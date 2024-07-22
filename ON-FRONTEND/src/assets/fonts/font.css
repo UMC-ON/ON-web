@@ -1,0 +1,15 @@
+@font-face {
+    font-family: "BalooBhai-Regular";
+    src: local('BalooBhai-Regular'),
+    url("./assets/fonts/BalooBhai-Regular.ttf") format("ttf");
+  }
+  
+  @font-face {
+    font-family: "Inter-Regular";
+    src: url("./assets/fonts/Inter-Regular.ttf") format("ttf");
+  }
+  
+  @font-face {
+    font-family: "Test-Regular";
+    src: url("./assets/fonts/BalooBhai2-Regular.ttf") format("ttf");
+  }
