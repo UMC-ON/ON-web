@@ -3,7 +3,7 @@ import './App.css';
 import { ThemeProvider } from 'styled-components';
 import theme from './styles/theme';
 import Page from './Page';
-import './assets/fonts/font.css';
+// import './assets/fonts/font.css';
 
 function App() {
   return (

@@ -3,15 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <link
+      rel="manifest"
+      href="/manifest.json"
+    />
+    <link
       rel="icon"
-      type="image/svg+xml"
-      href="/vite.svg"
+      type="image/png"
+      href="/public/icon/icon-192x192.png"
+    />
+    <!-- 추가 -->
+    <link
+      rel="apple-touch-icon"
+      href="icons/icon-152x152.png"
+      sizes="152x152"
+    />
+    <link
+      rel="alternate icon"
+      href="/public/icon/icon-192x192.png"
+      type="ico"
+      sizes="32x32"
     />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0"
     />
-    <title>Vite + React</title>
+    <title>ON-교환학생의 모든 것</title>
   </head>
   <body>
     <div id="root"></div>
@@ -19,5 +35,21 @@
       type="module"
       src="/src/main.jsx"
     ></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        // Register a service worker hosted at the root of the
+        // site using the default scope.
+        navigator.serviceWorker
+          .register('/sw.js')
+          .then((registration) => {
+            console.log('Service worker registration succeeded:', registration);
+          })
+          .catch((err) => {
+            console.log('Service worker registration failed:', error);
+          });
+      } else {
+        console.log('Service workers are not supported.');
+      }
+    </script>
   </body>
 </html>
