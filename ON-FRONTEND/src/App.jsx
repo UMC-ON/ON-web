@@ -12,12 +12,17 @@ import Notification from './pages/Notification.jsx';
 import Search from './pages/Search.jsx';
 import BottomTabNav from './components/BottomTabNav.jsx';
 import Chat from './pages/Chat.jsx';
+import HomePage from './pages/HomePage.jsx'
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <NavBar />
       <Routes>
+      <Route
+          path="/"
+          element={<HomePage/>}
+        />
         <Route
           path="/mypage"
           element={<MyPage />}
