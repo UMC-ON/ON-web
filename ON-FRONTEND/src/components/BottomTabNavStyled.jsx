@@ -3,6 +3,7 @@ import theme from '../styles/theme';
 
 export const BottomTabLayout = styled.div`
   width: 100%;
+  max-width: 480px;
   height: 87px;
   position: fixed;
   bottom: 0;
