@@ -10,6 +10,8 @@ import NavBar from './components/NavBar.jsx';
 import MyPage from './pages/MyPage.jsx';
 import Notification from './pages/Notification.jsx';
 import Search from './pages/Search.jsx';
+import BottomTabNav from './components/BottomTabNav.jsx';
+import Chat from './pages/Chat.jsx';
 
 function App() {
   return (
@@ -28,7 +30,12 @@ function App() {
           path="/search"
           element={<Search />}
         />
+        <Route
+          path="/chat"
+          element={<Chat />}
+        />
       </Routes>
+      <BottomTabNav />
       <Page />
     </ThemeProvider>
   );
