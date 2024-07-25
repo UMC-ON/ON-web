@@ -12,33 +12,12 @@ import Search from './pages/Search.jsx';
 import BottomTabNav from './components/BottomTabNav.jsx';
 import Chat from './pages/Chat.jsx';
 import HomePage from './pages/HomePage.jsx';
-import SignUp_TermsOfService from './pages/SignUp_SignIn/SignUp_TermsOfService.jsx';
-import SignUp_UserInfo from './pages/SignUp_SignIn/SignUp_UserInfo.jsx';
-import SignUp_UserInfo_Additional from './pages/SignUp_SignIn/SignUp_UserInfo_Additional.jsx';
-import SignUp_UserInfo_School from './pages/SignUp_SignIn/SignUp_UserInfo_School.jsx';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <NavBar />
       <Routes>
-        <Route
-          path="/signUp"
-          element={<SignUp_TermsOfService />}
-        />
-        <Route
-          path="/signUp/userInfo"
-          element={<SignUp_UserInfo />}
-        />
-        <Route
-          path="/signUp/userInfo_additional"
-          element={<SignUp_UserInfo_Additional />}
-        />
-
-        <Route
-          path="/signUp/userInfo_school"
-          element={<SignUp_UserInfo_School />}
-        />
         <Route
           path="/"
           element={<HomePage />}
