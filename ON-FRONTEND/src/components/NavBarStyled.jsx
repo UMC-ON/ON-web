@@ -1,12 +1,11 @@
 import styled from 'styled-components';
 import theme from '../styles/theme';
-import { NavLink } from 'react-router-dom';
 
 export const NavbarLayout = styled.div`
   width: 100%;
   height: 61px;
   position: fixed;
-  z-index: 5;
+  z-index: 1;
   display: flex;
   top: 0;
   align-items: center;
