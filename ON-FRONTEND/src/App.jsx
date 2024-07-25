@@ -5,12 +5,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import theme from './styles/theme.js';
 
 // 페이지, 컴포넌트 import
-import NavBar from './components/NavBar.jsx';
-import MyPage from './pages/MyPage.jsx';
-import Notification from './pages/Notification.jsx';
-import Search from './pages/Search.jsx';
-import BottomTabNav from './components/BottomTabNav.jsx';
-import Chat from './pages/Chat.jsx';
+import NavBar from './components/NavBar/NavBar.jsx';
+import MyPage from './pages/MyPage/MyPage.jsx';
+import Notification from './pages/Notification/NotificationPage.jsx';
+import Search from './pages/Search/SearchPage.jsx';
+import BottomTabNav from './components/BottomTabNav/BottomTabNav.jsx';
+import Chat from './pages/Chat/ChatPage.jsx';
 import HomePage from './pages/HomePage.jsx';
 import SignUp_TermsOfService from './pages/SignUp_SignIn/SignUp_TermsOfService.jsx';
 import SignUp_UserInfo from './pages/SignUp_SignIn/SignUp_UserInfo.jsx';
