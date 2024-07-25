@@ -3,7 +3,6 @@ import './App.css';
 import { ThemeProvider } from 'styled-components';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import theme from './styles/theme.js';
-import Page from './Page.jsx';
 
 // 페이지, 컴포넌트 import
 import NavBar from './components/NavBar.jsx';
@@ -12,16 +11,16 @@ import Notification from './pages/Notification.jsx';
 import Search from './pages/Search.jsx';
 import BottomTabNav from './components/BottomTabNav.jsx';
 import Chat from './pages/Chat.jsx';
-import HomePage from './pages/HomePage.jsx'
+import HomePage from './pages/HomePage.jsx';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <NavBar />
       <Routes>
-      <Route
+        <Route
           path="/"
-          element={<HomePage/>}
+          element={<HomePage />}
         />
         <Route
           path="/mypage"
@@ -41,7 +40,6 @@ function App() {
         />
       </Routes>
       <BottomTabNav />
-      <Page />
     </ThemeProvider>
   );
 }
