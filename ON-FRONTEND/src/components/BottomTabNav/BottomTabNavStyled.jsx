@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import theme from '../styles/theme';
+import theme from '../../styles/theme';
 
 export const BottomTabLayout = styled.div`
   width: 100%;
@@ -9,13 +9,14 @@ export const BottomTabLayout = styled.div`
   bottom: 0;
   border-radius: 14px 14px 0px 0px;
   border: 1px solid white;
-  background: #f7f7f7;
+  background: #ffffff;
   z-index: 1;
   display: flex;
-  align-items: baseline;
+  align-items: flex-end;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: 15px 32px 30px 32px;
+  padding: 0px 32px 30px 32px;
+  box-shadow: 0px -1px 4px 0px #e2e2e2;
 `;
 
 export const IconContainer = styled.div`

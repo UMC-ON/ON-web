@@ -9,25 +9,27 @@ const BottomTabNav = () => {
   return (
     <s.BottomTabLayout>
       {/*홈 버튼*/}
-      <s.IconContainer>
-        <s.Icon
-          xmlns="http://www.w3.org/2000/svg"
-          width="23"
-          height="24"
-          viewBox="0 0 23 24"
-          fill="current"
-        >
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M10.0527 0.488142C10.8042 -0.162714 11.9198 -0.162714 12.6713 0.488143L22.0293 8.59239C23.4291 9.80466 22.5717 12.1042 20.72 12.1042H20.362V21.3542C20.362 22.4588 19.4666 23.3542 18.362 23.3542L14.362 23.3542V15.3542C14.362 14.802 13.9143 14.3542 13.362 14.3542H9.362C8.80971 14.3542 8.362 14.802 8.362 15.3542V23.3542L4.36199 23.3542C3.25742 23.3542 2.36199 22.4588 2.36199 21.3542V12.1042H2.00401C0.152235 12.1042 -0.705103 9.80466 0.694704 8.59239L10.0527 0.488142Z"
+      <NavLink to="/">
+        <s.IconContainer className={currentPath === '/' ? 'active' : ''}>
+          <s.Icon
+            xmlns="http://www.w3.org/2000/svg"
+            width="23"
+            height="24"
+            viewBox="0 0 23 24"
             fill="current"
-          />
-        </s.Icon>
-        <s.IconTag>홈</s.IconTag>
-      </s.IconContainer>
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M10.0527 0.488142C10.8042 -0.162714 11.9198 -0.162714 12.6713 0.488143L22.0293 8.59239C23.4291 9.80466 22.5717 12.1042 20.72 12.1042H20.362V21.3542C20.362 22.4588 19.4666 23.3542 18.362 23.3542L14.362 23.3542V15.3542C14.362 14.802 13.9143 14.3542 13.362 14.3542H9.362C8.80971 14.3542 8.362 14.802 8.362 15.3542V23.3542L4.36199 23.3542C3.25742 23.3542 2.36199 22.4588 2.36199 21.3542V12.1042H2.00401C0.152235 12.1042 -0.705103 9.80466 0.694704 8.59239L10.0527 0.488142Z"
+              fill="current"
+            />
+          </s.Icon>
+          <s.IconTag>홈</s.IconTag>
+        </s.IconContainer>
+      </NavLink>
       {/*커뮤니티 버튼*/}
-      <s.IconContainer>
+      <s.IconContainer className={currentPath === '/수정' ? 'active' : ''}>
         <s.Icon
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -45,7 +47,7 @@ const BottomTabNav = () => {
         <s.IconTag>커뮤니티</s.IconTag>
       </s.IconContainer>
       {/*물품거래 버튼*/}
-      <s.IconContainer>
+      <s.IconContainer className={currentPath === '/수정' ? 'active' : ''}>
         <s.Icon
           xmlns="http://www.w3.org/2000/svg"
           width="22"
@@ -94,7 +96,7 @@ const BottomTabNav = () => {
         </s.IconContainer>
       </NavLink>
       {/*나의일기 버튼*/}
-      <s.IconContainer>
+      <s.IconContainer className={currentPath === '/수정' ? 'active' : ''}>
         <s.Icon
           xmlns="http://www.w3.org/2000/svg"
           width="24"
