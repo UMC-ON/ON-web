@@ -16,98 +16,121 @@ import bannerimg from '../assets/images/home_banner.png';
 const images = [bannerimg, bannerimg, bannerimg, bannerimg, bannerimg];
 
 function HomePage() {
-    const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-    const handlers = useSwipeable({
-      onSwipedLeft: () => setCurrentSlide((prev) => (prev + 1) % images.length),
-      onSwipedRight: () => setCurrentSlide((prev) => (prev - 1 + images.length) % images.length),
-      preventDefaultTouchmoveEvent: true,
-      trackMouse: true
-    });
-  
-    const goToSlide = (index) => {
-      setCurrentSlide(index);
-    };
+  const handlers = useSwipeable({
+    onSwipedLeft: () => setCurrentSlide((prev) => (prev + 1) % images.length),
+    onSwipedRight: () =>
+      setCurrentSlide((prev) => (prev - 1 + images.length) % images.length),
+    preventDefaultTouchmoveEvent: true,
+    trackMouse: true,
+  });
 
-    return (
-      <>
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+  };
+
+  return (
+    <>
+      <BigContainer>
+        <LeftContainer>
+          <SubText>나의 교환교</SubText>
+        </LeftContainer>
+        <LeftContainer>
+          <BigText spacing="1vh">영국,</BigText>
+          <BigText color="#3E73B2">King's College London</BigText>
+        </LeftContainer>
+
+        <Container>
+          <Button>
+            <Icon
+              src={schoolIcon}
+              alt="School Icon"
+            />
+            <SubText>교환교</SubText>
+            <SubText>홈페이지</SubText>
+          </Button>
+          <Button>
+            <Icon
+              src={migrationIcon}
+              alt="Migration Icon"
+            />
+            <SubText>영국</SubText>
+            <SubText>이민국</SubText>
+          </Button>
+          <Button>
+            <Icon
+              src={companyIcon}
+              alt="Company Icon"
+            />
+            <SubText>동행</SubText>
+            <SubText>구하기</SubText>
+          </Button>
+        </Container>
+        <Container>
+          <Button>
+            <Icon
+              src={informationIcon}
+              alt="Information Icon"
+            />
+            <SubText>정보글</SubText>
+            <SubText>쓰기</SubText>
+          </Button>
+          <Button>
+            <Icon
+              src={writeIcon}
+              alt="Write Icon"
+            />
+            <SubText>자유글</SubText>
+            <SubText>쓰기</SubText>
+          </Button>
+          <Button>
+            <Icon
+              src={diaryIcon}
+              alt="Diary Icon"
+            />
+            <SubText>일기쓰기</SubText>
+            <SubText>&nbsp; &nbsp;</SubText>
+          </Button>
+        </Container>
+
+        <SliderContainer {...handlers}>
+          <SliderWrapper currentSlide={currentSlide}>
+            {images.map((image, index) => (
+              <Slide
+                key={index}
+                style={{ backgroundImage: `url(${image})` }}
+              />
+            ))}
+          </SliderWrapper>
+        </SliderContainer>
+        <DotContainer>
+          {images.map((_, index) => (
+            <Dot
+              key={index}
+              active={index === currentSlide}
+              onClick={() => goToSlide(index)}
+            />
+          ))}
+        </DotContainer>
+      </BigContainer>
+
+      <BlueContainer>
         <BigContainer>
-            <LeftContainer>
-                <SubText>나의 교환교</SubText>
-            </LeftContainer>
-            <LeftContainer>
-                <BigText spacing="1vh">영국,</BigText>
-                <BigText color="#3E73B2">King's College London</BigText>
-            </LeftContainer>
-
-            <Container>
-                <Button>
-                    <Icon src={schoolIcon} alt="School Icon" />
-                    <SubText>교환교</SubText>
-                    <SubText>홈페이지</SubText>
-                </Button>
-                <Button>
-                    <Icon src={migrationIcon} alt="Migration Icon" />
-                    <SubText>영국</SubText>
-                    <SubText>이민국</SubText>
-                </Button>
-                <Button>
-                    <Icon src={companyIcon} alt="Company Icon" />
-                    <SubText>동행</SubText>
-                    <SubText>구하기</SubText>
-                </Button>
-            </Container>
-            <Container>
-                <Button>
-                    <Icon src={informationIcon} alt="Information Icon" />
-                    <SubText>정보글</SubText>
-                    <SubText>쓰기</SubText>
-                </Button>
-                <Button>
-                    <Icon src={writeIcon} alt="Write Icon" />
-                    <SubText>자유글</SubText>
-                    <SubText>쓰기</SubText>
-                </Button>
-                <Button>
-                    <Icon src={diaryIcon} alt="Diary Icon" />
-                    <SubText>일기쓰기</SubText>
-                    <SubText>&nbsp; &nbsp;</SubText>
-                </Button>
-            </Container>
-
-            <SliderContainer {...handlers}>
-                <SliderWrapper currentSlide={currentSlide}>
-                    {images.map((image, index) => (
-                        <Slide key={index} style={{ backgroundImage: `url(${image})` }} />
-                    ))}
-                </SliderWrapper>
-            </SliderContainer>
-            <DotContainer>
-                {images.map((_, index) => (
-                <Dot key={index} active={index === currentSlide} onClick={() => goToSlide(index)} />
-                ))}
-            </DotContainer>
-          </BigContainer>
-
-          <BlueContainer>
-
-            <BigContainer>
-                <LeftContainer>
-                <MiddleText spacing="1vh">나를 위한</MiddleText>
-                <MiddleText color="#3E73B2">런던 근교 여행지</MiddleText>
-                </LeftContainer>
-            </BigContainer>
-
-
-          </BlueContainer>
-        </>
-    );
+          <LeftContainer>
+            <MiddleText spacing="1vh">나를 위한</MiddleText>
+            <MiddleText color="#3E73B2">런던 근교 여행지</MiddleText>
+          </LeftContainer>
+        </BigContainer>
+      </BlueContainer>
+    </>
+  );
 }
 
 export default HomePage;
 
 const BigContainer = styled.div`
-    padding: 1.5rem;
+  padding: 1.5rem;
 `;
 
 const LeftContainer = styled.div`
@@ -123,8 +146,8 @@ const SubText = styled.div`
 
 const BigText = styled.div`
   margin-top: 1vh;
-  color: ${props => props.color || '#000000'};
-  margin-right: ${props => props.spacing || '0'};
+  color: ${(props) => props.color || '#000000'};
+  margin-right: ${(props) => props.spacing || '0'};
   font-weight: bold;
   font-family: 'Inter-Regular';
   font-size: 1.4em;
@@ -132,8 +155,8 @@ const BigText = styled.div`
 `;
 
 const MiddleText = styled.div`
-  color: ${props => props.color || '#000000'};
-  margin-right: ${props => props.spacing || '0'};
+  color: ${(props) => props.color || '#000000'};
+  margin-right: ${(props) => props.spacing || '0'};
   font-weight: bold;
   font-family: 'Inter-Regular';
   font-size: 1.2em;
@@ -150,8 +173,8 @@ const Button = styled.button`
 `;
 
 const Icon = styled.img`
-  width: 5vh; 
-  height: 5vh; 
+  width: 5vh;
+  height: 5vh;
   margin-bottom: 1vh;
 `;
 
@@ -171,11 +194,11 @@ const SliderContainer = styled.div`
 `;
 
 const SliderWrapper = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['currentSlide'].includes(prop)
+  shouldForwardProp: (prop) => !['currentSlide'].includes(prop),
 })`
   display: flex;
   transition: transform 0.3s ease-in-out;
-  transform: ${props => `translateX(-${props.currentSlide * 100}%)`};
+  transform: ${(props) => `translateX(-${props.currentSlide * 100}%)`};
 `;
 
 const Slide = styled.div`
@@ -192,14 +215,14 @@ const DotContainer = styled.div`
 `;
 
 const Dot = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['active'].includes(prop)
+  shouldForwardProp: (prop) => !['active'].includes(prop),
 })`
-  width: ${props => (props.active ? '8px' : '5px')};
-  height: ${props => (props.active ? '8px' : '5px')};
-  margin: ${props => (props.active ? '0 5px' : '2px 5px')};
+  width: ${(props) => (props.active ? '8px' : '5px')};
+  height: ${(props) => (props.active ? '8px' : '5px')};
+  margin: ${(props) => (props.active ? '0 5px' : '2px 5px')};
   border-radius: 50%;
-  background-color: ${props => (props.active ? '#9D9AB1' : '#6EBAFF')};
-  opacity: ${props => (props.active ? '1' : '0.5')};
+  background-color: ${(props) => (props.active ? '#9D9AB1' : '#6EBAFF')};
+  opacity: ${(props) => (props.active ? '1' : '0.5')};
   cursor: pointer;
 `;
 
