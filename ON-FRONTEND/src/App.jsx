@@ -16,6 +16,8 @@ import SignUp_TermsOfService from './pages/SignUp_SignIn/SignUp_TermsOfService.j
 import SignUp_UserInfo from './pages/SignUp_SignIn/SignUp_UserInfo.jsx';
 import SignUp_UserInfo_Additional from './pages/SignUp_SignIn/SignUp_UserInfo_Additional.jsx';
 import SignUp_UserInfo_School from './pages/SignUp_SignIn/SignUp_UserInfo_School.jsx';
+import DiaryCalendar from './components/DiaryCalendar/DiaryCalendar.jsx';
+import CompanyCalendar from './components/CompanyCalendar/CompanyCalendar.jsx';
 
 function App() {
   return (
