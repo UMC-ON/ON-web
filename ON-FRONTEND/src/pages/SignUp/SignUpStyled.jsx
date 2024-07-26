@@ -1,21 +1,30 @@
 import styled from 'styled-components';
 import theme from '../../styles/theme';
-import polygon3 from '../../assets/images/polygon3.png';
+import grayArrow from '../../assets/images/grayArrow.svg';
+import radioButton_checked from '../../assets/images/radioButton_checked.svg';
 
-export const FormPage = styled.div`
+export const FormPage = styled.section`
   background-color: rgb(250, 250, 250);
   box-sizing: border-box;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  & .margin_bottom_40 {
+    margin-bottom: 2.5rem;
+  }
+`;
+
+export const SectionWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 100%;
 `;
 
 export const TitleSection = styled.section`
-  position: fixed;
-  top: 0;
   width: calc(100% - 3.25rem);
   display: flex;
   flex-direction: column;
@@ -24,25 +33,36 @@ export const TitleSection = styled.section`
   & > .on_exp {
     color: black;
     opacity: 64%;
-    margin: 0.625rem 0;
     font-size: 0.875rem;
   }
 `;
 export const Logo = styled.img`
   object-fit: contain;
-  width: 60px;
-  height: 34px;
+  width: 93px;
+  height: 56px;
+`;
+
+export const BackButton = styled.button`
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid gray;
+  font-size: 0.625rem;
+  color: black;
+  opacity: 64%;
+  outline: none;
+  background-color: transparent;
+  padding: 0;
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    outline: none;
+  }
 `;
 export const ContentSection = styled.section`
-  padding-top: 6.75rem;
   text-align: left;
   margin: 0 1.625rem;
   width: calc(100% - 3.25rem);
-  & .back {
-    font-size: 0.625rem;
-    color: black;
-    opacity: 64%;
-  }
   & .radioBtn {
     display: flex;
     flex-direction: row;
@@ -55,7 +75,7 @@ export const ContentSection = styled.section`
 `;
 
 export const StyledH2 = styled.div`
-  font-family: 'Inter-SemiBold';
+  font-family: Inter;
   font-size: 1.563rem;
   font-weight: bold;
   margin: 0.75rem 0;
@@ -69,26 +89,33 @@ export const RadioButton = styled.input`
   width: 1.25em;
   height: 1.25em;
   &:checked {
-    background-color: ${(props) => props.theme.skyBlue};
+    background: url(${radioButton_checked}) no-repeat center;
   }
 `;
 
-export const ButtonSection = styled.div`
-  position: fixed;
-  bottom: 4rem;
-  margin: 0 1.625rem;
-  width: calc(100% - 3.25rem);
+export const ButtonSection = styled.section`
+  width: calc(100% - 2.75rem);
+  margin: 1.625rem 1.375rem;
 `;
 
 export const PurpleButton = styled.button`
-  height: 3.375rem;
-  width: 19.25rem;
-  padding: 0;
-  margin: 0 0.563rem;
-  background-color: ${(props) => props.theme.lightPurple};
+  display: flex;
+  width: 308px;
+  height: 59px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin: 0 0.6rem;
+  border-radius: 16px;
+  background: #c2c7ff;
   color: white;
-  border-radius: 1.2rem;
+  font-family: Inter;
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 600;
   &:focus {
+    border: none;
     outline: none;
   }
 `;
@@ -96,7 +123,10 @@ export const StyledFieldSet = styled.fieldset`
   & > label {
     display: inline-block;
     width: 100%;
-    margin-top: 2.5rem;
+  }
+  & > label .required::after {
+    content: '*';
+    color: #c2c7ff;
   }
 `;
 export const InputWrapper = styled.div`
@@ -138,16 +168,13 @@ export const Explanation = styled.div`
   font-size: 0.9rem;
   line-height: 1.1rem;
   text-align: justify;
-  margin-bottom: 2.5rem;
 `;
 export const TwoColumnWrapper = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: row;
 
   & > * {
-    margin-top: 2.5rem;
-    width: calc((100%) / 2);
+    width: calc((100%) / 2.5);
     flex: auto;
   }
 `;
@@ -161,6 +188,15 @@ export const StyledComboBox = styled.select`
   outline: none;
   border: none;
   appearance: none;
-  background: url(${polygon3}) no-repeat right;
+  background: url(${grayArrow}) no-repeat right;
   border-bottom: 1px solid #b0b0b0;
+`;
+
+export const CenterContainer = styled.div`
+  width: 100%;
+  height: auto;
+  margin-top: calc(100% / 15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
