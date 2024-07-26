@@ -12,34 +12,42 @@ import Search from './pages/Search/SearchPage.jsx';
 import BottomTabNav from './components/BottomTabNav/BottomTabNav.jsx';
 import Chat from './pages/Chat/ChatPage.jsx';
 import HomePage from './pages/HomePage.jsx';
-import SignUp_TermsOfService from './pages/SignUp_SignIn/SignUp_TermsOfService.jsx';
-import SignUp_UserInfo from './pages/SignUp_SignIn/SignUp_UserInfo.jsx';
-import SignUp_UserInfo_Additional from './pages/SignUp_SignIn/SignUp_UserInfo_Additional.jsx';
-import SignUp_UserInfo_School from './pages/SignUp_SignIn/SignUp_UserInfo_School.jsx';
+
 import DiaryCalendar from './components/DiaryCalendar/DiaryCalendar.jsx';
 import CompanyCalendar from './components/CompanyCalendar/CompanyCalendar.jsx';
+
+import TermsOfServicePage from './pages/SignUp/TermsOfServicePage.jsx';
+import UserInfoPage from './pages/SignUp/UserInfoPage.jsx';
+import UserInfoSchoolPage from './pages/SignUp/UserInfoSchoolPage.jsx';
+import UserInfoSchoolAuthPage from './pages/SignUp/UserInfoSchoolAuthPage.jsx';
+import SignUpCompletePage from './pages/SignUp/SignUpCompletePage.jsx';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <NavBar />
       <Routes>
         <Route
           path="/signUp"
-          element={<SignUp_TermsOfService />}
+          element={<TermsOfServicePage />}
         />
         <Route
           path="/signUp/userInfo"
-          element={<SignUp_UserInfo />}
-        />
-        <Route
-          path="/signUp/userInfo_additional"
-          element={<SignUp_UserInfo_Additional />}
+          element={<UserInfoPage />}
         />
 
         <Route
           path="/signUp/userInfo_school"
-          element={<SignUp_UserInfo_School />}
+          element={<UserInfoSchoolPage />}
+        />
+
+        <Route
+          path="/signUp/userInfo_schoolAuth"
+          element={<UserInfoSchoolAuthPage />}
+        />
+
+        <Route
+          path="/signUp/complete"
+          element={<SignUpCompletePage />}
         />
         <Route
           path="/"
@@ -62,7 +70,6 @@ function App() {
           element={<Chat />}
         />
       </Routes>
-      <BottomTabNav />
     </ThemeProvider>
   );
 }
