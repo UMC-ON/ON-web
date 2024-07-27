@@ -22,6 +22,8 @@ import UserInfoSchoolPage from './pages/SignUp/UserInfoSchoolPage.jsx';
 import UserInfoSchoolAuthPage from './pages/SignUp/UserInfoSchoolAuthPage.jsx';
 import SignUpCompletePage from './pages/SignUp/SignUpCompletePage.jsx';
 
+import FreeCommunityHome from './pages/Community/FreeCommunity/FreeCommunityHome.jsx';
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -52,6 +54,10 @@ function App() {
         <Route
           path="/"
           element={<HomePage />}
+        />
+        <Route
+          path="/community/general"
+          element={<FreeCommunityHome />}
         />
         <Route
           path="/mypage"
