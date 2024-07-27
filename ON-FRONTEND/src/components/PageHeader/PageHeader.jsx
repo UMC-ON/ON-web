@@ -1,8 +1,9 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import * as s from './PageHeaderStyled.jsx';
+import theme from '../../styles/theme';
 
-const PageHeader = ({ pageName }) => {
+const PageHeader = ({ pageName, color = `${theme.title}` }) => {
   const navigate = useNavigate();
 
   const onClickBackButton = () => {
@@ -27,7 +28,7 @@ const PageHeader = ({ pageName }) => {
           />
         </svg>
       </s.BackButton>
-      <s.PageName>{pageName}</s.PageName>
+      <s.PageName style={{ color: `${color}` }}>{pageName}</s.PageName>
     </s.PageHeaderLayout>
   );
 };

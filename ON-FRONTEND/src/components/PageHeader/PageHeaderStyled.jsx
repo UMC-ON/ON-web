@@ -22,7 +22,6 @@ export const BackButton = styled.div`
   left: 17px;
 `;
 export const PageName = styled.p`
-  color: ${theme.title};
   text-align: center;
   font-family: Inter;
   font-size: 22px;

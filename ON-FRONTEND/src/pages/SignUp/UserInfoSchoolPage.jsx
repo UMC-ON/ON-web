@@ -46,7 +46,7 @@ const UserInfoSchoolPage = () => {
                   value="none"
                   hidden
                 >
-                  국가를 선택해주세요
+                  국가
                 </option>
                 <option disabled>----북미----</option>
                 <option>미국 </option>
@@ -140,4 +140,11 @@ const SchoolComboBox = styled(s.StyledComboBox)`
   margin: 0.625rem 0;
   font-size: 0.75rem;
   color: #979797;
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: gray;
+    border-radius: 1rem;
+  }
 `;
