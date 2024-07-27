@@ -92,5 +92,6 @@ const StyledList = styled.li`
     text-align: left;
     background: linear-gradient(135deg, #c2c7ff 0%, #ad99ff 100%);
     color: white;
+    -webkit-tap-highlight-color: transparent;
   }
 `;
