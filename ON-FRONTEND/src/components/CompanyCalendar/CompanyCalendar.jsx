@@ -1,27 +1,64 @@
 import React, { useState } from 'react';
-import Calendar from 'react-calendar';
-import moment from "moment";
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import moment from 'moment';
+import ko from "date-fns/locale/ko";
 import * as s from './CompanyCalendarStyled.jsx';
 
+const DateRangePicker = () => {
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
-export default function MyApp() {
-  const [value, onChange] = useState(new Date());
-  // const [mark, setMark] = useState([]);
-  // setMark("2024-07-24");
+  const onChange = (dates) => {
+    const [start, end] = dates;
+    setStartDate(start);
+    setEndDate(end);
+  };
+
+  const today = moment().startOf('day').toDate();
+
+  const renderCustomHeader = ({
+    date,
+    decreaseMonth,
+    increaseMonth,
+    prevMonthButtonDisabled,
+    nextMonthButtonDisabled,
+  }) => (
+    <s.CalendarHeader>
+      <s.HeaderButton onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
+        {"<"}
+      </s.HeaderButton>
+      <s.HeaderTitle>
+        {moment(date).format('YYYY.MM')}
+      </s.HeaderTitle>
+      <s.HeaderButton onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
+        {">"}
+      </s.HeaderButton>
+    </s.CalendarHeader>
+  );
+
   return (
     <s.CompanyCalendar>
-      <Calendar
-        locale="kr"
-        onChange={onChange}
-        value={value}
-        calendarType='hebrew'
-        next2Label={null}
-        prev2Label={null}
-        showNeighboringMonth={false}
-        formatDay={(locale, date) => moment(date).format("D")}
-        formatMonthYear={(locale, date) => moment(date).format("YYYY. MM")}
-        formatYear={(locale, date) => moment(date).format("YYYY")}
-      />
+      <div className="date-range-picker">
+        <DatePicker
+          locale={ko}
+          selected={startDate}
+          onChange={onChange}
+          startDate={startDate}
+          endDate={endDate}
+          minDate={today}
+          selectsRange
+          inline
+          renderCustomHeader={renderCustomHeader}
+        />
+        {startDate && endDate && (
+          <div className="selected-date-range">
+            {moment(startDate).format('MM/DD')} - {moment(endDate).format('MM/DD')}
+          </div>
+        )}
+      </div>
     </s.CompanyCalendar>
   );
-}
+};
+
+export default DateRangePicker;
