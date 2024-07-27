@@ -23,15 +23,18 @@ import UserInfoSchoolAuthPage from './pages/SignUp/UserInfoSchoolAuthPage.jsx';
 import SignUpCompletePage from './pages/SignUp/SignUpCompletePage.jsx';
 
 import FreeCommunityHome from './pages/Community/FreeCommunity/FreeCommunityHome.jsx';
+import InfoCommunityHome from './pages/Community/InfoCommunity/InfoCommunityHome.jsx';
+import InfoPostPage from './pages/Community/InfoCommunity/InfoPostPage.jsx';
+import FreePostPage from './pages/Community/FreeCommunity/FreePostPage.jsx';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Routes>
         <Route
-            path="/company"
-            element={<CompanyCalendar />}
-          />
+          path="/company"
+          element={<CompanyCalendar />}
+        />
         <Route
           path="/signUp"
           element={<TermsOfServicePage />}
@@ -62,6 +65,19 @@ function App() {
         <Route
           path="/community/general"
           element={<FreeCommunityHome />}
+        />
+
+        <Route
+          path="/community/general/post"
+          element={<FreePostPage />}
+        />
+        <Route
+          path="/community/info"
+          element={<InfoCommunityHome />}
+        />
+        <Route
+          path="/community/info/post"
+          element={<InfoPostPage />}
         />
         <Route
           path="/mypage"

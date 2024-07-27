@@ -1,12 +1,14 @@
 import * as s from './CommunityPostStyled';
 import styled from 'styled-components';
 import Img from '../../assets/images/postImgExample.svg';
+import commentImg from '../../assets/images/commentImg.svg';
+import verifiedBadge from '../../assets/images/verifiedBadge.svg';
 
 const CommunityPost = () => {
   return (
     <s.Post>
       <HeaderSection>
-        <Title>임시 제목 블라블라블라</Title>
+        <Title>[독일 교환학생 준비] Ep 1. 테아민 잡기</Title>
         <Date>10분 전</Date>
       </HeaderSection>
       <ContentSection>
@@ -21,11 +23,16 @@ const CommunityPost = () => {
           </TextContent>
 
           <PostInfoWrapper>
-            <Writer></Writer>
-            <img />
+            <Writer>
+              익명
+              <VerifiedImg
+                src={verifiedBadge}
+                verified={'verified'}
+              />
+            </Writer>
             <Comment>
-              <img />
-              <CommentNum></CommentNum>
+              <img src={commentImg} />
+              <div style={{ paddingBottom: '3px' }}>1</div>
             </Comment>
           </PostInfoWrapper>
         </ContentWrapper>
@@ -117,8 +124,42 @@ const TextContent = styled.span`
   letter-spacing: 0.24px;
 `;
 const PostInfoWrapper = styled.div`
-  height: 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-content: center;
+
+  flex-wrap: wrap;
+  align-items: center;
+  flex: auto;
+
+  & > * {
+    margin: 0 3px;
+  }
 `;
-const Writer = styled.div``;
-const Comment = styled.div``;
-const CommentNum = styled.div``;
+const Writer = styled.div`
+  font-size: 8px;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+`;
+const VerifiedImg = styled.img`
+  padding: 0 2px;
+  display: ${(props) =>
+    props.verified === 'verified' ? 'inline-block' : 'none'};
+`;
+const Comment = styled.div`
+  padding-top: 2px;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  color: #92a5bc;
+  font-family: Inter;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 12px */
+  & > * {
+    padding: 0 1px;
+  }
+`;
