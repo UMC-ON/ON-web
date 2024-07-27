@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import theme from '../../styles/theme';
+
 
 export const DiaryCalendar = styled.div`
     .react-calendar {
     width: 350px;
     max-width: 100%;
-    background: linear-gradient(-45deg,#DCDFFF, #D6EBFF); /* 그라데이션 넣어야 함*/
+    background: linear-gradient(-45deg,#DCDFFF, #D6EBFF);
     border: none;
     border-radius: 10px;
     font-family: Arial, Helvetica, sans-serif;

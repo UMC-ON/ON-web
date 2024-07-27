@@ -29,6 +29,10 @@ function App() {
     <ThemeProvider theme={theme}>
       <Routes>
         <Route
+            path="/company"
+            element={<CompanyCalendar />}
+          />
+        <Route
           path="/signUp"
           element={<TermsOfServicePage />}
         />

@@ -17,7 +17,7 @@ const theme = {
   title: '#3E73B2',
   navActivate: '#3E73B2',
   touratt: '#698DB8',
-  purpleGra: 'var(--, linear-gradient(135deg, #C2C7FF 0%, #AD99FF 100%))',
+  purpleGra: 'linear-gradient(135deg, #C2C7FF 0%, #AD99FF 100%)',
   blueGra: 'var(--, linear-gradient(135deg, #D6EBFF 0%, #C2C7FF 100%))',
   infoCom: '#BFD8E5',
   freeCom: '#CBCDE9',
