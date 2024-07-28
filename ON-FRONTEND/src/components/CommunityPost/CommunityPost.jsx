@@ -8,7 +8,7 @@ const CommunityPost = () => {
   return (
     <s.Post>
       <HeaderSection>
-        <Title>[독일 교환학생 준비] Ep 1. 테아민 잡기</Title>
+        <Title>[🇩🇪 독일 교환학생 준비] ep.1 테아민 잡기</Title>
         <Date>10분 전</Date>
       </HeaderSection>
       <ContentSection>
@@ -32,7 +32,7 @@ const CommunityPost = () => {
             </Writer>
             <Comment>
               <img src={commentImg} />
-              <div style={{ paddingBottom: '3px' }}>1</div>
+              <div>1</div>
             </Comment>
           </PostInfoWrapper>
         </ContentWrapper>
@@ -138,6 +138,7 @@ const PostInfoWrapper = styled.div`
   }
 `;
 const Writer = styled.div`
+  color: #7a7a7a;
   font-size: 8px;
   display: flex;
   flex-direction: row;

@@ -47,9 +47,16 @@ const InfoCommunityHome = () => {
           >
             {currentValue}
           </s.FilterSelectionButton>
-          <s.DarkBackground show={isOptionVisible.toString()} />
+          <s.DarkBackground
+            onClick={clickHandler}
+            show={isOptionVisible.toString()}
+          />
           <s.FilterList show={isOptionVisible.toString()}>
-            <CountryList setOptionVisible={clickHandler} />
+            <CountryList
+              setOptionVisible={clickHandler}
+              color1="#D6EBFF"
+              color2="#C2C7FF"
+            />
           </s.FilterList>
         </s.FilterSection>
         <s.PostListSection>

@@ -25,21 +25,30 @@ const UserInfoAdditionalPage = () => {
           </s.BackButton>
           <s.StyledH2 className="margin_bottom_40">정보 입력</s.StyledH2>
           <s.StyledFieldSet>
-            <label className="margin_bottom_40">
+            <label
+              style={{ color: 'black' }}
+              className="margin_bottom_40"
+            >
               이름
               <s.InputWrapper>
                 <s.TransparentInput placeholder="본명으로 작성해 주세요" />
               </s.InputWrapper>
             </label>
             <s.TwoColumnWrapper>
-              <label className="margin_bottom_40">
+              <label
+                style={{ color: 'black' }}
+                className="margin_bottom_40"
+              >
                 나이
                 <s.InputWrapper>
                   <s.TransparentInput placeholder="숫자만 입력해주세요" />
                 </s.InputWrapper>
               </label>
               <EmptyDiv></EmptyDiv>
-              <label className="margin_bottom_40">
+              <label
+                style={{ color: 'black' }}
+                className="margin_bottom_40"
+              >
                 성별
                 <s.StyledComboBox defaultValue={'none'}>
                   <option
@@ -52,7 +61,10 @@ const UserInfoAdditionalPage = () => {
                 </s.StyledComboBox>
               </label>
             </s.TwoColumnWrapper>
-            <label className="margin_bottom_40">
+            <label
+              style={{ color: 'black' }}
+              className="margin_bottom_40"
+            >
               닉네임
               <s.InputWrapper>
                 <s.TransparentInput />

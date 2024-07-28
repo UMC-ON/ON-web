@@ -29,7 +29,12 @@ const UserInfoSchoolPage = () => {
           </s.StyledH2>
           <s.StyledFieldSet>
             <label className="margin_bottom_40">
-              <div className="required">나의 교환/방문교</div>
+              <div
+                style={{ color: 'black' }}
+                className="required"
+              >
+                나의 교환/방문교
+              </div>
               <s.InputWrapper>
                 <s.TransparentInput placeholder="학교의 공식 영문명을 작성해주세요" />
               </s.InputWrapper>
@@ -40,7 +45,12 @@ const UserInfoSchoolPage = () => {
               <GrayLabel htmlFor="school_unsure">교환/방문교 미정</GrayLabel>
             </label>
             <label className="margin_bottom_40">
-              <div className="required">교환/방문교 소재 국가</div>
+              <div
+                style={{ color: 'black' }}
+                className="required"
+              >
+                교환/방문교 소재 국가
+              </div>
               <SchoolComboBox defaultValue={'none'}>
                 <option
                   value="none"
@@ -69,7 +79,7 @@ const UserInfoSchoolPage = () => {
                 <option>뉴질랜드</option>
               </SchoolComboBox>
             </label>
-            <label>
+            <label style={{ color: 'black' }}>
               파견 유형
               <RadioBtnDiv>
                 <label>
