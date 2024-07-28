@@ -40,11 +40,18 @@ const InfoPostPage = () => {
         </s.PostInfoSection>
         <s.TitleSection>
           <s.HeadingTitle>제목</s.HeadingTitle>
-          <s.Editor />
+          <s.EditorWrapper style={{ height: '38px' }}>
+            <s.Editor
+              wrap="off"
+              style={{ fontWeight: 'bold' }}
+            />
+          </s.EditorWrapper>
         </s.TitleSection>
         <s.ContentSection>
           <s.HeadingTitle>내용</s.HeadingTitle>
-          <s.Editor style={{ height: '585px' }} />
+          <s.EditorWrapper style={{ height: '585px' }}>
+            <s.Editor />
+          </s.EditorWrapper>
         </s.ContentSection>
       </s.BigContainer>
     </>

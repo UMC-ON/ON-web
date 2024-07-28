@@ -30,7 +30,7 @@ const FreePostPage = () => {
               교환교:
               <s.ButtonWrapper>
                 <s.ColorButtonTag color="#CBCDE9">
-                  King's College London
+                  California State University Long Beach
                 </s.ColorButtonTag>
               </s.ButtonWrapper>
             </s.InfoLabel>
@@ -45,14 +45,24 @@ const FreePostPage = () => {
         </s.PostInfoSection>
         <s.TitleSection>
           <s.HeadingTitle>제목</s.HeadingTitle>
-          <s.Editor color="#CBCDE9" />
+          <s.EditorWrapper
+            color="#CBCDE9"
+            style={{ height: '38px' }}
+          >
+            <s.Editor
+              wrap="off"
+              style={{ fontWeight: 'bold', fontSize: '17px' }}
+            />
+          </s.EditorWrapper>
         </s.TitleSection>
         <s.ContentSection>
           <s.HeadingTitle>내용</s.HeadingTitle>
-          <s.Editor
+          <s.EditorWrapper
             style={{ height: '585px' }}
             color="#CBCDE9"
-          />
+          >
+            <s.Editor />
+          </s.EditorWrapper>
         </s.ContentSection>
       </s.BigContainer>
     </>

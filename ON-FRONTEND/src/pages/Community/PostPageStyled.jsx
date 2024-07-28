@@ -12,7 +12,7 @@ export const ConfirmHeader = styled.div`
   top: 0;
   align-content: center;
   justify-content: end;
-  background: linear-gradient(to top, transparent 5%, white 60%);
+  background: white;
   border: none;
   border-width: 0.5px 0;
   box-sizing: border-box;
@@ -42,7 +42,8 @@ export const ColorButton = styled.button`
 export const BigContainer = styled.section`
   box-sizing: border-box;
   width: 100vw;
-  height: 100vh;
+  height: auto;
+  background-color: white;
   padding: 0 37px;
   padding-top: 61px;
   display: flex;
@@ -103,12 +104,11 @@ export const ColorButtonTag = styled(ColorButton)`
   max-width: 156px;
   min-height: 22px;
 
-  background: url(${xImg}) no-repeat right 5px center
+  background: url(${xImg}) no-repeat right 6px center
     ${(props) => props.color || '#BFD8E5'};
 
   padding: 0px 8px;
   padding-right: 18px;
-  padding-bottom: 2px;
 
   margin: 4px 5px;
 
@@ -162,26 +162,40 @@ export const TitleSection = styled.section`
   align-content: center;
   padding: 10px 0;
 `;
-export const Editor = styled.textarea`
+
+export const EditorWrapper = styled.div`
   box-sizing: border-box;
-  width: auto;
+  width: 100%;
   height: 100%;
   fill: #fff;
-  border: 1px solid ${(props) => props.color || '#bfd8e5'};
+  border: 1.5px solid ${(props) => props.color || '#bfd8e5'};
   border-radius: 8px;
 
-  padding: 5px 8px;
+  padding: 10px 8px;
+  padding-top: 7px;
 
   margin-top: 5px;
+`;
+export const Editor = styled.textarea`
+  border: none;
+  width: 100%;
+  height: 100%;
 
   font-family: Inter;
   font-size: 15px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  color: black;
+
+  background-color: transparent;
 
   &:focus {
     outline: none;
+  }
+  resize: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
 `;
 export const ContentSection = styled.section`
@@ -189,7 +203,7 @@ export const ContentSection = styled.section`
   display: flex;
   flex-direction: column;
   align-content: center;
-  width: 316px;
+  width: 100%;
   height: auto;
   flex-shrink: 0;
   padding: 10px 0;

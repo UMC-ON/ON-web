@@ -50,7 +50,10 @@ const FreeCommunityHome = () => {
           >
             {currentValue}
           </s.FilterSelectionButton>
-          <s.DarkBackground show={isOptionVisible.toString()} />
+          <s.DarkBackground
+            onClick={clickHandler}
+            show={isOptionVisible.toString()}
+          />
           <s.FilterList show={isOptionVisible.toString()}>
             <CountryList setOptionVisible={clickHandler} />
           </s.FilterList>

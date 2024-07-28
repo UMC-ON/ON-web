@@ -32,7 +32,7 @@ const UserInfoSchoolAuthPage = () => {
           </s.Explanation>
           <s.StyledFieldSet>
             <label className="margin_bottom_40">
-              <div>나의 교환/방문교</div>
+              <div style={{ color: 'black' }}>나의 교환/방문교</div>
               <s.InputWrapper>
                 <s.TransparentInput placeholder="아까 적은 학교 이름 자동으로 표시" />
               </s.InputWrapper>
