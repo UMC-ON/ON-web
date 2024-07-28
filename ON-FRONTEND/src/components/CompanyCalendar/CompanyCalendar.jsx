@@ -17,6 +17,11 @@ const DateRangePicker = () => {
 
   const today = moment().startOf('day').toDate();
 
+  const handleReset = () => {
+    setStartDate(null);
+    setEndDate(null);
+  };
+
   const renderCustomHeader = ({
     date,
     decreaseMonth,
@@ -56,6 +61,12 @@ const DateRangePicker = () => {
             {moment(startDate).format('MM/DD')} - {moment(endDate).format('MM/DD')}
           </div>
         )}
+        <div className="controls">
+          <s.ResetButton onClick={handleReset}>초기화</s.ResetButton>
+          <s.ApplyButton disabled={!startDate || !endDate}>
+            적용
+          </s.ApplyButton>
+        </div>
       </div>
     </s.CompanyCalendar>
   );

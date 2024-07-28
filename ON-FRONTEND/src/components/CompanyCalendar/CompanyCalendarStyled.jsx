@@ -29,13 +29,15 @@ export const CompanyCalendar = styled.div`
 
   .react-datepicker__day--selected,
   .react-datepicker__day--in-range {
-    background-color: #3E73B2;
-    color: white;
+    background-color: #E0E7FF;
+    color: #000;
+    border-radius: 50%;
   }
 
   .react-datepicker__day--in-selecting-range {
     background-color: #b3cde0;
   }
+
 
   .react-datepicker__current-month,
   .custom-header {
@@ -73,4 +75,26 @@ export const HeaderButton = styled.button`
 
 export const HeaderTitle = styled.span`
   font-size: 1.2em;
+`;
+
+export const ResetButton = styled.button`
+  background: none;
+  border: none;
+  color: #007BFF;
+  font-size: 0.8em;
+  cursor: pointer;
+  width: 6em;
+  margin-right: 4.5em;
+`;
+
+export const ApplyButton = styled.button`
+  background: ${(props) => (props.disabled ? '#E0E0E0' : '#C2C7FF')};
+  color: ${(props) => (props.disabled ? 'black' : '#FFFFFF')};
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+  margin: 1em;
+  width: 7em;
 `;
