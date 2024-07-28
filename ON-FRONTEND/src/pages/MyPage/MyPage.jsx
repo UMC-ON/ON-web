@@ -1,12 +1,12 @@
 import PageHeader from '../../components/PageHeader/PageHeader';
+import * as s from './MyPageStyled';
 
-const Mypage = () => {
+const MyPage = () => {
   return (
-    <>
+    <s.MyPageLayout>
       <PageHeader pageName="마이페이지" />
-      마이페이지
-    </>
+    </s.MyPageLayout>
   );
 };
 
-export default Mypage;
+export default MyPage;
