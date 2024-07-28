@@ -26,6 +26,7 @@ import FreeCommunityHome from './pages/Community/FreeCommunity/FreeCommunityHome
 import InfoCommunityHome from './pages/Community/InfoCommunity/InfoCommunityHome.jsx';
 import InfoPostPage from './pages/Community/InfoCommunity/InfoPostPage.jsx';
 import FreePostPage from './pages/Community/FreeCommunity/FreePostPage.jsx';
+import CommunityHomePage from './pages/CommunityHomePage.jsx';
 
 function App() {
   return (
@@ -61,6 +62,10 @@ function App() {
         <Route
           path="/"
           element={<HomePage />}
+        />
+        <Route
+          path="/community"
+          element={<CommunityHomePage/>}
         />
         <Route
           path="/community/general"
