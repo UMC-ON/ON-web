@@ -6,6 +6,7 @@ export const PageContainer = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
+  background-color: white;
   flex-direction: column;
   align-content: start;
   align-items: center;
@@ -26,6 +27,7 @@ export const FilterSection = styled.section`
   padding: 0 14px;
 `;
 export const FilterSelectionButton = styled.button`
+  color: black;
   box-sizing: border-box;
   min-width: 69px;
   width: auto;
@@ -75,7 +77,6 @@ export const DarkBackground = styled.div`
   opacity: 70%;
   z-index: 3;
   display: ${(props) => (props.show === 'true' ? 'block' : 'none')};
-  pointer-events: none;
 `;
 
 export const PostListSection = styled.section`

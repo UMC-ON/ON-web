@@ -29,6 +29,7 @@ import FreePostPage from './pages/Community/FreeCommunity/FreePostPage.jsx';
 import CommunityHomePage from './pages/CommunityHomePage.jsx';
 import AccompanyPage from './pages/AccompanyPage.jsx';
 import AccompanyDetailPage from './pages/AccompanyDetailPage.jsx';
+import FreeDetailPage from './pages/Community/FreeCommunity/FreeDetailPage.jsx';
 
 function App() {
   return (
@@ -67,13 +68,16 @@ function App() {
         />
         <Route
           path="/community"
-          element={<CommunityHomePage/>}
+          element={<CommunityHomePage />}
         />
         <Route
           path="/community/general"
           element={<FreeCommunityHome />}
         />
-
+        <Route
+          path="/community/general/detail"
+          element={<FreeDetailPage />}
+        />
         <Route
           path="/community/general/post"
           element={<FreePostPage />}

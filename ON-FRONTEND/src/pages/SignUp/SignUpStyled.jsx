@@ -6,7 +6,8 @@ import radioButton_checked from '../../assets/images/radioButton_checked.svg';
 export const FormPage = styled.section`
   background-color: rgb(250, 250, 250);
   box-sizing: border-box;
-  height: 100vh;
+  height: auto;
+  min-height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -75,6 +76,7 @@ export const ContentSection = styled.section`
 `;
 
 export const StyledH2 = styled.div`
+  color: black;
   font-family: Inter;
   font-size: 1.563rem;
   font-weight: bold;
@@ -136,6 +138,7 @@ export const InputWrapper = styled.div`
 `;
 
 export const TransparentInput = styled.input`
+  color: black;
   height: 2rem;
   margin-top: 0.2rem;
   background-color: transparent;
@@ -180,6 +183,7 @@ export const TwoColumnWrapper = styled.div`
 `;
 
 export const StyledComboBox = styled.select`
+  color: black;
   height: 2.063rem;
   padding: 0.25rem;
   margin-top: 0.2rem;
@@ -195,7 +199,7 @@ export const StyledComboBox = styled.select`
 export const CenterContainer = styled.div`
   width: 100%;
   height: auto;
-  margin-top: calc(100% / 15);
+  margin: calc(100% / 25) 0;
   display: flex;
   flex-direction: column;
   align-items: center;

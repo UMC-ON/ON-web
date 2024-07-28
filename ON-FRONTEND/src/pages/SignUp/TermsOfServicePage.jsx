@@ -47,14 +47,14 @@ const TermsOfServicePage = () => {
             텍스트다.
           </TermContent>
           <div className="radioBtn">
-            <label>
+            <label style={{ color: 'black' }}>
               <s.RadioButton
                 type="radio"
                 name="termConsent"
               />
               비동의
             </label>
-            <label>
+            <label style={{ color: 'black' }}>
               <s.RadioButton
                 type="radio"
                 name="termConsent"
@@ -82,6 +82,7 @@ const Title = styled.div`
 `;
 
 const TermContent = styled.div`
+  color: black;
   overflow: auto;
   height: 17.625rem;
   margin: 0.313rem 0;
