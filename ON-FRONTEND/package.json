@@ -48,8 +48,7 @@
    "main": "vite.config.js",
    "keywords": [],
    "author": "",
-   "license": "ISC"
-=======
+   "license": "ISC",
   "name": "on-frontend",
   "private": true,
   "version": "0.0.0",
