@@ -14,7 +14,7 @@ const CardAccompanyList = ({ cards }) => {
         <CardContainer key={index}>
           <Card>
             <CardImage src={card.image}/>
-            <GreyCard>
+            <GreyCard color={card.color}>
               <Left><CardName>{card.title}</CardName></Left>
               <Left>
                 <CardIcon src={personIcon}/>
@@ -132,7 +132,7 @@ const GreyText = styled.p`
 `;
 
 const GreyCard = styled.div`
-  background-color: #D0D6DA;
+  background-color: ${props => props.color || '#D0D6DA'};
 `;
 
 const Left = styled.div`

@@ -27,6 +27,8 @@ import InfoCommunityHome from './pages/Community/InfoCommunity/InfoCommunityHome
 import InfoPostPage from './pages/Community/InfoCommunity/InfoPostPage.jsx';
 import FreePostPage from './pages/Community/FreeCommunity/FreePostPage.jsx';
 import CommunityHomePage from './pages/CommunityHomePage.jsx';
+import AccompanyPage from './pages/AccompanyPage.jsx';
+import AccompanyDetailPage from './pages/AccompanyDetailPage.jsx';
 import FreeDetailPage from './pages/Community/FreeCommunity/FreeDetailPage.jsx';
 
 function App() {
@@ -103,6 +105,14 @@ function App() {
         <Route
           path="/chat"
           element={<Chat />}
+        />
+        <Route
+          path="/accompany"
+          element={<AccompanyPage/>}
+        />
+        <Route
+          path="/accompany/detail"
+          element={<AccompanyDetailPage/>}
         />
       </Routes>
     </ThemeProvider>
