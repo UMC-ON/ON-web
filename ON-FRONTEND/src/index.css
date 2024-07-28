@@ -36,9 +36,10 @@ a:hover {
 body {
   margin: 0px;
   display: flex;
-  place-items: center;
+  /* place-items: center; */
   max-width: 480px;
   min-height: 100vh;
+  background-color: #ffffff;
 }
 
 h1 {
