@@ -162,7 +162,7 @@ function CommunityHomePage() {
 
           <FlexContainer>
               <Span>
-                <RoundIcon src={freeCircleIcon}/>
+                <RoundIcon src={freeCircleIcon} />
                 <MiddleText spacing="1vh">자유 커뮤니티</MiddleText>
               </Span>
               <RightIcon src={rightIcon}/>
@@ -215,7 +215,7 @@ const Shadow = styled.div`
 
 const Span = styled.span`
   display: flex;
-  align-items: center;  /* Add this to center vertically */
+  align-items: center; 
   padding-left: 1.2vh;
 `;
 
@@ -224,8 +224,8 @@ const FlexContainer = styled.div`
   margin-top: 1.5rem;
   margin-right: 0.5rem;
   display: flex;
-  justify-content: space-between;  /* This keeps items on left and right */
-  align-items: center;  /* Add this to center vertically */
+  justify-content: space-between; 
+  align-items: center; 
   padding: 10px; 
   margin-bottom: 1vh;
 `;
