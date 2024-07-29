@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React from 'react';
+import React, {useState} from 'react';
 
 import detailImg from '../assets/images/accompany_img.svg';
 import profileImg from '../assets/images/profile_img.jpeg';
@@ -11,6 +11,9 @@ import plusIcon from '../assets/images/black_plus_icon.svg';
 import marketImg from '../assets/images/borough_market.svg';
 
 import CardAccompanyList from '../components/CardAccompanyList';
+import AccompanyHeader from '../components/AccompanyHeader';
+import FirstModal from '../components/FirstModal';
+import SecondModal from '../components/SecondModal';
 
 const accompanycards = [
   {
@@ -50,8 +53,39 @@ const accompanycards = [
 
 
 function AccompanyDetailPage() {
+
+  const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
+  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+
+  const openFirstModal = () => {
+    console.log("First modal opened");
+    setIsFirstModalOpen(true);
+  };
+
+  const closeFirstModal = () => {
+    console.log("First modal closed");
+    setIsFirstModalOpen(false);
+  };
+
+  const openSecondModal = () => {
+    console.log("Second modal opened");
+    setIsSecondModalOpen(true);
+  };
+
+  const closeSecondModal = () => {
+    console.log("Second modal closed");
+    setIsSecondModalOpen(false);
+  };
+
+  const handleBlueButtonClick = () => {
+    closeFirstModal();
+    openSecondModal();
+  };
+
+
     return (
       <>
+        <AccompanyHeader/>
         <Space/>
         <BannerContainer>
           <BannerImg src={detailImg} alt="Banner" />
@@ -117,6 +151,16 @@ function AccompanyDetailPage() {
 
         <CardAccompanyList cards={accompanycards}></CardAccompanyList>
         <Space/>
+
+        <BottomTabLayout>
+          <GreyButton>채팅 문의</GreyButton>
+          <BlueButton onClick={openFirstModal}>동행 신청</BlueButton>
+        </BottomTabLayout>
+
+        {isFirstModalOpen && (
+        <FirstModal closeModal={closeFirstModal} openNextModal={handleBlueButtonClick} />
+        )}
+        {isSecondModalOpen && <SecondModal closeModal={closeSecondModal} />}
 
       </>
     );
@@ -293,4 +337,63 @@ const MiddleText = styled.div`
   font-weight: bold;
   font-family: 'Inter-Regular';
   font-size: 1.2em;
+`;
+
+const BottomTabLayout = styled.div`
+  width: 100%;
+  max-width: 480px;
+  height: 87px;
+  position: fixed;
+  bottom: 0;
+  border-top:  1px solid #DFDFDF;
+  background: #ffffff;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 20px 20px;
+`;
+
+const GreyButton = styled.button`
+  align-items: center;
+  justify-content: center; 
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  border-radius: 10px;
+  width: 148px;
+  height: 50px;
+  padding: 15px 26px;
+  background-color: #d9d9d9;
+  color: white;
+  text-align: center;
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  z-index: 2;
+`;
+
+
+const BlueButton = styled.button`
+  align-items: center;
+  justify-content: center; 
+  left: 0;
+  right: 0;
+  margin: 0 auto; 
+  border-radius: 10px;
+  width: 148px;
+  height: 50px;
+  padding: 15px 26px;
+  background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
+  color: white;
+  text-align: center;
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  z-index: 2;
 `;

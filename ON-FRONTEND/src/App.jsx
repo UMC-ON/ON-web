@@ -31,6 +31,7 @@ import AccompanyPage from './pages/AccompanyPage.jsx';
 import AccompanyDetailPage from './pages/AccompanyDetailPage.jsx';
 import FreeDetailPage from './pages/Community/FreeCommunity/FreeDetailPage.jsx';
 import DiaryPage from "./pages/Diary/DiaryPage.jsx";
+import AccompanyPostPage from './pages/AccompanyPostPage.jsx';
 
 function App() {
   return (
@@ -106,6 +107,10 @@ function App() {
         <Route
           path="/accompany"
           element={<AccompanyPage/>}
+        />
+         <Route
+          path="/accompany/post"
+          element={<AccompanyPostPage/>}
         />
         <Route
           path="/accompany/detail"
