@@ -72,8 +72,10 @@ const BottomTabNav = () => {
       </s.IconContainer>
 
       {/*채팅 버튼*/}
-      <NavLink to="/chat">
-        <s.IconContainer className={currentPath === '/chat' ? 'active' : ''}>
+      <NavLink to="/chatlist">
+        <s.IconContainer
+          className={currentPath === '/chatlist' ? 'active' : ''}
+        >
           <s.Icon
             xmlns="http://www.w3.org/2000/svg"
             width="24"
