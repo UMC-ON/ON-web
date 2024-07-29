@@ -96,7 +96,8 @@ const BottomTabNav = () => {
         </s.IconContainer>
       </NavLink>
       {/*나의일기 버튼*/}
-      <s.IconContainer className={currentPath === '/수정' ? 'active' : ''}>
+      <NavLink to="/diary">
+      <s.IconContainer className={currentPath === '/diary' ? 'active' : ''}>
         <s.Icon
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -121,6 +122,7 @@ const BottomTabNav = () => {
         </s.Icon>
         <s.IconTag>나의일기</s.IconTag>
       </s.IconContainer>
+      </NavLink>
     </s.BottomTabLayout>
   );
 };
