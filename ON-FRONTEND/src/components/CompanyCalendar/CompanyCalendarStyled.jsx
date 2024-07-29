@@ -53,6 +53,27 @@ export const CompanyCalendar = styled.div`
   .react-datepicker__day--outside-month {
     visibility: hidden;
   }
+    .custom-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5em;
+  background-color: white;
+  color: #3E73B2;
+  font-weight: bold;
+}
+
+.custom-header button {
+  background: none;
+  border: none;
+  color: #3E73B2;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.custom-header span {
+  font-size: 1.2em;
+}
 `;
 
 export const CalendarHeader = styled.div`
