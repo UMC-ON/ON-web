@@ -2,10 +2,13 @@ import React, { useState, useRef } from 'react';
 import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import DiaryCalendar from '../../components/DiaryCalendar/DiaryCalendar';
 import PageHeader from '../../components/PageHeader/PageHeader';
+// import DailyDiary from '../../components/DailyDiary';
 import styled from 'styled-components';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import './DiaryPage.css';
+import plus_button from '../../assets/images/addButton.svg';
 
 const Diary = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -21,14 +24,13 @@ const Diary = () => {
     setCalendarOpen(!calendarOpen); // 달력 열기/닫기 토글
   };
 
-  const todayDate = moment().format('YYYY-MM-DD');
+  const todayDate = moment().format('YYYY.MM.DD');
 
   const calculateDDay = (date) => {
     if (!date) return '';
     const dDay = Math.abs(moment(date).diff(moment(), 'days'));
     return dDay === 0 ? '오늘' : `D+${dDay}`;
   };
-
 
   return (
     <DiaryContainer>
@@ -37,6 +39,8 @@ const Diary = () => {
         <Information>
           <DDay>
             {selectedDate ? `${calculateDDay(selectedDate)}` : <DatePicker
+                className='inputDate'
+                placeholderText={'날짜 설정'} 
                 ref={datePickerRef}
                 selected={selectedDate}
                 onChange={handleDateChange}
@@ -65,9 +69,10 @@ const Diary = () => {
           <DiaryCalendar />
         </CalendarContainer>
         <AddDiary>
-            <div>기록 남기기</div>
-            <AddButton></AddButton>
+          <div>기록 남기기</div>
+          <AddButton src={plus_button} />
         </AddDiary>
+        <CustomDiv />
       </Content>
       <BottomTabNav />
     </DiaryContainer>
@@ -79,7 +84,7 @@ export default Diary;
 const DiaryContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
 `;
 
 const Content = styled.div`
@@ -106,7 +111,7 @@ const DDay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 5px solid #DCDFFF; //이후 border에 그라데이션 추가하기
+  border: 5px solid #DCDFFF; // 이후 border에 그라데이션 추가하기
 `;
 
 const Today = styled.div`
@@ -155,27 +160,41 @@ const CalendarContainer = styled.div`
 `;
 
 const AddDiary = styled.div`
-    width: 40vw;
-    height: 5vh;
-    margin-bottom: 8em;
-    background: ${props => props.theme.lightPurple};
-    color: white;
-    border-radius: 55px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`
+  width: 30%;
+  height: 5vh;
+  margin: 2em 0; /* 마진 변경 */
+  margin-left: 1.5em;
+  background: ${props => props.theme.lightPurple};
+  color: white;
+  border-radius: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8em;
+`;
 
-const AddButton = styled.div`
-    width: 6vw;
-    height: 3vh;
-    background: white;
-    border-radius: 50%;
-    margin-left: 0.5em;
-`
+const AddButton = styled.img`
+  width: 6vw;
+  height: 3vh;
+  margin-left: 0.5em;
+`;
+
+const CustomDiv = styled.div`
+  width: 300px;
+  height: 300px;
+  background-color: black;
+  margin: 2em auto; /* 중앙 정렬을 위해 변경 */
+`;
+
+const DailyDiary = styled.div`
+  width: 100vw;
+  height: 30vh;
+  background: black;
+  position: relative;
+  margin-top: 50%;
+`;
 
 /*
-하단 네비게이션에 주소 연결
-datepicker input창 튜닝
+D-Day 로직에 문제 있음 -> 다음 달로 넘어가면 날짜 초기화됨, 수정 필요
 버튼 + 일기쓰기 페이지 만들기
 */
