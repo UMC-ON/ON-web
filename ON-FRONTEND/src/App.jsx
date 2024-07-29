@@ -30,15 +30,12 @@ import CommunityHomePage from './pages/CommunityHomePage.jsx';
 import AccompanyPage from './pages/AccompanyPage.jsx';
 import AccompanyDetailPage from './pages/AccompanyDetailPage.jsx';
 import FreeDetailPage from './pages/Community/FreeCommunity/FreeDetailPage.jsx';
+import DiaryPage from "./pages/Diary/DiaryPage.jsx";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Routes>
-        <Route
-          path="/company"
-          element={<CompanyCalendar />}
-        />
         <Route
           path="/signUp"
           element={<TermsOfServicePage />}
@@ -113,6 +110,10 @@ function App() {
         <Route
           path="/accompany/detail"
           element={<AccompanyDetailPage/>}
+        />
+        <Route
+          path="/diary"
+          element={<DiaryPage />}
         />
       </Routes>
     </ThemeProvider>
