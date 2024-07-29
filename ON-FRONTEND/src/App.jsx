@@ -11,6 +11,7 @@ import Notification from './pages/Notification/NotificationPage.jsx';
 import Search from './pages/Search/SearchPage.jsx';
 import BottomTabNav from './components/BottomTabNav/BottomTabNav.jsx';
 import Chat from './pages/Chat/ChatPage.jsx';
+import ChatList from './pages/ChatList/ChatList.jsx';
 import HomePage from './pages/HomePage.jsx';
 
 import DiaryCalendar from './components/DiaryCalendar/DiaryCalendar.jsx';
@@ -105,8 +106,12 @@ function App() {
           element={<Chat />}
         />
         <Route
+          path="/chatlist"
+          element={<ChatList />}
+        />
+        <Route
           path="/accompany"
-          element={<AccompanyPage/>}
+          element={<AccompanyPage />}
         />
          <Route
           path="/accompany/post"
@@ -114,7 +119,7 @@ function App() {
         />
         <Route
           path="/accompany/detail"
-          element={<AccompanyDetailPage/>}
+          element={<AccompanyDetailPage />}
         />
         <Route
           path="/diary"
