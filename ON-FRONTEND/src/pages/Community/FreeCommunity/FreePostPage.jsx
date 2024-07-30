@@ -1,5 +1,7 @@
 import * as s from '../PostPageStyled.jsx';
 import { useNavigate } from 'react-router-dom';
+import camera from '../../../assets/images/camera.svg';
+import DefaultCheckBox from '../../../components/DefaultCheckBox/DefaultCheckBox.jsx';
 
 const FreePostPage = () => {
   const navigate = useNavigate();
@@ -34,13 +36,10 @@ const FreePostPage = () => {
                 </s.ColorButtonTag>
               </s.ButtonWrapper>
             </s.InfoLabel>
-            <s.CheckBoxWrapper>
-              <s.StyledCheckBox
-                type="checkBox"
-                color="#CBCDE9"
-              />
-              파견교 비공개
-            </s.CheckBoxWrapper>
+            <DefaultCheckBox
+              after="파견교 비공개"
+              checkBoxStyle={{ color: '#CBCDE9' }}
+            />
           </s.SpaceBetweenContainer>
         </s.PostInfoSection>
         <s.TitleSection>
@@ -65,6 +64,13 @@ const FreePostPage = () => {
           </s.EditorWrapper>
         </s.ContentSection>
       </s.BigContainer>
+      <s.Footer>
+        <img src={camera} />
+        <DefaultCheckBox
+          after="익명"
+          wrapperStyle={{ fontSize: '14px' }}
+        />
+      </s.Footer>
     </>
   );
 };

@@ -1,6 +1,5 @@
 import * as s from '../CommunityStyled.jsx';
 
-import CountryList from '../../../components/Common/CountryList.jsx';
 import PageHeader from '../../../components/PageHeader/PageHeader.jsx';
 import CustomSlider from '../../../components/Slider/CustomSlider.jsx';
 import CommunityPost from '../../../components/CommunityPost/CommunityPost.jsx';
@@ -11,23 +10,17 @@ import gradientRec from '../../../assets/images/gradientRec.svg';
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CountryList } from '../../../components/CountryList.jsx';
+import FilterButton from '../../../components/Common/FilterButton/FilterButton.jsx';
 
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 
 const FreeCommunityHome = () => {
-  const [isOptionVisible, setOptionVisible] = useState(false);
-  const [currentValue, setCurrentValue] = useState('국가');
-  const clickHandler = (e) => {
-    setOptionVisible(!isOptionVisible);
-    const { innerText } = e.target;
-    setCurrentValue(innerText);
-  };
-
   const navigate = useNavigate();
   const nav = () => {
     navigate('./post');
   };
-
+  const mylist = [1, 2, 3, 4, '와진짜개짱짱긴텍스트'];
   return (
     <>
       <s.PageContainer>
@@ -43,20 +36,18 @@ const FreeCommunityHome = () => {
         </s.SliderWrapper>
 
         <s.FilterSection>
-          <s.FilterSelectionButton
-            onClick={() => {
-              setOptionVisible((prev) => !prev);
-            }}
-          >
-            {currentValue}
-          </s.FilterSelectionButton>
-          <s.DarkBackground
-            onClick={clickHandler}
-            show={isOptionVisible.toString()}
+          <FilterButton
+            color1="#C2C7FF"
+            color2="#AD99FF"
+            myList={CountryList}
+            placeholder="국가"
           />
-          <s.FilterList show={isOptionVisible.toString()}>
-            <CountryList setOptionVisible={clickHandler} />
-          </s.FilterList>
+          <FilterButton
+            color1="#C2C7FF"
+            color2="#AD99FF"
+            myList={mylist}
+            placeholder="실험"
+          />
         </s.FilterSection>
         <s.PostListSection>
           <CommunityPost></CommunityPost>

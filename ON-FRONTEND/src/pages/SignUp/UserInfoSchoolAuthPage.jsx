@@ -25,19 +25,17 @@ const UserInfoSchoolAuthPage = () => {
             이전 단계
           </s.BackButton>
           <s.StyledH2>교환/방문교 인증</s.StyledH2>
-          <s.Explanation className="margin_bottom_40">
+          <s.Explanation>
             신뢰할 수 있는 커뮤니티를 위해 교환/방문교의 파견사실을 확인하고
             있습니다. 인증을 하지 않아도 커뮤니티 글을 쓰고 읽을 수 있지만 일부
             기능(동행 구하기, 물품 거래)이 제한됩니다.
           </s.Explanation>
-          <s.StyledFieldSet>
-            <label className="margin_bottom_40">
-              <div style={{ color: 'black' }}>나의 교환/방문교</div>
-              <s.InputWrapper>
-                <s.TransparentInput placeholder="아까 적은 학교 이름 자동으로 표시" />
-              </s.InputWrapper>
-            </label>
-          </s.StyledFieldSet>
+          <fieldset>
+            <s.InputWrapper>
+              <div>나의 교환/방문교</div>
+              <s.TransparentInput placeholder="아까 적은 학교 이름 자동으로 표시" />
+            </s.InputWrapper>
+          </fieldset>
           <s.CenterContainer>
             <AddPhoto src={addPhoto} />
           </s.CenterContainer>
@@ -61,5 +59,6 @@ export default UserInfoSchoolAuthPage;
 const AddPhoto = styled.img`
   width: 310px;
   height: 310px;
+  margin: 26px 40px;
   flex-shrink: 0;
 `;

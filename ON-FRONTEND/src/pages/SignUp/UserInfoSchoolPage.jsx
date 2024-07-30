@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import * as s from './SignUpStyled';
 import groupLogo from '../../assets/images/groupLogo.svg';
-import lightBlueArrow from '../../assets/images/lightBlueArrow.svg';
 import { useNavigate } from 'react-router-dom';
+import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox';
 
 const UserInfoSchoolPage = () => {
   const navigate = useNavigate();
@@ -24,34 +24,39 @@ const UserInfoSchoolPage = () => {
           >
             이전 단계
           </s.BackButton>
-          <s.StyledH2 className="margin_bottom_40">
-            교환/방문교 정보 입력
-          </s.StyledH2>
-          <s.StyledFieldSet>
-            <label className="margin_bottom_40">
+          <s.StyledH2>교환/방문교 정보 입력</s.StyledH2>
+          <fieldset>
+            <s.InputWrapper>
               <div
                 style={{ color: 'black' }}
                 className="required"
               >
                 나의 교환/방문교
               </div>
-              <s.InputWrapper>
-                <s.TransparentInput placeholder="학교의 공식 영문명을 작성해주세요" />
-              </s.InputWrapper>
-              <StyledCheckBox
-                type="checkbox"
-                id="school_unsure"
-              />
-              <GrayLabel htmlFor="school_unsure">교환/방문교 미정</GrayLabel>
-            </label>
-            <label className="margin_bottom_40">
-              <div
-                style={{ color: 'black' }}
-                className="required"
-              >
-                교환/방문교 소재 국가
-              </div>
-              <SchoolComboBox defaultValue={'none'}>
+              <s.TransparentInput placeholder="학교의 공식 영문명을 작성해주세요" />
+            </s.InputWrapper>
+            <DefaultCheckBox
+              wrapperStyle={{ paddingTop: '12px' }}
+              after="교환/방문교 미정"
+              checkBoxStyle={{
+                border: '0.5px solid #C6C6C6',
+                width: '11px',
+                height: '11px',
+                borderRadius: '3px',
+              }}
+            />
+
+            <s.InputWrapper>
+              <div>교환/방문교 홈페이지 링크 </div>
+              <s.TransparentInput placeholder="교환/방문교의 웹 사이트 주소를 붙여넣기 해주세요." />
+            </s.InputWrapper>
+            <s.Explanation style={{ fontSize: '9px' }}>
+              사이트 주소는 가입 이후 마이페이지에서 수정하실 수 있습니다.
+            </s.Explanation>
+
+            <s.InputWrapper style={{ color: 'black', border: 'none' }}>
+              <div className="required">교환/방문교 소재 국가</div>
+              <s.SchoolComboBox defaultValue={'none'}>
                 <option
                   value="none"
                   hidden
@@ -77,9 +82,10 @@ const UserInfoSchoolPage = () => {
                 <option disabled>----오세아니아----</option>
                 <option>호주 </option>
                 <option>뉴질랜드</option>
-              </SchoolComboBox>
-            </label>
-            <label style={{ color: 'black' }}>
+              </s.SchoolComboBox>
+            </s.InputWrapper>
+
+            <s.InputWrapper style={{ color: 'black', border: 'none' }}>
               파견 유형
               <RadioBtnDiv>
                 <label>
@@ -97,8 +103,8 @@ const UserInfoSchoolPage = () => {
                   방문학생
                 </label>
               </RadioBtnDiv>
-            </label>
-          </s.StyledFieldSet>
+            </s.InputWrapper>
+          </fieldset>
         </s.ContentSection>
       </s.SectionWrapper>
 
@@ -128,33 +134,5 @@ const StyledCheckBox = styled.input`
   stroke: #c6c6c6;
   &:checked {
     accent-color: white;
-  }
-`;
-
-const GrayLabel = styled.label`
-  display: inline-block;
-  margin-top: 0.688rem;
-  color: black;
-  opacity: 64%;
-  font-size: 0.688rem;
-`;
-
-const SchoolComboBox = styled(s.StyledComboBox)`
-  display: block;
-  width: calc(100% / 2);
-  border-radius: 0.8rem;
-  outline: none;
-  border: none;
-  background: url(${lightBlueArrow}) no-repeat right 0.8rem center #f3f3f3;
-  padding: 0.25rem 0.625rem;
-  margin: 0.625rem 0;
-  font-size: 0.75rem;
-  color: #979797;
-  &::-webkit-scrollbar {
-    width: 0.5rem;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: gray;
-    border-radius: 1rem;
   }
 `;

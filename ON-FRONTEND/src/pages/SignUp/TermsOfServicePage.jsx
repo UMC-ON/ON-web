@@ -25,7 +25,9 @@ const TermsOfServicePage = () => {
           >
             이전 단계
           </s.BackButton>
-          <s.StyledH2 className="margin_bottom_40">Terms of Policy</s.StyledH2>
+          <s.StyledH2 style={{ marginBottom: '40px' }}>
+            회원가입을 위한 약관 동의
+          </s.StyledH2>
           <TermContent>
             [제 1항 25조] 테스트용으로 쓰이는 더미 텍스트다. 테스트용으로 쓰이는
             더미 텍스트다. 디자인을 할 때 가제로 쓰이고 레이아웃을 테스트할 때

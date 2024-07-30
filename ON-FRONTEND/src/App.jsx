@@ -27,11 +27,13 @@ import FreeCommunityHome from './pages/Community/FreeCommunity/FreeCommunityHome
 import InfoCommunityHome from './pages/Community/InfoCommunity/InfoCommunityHome.jsx';
 import InfoPostPage from './pages/Community/InfoCommunity/InfoPostPage.jsx';
 import FreePostPage from './pages/Community/FreeCommunity/FreePostPage.jsx';
+import FreeDetailPage from './pages/Community/FreeCommunity/FreeDetailPage.jsx';
+import InfoDetailPage from './pages/Community/InfoCommunity/InfoDetailPage.jsx';
+
 import CommunityHomePage from './pages/CommunityHomePage.jsx';
 import AccompanyPage from './pages/AccompanyPage.jsx';
 import AccompanyDetailPage from './pages/AccompanyDetailPage.jsx';
-import FreeDetailPage from './pages/Community/FreeCommunity/FreeDetailPage.jsx';
-import DiaryPage from "./pages/Diary/DiaryPage.jsx";
+import DiaryPage from './pages/Diary/DiaryPage.jsx';
 import AccompanyPostPage from './pages/AccompanyPostPage.jsx';
 
 function App() {
@@ -86,6 +88,10 @@ function App() {
           element={<InfoCommunityHome />}
         />
         <Route
+          path="/community/info/detail"
+          element={<InfoDetailPage />}
+        />
+        <Route
           path="/community/info/post"
           element={<InfoPostPage />}
         />
@@ -113,9 +119,9 @@ function App() {
           path="/accompany"
           element={<AccompanyPage />}
         />
-         <Route
+        <Route
           path="/accompany/post"
-          element={<AccompanyPostPage/>}
+          element={<AccompanyPostPage />}
         />
         <Route
           path="/accompany/detail"

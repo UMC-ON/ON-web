@@ -3,31 +3,30 @@ import styled from 'styled-components';
 import Img from '../../assets/images/postImgExample.svg';
 import commentImg from '../../assets/images/commentImg.svg';
 import verifiedBadge from '../../assets/images/verifiedBadge.svg';
+import { Post } from './Post';
+import { useNavigate } from 'react-router-dom';
 
 const CommunityPost = () => {
+  const navigate = useNavigate();
+  const nav = () => {
+    navigate('./detail');
+  };
   return (
-    <s.Post>
+    <s.Post onClick={nav}>
       <HeaderSection>
-        <Title>[🇩🇪 독일 교환학생 준비] ep.1 테아민 잡기</Title>
-        <Date>10분 전</Date>
+        <Title>{Post.title}</Title>
+        <Date>{Post.date}</Date>
       </HeaderSection>
       <ContentSection>
         <ContentWrapper>
-          <TextContent>
-            따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 ​ 독일로 교환학생을
-            앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약! ​ 저는
-            3개월 만에 학기가 끝나는 학교로 가지만, 이후 보다 편안하고 안전한(?)
-            유럽 여행을 위해 비자를 발급받으려 합니다! 이를 위해서는,,,,
-            피켓팅.. 치열하다.. 힘들다.. 세상 부정적인 단어들로 불리는 테아민을
-            잡아야 하는데요!
-          </TextContent>
+          <TextContent>{Post.content}</TextContent>
 
           <PostInfoWrapper>
             <Writer>
-              익명
+              {Post.writer}
               <VerifiedImg
                 src={verifiedBadge}
-                verified={'verified'}
+                verified={Post.verified}
               />
             </Writer>
             <Comment>
@@ -37,8 +36,8 @@ const CommunityPost = () => {
           </PostInfoWrapper>
         </ContentWrapper>
         <ContentImg
-          src={Img}
-          showimg={'true'}
+          src={Post.img}
+          showimg={Post.showImg}
         />
       </ContentSection>
     </s.Post>
@@ -146,8 +145,7 @@ const Writer = styled.div`
 `;
 const VerifiedImg = styled.img`
   padding: 0 2px;
-  display: ${(props) =>
-    props.verified === 'verified' ? 'inline-block' : 'none'};
+  display: ${(props) => (props.verified === 'true' ? 'inline-block' : 'none')};
 `;
 const Comment = styled.div`
   padding-top: 2px;

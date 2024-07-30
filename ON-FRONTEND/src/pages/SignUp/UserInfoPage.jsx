@@ -23,33 +23,25 @@ const UserInfoAdditionalPage = () => {
           >
             이전 단계
           </s.BackButton>
-          <s.StyledH2 className="margin_bottom_40">정보 입력</s.StyledH2>
-          <s.StyledFieldSet>
-            <label
-              style={{ color: 'black' }}
-              className="margin_bottom_40"
-            >
-              이름
-              <s.InputWrapper>
-                <s.TransparentInput placeholder="본명으로 작성해 주세요" />
-              </s.InputWrapper>
-            </label>
+          <s.StyledH2>정보 입력</s.StyledH2>
+          <fieldset>
+            <s.InputWrapper>
+              <div>이름</div>
+              <s.TransparentInput placeholder="본명으로 작성해 주세요" />
+            </s.InputWrapper>
+
             <s.TwoColumnWrapper>
-              <label
-                style={{ color: 'black' }}
-                className="margin_bottom_40"
-              >
-                나이
-                <s.InputWrapper>
-                  <s.TransparentInput placeholder="숫자만 입력해주세요" />
-                </s.InputWrapper>
-              </label>
+              <s.InputWrapper>
+                <div>나이</div>
+                <s.TransparentInput
+                  placeholder="숫자만 입력해주세요"
+                  inputMode="numeric"
+                />
+              </s.InputWrapper>
+
               <EmptyDiv></EmptyDiv>
-              <label
-                style={{ color: 'black' }}
-                className="margin_bottom_40"
-              >
-                성별
+              <s.InputWrapper style={{ border: 'none' }}>
+                <div>성별</div>
                 <s.StyledComboBox defaultValue={'none'}>
                   <option
                     value="none"
@@ -59,18 +51,14 @@ const UserInfoAdditionalPage = () => {
                   <option value="F">여자</option>
                   <option value="E">기타</option>
                 </s.StyledComboBox>
-              </label>
-            </s.TwoColumnWrapper>
-            <label
-              style={{ color: 'black' }}
-              className="margin_bottom_40"
-            >
-              닉네임
-              <s.InputWrapper>
-                <s.TransparentInput />
               </s.InputWrapper>
-            </label>
-          </s.StyledFieldSet>
+            </s.TwoColumnWrapper>
+
+            <s.InputWrapper>
+              <div>닉네임</div>
+              <s.TransparentInput />
+            </s.InputWrapper>
+          </fieldset>
         </s.ContentSection>
       </s.SectionWrapper>
 

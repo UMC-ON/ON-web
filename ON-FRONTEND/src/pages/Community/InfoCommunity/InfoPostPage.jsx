@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import * as s from '../PostPageStyled.jsx';
+import camera from '../../../assets/images/camera.svg';
+import DefaultCheckBox from '../../../components/DefaultCheckBox/DefaultCheckBox.jsx';
 
 const InfoPostPage = () => {
   const navigate = useNavigate();
@@ -32,10 +34,7 @@ const InfoPostPage = () => {
                 <s.ColorButtonTag>King's College London</s.ColorButtonTag>
               </s.ButtonWrapper>
             </s.InfoLabel>
-            <s.CheckBoxWrapper>
-              <s.StyledCheckBox type="checkBox" />
-              파견교 비공개
-            </s.CheckBoxWrapper>
+            <DefaultCheckBox after="파견교 비공개" />
           </s.SpaceBetweenContainer>
         </s.PostInfoSection>
         <s.TitleSection>
@@ -54,6 +53,13 @@ const InfoPostPage = () => {
           </s.EditorWrapper>
         </s.ContentSection>
       </s.BigContainer>
+      <s.Footer>
+        <img src={camera} />
+        <DefaultCheckBox
+          after="익명"
+          wrapperStyle={{ fontSize: '14px' }}
+        />
+      </s.Footer>
     </>
   );
 };
