@@ -28,8 +28,14 @@ const Diary = () => {
 
   const calculateDDay = (date) => {
     if (!date) return '';
-    const dDay = Math.abs(moment(date).diff(moment(), 'days'));
-    return dDay === 0 ? '오늘' : `D+${dDay}`;
+    const diffDays = moment(date).diff(moment(), 'days');
+    if (diffDays === 0) {
+      return '오늘';
+    } else if (diffDays > 0) {
+      return `D-${diffDays}`;
+    } else {
+      return `D+${Math.abs(diffDays)}`;
+    }
   };
 
   return (
@@ -72,7 +78,10 @@ const Diary = () => {
           <div>기록 남기기</div>
           <AddButton src={plus_button} />
         </AddDiary>
-        <CustomDiv />
+        <DailyDiary>
+          <p style={{padding: "20px", color: "#D9D9D9"}}>교환 생활의 시작,<br/>윤서님의 교환 1일차 하루는 어땠나요?</p>
+          <Save>저장하기</Save>
+        </DailyDiary>
       </Content>
       <BottomTabNav />
     </DiaryContainer>
@@ -162,8 +171,9 @@ const CalendarContainer = styled.div`
 const AddDiary = styled.div`
   width: 30%;
   height: 5vh;
-  margin: 2em 0; /* 마진 변경 */
   margin-left: 1.5em;
+  margin-top: 1em;
+  margin-bottom: 1em;
   background: ${props => props.theme.lightPurple};
   color: white;
   border-radius: 55px;
@@ -179,22 +189,31 @@ const AddButton = styled.img`
   margin-left: 0.5em;
 `;
 
-const CustomDiv = styled.div`
-  width: 300px;
-  height: 300px;
-  background-color: black;
-  margin: 2em auto; /* 중앙 정렬을 위해 변경 */
-`;
-
 const DailyDiary = styled.div`
-  width: 100vw;
-  height: 30vh;
-  background: black;
-  position: relative;
-  margin-top: 50%;
+  width: 90%;
+  height: 130px;
+  margin-bottom: 100px;
+  margin-left: 15px;
+  border-radius: 15px;
+  border: 0.5px solid ${props => props.theme.lightPurple};
+  white-space: pre-wrap;
+  text-align: left;
+  display: flex;
+  align-items: right;
+  position: relative; // 상대 위치로 설정
 `;
 
-/*
-D-Day 로직에 문제 있음 -> 다음 달로 넘어가면 날짜 초기화됨, 수정 필요
-버튼 + 일기쓰기 페이지 만들기
-*/
+const Save = styled.div`
+  width: 70px;
+  height: 20px;
+  border-radius: 9px;
+  background: ${props => props.theme.blueGra};
+  color: white;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute; // 절대 위치로 설정
+  bottom: 10px; // 아래에서 10px 간격
+  right: 10px; // 오른쪽에서 10px 간격
+`;
