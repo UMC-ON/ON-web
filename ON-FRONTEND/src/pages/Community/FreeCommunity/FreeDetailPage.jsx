@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { useRef } from 'react';
+import * as s from '../DetailPageStyled.jsx';
+import DefaultCheckBox from '../../../components/DefaultCheckBox/DefaultCheckBox.jsx';
 
 const FreeDetailPage = () => {
   //const textarea = useRef(null);
@@ -11,8 +11,8 @@ const FreeDetailPage = () => {
   };
   return (
     <>
-      <ConfirmHeader>
-        <BackButton>
+      <s.ConfirmHeader>
+        <s.BackButton>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="10"
@@ -28,20 +28,22 @@ const FreeDetailPage = () => {
               strokeLinecap="round"
             />
           </svg>
-        </BackButton>
-        <PostInfo>
-          <InfoLabel>익명</InfoLabel>
-          <InfoLabel>
+        </s.BackButton>
+        <s.PostInfo>
+          <s.InfoLabel>익명</s.InfoLabel>
+          <s.InfoLabel>
             KR
             <img />
             DE
-          </InfoLabel>
-          <InfoLabel>5min ago</InfoLabel>
-        </PostInfo>
-      </ConfirmHeader>
-      <DetailPageLayout>
-        <Title>[🇩🇪 독일 교환학생 준비] ep.1 테아민 잡기</Title>
-        <Content>
+          </s.InfoLabel>
+          <s.InfoLabel>5min ago</s.InfoLabel>
+        </s.PostInfo>
+      </s.ConfirmHeader>
+      <s.DetailPageLayout>
+        <s.Title color="#CBCDE9">
+          [🇩🇪 독일 교환학생 준비] ep.1 테아민 잡기
+        </s.Title>
+        <s.Content>
           따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 ​ 독일로 교환학생을
           앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약! ​ 저는
           3개월 만에 학기가 끝나는 학교로 가지만, 이후 보다 편안하고 안전한(?)
@@ -55,144 +57,27 @@ const FreeDetailPage = () => {
           슬슬 잡아볼까~? 하며 1월 7일 일요일부터 시도를 해봤습니다! 으음..
           당연히 안되죠.. 함 해볼까~?라는 마인드로 들어가면 절대 잡을 수가
           업슴,,,,,
-        </Content>
-        <CommentWritingDiv>
-          <CommentEditor
+        </s.Content>
+        <s.CommentWritingDiv color1="#F8F7FF">
+          <DefaultCheckBox
+            before="익명"
+            checkBoxStyle={{
+              border: '0.2px solid rgba(0, 0, 0, 0.50)',
+              width: '14px',
+              height: '14px',
+              borderRadius: '5px',
+            }}
+          />
+          <s.CommentEditor
             className="commentEditor"
             placeholder="댓글을 작성해주세요."
             onInput={handleResizeHeight}
             rows={1}
           />
-        </CommentWritingDiv>
-      </DetailPageLayout>
+        </s.CommentWritingDiv>
+      </s.DetailPageLayout>
     </>
   );
 };
 
 export default FreeDetailPage;
-
-export const ConfirmHeader = styled.div`
-  width: 100%;
-  height: 61px;
-  position: fixed;
-  z-index: 2;
-  display: flex;
-  flex-direction: row;
-  top: 0;
-  align-items: center;
-  justify-content: space-between;
-  background-color: white;
-  border-width: 0.5px 0;
-  box-sizing: border-box;
-  padding: 0 17px 0 17px;
-`;
-
-const BackButton = styled.div`
-  margin-left: 17px;
-`;
-
-const PostInfo = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: end;
-`;
-const InfoLabel = styled.div`
-  overflow: hidden;
-  color: #000;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: Inter;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-
-  margin: 0 4.5px;
-`;
-const Title = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  text-align: left;
-  padding: 17px 32px;
-  width: 100%;
-  min-height: 60.126px;
-  height: auto;
-  color: black;
-  background: ${(props) => props.color || '#BFD8E5'};
-
-  color: #000;
-  font-family: Inter;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 26px;
-`;
-const DetailPageLayout = styled.div`
-  background: white;
-  box-sizing: border-box;
-  width: 100vw;
-  height: auto;
-  min-height: 100vh;
-  padding-top: 61px;
-`;
-
-const Content = styled.pre`
-  box-sizing: border-box;
-  width: 100%;
-  padding: 19px 29px;
-
-  text-align: left;
-  white-space: pre-wrap;
-
-  color: #000;
-  font-family: Inter;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-`;
-
-const CommentWritingDiv = styled.div`
-  box-sizing: border-box;
-
-  position: fixed;
-  bottom: 0;
-  left: 0;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  flex-wrap: wrap;
-
-  width: 100vw;
-  height: auto;
-  min-height: 70px;
-  border-radius: 30px 30px 0px 0px;
-  background: linear-gradient(135deg, #f1f8ff 0%, #f2f3ff 100%);
-  box-shadow: 0px -3px 3px 0px rgba(0, 0, 0, 0.05);
-  padding: 14px 15px;
-`;
-const CommentEditor = styled.textarea`
-  box-sizing: border-box;
-  background-color: transparent;
-  border: none;
-
-  flex: auto;
-
-  &:focus {
-    outline: none;
-  }
-
-  color: #3d3d3d;
-  font-family: Inter;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-
-  height: auto;
-  min-height: 52px;
-  max-height: 130px;
-`;

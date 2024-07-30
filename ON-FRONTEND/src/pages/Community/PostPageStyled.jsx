@@ -41,7 +41,7 @@ export const ColorButton = styled.button`
 
 export const BigContainer = styled.section`
   box-sizing: border-box;
-  width: 100vw;
+  width: 100%;
   height: auto;
   background-color: white;
   padding: 0 37px;
@@ -207,4 +207,20 @@ export const ContentSection = styled.section`
   height: auto;
   flex-shrink: 0;
   padding: 10px 0;
+`;
+
+export const Footer = styled.div`
+  box-sizing: border-box;
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+  bottom: 0;
+  width: 100%;
+  max-width: 480px;
+  height: 40px;
+  padding: 0 27px;
+  background-color: white;
 `;

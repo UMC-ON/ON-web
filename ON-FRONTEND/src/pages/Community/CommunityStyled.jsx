@@ -11,12 +11,12 @@ export const PageContainer = styled.div`
   align-content: start;
   align-items: center;
   justify-content: center;
+  z-index: 0;
 `;
 
 export const FilterSection = styled.section`
   display: flex;
   box-sizing: border-box;
-  position: relative;
   flex-wrap: wrap;
   flex-direction: column;
   align-content: start;
@@ -53,7 +53,8 @@ export const FilterList = styled.ul`
   box-sizing: border-box;
   position: absolute;
   top: 80%;
-  padding: 0 24px;
+  left: 0;
+  padding: 0px 0px 30px 24px;
   display: ${(props) => (props.show === 'true' ? 'flex' : 'none')};
   flex-direction: column;
   align-items: start;
@@ -62,8 +63,8 @@ export const FilterList = styled.ul`
     display: none;
   }
   height: 300px;
-  width: 100vw;
-  //mask-image: linear-gradient(to top, transparent 5%, white 25%, white 75%);
+  width: auto;
+  mask-image: linear-gradient(to top, transparent 5%, white 25%, white 75%);
   z-index: 4;
 `;
 
@@ -81,7 +82,6 @@ export const DarkBackground = styled.div`
 
 export const PostListSection = styled.section`
   width: 100%;
-  pointer-events: none;
 `;
 
 export const SliderWrapper = styled.section`

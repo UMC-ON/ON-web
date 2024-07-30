@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 import grayArrow from '../../assets/images/grayArrow.svg';
+import lightBlueArrow from '../../assets/images/lightBlueArrow.svg';
 import radioButton_checked from '../../assets/images/radioButton_checked.svg';
 
 export const FormPage = styled.section`
@@ -9,13 +10,11 @@ export const FormPage = styled.section`
   height: auto;
   min-height: 100vh;
   width: 100%;
+  padding: 20px 26px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  & .margin_bottom_40 {
-    margin-bottom: 2.5rem;
-  }
 `;
 
 export const SectionWrapper = styled.section`
@@ -26,11 +25,11 @@ export const SectionWrapper = styled.section`
 `;
 
 export const TitleSection = styled.section`
-  width: calc(100% - 3.25rem);
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: start;
-  margin: 1.25rem 1.625rem;
+
   & > .on_exp {
     color: black;
     opacity: 64%;
@@ -62,8 +61,8 @@ export const BackButton = styled.button`
 `;
 export const ContentSection = styled.section`
   text-align: left;
-  margin: 0 1.625rem;
-  width: calc(100% - 3.25rem);
+  padding-top: 20px;
+  width: 100%;
   & .radioBtn {
     display: flex;
     flex-direction: row;
@@ -96,8 +95,13 @@ export const RadioButton = styled.input`
 `;
 
 export const ButtonSection = styled.section`
-  width: calc(100% - 2.75rem);
-  margin: 1.625rem 1.375rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  width: 100%;
+  padding: 5px 0;
 `;
 
 export const PurpleButton = styled.button`
@@ -121,23 +125,43 @@ export const PurpleButton = styled.button`
     outline: none;
   }
 `;
-export const StyledFieldSet = styled.fieldset`
-  & > label {
-    display: inline-block;
-    width: 100%;
-  }
-  & > label .required::after {
+export const StyledFieldSet = styled.fieldset``;
+export const InputWrapper = styled.div`
+  color: black;
+
+  width: 100%;
+  flex-direction: column;
+  border-bottom: 1px solid #b0b0b0;
+  justify-content: center;
+  margin-top: 40px;
+  & > .required::after {
     content: '*';
     color: #c2c7ff;
   }
 `;
-export const InputWrapper = styled.div`
-  border-bottom: 1px solid #b0b0b0;
-  display: flex;
-  justify-content: space-between;
+
+export const SchoolComboBox = styled.select`
+  appearance: none;
+  width: auto;
+  border-radius: 0.8rem;
+  outline: none;
+  border: none;
+  background: url(${lightBlueArrow}) no-repeat right 0.8rem center #f3f3f3;
+  padding: 0.25rem 0.625rem;
+  margin: 0.625rem 0;
+  font-size: 0.75rem;
+  color: #979797;
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: gray;
+    border-radius: 1rem;
+  }
 `;
 
 export const TransparentInput = styled.input`
+  width: auto;
   color: black;
   height: 2rem;
   margin-top: 0.2rem;
@@ -145,7 +169,7 @@ export const TransparentInput = styled.input`
   border: none;
   outline: none;
   padding: 0 0.06rem;
-  flex: auto;
+
   &::placeholder {
     font-size: 0.75rem;
   }
@@ -167,12 +191,17 @@ export const GrayButton = styled.button`
 `;
 
 export const Explanation = styled.div`
-  opacity: 64%;
-  font-size: 0.9rem;
-  line-height: 1.1rem;
+  color: rgba(0, 0, 0, 0.49);
+  font-family: 'Baloo Bhaina 2';
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 153.846% */
   text-align: justify;
 `;
 export const TwoColumnWrapper = styled.div`
+  box-sizing: border-box;
+  width: 100%;
   display: flex;
   flex-direction: row;
 
@@ -188,7 +217,7 @@ export const StyledComboBox = styled.select`
   padding: 0.25rem;
   margin-top: 0.2rem;
   display: block;
-  width: 100%;
+  width: auto;
   outline: none;
   border: none;
   appearance: none;
@@ -199,8 +228,9 @@ export const StyledComboBox = styled.select`
 export const CenterContainer = styled.div`
   width: 100%;
   height: auto;
-  margin: calc(100% / 25) 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  align-content: center;
 `;

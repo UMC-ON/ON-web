@@ -1,33 +1,26 @@
 import styled from 'styled-components';
 import * as s from '../CommunityStyled.jsx';
 
-import CountryList from '../../../components/Common/CountryList.jsx';
 import PageHeader from '../../../components/PageHeader/PageHeader.jsx';
 import CustomSlider from '../../../components/Slider/CustomSlider.jsx';
 import CommunityPost from '../../../components/CommunityPost/CommunityPost.jsx';
+import FilterButton from '../../../components/Common/FilterButton/FilterButton.jsx';
 
 import communityBannerImg from '../../../assets/images/communityBannerImg.svg';
 import pencilImg from '../../../assets/images/pencil.svg';
 import gradientRec from '../../../assets/images/gradientRec.svg';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CountryList } from '../../../components/CountryList.jsx';
 
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 
 const InfoCommunityHome = () => {
-  const [isOptionVisible, setOptionVisible] = useState(false);
-  const [currentValue, setCurrentValue] = useState('국가');
-  const clickHandler = (e) => {
-    setOptionVisible(!isOptionVisible);
-    const { innerText } = e.target;
-    setCurrentValue(innerText);
-  };
-
   const navigate = useNavigate();
   const nav = () => {
     navigate('./post');
   };
-
+  const mylist = [1, 2, 3, 4, '와진짜개짱짱긴텍스트'];
   return (
     <>
       <s.PageContainer>
@@ -40,24 +33,16 @@ const InfoCommunityHome = () => {
         </s.SliderWrapper>
 
         <s.FilterSection>
-          <s.FilterSelectionButton
-            onClick={() => {
-              setOptionVisible((prev) => !prev);
-            }}
-          >
-            {currentValue}
-          </s.FilterSelectionButton>
-          <s.DarkBackground
-            onClick={clickHandler}
-            show={isOptionVisible.toString()}
+          <FilterButton
+            color1="#D6EBFF"
+            color2="#C2C7FF"
+            myList={CountryList}
+            placeholder="국가"
           />
-          <s.FilterList show={isOptionVisible.toString()}>
-            <CountryList
-              setOptionVisible={clickHandler}
-              color1="#D6EBFF"
-              color2="#C2C7FF"
-            />
-          </s.FilterList>
+          <FilterButton
+            myList={mylist}
+            placeholder="실험"
+          />
         </s.FilterSection>
         <s.PostListSection>
           <CommunityPost></CommunityPost>

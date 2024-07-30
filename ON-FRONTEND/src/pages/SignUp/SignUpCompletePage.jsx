@@ -4,6 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import SignUpCompleteImg from '../../assets/images/SignUpCompleteImg.svg';
 
 const SignUpCompletePage = () => {
+  const navigate = useNavigate();
+  const nav = () => {
+    navigate('/');
+  };
   return (
     <s.FormPage>
       <s.SectionWrapper>
@@ -37,8 +41,9 @@ const SignUpCompletePage = () => {
           style={{
             background: 'linear-gradient(135deg, #d6ebff 0%, #c2c7ff 100%)',
           }}
+          onClick={nav}
         >
-          로그인
+          ON 시작하기
         </s.PurpleButton>
       </s.ButtonSection>
     </s.FormPage>
