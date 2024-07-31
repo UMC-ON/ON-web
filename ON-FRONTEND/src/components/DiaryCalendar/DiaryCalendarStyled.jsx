@@ -104,7 +104,7 @@ export const DiaryCalendar = styled.div`
   .react-calendar__year-view .react-calendar__tile,
   .react-calendar__decade-view .react-calendar__tile,
   .react-calendar__century-view .react-calendar__tile {
-    padding: 2em 0.5em;
+    padding: 0;
   }
   
   .react-calendar__tile {
@@ -115,6 +115,8 @@ export const DiaryCalendar = styled.div`
     line-height: 16px;
     font: inherit;
     font-size: 0.833em;
+    height: 60px;
+    width: 30px;
   }
   
   .react-calendar__tile:disabled {

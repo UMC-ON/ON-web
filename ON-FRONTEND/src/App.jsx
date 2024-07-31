@@ -16,6 +16,7 @@ import HomePage from './pages/HomePage.jsx';
 
 import DiaryCalendar from './components/DiaryCalendar/DiaryCalendar.jsx';
 import CompanyCalendar from './components/CompanyCalendar/CompanyCalendar.jsx';
+import SellPage from "./pages/SellPage.jsx";
 
 import TermsOfServicePage from './pages/SignUp/TermsOfServicePage.jsx';
 import UserInfoPage from './pages/SignUp/UserInfoPage.jsx';
@@ -130,6 +131,14 @@ function App() {
         <Route
           path="/diary"
           element={<DiaryPage />}
+        />
+        <Route
+          path="/company"
+          element={<CompanyCalendar />}
+        />
+        <Route 
+          path="/sell"
+          element={<SellPage />} 
         />
       </Routes>
     </ThemeProvider>

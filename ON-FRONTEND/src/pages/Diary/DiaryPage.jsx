@@ -65,8 +65,8 @@ const Diary = () => {
             <RightContainer>
               <SubText>나의 교환교</SubText>
               <SchoolContainer>
-                <BigText spacing="1vh">영국, </BigText>
-                <BigText color="#3E73B2">King’s College London</BigText>
+                <BigText>영국,</BigText>
+                <BigText style={{color:"#3E73B2", marginLeft: "0.5em"}}>King’s College London</BigText>
               </SchoolContainer>
             </RightContainer>
           </div>
