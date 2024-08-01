@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import React, { useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
+import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -115,6 +116,12 @@ function HomePage() {
       setCurrentSlide(index);
     };
 
+    const navigate = useNavigate();
+
+    function goToAccompany() {
+      navigate("/accompany");
+    }
+
     return (
       <>
         <NavBar></NavBar>
@@ -139,7 +146,7 @@ function HomePage() {
                     <SubText>영국</SubText>
                     <SubText>이민국</SubText>
                 </Button>
-                <Button>
+                <Button onClick={goToAccompany}>
                     <Icon src={companyIcon} alt="Company Icon" />
                     <SubText>동행</SubText>
                     <SubText>구하기</SubText>
@@ -435,7 +442,7 @@ const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 3vh;
+  gap: 2rem;
 `;
 
 const SliderContainer = styled.div`

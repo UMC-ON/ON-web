@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import informationIcon from '../assets/images/information_icon.svg';
 import writeIcon from '../assets/images/write_icon.svg';
@@ -119,6 +120,13 @@ const accompanyData = [
 
 function CommunityHomePage() {
 
+    const navigate = useNavigate();
+
+    function handleClick() {
+      navigate("/accompany");
+    }
+
+
     return (
       <>
         <NavBar/>
@@ -136,7 +144,7 @@ function CommunityHomePage() {
                     <SubText>자유글</SubText>
                     <SubText>쓰기</SubText>
                 </Button>
-                <Button>
+                <Button onClick={handleClick}>
                     <Icon src={companyIcon} alt="Company Icon" />
                     <SubText>동행</SubText>
                     <SubText>구하기</SubText>

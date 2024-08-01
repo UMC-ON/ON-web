@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 import PageHeader from '../components/PageHeader/PageHeader';
 import DotInslideSlider from '../components/DotInsideSlider';
+import DateRangePicker from '../components/CompanyCalendar/CompanyCalendar.jsx';
 
 import bannerImg from '../assets/images/adBanner.svg';
 import arrowIcon from '../assets/images/bottomArrow.svg';
@@ -13,7 +14,6 @@ import pencilImg from '../assets/images/pencil.svg';
 
 
 import { useNavigate } from 'react-router-dom';
-import { DiaryCalendar } from '../components/DiaryCalendar/DiaryCalendarStyled';
 import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
 
 const images = [bannerImg, bannerImg, bannerImg, bannerImg, bannerImg];
@@ -124,7 +124,11 @@ function AccompanyPage() {
 
         <Space/>
 
-        {showCalendar && <BottomTabNav />}
+        {showCalendar && 
+          <BottomTabLayout>
+            <DateRangePicker/>
+          </BottomTabLayout>
+          }
 
           <WriteButton>
             <img src={pencilImg} />
@@ -223,4 +227,20 @@ const WriteButton = styled.button`
   }
 
   -webkit-tap-highlight-color: transparent;
+`;
+
+const BottomTabLayout = styled.div`
+  width: 100%;
+  max-width: 480px;
+  position: fixed;
+  bottom: 0;
+  border-radius: 14px 14px 0px 0px;
+  border: 1px solid white;
+  background: #ffffff;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  box-sizing: border-box;
+  box-shadow: 0px -1px 4px 0px #e2e2e2;
 `;

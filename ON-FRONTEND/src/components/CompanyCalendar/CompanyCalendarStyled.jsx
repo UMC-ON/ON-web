@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const CompanyCalendar = styled.div`
+  width: 100%;
   .date-range-picker {
     display: flex;
     flex-direction: column;
