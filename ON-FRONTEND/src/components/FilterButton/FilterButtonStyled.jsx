@@ -44,7 +44,7 @@ export const FilterList = styled.ul`
   z-index: 4;
 `;
 import styled from 'styled-components';
-import lightBlueArrow from '../../../assets/images/lightBlueArrow.svg';
+import lightBlueArrow from '../../assets/images/lightBlueArrow.svg';
 
 export const DarkBackground = styled.div`
   position: fixed;

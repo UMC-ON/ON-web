@@ -1,32 +1,34 @@
 import * as s from './CommunityPostStyled';
 import styled from 'styled-components';
-import Img from '../../assets/images/postImgExample.svg';
+s;
 import commentImg from '../../assets/images/commentImg.svg';
 import verifiedBadge from '../../assets/images/verifiedBadge.svg';
-import { Post } from './Post';
 import { useNavigate } from 'react-router-dom';
 
-const CommunityPost = () => {
+import { CommentList } from '../Common/TempDummyData/PostList';
+
+const CommunityPost = ({ post }) => {
   const navigate = useNavigate();
   const nav = () => {
     navigate('./detail');
   };
+
   return (
     <s.Post onClick={nav}>
       <HeaderSection>
-        <Title>{Post.title}</Title>
-        <Date>{Post.date}</Date>
+        <Title>{post.title}</Title>
+        <Date>{post.date}</Date>
       </HeaderSection>
       <ContentSection>
         <ContentWrapper>
-          <TextContent>{Post.content}</TextContent>
+          <TextContent>{post.content}</TextContent>
 
           <PostInfoWrapper>
             <Writer>
-              {Post.writer}
+              {post.is_anonymous ? '익명' : post.writerInfo.name}
               <VerifiedImg
                 src={verifiedBadge}
-                verified={Post.verified}
+                is_verified={post.writerInfo.is_verified.toString()}
               />
             </Writer>
             <Comment>
@@ -36,8 +38,8 @@ const CommunityPost = () => {
           </PostInfoWrapper>
         </ContentWrapper>
         <ContentImg
-          src={Post.img}
-          showimg={Post.showImg}
+          src={post.img_id_list}
+          showimg={post.img_id_list}
         />
       </ContentSection>
     </s.Post>
@@ -99,17 +101,19 @@ const ContentWrapper = styled.div`
   width: 100%;
 `;
 const ContentImg = styled.img`
-  display: ${(props) => (props.showimg === 'true' ? 'inline' : 'none')};
+  display: ${(props) => (props.showimg ? 'inline' : 'none')};
   width: 82px;
   height: 82px;
   margin-left: 12px;
+  border-radius: 0.5rem;
 `;
 const TextContent = styled.span`
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   box-sizing: border-box;
-  height: calc(18px * 3);
+  max-height: calc(18px * 3);
+  height: auto;
   overflow: hidden;
   color: #838383;
   text-overflow: ellipsis;
@@ -123,6 +127,7 @@ const TextContent = styled.span`
   letter-spacing: 0.24px;
 `;
 const PostInfoWrapper = styled.div`
+  height: auto;
   display: flex;
   flex-direction: row;
   justify-content: start;
@@ -130,10 +135,12 @@ const PostInfoWrapper = styled.div`
 
   flex-wrap: wrap;
   align-items: center;
-  flex: auto;
+  padding-top: 1rem;
+
+  //flex: auto;
 
   & > * {
-    margin: 0 3px;
+    margin: 0 5px 0 0;
   }
 `;
 const Writer = styled.div`
@@ -145,7 +152,7 @@ const Writer = styled.div`
 `;
 const VerifiedImg = styled.img`
   padding: 0 2px;
-  display: ${(props) => (props.verified === 'true' ? 'inline-block' : 'none')};
+  display: ${(props) => (props.is_verified ? 'inline-block' : 'none')};
 `;
 const Comment = styled.div`
   padding-top: 2px;

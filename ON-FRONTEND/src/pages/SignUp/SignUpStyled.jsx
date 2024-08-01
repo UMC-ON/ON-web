@@ -10,7 +10,7 @@ export const FormPage = styled.section`
   height: auto;
   min-height: 100vh;
   width: 100%;
-  padding: 20px 26px;
+  padding: 1.5rem 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,8 +20,9 @@ export const FormPage = styled.section`
 export const SectionWrapper = styled.section`
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: center;
   width: 100%;
+  margin-bottom: 40px;
 `;
 
 export const TitleSection = styled.section`
@@ -125,12 +126,12 @@ export const PurpleButton = styled.button`
     outline: none;
   }
 `;
-export const StyledFieldSet = styled.fieldset``;
 export const InputWrapper = styled.div`
   color: black;
 
   width: 100%;
   flex-direction: column;
+  flex-wrap: wrap;
   border-bottom: 1px solid #b0b0b0;
   justify-content: center;
   margin-top: 40px;
@@ -161,7 +162,7 @@ export const SchoolComboBox = styled.select`
 `;
 
 export const TransparentInput = styled.input`
-  width: auto;
+  width: 100%;
   color: black;
   height: 2rem;
   margin-top: 0.2rem;
@@ -217,7 +218,7 @@ export const StyledComboBox = styled.select`
   padding: 0.25rem;
   margin-top: 0.2rem;
   display: block;
-  width: auto;
+  width: 100%;
   outline: none;
   border: none;
   appearance: none;

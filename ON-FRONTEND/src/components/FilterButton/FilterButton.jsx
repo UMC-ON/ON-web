@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CountryList } from '../../CountryList';
+import { CountryList } from '../CountryList';
 import * as s from './FilterButtonStyled';
 import ButtonStyleList from './ButtonStyleList';
 

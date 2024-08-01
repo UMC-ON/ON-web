@@ -56,7 +56,9 @@ const UserInfoAdditionalPage = () => {
 
             <s.InputWrapper>
               <div>닉네임</div>
-              <s.TransparentInput />
+              <div>
+                <s.TransparentInput />
+              </div>
             </s.InputWrapper>
           </fieldset>
         </s.ContentSection>

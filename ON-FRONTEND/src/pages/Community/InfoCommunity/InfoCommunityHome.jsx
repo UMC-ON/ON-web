@@ -4,7 +4,7 @@ import * as s from '../CommunityStyled.jsx';
 import PageHeader from '../../../components/PageHeader/PageHeader.jsx';
 import CustomSlider from '../../../components/Slider/CustomSlider.jsx';
 import CommunityPost from '../../../components/CommunityPost/CommunityPost.jsx';
-import FilterButton from '../../../components/Common/FilterButton/FilterButton.jsx';
+import FilterButton from '../../../components/FilterButton/FilterButton.jsx';
 
 import communityBannerImg from '../../../assets/images/communityBannerImg.svg';
 import pencilImg from '../../../assets/images/pencil.svg';
@@ -13,6 +13,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CountryList } from '../../../components/CountryList.jsx';
 
+import { PostList } from '../../../components/Common/TempDummyData/PostList.jsx';
+import { Post } from '../../../components/CommunityPost/CommunityPostStyled.jsx';
+
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 
 const InfoCommunityHome = () => {
@@ -20,6 +23,7 @@ const InfoCommunityHome = () => {
   const nav = () => {
     navigate('./post');
   };
+  console.log(PostList);
   const mylist = [1, 2, 3, 4, '와진짜개짱짱긴텍스트'];
   return (
     <>
@@ -39,17 +43,14 @@ const InfoCommunityHome = () => {
             myList={CountryList}
             placeholder="국가"
           />
-          <FilterButton
-            myList={mylist}
-            placeholder="실험"
-          />
         </s.FilterSection>
         <s.PostListSection>
-          <CommunityPost></CommunityPost>
-          <CommunityPost></CommunityPost>
-          <CommunityPost></CommunityPost>
-          <CommunityPost></CommunityPost>
-          <CommunityPost></CommunityPost>
+          {PostList.map((post, index) => (
+            <CommunityPost
+              key={index}
+              post={post}
+            />
+          ))}
         </s.PostListSection>
         <s.WriteButton
           style={{ background: 'linear-gradient(135deg,#D6EBFF,#C2C7FF)' }}
@@ -65,6 +66,8 @@ const InfoCommunityHome = () => {
             bottom: '0',
             pointerEvents: 'none',
             zIndex: '1',
+            width: '100%',
+            maxWidth: '480px',
           }}
         />
       </s.PageContainer>

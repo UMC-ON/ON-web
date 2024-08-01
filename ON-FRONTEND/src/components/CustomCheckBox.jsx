@@ -4,7 +4,10 @@ import React, { useState } from 'react';
 function CustomCheckbox({ checked, onChange }) {
   return (
     <CheckboxContainer>
-      <HiddenCheckbox checked={checked} onChange={onChange} />
+      <HiddenCheckbox
+        checked={checked}
+        onChange={onChange}
+      />
       <StyledCheckbox checked={checked} />
     </CheckboxContainer>
   );
@@ -22,7 +25,7 @@ const CheckboxContainer = styled.label`
 const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
   border: 0;
   clip: rect(0 0 0 0);
-  clippath: inset(50%);
+  clip-path: inset(50%);
   height: 1px;
   margin: -1px;
   overflow: hidden;
@@ -40,7 +43,7 @@ const StyledCheckbox = styled.div`
   height: 16px;
   background: white;
   border-radius: 30%;
-  border: 2px solid #BFD8E5;
+  border: 2px solid #bfd8e5;
   transition: all 150ms;
   position: relative;
 
@@ -64,7 +67,7 @@ const StyledCheckbox = styled.div`
       font-weight: bold;
     }
   `}
-  
+
   /* Optional: Style for unchecked state */
   &:not(:checked) {
     /* You can also add styles for the unchecked state here if needed */
