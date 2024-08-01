@@ -157,6 +157,7 @@ const Input = styled.input`
     font-size: 0.8rem;
     padding-left: 5px;
     font-family: Inter;
+    background-color: white;
 `;
 
 const GreyInput = styled.textarea`
@@ -170,6 +171,7 @@ const GreyInput = styled.textarea`
     margin-top: 1vh;
     margin-bottom: 3vh;
     height: ${props => props.$height || 'auto'};
+    background-color: white;
 `;
 
 
