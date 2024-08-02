@@ -2,10 +2,18 @@ import styled from 'styled-components';
 
 export const CompanyCalendar = styled.div`
   width: 100%;
+    .top-header {
+    width: 90%;
+    display: flex;
+    margin-bottom: 10px;
+    justify-content: flex-start; /* img를 오른쪽 끝으로 정렬 */
+  }
+
   .date-range-picker {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 420px;
   }
 
   .selected-date-range {
@@ -23,6 +31,16 @@ export const CompanyCalendar = styled.div`
     border: none;
   }
 
+
+  .react-datepicker__month {
+    padding: 10px;
+  }
+
+  .react-datepicker__day {
+    margin: 5px 10px;
+    border-radius: 50%;
+  }
+
   .react-datepicker__header {
     background-color: white;
     border-bottom: none;
@@ -32,7 +50,6 @@ export const CompanyCalendar = styled.div`
   .react-datepicker__day--in-range {
     background-color: #E0E7FF;
     color: #000;
-    border-radius: 50%;
   }
 
   .react-datepicker__day--in-selecting-range {
@@ -50,11 +67,33 @@ export const CompanyCalendar = styled.div`
   .react-datepicker__time-name {
     color: #000;
   }
+
+  .react-datepicker__day--today {
+    background: none;
+    border: 2px solid ${(props) => props.theme.lightPurple};
+  }
+
+  .react-datepicker__day--selecting-range-start {
+    background: none;
+    border: 2px solid ${(props) => props.theme.lightPurple};
+  }
+  
+  // .react-datepicker__day--selecting-range-end {
+  //   background: ${(props) => props.theme.purpleGra};
+  // }
+
+  .react-datepicker__day-name {
+    margin: 0px 10px;
+  }
+
+  .react-datepicker__day--in-range {
+  background: ${(props) => props.theme.lightBlue}};
   
   .react-datepicker__day--outside-month {
     visibility: hidden;
   }
-    .custom-header {
+  
+  .custom-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
