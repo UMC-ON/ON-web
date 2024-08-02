@@ -12,7 +12,6 @@ import AccompanyList from '../components/AccompanyList';
 import marketImg from '../assets/images/borough_market.svg';
 import pencilImg from '../assets/images/pencil.svg';
 
-
 import { useNavigate } from 'react-router-dom';
 import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
 
@@ -125,12 +124,15 @@ function AccompanyPage() {
         <Space/>
 
         {showCalendar && 
-          <BottomTabLayout>
-            <DateRangePicker/>
-          </BottomTabLayout>
-          }
+          <>
+            <Overlay onClick={calendarClick} />
+            <BottomTabLayout>
+              <DateRangePicker/>
+            </BottomTabLayout>
+          </>
+        }
 
-          <WriteButton>
+          <WriteButton onClick={nav}>
             <img src={pencilImg} />
             <LeftPadding/>
             글 쓰기
@@ -150,7 +152,6 @@ const Span = styled.span`
 const LeftPadding = styled.div`
   padding-left: 10px;
 `;
-
 
 const FlexContainer = styled.div`
   display: flex;
@@ -243,4 +244,14 @@ const BottomTabLayout = styled.div`
   justify-content: space-between;
   box-sizing: border-box;
   box-shadow: 0px -1px 4px 0px #e2e2e2;
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9;
 `;
