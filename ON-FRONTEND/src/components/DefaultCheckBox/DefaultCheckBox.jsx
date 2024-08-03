@@ -1,31 +1,46 @@
 import styled from 'styled-components';
-
+import check from '../../assets/images/check.svg';
+import { useRef } from 'react';
 const DefaultCheckBox = ({
   before,
   after,
   wrapperStyle = {},
   checkBoxStyle = {},
+  onChange = () => {},
+  name = {},
 }) => {
+  let checked = useRef(false);
   return (
     <CheckBoxWrapper style={wrapperStyle}>
-      {before}
+      <TextDiv>{before}</TextDiv>
+
       <StyledCheckBox
         type="checkBox"
         style={checkBoxStyle}
+        name={name}
+        onClick={() => {
+          checked.current = !checked.current;
+          onChange({
+            target: {
+              name: name,
+              value: checked.current,
+            },
+          });
+        }}
       />
-      {after}
+      <TextDiv>{after}</TextDiv>
     </CheckBoxWrapper>
   );
 };
 
 export default DefaultCheckBox;
 
-const CheckBoxWrapper = styled.div`
+const CheckBoxWrapper = styled.label`
   display: flex;
   flex-direction: row;
   align-items: center;
-  align-content: center;
 
+  flex-wrap: nowrap;
   color: #b2b2b2;
   font-family: Inter;
   font-size: 11px;
@@ -45,5 +60,14 @@ const StyledCheckBox = styled.input`
   flex-shrink: 0;
   border-radius: 6px;
   border: 2px solid ${(props) => props.style.color || '#bfd8e5'};
-  margin: 0 4px;
+  padding: 0 4px;
+  background-color: white;
+  &:checked {
+    background: url(${check}) no-repeat center white;
+  }
+`;
+
+const TextDiv = styled.div`
+  width: auto;
+  white-space: nowrap;
 `;

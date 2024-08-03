@@ -2,12 +2,21 @@ import styled from 'styled-components';
 import groupLogo from '../../assets/images/groupLogo.svg';
 import * as s from './SignUpStyled';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 
 const TermsOfServicePage = () => {
-  const navigate = useNavigate();
-  const nav = () => {
-    navigate('/signUp/userInfo');
+  const nav = useNavigate();
+  const nextBtn = useRef(null);
+  const onClickHandler = (e) => {
+    if (e.target.value === 'agree') {
+      nextBtn.current.disabled = false;
+      nextBtn.current.style.setProperty('opacity', '100%');
+    } else {
+      nextBtn.current.disabled = true;
+      nextBtn.current.style.setProperty('opacity', '50%');
+    }
   };
+
   return (
     <s.FormPage>
       <s.SectionWrapper>
@@ -20,7 +29,7 @@ const TermsOfServicePage = () => {
         <s.ContentSection>
           <s.BackButton
             onClick={() => {
-              navigate(-1);
+              nav(-1);
             }}
           >
             이전 단계
@@ -53,6 +62,8 @@ const TermsOfServicePage = () => {
               <s.RadioButton
                 type="radio"
                 name="termConsent"
+                value="disagree"
+                onChange={onClickHandler}
               />
               비동의
             </label>
@@ -60,6 +71,9 @@ const TermsOfServicePage = () => {
               <s.RadioButton
                 type="radio"
                 name="termConsent"
+                value="agree"
+                defaultChecked
+                onChange={onClickHandler}
               />
               동의
             </label>
@@ -68,7 +82,14 @@ const TermsOfServicePage = () => {
       </s.SectionWrapper>
 
       <s.ButtonSection>
-        <s.PurpleButton onClick={nav}>다음 단계</s.PurpleButton>
+        <s.PurpleButton
+          onClick={() => {
+            nav('/signUp/userInfo');
+          }}
+          ref={nextBtn}
+        >
+          다음 단계
+        </s.PurpleButton>
       </s.ButtonSection>
     </s.FormPage>
   );

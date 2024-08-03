@@ -44,7 +44,7 @@ export const BigContainer = styled.section`
   width: 100%;
   height: auto;
   background-color: white;
-  padding: 0 37px;
+  padding: 0 1.5rem;
   padding-top: 61px;
   display: flex;
   flex-direction: column;
@@ -71,62 +71,38 @@ export const HeadingTitle = styled.h2`
 `;
 export const InfoLabel = styled.div`
   display: flex;
-  flex-direction: row;
-  align-content: center;
   align-items: center;
-  justify-content: start;
-
-  text-align: left;
-
-  color: #7a7a7a;
-  font-family: Inter;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  letter-spacing: 0.3px;
-  flex-wrap: wrap;
-
-  width: auto;
-`;
-export const ButtonWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  color: black;
 `;
 export const ColorButtonTag = styled(ColorButton)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
+  box-sizing: border-box;
   width: auto;
   height: auto;
   max-width: 156px;
   min-height: 22px;
 
-  background: url(${xImg}) no-repeat right 6px center
-    ${(props) => props.color || '#BFD8E5'};
+  background: ${(props) => props.color || '#BFD8E5'};
 
-  padding: 0px 8px;
-  padding-right: 18px;
-
-  margin: 4px 5px;
-
+  padding: 0 8px;
+  flex-shrink: 1;
   color: #fff;
-  text-align: left;
+  text-align: center;
   font-family: Inter;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0.24px;
+
+  white-space: wrap;
 `;
 
 export const SpaceBetweenContainer = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
 `;
 
 export const CheckBoxWrapper = styled.div`
@@ -207,20 +183,29 @@ export const ContentSection = styled.section`
   height: auto;
   flex-shrink: 0;
   padding: 10px 0;
+  padding-bottom: 5.5rem;
 `;
 
 export const Footer = styled.div`
   box-sizing: border-box;
+
   position: fixed;
+  bottom: 0;
+  left: 0;
+
   display: flex;
   flex-direction: row;
-  align-items: center;
-  align-content: center;
   justify-content: space-between;
-  bottom: 0;
+  align-items: end;
+  flex-wrap: wrap;
+
   width: 100%;
   max-width: 480px;
-  height: 40px;
-  padding: 0 27px;
-  background-color: white;
+
+  height: auto;
+  //min-height: 70px;
+  border-radius: 30px 30px 0px 0px;
+  background: white;
+  box-shadow: 0px -3px 3px 0px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
 `;

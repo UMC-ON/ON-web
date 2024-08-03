@@ -2,10 +2,12 @@ import * as s from './SignUpStyled';
 import groupLogo from '../../assets/images/groupLogo.svg';
 import { useNavigate } from 'react-router-dom';
 import SignUpCompleteImg from '../../assets/images/SignUpCompleteImg.svg';
+import { userInfo } from '../../components/Common/TempDummyData/PostList';
 
 const SignUpCompletePage = () => {
   const navigate = useNavigate();
   const nav = () => {
+    console.log(userInfo);
     navigate('/');
   };
   return (

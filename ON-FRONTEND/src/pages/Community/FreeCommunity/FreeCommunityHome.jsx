@@ -11,7 +11,8 @@ import gradientRec from '../../../assets/images/gradientRec.svg';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CountryList } from '../../../components/CountryList.jsx';
-import FilterButton from '../../../components/Common/FilterButton/FilterButton.jsx';
+import { PostList } from '../../../components/Common/TempDummyData/PostList.jsx';
+import FilterButton from '../../../components/FilterButton/FilterButton.jsx';
 
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 
@@ -50,11 +51,12 @@ const FreeCommunityHome = () => {
           />
         </s.FilterSection>
         <s.PostListSection>
-          <CommunityPost></CommunityPost>
-          <CommunityPost></CommunityPost>
-          <CommunityPost></CommunityPost>
-          <CommunityPost></CommunityPost>
-          <CommunityPost></CommunityPost>
+          {PostList.map((post, index) => (
+            <CommunityPost
+              key={index}
+              post={post}
+            />
+          ))}
         </s.PostListSection>
         <s.WriteButton onClick={nav}>
           <img src={pencilImg} />

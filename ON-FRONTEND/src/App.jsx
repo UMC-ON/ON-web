@@ -16,7 +16,7 @@ import HomePage from './pages/HomePage.jsx';
 
 import DiaryCalendar from './components/DiaryCalendar/DiaryCalendar.jsx';
 import CompanyCalendar from './components/CompanyCalendar/CompanyCalendar.jsx';
-import SellPage from "./pages/SellPage.jsx";
+import SellPage from './pages/SellPage.jsx';
 import ScrapList from './pages/ScrapList.jsx';
 
 import TermsOfServicePage from './pages/SignUp/TermsOfServicePage.jsx';
@@ -90,7 +90,7 @@ function App() {
           element={<InfoCommunityHome />}
         />
         <Route
-          path="/community/info/detail"
+          path="/community/info/detail/:id"
           element={<InfoDetailPage />}
         />
         <Route
@@ -137,15 +137,14 @@ function App() {
           path="/company"
           element={<CompanyCalendar />}
         />
-        <Route 
+        <Route
           path="/sell"
-          element={<SellPage />} 
+          element={<SellPage />}
         />
-        <Route 
+        <Route
           path="/scrap"
-          element={<ScrapList />} 
+          element={<ScrapList />}
         />
-
       </Routes>
     </ThemeProvider>
   );

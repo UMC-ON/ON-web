@@ -1,5 +1,6 @@
 import * as s from '../DetailPageStyled.jsx';
 import DefaultCheckBox from '../../../components/DefaultCheckBox/DefaultCheckBox.jsx';
+import commentImg from '../../../assets/images/commentImg.svg';
 
 const FreeDetailPage = () => {
   //const textarea = useRef(null);
@@ -58,6 +59,35 @@ const FreeDetailPage = () => {
           당연히 안되죠.. 함 해볼까~?라는 마인드로 들어가면 절대 잡을 수가
           업슴,,,,,
         </s.Content>
+        <s.CommentSection>
+          <s.CommentNum>
+            <img src={commentImg} />3
+          </s.CommentNum>
+          <s.Comment>
+            <s.Writer>익명</s.Writer>테아민 잡는 거 걱정하고 있었는데.. 저도 꼭
+            성공했으면 좋겠네요ㅠㅠ 감사합니다!!
+          </s.Comment>
+          <s.Reply>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="11"
+              height="12"
+              viewBox="0 0 11 12"
+              fill="none"
+            >
+              <path
+                d="M1 0V8.73529H10M10 8.73529L8.43478 6.47059M10 8.73529L8.43478 11"
+                stroke="black"
+                strokeOpacity="0.5"
+                strokeWidth="0.5"
+              />
+            </svg>
+            <div>
+              <s.Writer>글쓴이</s.Writer>
+              미리 하시는 거면 크게 걱정 안 하셔도 돼요! 행운을 빕니다!
+            </div>
+          </s.Reply>
+        </s.CommentSection>
         <s.CommentWritingDiv color1="#F8F7FF">
           <DefaultCheckBox
             before="익명"

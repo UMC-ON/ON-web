@@ -6,7 +6,8 @@ export const Post = styled.div`
   justify-content: space-between;
   box-sizing: border-box;
   width: 100%;
-  height: 139px;
+  max-height: 139px;
+  height: auto;
   padding: 12px 28px;
   flex-shrink: 0;
   border: 2px solid transparent;

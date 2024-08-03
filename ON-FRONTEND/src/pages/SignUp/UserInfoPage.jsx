@@ -2,11 +2,36 @@ import styled from 'styled-components';
 import * as s from './SignUpStyled';
 import groupLogo from '../../assets/images/groupLogo.svg';
 import { useNavigate } from 'react-router-dom';
+import { useRef, useState } from 'react';
+import { userInfo } from '../../components/Common/TempDummyData/PostList';
 
 const UserInfoAdditionalPage = () => {
   const navigate = useNavigate();
   const nav = () => {
+    userInfo.name = userName.current.value;
+    userInfo.age = userAge.current.value;
+    userInfo.gender = userGender.current.value;
+    userInfo.nickName = userNickName.current.value;
     navigate('/signUp/userInfo_school');
+  };
+
+  const userName = useRef(null);
+  const userAge = useRef(null);
+  const userGender = useRef(null);
+  const userNickName = useRef(null);
+  const nextBtn = useRef(null);
+  const [isDisabled, setDisabled] = useState(true);
+  const onChangeHandler = () => {
+    if (
+      userName.current.value &&
+      userAge.current.value &&
+      userGender.current.value &&
+      userNickName.current.value
+    ) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
   };
   return (
     <s.FormPage>
@@ -27,51 +52,81 @@ const UserInfoAdditionalPage = () => {
           <fieldset>
             <s.InputWrapper>
               <div>이름</div>
-              <s.TransparentInput placeholder="본명으로 작성해 주세요" />
+              <s.TransparentInput
+                placeholder="본명으로 작성해 주세요"
+                ref={userName}
+                onChange={onChangeHandler}
+              />
             </s.InputWrapper>
 
             <s.TwoColumnWrapper>
               <s.InputWrapper>
-                <div>나이</div>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                >
+                  나이
+                  <s.Explanation
+                    style={{
+                      display: 'inline-block',
+                      fontSize: '0.5rem',
+                      lineHeight: 'normal',
+                    }}
+                  >
+                    *만나이 기준
+                  </s.Explanation>
+                </div>
                 <s.TransparentInput
                   placeholder="숫자만 입력해주세요"
                   inputMode="numeric"
+                  type="number"
+                  onChange={onChangeHandler}
+                  ref={userAge}
                 />
               </s.InputWrapper>
 
               <EmptyDiv></EmptyDiv>
               <s.InputWrapper style={{ border: 'none' }}>
                 <div>성별</div>
-                <s.StyledComboBox defaultValue={'none'}>
+                <s.StyledComboBox
+                  defaultValue={''}
+                  ref={userGender}
+                  onChange={onChangeHandler}
+                >
                   <option
-                    value="none"
+                    value=""
                     hidden
                   ></option>
-                  <option value="M">남자</option>
-                  <option value="F">여자</option>
-                  <option value="E">기타</option>
+                  <option value="male">남자</option>
+                  <option value="female">여자</option>
                 </s.StyledComboBox>
               </s.InputWrapper>
             </s.TwoColumnWrapper>
 
             <s.InputWrapper>
               <div>닉네임</div>
-              <s.TransparentInput />
+              <div>
+                <s.TransparentInput
+                  ref={userNickName}
+                  onChange={onChangeHandler}
+                />
+              </div>
             </s.InputWrapper>
           </fieldset>
         </s.ContentSection>
       </s.SectionWrapper>
 
       <s.ButtonSection>
-        <s.TwoColumnWrapper>
-          <s.PurpleButton
-            onClick={nav}
-            style={{ backgroundColor: ' #d7dff4' }}
-          >
-            건너뛰기
-          </s.PurpleButton>
-          <s.PurpleButton onClick={nav}>입력완료</s.PurpleButton>
-        </s.TwoColumnWrapper>
+        <s.PurpleButton
+          onClick={nav}
+          ref={nextBtn}
+          disabled={isDisabled}
+        >
+          입력완료
+        </s.PurpleButton>
       </s.ButtonSection>
     </s.FormPage>
   );
