@@ -80,7 +80,7 @@ const items = [
         icon: icon,
         nickname: '루이',
         id: 'fndl333',
-        price: '나눔'
+        price: '5000'
     },        
 ];
 

@@ -24,9 +24,8 @@ const Item = ({ items }) => {
                 <Place><Compas src={compas} />독일 베를린</Place>
                 <User><Profile src={profile} />루이(fndl333)</User>
               </LocationAndUser><br/>
-              <Price>{item.price}</Price>
+              <Price>{item.price === '나눔' ? item.price : `₩ ${item.price}`}</Price>
             </Description>
-            <Price></Price>
           </Information>
         </ItemDiv>
       ))}
@@ -59,7 +58,7 @@ const ItemDiv = styled.div`
   border: 1px solid #d9d9d9;
   display: flex;
   align-items: center;
-  margin-bottom: 2vh;
+  margin-bottom: 1vh;
   position: relative;
   text-align: left;
 `;
