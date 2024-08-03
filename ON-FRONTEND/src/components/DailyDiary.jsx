@@ -1,40 +1,63 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function Diary() {
+const StoredDiary = ({items}) => {
   return (
-    <DailyDiary>
-          <p style={{padding: "20px", color: "#D9D9D9"}}>교환 생활의 시작,<br/>윤서님의 교환 1일차 하루는 어땠나요?</p>
-          <Save>저장하기</Save>
-    </DailyDiary>
+    <>
+      {items && items.map((item, index) => (
+        <DailyDiary key={index}>
+          <Content>{item.content}</Content>
+          <DDay>{item.dday}</DDay>
+          <Date>{item.date}</Date>
+        </DailyDiary>
+      ))}
+    </>
   );
 }
+
+export default StoredDiary;
 
 const DailyDiary = styled.div`
   width: 90%;
   height: 130px;
-  margin-bottom: 100px;
-  margin-left: 15px;
+  margin: 10px auto;
   border-radius: 15px;
   border: 0.5px solid ${props => props.theme.lightPurple};
   white-space: pre-wrap;
   text-align: left;
   display: flex;
-  align-items: right;
-  position: relative; // 상대 위치로 설정
+  flex-direction: column;
+  position: relative;
 `;
 
-const Save = styled.div`
-  width: 70px;
-  height: 20px;
+const DDay = styled.div`
+  width: 50px;
+  height: 15px;
   border-radius: 9px;
   background: ${props => props.theme.blueGra};
   color: white;
-  font-size: 12px;
+  font-size: 11px;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute; // 절대 위치로 설정
-  bottom: 10px; // 아래에서 10px 간격
-  right: 10px; // 오른쪽에서 10px 간격
+  position: absolute;
+  bottom: 10px;
+  right: 7em;
+`;
+
+const Content = styled.p`
+  padding: 20px;
+  color: #D9D9D9;
+  font-size: 13px;
+  flex-grow: 1; /* Content가 가능한 모든 공간을 차지하도록 설정 */
+`;
+
+const Date = styled.p`
+  font-size: 11px;
+  margin: 10px;
+  font-weight: 600;
+  color: #B8B8B8;
+  position: absolute;
+  bottom: 2px;
+  right: 5px; /* Date를 아래로 배치하고 왼쪽에 고정 */
 `;
