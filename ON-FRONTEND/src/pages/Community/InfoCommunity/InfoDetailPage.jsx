@@ -3,29 +3,128 @@ import commentImg from '../../../assets/images/commentImg.svg';
 import DefaultCheckBox from '../../../components/DefaultCheckBox/DefaultCheckBox.jsx';
 import plane from '../../../assets/images/detailPagePlane.svg';
 
-import { Post } from '../../../components/Common/TempDummyData/Post.jsx';
+import {
+  CommentList,
+  userInfo,
+  PostList,
+} from '../../../components/Common/TempDummyData/PostList.jsx';
 
 import Comment from '../../../components/Comment/Comment.jsx';
 
-import { CommentList } from '../../../components/Common/TempDummyData/PostList.jsx';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useRef, useState, useEffect } from 'react';
 
 const InfoDetailPage = () => {
+  const currentPost_id = useLocation().state.value; //post_id 정보만 받아오기
+  //useLocation으로 post_id만 받아 온 뒤, postListDB에서 현재 포스트 찾아와 불러옴.
+  //그 뒤에는 선택사항: commentList DB를 따로 사용하느냐,
+  //아니면 post객체 필드에 각각 commentList를 만들것이냐.
+  //선택할 수 있게 짜놓음
+
+  ///선택 가능하게 하기 위한 변수들///
+  const commentListDB = CommentList;
+  const filteredCommentListDB = CommentList.filter(
+    (comment) => comment.post_id === currentPost_id,
+  );
+
+  const postListDB = PostList;
+  const currentPost = postListDB.filter(
+    (post) => post.post_id === currentPost_id,
+  )[0];
+
+  const currentCommentList = currentPost.commentList; //or commentListDB
+  const currentFilteredCommentList = currentPost.commentList; //or filteredCommentListDB
+
+  /// 여기서부터 메인 변수들 ///
+  const [content, setContent] = useState('');
+  const [selectedComment, setSelectedComment] = useState(null);
+
+  const isAnonymous = useRef(false);
+  const scrollRef = useRef(null);
+  const replyToText = useRef(null);
+  const commentEditor = useRef(null);
+  const mobileViewRef = useRef(null);
+
+  const getNumberOfComment = () => {
+    let numOfComment = 0;
+    currentPost.commentList.forEach((comment) => {
+      numOfComment += comment.replyList.length;
+      numOfComment++;
+      console.log(numOfComment);
+    });
+    return numOfComment;
+  };
+
+  //기타 이벤트 핸들링 함수
+
   const handleResizeHeight = () => {
     const textarea = document.querySelector('.commentEditor');
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
   };
+  const nav = useNavigate();
 
-  let numOfReply = 0;
-  Post.comments.map((comment, index) => (numOfReply += comment.replies.length));
-  console.log(numOfReply);
+  const onCommentSelection = (e) => {
+    if (selectedComment === null) {
+      setSelectedComment(e.target.comment);
+      replyToText.current = `${e.target.writer}에게 답장`;
+      console.log(selectedComment);
+    } else if (selectedComment === e.target.comment) {
+      setSelectedComment(null);
+      replyToText.current = null;
+      console.log(selectedComment);
+    } else {
+      setSelectedComment(e.target.comment);
+      replyToText.current = `${e.target.writer}에게 답장`;
+      console.log(selectedComment);
+    }
+  };
+  const onCommentSubmit = () => {
+    let key, value, pushList;
+    if (selectedComment !== null) {
+      key = ['comment_id', 'reply_id'];
+      value = [
+        selectedComment.comment_id,
+        selectedComment.replyList.length + 1,
+      ];
+      pushList = selectedComment.replyList;
+    } else {
+      key = ['post_id', 'comment_id', 'replyList'];
+      value = [currentPost_id, currentPost.commentList.length + 1, []];
+      pushList = currentCommentList;
+    }
 
-  const commentSend = () => {};
+    console.log(pushList);
 
+    addComment(key, value, pushList);
+    setContent('');
+    setSelectedComment(null);
+    replyToText.current = null;
+  };
+
+  const addComment = (key = [], value = [], pushList = []) => {
+    const comment = {
+      writerInfo: { ...userInfo },
+      content: content,
+      is_anonymous: isAnonymous.current,
+    };
+    if (key.length > 0) {
+      for (let i = 0; i < key.length; i++) {
+        comment[key[i]] = value[i];
+      }
+    }
+
+    console.log(comment);
+
+    pushList.push(comment);
+  };
+
+  const currentVisualViewHeight = window.visualViewport.height;
+  //replyToText.current = currentVisualViewHeight;
   return (
-    <>
-      <s.ConfirmHeader>
-        <s.BackButton>
+    <div ref={mobileViewRef}>
+      <s.PostInfoHeader>
+        <s.BackButton onClick={() => nav(-1)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="10"
@@ -44,53 +143,81 @@ const InfoDetailPage = () => {
         </s.BackButton>
         <s.PostInfo>
           <s.InfoLabel>
-            {Post.writerInfo.is_anonymous === 'true'
+            {currentPost.is_anonymous
               ? '익명'
-              : Post.writerInfo.name}
+              : currentPost.writerInfo.nickName}
           </s.InfoLabel>
           <s.InfoLabel>
-            {Post.writerInfo.from}
+            {currentPost.writerInfo.from}
             <img src={plane} />
-            {Post.writerInfo.to}
+            {currentPost.writerInfo.dispatched_country_id}
           </s.InfoLabel>
-          <s.InfoLabel>{Post.createdDate}</s.InfoLabel>
+          <s.InfoLabel>
+            {currentPost.createdDate.toLocaleString('ko-KR')}
+          </s.InfoLabel>
         </s.PostInfo>
-      </s.ConfirmHeader>
+      </s.PostInfoHeader>
       <s.DetailPageLayout>
-        <s.Title>{Post.title}</s.Title>
-        <s.Content>{Post.content}</s.Content>{' '}
+        <s.Title>{currentPost.title}</s.Title>
+        <s.Content>{currentPost.content}</s.Content>{' '}
         <s.CommentNumSection>
           <img src={commentImg} />
-          {numOfReply + Post.comments.length}
+          {getNumberOfComment()}
         </s.CommentNumSection>
         <s.CommentSection>
-          {CommentList.map((comment, index) => (
-            <Comment
-              comment={comment}
-              key={index}
-            />
-          ))}
-        </s.CommentSection>
-        <s.CommentWritingDiv>
-          <DefaultCheckBox
-            before="익명"
-            checkBoxStyle={{
-              border: '0.2px solid rgba(0, 0, 0, 0.50)',
-              width: '14px',
-              height: '14px',
-              borderRadius: '5px',
-            }}
-          />
+          {currentFilteredCommentList.map((comment, index) => {
+            return (
+              <Comment
+                comment={comment}
+                onCommentClick={onCommentSelection}
+                key={index}
+                clickedComment={selectedComment}
+                postWriter_id={currentPost.writerInfo.user_id}
+              />
+            );
+          })}
+        </s.CommentSection>{' '}
+      </s.DetailPageLayout>
+      <s.CommentWritingDiv id="commentDiv">
+        <DefaultCheckBox
+          before="익명"
+          checkBoxStyle={{
+            border: '0.2px solid rgba(0, 0, 0, 0.50)',
+            width: '14px',
+            height: '14px',
+            borderRadius: '5px',
+          }}
+          onChange={(e) => {
+            isAnonymous.current = e.target.value;
+            commentEditor.current.focus();
+          }}
+        />
+        <s.EditorWrapper>
+          {replyToText.current}
           <s.CommentEditor
             className="commentEditor"
             placeholder="댓글을 작성해주세요."
             onInput={handleResizeHeight}
             rows={1}
+            onChange={(e) => setContent(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && e.shiftKey) {
+                return;
+              } else if (e.key === 'Enter') {
+                onCommentSubmit();
+                e.preventDefault();
+              } else {
+                return;
+              }
+            }}
+            value={content}
+            ref={commentEditor}
           />
-          <s.ColorButtonTag onClick={commentSend}>등록</s.ColorButtonTag>
-        </s.CommentWritingDiv>
-      </s.DetailPageLayout>
-    </>
+        </s.EditorWrapper>
+
+        <s.ColorButtonTag onClick={onCommentSubmit}>등록</s.ColorButtonTag>
+      </s.CommentWritingDiv>
+    </div>
   );
 };
 

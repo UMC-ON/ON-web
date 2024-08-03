@@ -1,8 +1,11 @@
+import { userInfo } from './PostList';
+
 export const Comment = {
-  comment_id: '1',
-  post_id: '1',
-  writerInfo: { isAnonymous: true, order: null, name: '나실명' },
-  replies: [],
+  comment_id: null,
+  post_id: null,
+  writerInfo: {},
+  replyList: [],
+  is_anonymous: null,
   content: '',
 };
 

@@ -68,6 +68,6 @@ const StyledCheckBox = styled.input`
 `;
 
 const TextDiv = styled.div`
-  width: 100%;
+  width: auto;
   white-space: nowrap;
 `;

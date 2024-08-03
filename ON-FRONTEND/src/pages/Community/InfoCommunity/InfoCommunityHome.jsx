@@ -23,7 +23,6 @@ const InfoCommunityHome = () => {
   const nav = () => {
     navigate('./post');
   };
-  console.log(PostList);
   const mylist = [1, 2, 3, 4, '와진짜개짱짱긴텍스트'];
   return (
     <>
@@ -45,9 +44,9 @@ const InfoCommunityHome = () => {
           />
         </s.FilterSection>
         <s.PostListSection>
-          {PostList.map((post, index) => (
+          {PostList.map((post) => (
             <CommunityPost
-              key={index}
+              key={post.createdDate}
               post={post}
             />
           ))}

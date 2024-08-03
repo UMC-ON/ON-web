@@ -3,11 +3,18 @@ import * as s from './SignUpStyled';
 import groupLogo from '../../assets/images/groupLogo.svg';
 import addPhoto from '../../assets/images/addPhoto.svg';
 import { useNavigate } from 'react-router-dom';
+import {
+  userInfo,
+  UserList,
+} from '../../components/Common/TempDummyData/PostList';
 
 const UserInfoSchoolAuthPage = () => {
   const navigate = useNavigate();
   const nav = () => {
+    userInfo.userid = userList.length;
+    UserList.push(userInfo); //DB 유저 리스트에 유저 추가
     navigate('/signUp/complete');
+    console.log(userInfo);
   };
   return (
     <s.FormPage>
@@ -33,7 +40,10 @@ const UserInfoSchoolAuthPage = () => {
           <fieldset>
             <s.InputWrapper>
               <div>나의 교환/방문교</div>
-              <s.TransparentInput placeholder="아까 적은 학교 이름 자동으로 표시" />
+              <s.TransparentInput
+                disabled={true}
+                value={userInfo.dispatched_univ}
+              />
             </s.InputWrapper>
           </fieldset>
           <s.CenterContainer>
@@ -44,10 +54,13 @@ const UserInfoSchoolAuthPage = () => {
 
       <s.ButtonSection>
         <s.TwoColumnWrapper>
-          <s.PurpleButton style={{ backgroundColor: ' #d7dff4' }}>
+          <s.PurpleButton
+            style={{ backgroundColor: ' #d7dff4' }}
+            onClick={nav}
+          >
             건너뛰기
           </s.PurpleButton>
-          <s.PurpleButton onClick={nav}>회원가입</s.PurpleButton>
+          <s.PurpleButton onClick={nav}>입력완료</s.PurpleButton>
         </s.TwoColumnWrapper>
       </s.ButtonSection>
     </s.FormPage>

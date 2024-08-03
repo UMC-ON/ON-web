@@ -3,33 +3,33 @@ import * as s from '../PostPageStyled.jsx';
 import camera from '../../../assets/images/camera.svg';
 import DefaultCheckBox from '../../../components/DefaultCheckBox/DefaultCheckBox.jsx';
 import { useState } from 'react';
-import { PostList } from '../../../components/Common/TempDummyData/PostList.jsx';
+import {
+  PostList,
+  userInfo,
+} from '../../../components/Common/TempDummyData/PostList.jsx';
 
 const InfoPostPage = () => {
   const [input, setInput] = useState({
+    post_id: PostList.length + 1,
     createdDate: new Date(),
-    writerInfo: { name: '나실명', to: 'UK', from: 'KR', is_verified: true },
+    writerInfo: { ...userInfo },
     is_anonymous: null,
     is_anonymous_univ: null,
     title: '',
     content: '',
+    commentList: [],
   });
   const onChangeInput = (e) => {
-    console.log(e.target.name);
-    console.log(e.target.value);
     let name = e.target.name;
     let value = e.target.value;
 
-    if (name === 'createdDate') {
-      value = new Date(value);
-    }
     setInput({
       ...input,
       [name]: value,
     });
   };
   const onSubmit = () => {
-    PostList.unshift(input);
+    PostList.unshift(input); //DB에 저장
     navigate('/community/info', { replace: true });
   };
   const navigate = useNavigate();
@@ -59,13 +59,15 @@ const InfoPostPage = () => {
         <s.PostInfoSection>
           <s.InfoLabel>
             교환 국가:
-            <s.ColorButtonTag>영국</s.ColorButtonTag>
+            <s.ColorButtonTag>
+              {userInfo.dispatched_country_id}
+            </s.ColorButtonTag>
           </s.InfoLabel>
           <s.SpaceBetweenContainer>
             <s.InfoLabel>
               <div style={{ whiteSpace: 'nowrap' }}>교환교:</div>
 
-              <s.ColorButtonTag>King's College London</s.ColorButtonTag>
+              <s.ColorButtonTag>{userInfo.dispatched_univ}</s.ColorButtonTag>
             </s.InfoLabel>
             <DefaultCheckBox
               after="파견교 비공개"

@@ -5,16 +5,27 @@ import commentImg from '../../assets/images/commentImg.svg';
 import verifiedBadge from '../../assets/images/verifiedBadge.svg';
 import { useNavigate } from 'react-router-dom';
 
-import { CommentList } from '../Common/TempDummyData/PostList';
-
 const CommunityPost = ({ post }) => {
   const navigate = useNavigate();
-  const nav = () => {
-    navigate('./detail');
+
+  const getNumOfComment = () => {
+    let numOfComment = 0;
+    post.commentList.forEach((comment) => {
+      numOfComment += comment.replyList.length;
+      numOfComment++;
+      console.log(numOfComment);
+    });
+    return numOfComment;
   };
 
   return (
-    <s.Post onClick={nav}>
+    <s.Post
+      onClick={() =>
+        navigate(`./detail/${post.post_id}`, {
+          state: { value: post.post_id },
+        })
+      }
+    >
       <HeaderSection>
         <Title>{post.title}</Title>
         <Date>{post.date}</Date>
@@ -25,7 +36,7 @@ const CommunityPost = ({ post }) => {
 
           <PostInfoWrapper>
             <Writer>
-              {post.is_anonymous ? '익명' : post.writerInfo.name}
+              {post.is_anonymous ? '익명' : post.writerInfo.nickName}
               <VerifiedImg
                 src={verifiedBadge}
                 is_verified={post.writerInfo.is_verified.toString()}
@@ -33,7 +44,7 @@ const CommunityPost = ({ post }) => {
             </Writer>
             <Comment>
               <img src={commentImg} />
-              <div>1</div>
+              <div>{getNumOfComment()}</div>
             </Comment>
           </PostInfoWrapper>
         </ContentWrapper>
@@ -152,7 +163,8 @@ const Writer = styled.div`
 `;
 const VerifiedImg = styled.img`
   padding: 0 2px;
-  display: ${(props) => (props.is_verified ? 'inline-block' : 'none')};
+  display: ${(props) =>
+    props.is_verified === 'true' ? 'inline-block' : 'none'};
 `;
 const Comment = styled.div`
   padding-top: 2px;

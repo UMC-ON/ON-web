@@ -1,13 +1,11 @@
 import styled from 'styled-components';
 
-const Reply = ({ reply }) => {
-  const showWriter = (targetWriterInfo) => {
-    if (targetWriterInfo.isAnonymous === 'true') {
-      return targetWriterInfo.order === null
-        ? '글쓴이'
-        : '익명' + targetWriterInfo.order;
+const Reply = ({ reply, postWriter_id }) => {
+  const showWriter = (thisReply) => {
+    if (thisReply.is_anonymous === true) {
+      return thisReply.writerInfo.user_id === postWriter_id ? '글쓴이' : '익명';
     } else {
-      return targetWriterInfo.name;
+      return thisReply.writerInfo.nickName;
     }
   };
   return (
@@ -27,7 +25,7 @@ const Reply = ({ reply }) => {
         />
       </svg>
       <div>
-        <Writer>{showWriter(reply.writerInfo)}</Writer>
+        <Writer writer={showWriter(reply)}>{showWriter(reply)}</Writer>
         {reply.content}
       </div>
     </ReplyDiv>
@@ -38,7 +36,7 @@ export default Reply;
 
 const Writer = styled.div`
   padding: 3px 0;
-  color: #525252;
+  color: ${(props) => (props.writer === '글쓴이' ? '#35bed6' : '#525252')};
   font-family: Inter;
   font-size: 13px;
   font-style: normal;

@@ -53,7 +53,7 @@ export const DarkBackground = styled.div`
   width: 480px;
   height: 100vh;
   background-color: black;
-  opacity: 70%;
+  opacity: 20%;
   z-index: 3;
   display: ${(props) => (props.show === 'true' ? 'block' : 'none')};
 `;

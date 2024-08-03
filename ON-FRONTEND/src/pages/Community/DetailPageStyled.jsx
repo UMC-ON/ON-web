@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const ConfirmHeader = styled.div`
+export const PostInfoHeader = styled.div`
   width: 100%;
   max-width: 480px;
   height: 61px;
@@ -69,8 +69,8 @@ export const DetailPageLayout = styled.div`
   background: white;
   box-sizing: border-box;
   width: 100%;
-  height: auto;
-  min-height: 100vh;
+  //height: auto;
+  //min-height: 100vh;
   padding-top: 61px;
   display: flex;
   flex-direction: column;
@@ -80,7 +80,8 @@ export const DetailPageLayout = styled.div`
 export const Content = styled.pre`
   box-sizing: border-box;
   width: 100%;
-  padding: 19px 1.5rem;
+
+  padding: 2rem 1.5rem;
 
   text-align: left;
   white-space: pre-wrap;
@@ -99,7 +100,6 @@ export const CommentWritingDiv = styled.div`
   position: fixed;
   bottom: 0;
   left: 0;
-
   display: flex;
   flex-direction: row;
   justify-content: start;
@@ -120,12 +120,27 @@ export const CommentWritingDiv = styled.div`
   box-shadow: 0px -3px 3px 0px rgba(0, 0, 0, 0.05);
   padding: 14px 15px;
 `;
+
+export const EditorWrapper = styled.div`
+  color: black;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-content: start;
+  flex: auto;
+  flex-wrap: nowrap;
+  justify-content: start;
+  align-items: start;
+  padding: 0 0.94rem;
+  font-size: 12px;
+`;
 export const CommentEditor = styled.textarea`
   box-sizing: border-box;
   background-color: transparent;
   border: none;
 
   flex: auto;
+  width: 100%;
 
   &:focus {
     outline: none;
@@ -137,6 +152,7 @@ export const CommentEditor = styled.textarea`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  text-align: left;
 
   height: auto;
   min-height: 28px;
@@ -147,8 +163,7 @@ export const CommentEditor = styled.textarea`
   }
 
   resize: none;
-
-  margin: 0 0.94rem;
+  margin-top: 0.3rem;
 `;
 
 export const CommentSection = styled.section`
@@ -162,7 +177,7 @@ export const CommentSection = styled.section`
   width: 100%;
   height: auto;
   padding: 0 30px;
-  padding-bottom: 60px;
+  padding-bottom: 10rem;
 `;
 
 export const Comment = styled.div`
