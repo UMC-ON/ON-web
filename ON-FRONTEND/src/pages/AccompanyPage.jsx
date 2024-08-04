@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React, { useState } from 'react';
+import moment from 'moment';
 
 import AccompanyHomeComponent from '../components/AccompanyHomeComponent';
 import DateRangePicker from '../components/CompanyCalendar/CompanyCalendar.jsx';
@@ -33,8 +34,8 @@ function AccompanyPage() {
     };
 
     const handleApplyClick = (start, end) => {
-      setStartDate(start);
-      setEndDate(end);
+      setStartDate(moment(start).format('MM/DD'));
+      setEndDate(moment(end).format('MM/DD'));
       setIsDateClicked(true);
       setShowCalendar(false);
     };
