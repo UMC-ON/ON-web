@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const CompanyCalendar = styled.div`
   width: 100%;
+  margin-top: 10px;
     .top-header {
     width: 90%;
     display: flex;
@@ -145,7 +146,7 @@ export const ResetButton = styled.button`
   font-size: 0.8em;
   cursor: pointer;
   width: 6em;
-  margin-right: 4.5em;
+  margin-right: 9em;
 `;
 
 export const ApplyButton = styled.button`
@@ -157,5 +158,5 @@ export const ApplyButton = styled.button`
   font-size: 1em;
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   margin: 1em;
-  width: 7em;
+  width: 10em;
 `;

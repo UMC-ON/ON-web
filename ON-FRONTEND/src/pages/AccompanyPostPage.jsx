@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React, {useState} from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 import postIcon from '../assets/images/writepost_icon.svg';
 
@@ -8,17 +9,27 @@ import CameraBottom from '../components/CameraBottom';
 
 
 function AccompanyPostPage() {
-    const [checked, setChecked] = useState(false);
+    const [ageChecked, setAgeChecked] = useState(false);
+    const [schoolChecked, setSchoolChecked] = useState(false);
 
-    const handleCheckboxChange = (e) => {
-        setChecked(e.target.checked);
+    const checkAge = (e) => {
+      setAgeChecked(e.target.checked);
+    };
 
+    const checkSchool = (e) => {
+      setSchoolChecked(e.target.checked);
+    };
+
+    const navigate = useNavigate();
+
+    const onClickBackButton = () => {
+      navigate(-1);
     };
 
     return (
       <>
         <RightContainer>
-            <GreyButton>취소</GreyButton>
+            <GreyButton onClick={onClickBackButton}>취소</GreyButton>
             <BlueButton>등록</BlueButton>
         </RightContainer>
 
@@ -43,57 +54,36 @@ function AccompanyPostPage() {
             <BlueContainer>
                 <Left $bottom="5px">
                     <BlackText>나이 :</BlackText>
-                    <BlackText $isChecked={checked}>22세</BlackText>
-                    <CustomCheckbox checked={checked} onChange={handleCheckboxChange} />
+                    <BlackText $isChecked={ageChecked}>22세</BlackText>
+                    <CustomCheckbox checked={ageChecked} onChange={checkAge} />
                     <GreyText $size="0.7rem" $left="5px" $top="10px">나이 비공개</GreyText>
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>현재 위치 : </BlackText>
-                    <CircleContainer>영국 런던
+                    <CircleContainer>독일
                         <SmallIcon src={postIcon} $left="5px"/>
                     </CircleContainer>
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>파견교 : </BlackText>
-                    <BlackText $isChecked={checked} $size="0.8rem">King's College London</BlackText>
-                    <CustomCheckbox checked={checked} onChange={handleCheckboxChange} />
+                    <BlackText $isChecked={schoolChecked} $size="0.8rem">King's College London</BlackText>
+                    <CustomCheckbox checked={schoolChecked} onChange={checkSchool} />
                     <GreyText $size="0.7rem" $left="5px" $top="10px">파견교 비공개</GreyText>
-                </Left>
-                <Left $bottom="5px">
-                    <BlackText>여행 지역 : </BlackText>
-                    <CircleContainer $color="#C2C7FF">모로코
-                        <SmallIcon src={postIcon} $left="5px"/>
-                    </CircleContainer>
-                </Left>
-                <Left $bottom="5px">
-                    <BlackText>예상 일정 : </BlackText>
-                    <Input $width="10px"/>
-                    <GreyText $left="3px">일</GreyText>
-                    <GreyText $size="0.5rem" $left="7px" $top="15px" $color="#B2B2B2">*당일치기는 0일로 입력해 주세요.</GreyText>
-                </Left>
-                <Left $bottom="5px">
-                    <BlackText>희망 시기 : </BlackText>
-                    <Input $width="35px"/>
-                    <GreyText $left="3px">년</GreyText>
-                    <Input $width="10px"/>
-                    <GreyText $left="3px">월</GreyText>
-                    <Input $width="10px"/>
-                    <GreyText $left="3px">일</GreyText>
-                </Left>
-                <Left>
-                    <LeftSpace/>
-                    <GreyText $left="3px">~</GreyText>
-                    <Input $width="35px"/>
-                    <GreyText $left="3px">년</GreyText>
-                    <Input $width="10px"/>
-                    <GreyText $left="3px">월</GreyText>
-                    <Input $width="10px"/>
-                    <GreyText $left="3px">일</GreyText>
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>모집 인원 : </BlackText>
                     <Input $width="10px"/>
                     <GreyText $left="3px">명</GreyText>
+                </Left>
+                <Left $bottom="5px">
+                    <BlackText>여행 지역 : </BlackText>
+                    <CircleContainer2>입력하기
+                    </CircleContainer2>
+                </Left>
+                <Left $bottom="5px">
+                    <BlackText>예상 일정 : </BlackText>
+                    <CircleContainer2>입력하기
+                    </CircleContainer2>
                 </Left>
             </BlueContainer>
         </BigContainer>
@@ -134,7 +124,20 @@ const Space = styled.section`
 `;
 
 const CircleContainer = styled.section`
-  background-color: ${props => props.$color || '#BFD8E5'};
+  background: linear-gradient(to right bottom, #D6EBFF, #C2C7FF);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: white;
+  padding: 5px;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  margin-top: 5px;
+  padding-left: 6px;
+`;
+
+const CircleContainer2 = styled.section`
+  background: linear-gradient(to right bottom, #C2C7FF, #AD99FF);
   border-radius: 20px;
   font-size: 0.8rem;
   color: white;
