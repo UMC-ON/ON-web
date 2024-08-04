@@ -25,3 +25,5 @@ const theme = {
 };
 
 export default theme;
+
+//color : ${(props) => props.theme.lightBlue};

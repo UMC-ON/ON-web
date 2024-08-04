@@ -3,6 +3,11 @@ import styled from 'styled-components';
 export const CompanyCalendar = styled.div`
   width: 100%;
   margin-top: 10px;
+  .react-datepicker__day--in-range {
+    background-color: #cce5ff;
+    color: #000;
+  }
+
     .top-header {
     width: 90%;
     display: flex;

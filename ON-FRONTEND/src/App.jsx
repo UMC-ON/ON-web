@@ -19,6 +19,7 @@ import CompanyCalendar from './components/CompanyCalendar/CompanyCalendar.jsx';
 import SellPage from './pages/SellPage.jsx';
 import ScrapList from './pages/ScrapList.jsx';
 import SellPost from "./pages/SellPostPage.jsx";
+import ItemDetailPage from './pages/ItemDetailPage.jsx';
 
 import TermsOfServicePage from './pages/SignUp/TermsOfServicePage.jsx';
 import UserInfoPage from './pages/SignUp/UserInfoPage.jsx';
@@ -143,12 +144,16 @@ function App() {
           element={<SellPage />}
         />
         <Route
-          path="/scrap"
-          element={<ScrapList />}
+          path="/sell/id"
+          element={<ItemDetailPage />}
         />
         <Route
           path="/sell/post"
           element={<SellPost />}
+        />
+        <Route
+          path="/scrap"
+          element={<ScrapList />}
         />
       </Routes>
     </ThemeProvider>

@@ -53,6 +53,7 @@ const DateRangePicker = ({ onApply }) => {
           <p style={{fontSize: "12px", color: "#CCCCCC", marginTop: "10px"}}>날짜</p>
         </div>
         <DatePicker
+          
           locale={ko}
           selected={startDate}
           onChange={onChange}
