@@ -16,7 +16,7 @@ const DateRangePicker = ({ onApply }) => {
   };
 
   const handleApply = () => {
-    onApply(moment(startDate).format('MM/DD'), moment(endDate).format('MM/DD'));
+    onApply(startDate, endDate);
   };
 
   const today = moment().startOf('day').toDate();

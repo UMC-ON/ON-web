@@ -1,16 +1,79 @@
 import styled from 'styled-components';
 import React, {useState} from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import moment from 'moment';
 
 import postIcon from '../assets/images/writepost_icon.svg';
+import minusButton from '../assets/images/minusButton.svg';
+import plusButton from '../assets/images/plusButton.svg';
+import closeIcon from '../assets/images/close_button.svg';
 
 import CustomCheckbox from '../components/CustomCheckBox';
 import CameraBottom from '../components/CameraBottom';
+import DateRangePicker from '../components/CompanyCalendar/CompanyCalendar.jsx';
 
 
 function AccompanyPostPage() {
     const [ageChecked, setAgeChecked] = useState(false);
     const [schoolChecked, setSchoolChecked] = useState(false);
+
+
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const [daysDifference, setDaysDifference] = useState(0);
+    const [limitDays, setLimitDays] = useState(0);
+    const [isDateClicked, setIsDateClicked] = useState(false);
+    const [showCalendar, setShowCalendar] = useState(false);
+    const [personValue, setPersonValue] = useState(0);
+
+    const handlePerson = (event) => {
+      const newValue = event.target.value;
+      if (!isNaN(newValue) && newValue.trim() !== '') {
+        setPersonValue(parseInt(newValue, 10)); 
+      } else {
+        setPersonValue(0); 
+      }
+    };
+
+    const handleChange = (event) => {
+      const newValue = event.target.value;
+      if (!isNaN(newValue) && newValue.trim() !== '') {
+        setDaysDifference(parseInt(newValue, 10)); 
+      } else {
+        setDaysDifference(0); 
+      }
+    };
+
+    const increaseDays = () => {
+      if (daysDifference < limitDays)
+      {
+        setDaysDifference(daysDifference+1);
+        console.log("Limit", limitDays);
+        console.log("Days", daysDifference);
+      }
+    };
+
+    const decreaseDays = () => {
+      if (daysDifference > 0)
+        {
+          setDaysDifference(daysDifference-1);
+          console.log("Limit", limitDays);
+          console.log("Days", daysDifference);
+        }
+    };
+
+    const handleApplyClick = (start, end) => {
+      setStartDate(moment(start).format('YYYY/MM/DD'));
+      setEndDate(moment(end).format('YYYY/MM/DD'));
+
+      const startMoment = moment(start);
+      const endMoment = moment(end);
+      const difference = endMoment.diff(startMoment, 'days');
+      setDaysDifference(difference+1);
+      setLimitDays(difference+1);
+      setIsDateClicked(true);
+      setShowCalendar(false);
+    };
 
     const checkAge = (e) => {
       setAgeChecked(e.target.checked);
@@ -24,6 +87,10 @@ function AccompanyPostPage() {
 
     const onClickBackButton = () => {
       navigate(-1);
+    };
+
+    const handleCalendarClick = () => {
+      setShowCalendar(!showCalendar);
     };
 
     return (
@@ -59,7 +126,7 @@ function AccompanyPostPage() {
                     <GreyText $size="0.7rem" $left="5px" $top="10px">나이 비공개</GreyText>
                 </Left>
                 <Left $bottom="5px">
-                    <BlackText>현재 위치 : </BlackText>
+                    <BlackText>현재 국가 : </BlackText>
                     <CircleContainer>독일
                         <SmallIcon src={postIcon} $left="5px"/>
                     </CircleContainer>
@@ -72,7 +139,7 @@ function AccompanyPostPage() {
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>모집 인원 : </BlackText>
-                    <Input $width="10px"/>
+                    <Input $width="12px" onChange={handlePerson} value={personValue}/>
                     <GreyText $left="3px">명</GreyText>
                 </Left>
                 <Left $bottom="5px">
@@ -82,11 +149,39 @@ function AccompanyPostPage() {
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>예상 일정 : </BlackText>
-                    <CircleContainer2>입력하기
+                    {!isDateClicked && (
+                        <CircleContainer2 onClick={handleCalendarClick}>입력하기
                     </CircleContainer2>
+                    )}
+                    {isDateClicked && (
+                      <>
+                        <CircleContainer onClick={handleCalendarClick}>{`${startDate}`}</CircleContainer>
+                        <GreyText $left="6px">~</GreyText>
+                        <CircleContainer onClick={handleCalendarClick}>{`${endDate}`}</CircleContainer>
+                        <GreyText $left="6px">사이</GreyText>
+                      </>
+                    )}
                 </Left>
+                    {isDateClicked && (
+                      <Left>
+                        <MarginLeft/>
+                        <CircleButton src={minusButton} onClick={decreaseDays}/>
+                        <Input $width="20px" $left="8px" value={daysDifference.toString()} onChange={handleChange}/>
+                        <CircleButton src={plusButton} onClick={increaseDays}/>
+                      </Left>
+                    )}
             </BlueContainer>
         </BigContainer>
+
+        {showCalendar && 
+          <>
+            <Overlay onClick={handleCalendarClick} />
+            <BottomTabLayout>
+              <Close src={closeIcon} onClick={handleCalendarClick} />
+              <DateRangePicker onApply={handleApplyClick}/>
+            </BottomTabLayout>
+          </>
+        }
 
         <BigContainer>
             <Left>
@@ -150,12 +245,12 @@ const CircleContainer2 = styled.section`
 `;
 
 const Input = styled.input`
-    margin-left: 10px;
+    margin-left: ${props => props.$left || '10px'};
     border-radius: 5px;
     border: 1px solid #CABCCB;
     width: ${props => props.$width || '25px'};
     margin-top: 4px;
-    height: 20px;
+    height: 18px;
     color: #838383;
     font-size: 0.8rem;
     padding-left: 5px;
@@ -266,4 +361,49 @@ const BlackText = styled.div`
   padding-left: 1rem;
   margin-top: 0.5rem;
   text-decoration: ${({ $isChecked }) => ($isChecked ? 'line-through' : 'none')};
+`;
+
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9;
+`;
+
+const Close = styled.img`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+`;
+
+const BottomTabLayout = styled.div`
+  width: 100%;
+  max-width: 480px;
+  position: fixed;
+  bottom: 0;
+  border-radius: 14px 14px 0px 0px;
+  border: 1px solid white;
+  background: #ffffff;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  box-sizing: border-box;
+  box-shadow: 0px -1px 4px 0px #e2e2e2;
+`;
+
+
+const CircleButton = styled.img`
+  margin-left: 8px;
+`;
+
+
+const MarginLeft = styled.div`
+  margin-left: 90px;
+  margin-top: 30px;
 `;
