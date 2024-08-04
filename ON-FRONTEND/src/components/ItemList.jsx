@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
+import { useNavigate } from 'react-router-dom';
 
-import item from "../assets/images/item.svg";
-import icon from "../assets/images/item_icon.svg";
 import compas from "../assets/images/compasIcon.svg";
 import profile from "../assets/images/profileIcon.svg";
 import empty_star from "../assets/images/empty_star.svg";
@@ -10,10 +9,16 @@ import filled_star from "../assets/images/filled_star.svg";
 
 
 const Item = ({ items }) => {
+
+  const navigate = useNavigate();
+    const goDetail = () => {
+      navigate('./id');
+    };
+  
   return (
     <>
       {items && items.map((item, index) => (
-        <ItemDiv key={index}>
+        <ItemDiv key={index} onClick={goDetail}>
           <Photo src={item.image} />
           <Information>
             <StarContainer />

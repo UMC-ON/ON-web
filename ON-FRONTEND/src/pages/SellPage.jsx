@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import item from "../assets/images/item.svg";
 import icon from "../assets/images/item_icon.svg";
 import arrowIcon from '../assets/images/bottomArrow.svg';
@@ -85,6 +87,11 @@ const items = [
 ];
 
 function SellPage() {
+  const navigate = useNavigate();
+    const goPost = () => {
+      navigate('./post');
+    };
+
     return(
         <>
           <PageHeader pageName={'거래하기'}></PageHeader>
@@ -108,7 +115,7 @@ function SellPage() {
             </Span>
           </FlexContainer><br/>
           <ItemList items={items}/>
-          <WriteButton>
+          <WriteButton onClick={goPost}>
             <img src={pencilImg} />
           글쓰기
         </WriteButton>
