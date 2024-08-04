@@ -17,6 +17,8 @@ import bannerimg from '../assets/images/home_banner.svg';
 import londonImg from '../assets/images/london_gallery.svg';
 import rightIcon from '../assets/images/right_arrow.svg';
 import infoImg from '../assets/images/info_container.svg';
+import infoStripe from '../assets/images/infoStripe.svg';
+import freeStripe from '../assets/images/freeStripe.svg';
 import freeImg from '../assets/images/free_container.svg';
 import bubbleIcon from '../assets/images/bubble.svg'
 import marketImg from '../assets/images/borough_market.svg';
@@ -202,25 +204,46 @@ function HomePage() {
           </FlexContainer>
 
           <ImgContainer>
-            <BackgroundImage src={infoImg} alt="Background Image" />
-            <TextTopLeft>[🇬🇧 킹칼] 한 학기 교환 비용 정리</TextTopLeft>
-            <TextTopRight>09:18</TextTopRight>
-            <TextMiddle>따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 독일로 교환학생을 앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약!</TextMiddle>
-            <TextBottomLeft>익명</TextBottomLeft>
-            <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
-            <TextBottomLeft2>1</TextBottomLeft2>
-            <ImageRight src={screenshotImg}></ImageRight>
+            <PaddingTop/>
+            <Stripe $blue={true}>
+              <TextTopLeft>[🇬🇧 킹칼] 한 학기 교환 비용 정리</TextTopLeft>
+              <TextTopRight>09:18</TextTopRight>
+            </Stripe>
+            <BetweenContainer>
+              <TextContainer>
+                <TextMiddle>
+                  따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 독일로 교환학생을 앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약!
+                </TextMiddle>
+                <InlineTextContainer>
+                  <TextBottomLeft>익명</TextBottomLeft>
+                  <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
+                  <TextBottomLeft2>1</TextBottomLeft2>
+                </InlineTextContainer>
+              </TextContainer>
+              <ImageRight src={screenshotImg}></ImageRight>
+            </BetweenContainer>
           </ImgContainer>
           
+          
           <ImgContainer>
-            <BackgroundImage src={infoImg} alt="Background Image" />
-            <TextTopLeft>[🇬🇧 킹칼] 한 학기 교환 비용 정리</TextTopLeft>
-            <TextTopRight>09:18</TextTopRight>
-            <TextMiddle>따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 독일로 교환학생을 앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약!</TextMiddle>
-            <TextBottomLeft>익명</TextBottomLeft>
-            <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
-            <TextBottomLeft2>1</TextBottomLeft2>
-            <ImageRight src={screenshotImg}></ImageRight>
+            <PaddingTop/>
+            <Stripe $blue={true}>
+              <TextTopLeft>[🇬🇧 킹칼] 한 학기 교환 비용 정리</TextTopLeft>
+              <TextTopRight>09:18</TextTopRight>
+            </Stripe>
+            <BetweenContainer>
+              <TextContainer>
+                <TextMiddle>
+                  따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 독일로 교환학생을 앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약!
+                </TextMiddle>
+                <InlineTextContainer>
+                  <TextBottomLeft>익명</TextBottomLeft>
+                  <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
+                  <TextBottomLeft2>1</TextBottomLeft2>
+                </InlineTextContainer>
+              </TextContainer>
+              <ImageRight src={screenshotImg}></ImageRight>
+            </BetweenContainer>
           </ImgContainer>
 
           <Space></Space>
@@ -231,27 +254,43 @@ function HomePage() {
               <RightIcon src={rightIcon}></RightIcon>
           </FlexContainer>
 
-          <ImgContainer>
-            <BackgroundImage src={freeImg} alt="Background Image" />
-            <TextTopLeft>독일 방문학생 갈 때 어학점수</TextTopLeft>
-            <TextMiddle2>독일 방문학생 갈 때 어학점수 어느 정도 나와야 할까요? 가장 가고 싶은 학교는 프푸응과대입니다.
-                         저는 3개월 만에 학기가 끝나는 학교로 가지만,이후 보다 편안하고 안전한(?) 유럽 여행을 위해비자를 발급받으려 합니다!
-            </TextMiddle2>
-            <TextBottomLeft>익명</TextBottomLeft>
-            <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
-            <TextBottomLeft2>3</TextBottomLeft2>
-          </ImgContainer>
+          <FreeContainer>
+            <PaddingTop/>
+            <Stripe $blue={false}>
+              <TextTopLeft>독일 방문학생 갈 때 어학점수</TextTopLeft>
+            </Stripe>
+              <TextContainer>
+                <TextMiddle2>독일 방문학생 갈 때 어학점수 어느 정도 나와야 할까요? 가장 가고 싶은 학교는 프푸응과대입니다.
+                            저는 3개월 만에 학기가 끝나는 학교로 가지만,이후 보다 편안하고 안전한(?) 유럽 여행을 위해비자를 발급받으려 합니다!
+                </TextMiddle2>
+                <InlineTextContainer>
+                  <MarginLeft/>
+                  <TextBottomLeft>익명</TextBottomLeft>
+                  <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
+                  <TextBottomLeft2>3</TextBottomLeft2>
+                </InlineTextContainer>
+              </TextContainer>
+          </FreeContainer>
+
+          <FreeContainer>
+            <PaddingTop/>
+            <Stripe $blue={false}>
+              <TextTopLeft>독일 방문학생 갈 때 어학점수</TextTopLeft>
+            </Stripe >
+              <TextContainer>
+                <TextMiddle2>독일 방문학생 갈 때 어학점수 어느 정도 나와야 할까요? 가장 가고 싶은 학교는 프푸응과대입니다.
+                            저는 3개월 만에 학기가 끝나는 학교로 가지만,이후 보다 편안하고 안전한(?) 유럽 여행을 위해비자를 발급받으려 합니다!
+                </TextMiddle2>
+                <InlineTextContainer>
+                  <MarginLeft/>
+                  <TextBottomLeft>익명</TextBottomLeft>
+                  <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
+                  <TextBottomLeft2>3</TextBottomLeft2>
+                </InlineTextContainer>
+              </TextContainer>
+          </FreeContainer>
           
-          <ImgContainer>
-            <BackgroundImage src={freeImg} alt="Background Image" />
-            <TextTopLeft>독일 방문학생 갈 때 어학점수</TextTopLeft>
-            <TextMiddle2>독일 방문학생 갈 때 어학점수 어느 정도 나와야 할까요? 가장 가고 싶은 학교는 프푸응과대입니다.
-                         저는 3개월 만에 학기가 끝나는 학교로 가지만,이후 보다 편안하고 안전한(?) 유럽 여행을 위해비자를 발급받으려 합니다!
-            </TextMiddle2>
-            <TextBottomLeft>익명</TextBottomLeft>
-            <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
-            <TextBottomLeft2>3</TextBottomLeft2>
-          </ImgContainer>
+          
 
           <Space></Space>
           <Space></Space>
@@ -275,90 +314,114 @@ export default HomePage;
 
 
 const ImgContainer = styled.div`
-  width: 85%;
-  position: relative;
+  background-image: url(${infoImg});
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  width: 340px; 
+  height: 130px; 
   margin: 0 auto;
-`;
-
-const BackgroundImage = styled.img`
-  object-fit: cover;
-  margin-top: 1vh;
-  width: 100%;
+  margin-bottom: 10px;
   filter: drop-shadow(8px 8px 8px rgba(0, 0, 0, 0.1));
 `;
 
-const OverlayText = styled.div`
-  position: absolute;
+const FreeContainer = styled.div`
+  background-image: url(${freeImg});
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  width: 340px; 
+  height: 130px; 
+  margin: 0 auto;
+  margin-bottom: 10px;
+  filter: drop-shadow(8px 8px 8px rgba(0, 0, 0, 0.1));
 `;
 
 const IconBottomLeft = styled.img`
-  position: absolute;
-  top: 13.8vh;
-  left: 5.5vh;
+  margin-left: 10px;
+`;
+
+const MarginLeft = styled.div`
+  margin-left: 5px;
 `;
 
 const ImageRight = styled.img`
-  position: absolute;
-  top: 6.5vh;
-  left: 28vh;
-  width: 8vh;
-  heigth: 8vh;
+  width: 75px;
+  heigth: 75px;
   border-radius: 10px;
+  margin-right: 20px;
+  padding-top: 3px;
 `;
 
-const TextBottomLeft2 = styled(OverlayText)`
+const TextBottomLeft2 = styled.div`
   color: #ffffff;
   font-size: 0.7em;
-  top: 13.8vh;
-  left: 7vh;
-  text-align: right;
+  margin-left: 3px;
 `;
 
-const TextTopLeft = styled(OverlayText)`
+const PaddingTop = styled.div`
+  padding-top: 13px;
+`;
+
+const Stripe = styled.div`
+  background-image:${props => props.$blue ? `url(${infoStripe})` : `url(${freeStripe})`};
+  
+  display: flex;
+  justify-content: space-between;
+  width: 340px; 
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+`;
+
+const TextTopLeft = styled.div`
   color: #363636;
-  font-size: 1em;
+  font-size: 0.9em;
   font-weight: bold;
-  top: 3.2vh;
-  left: 2.5vh;
+  text-align: left;
+  padding: 5px;
+  padding-left: 20px;
 `;
 
-const TextTopRight = styled(OverlayText)`
+const TextTopRight = styled.div`
   color: #7A7A7A;
   font-size: 0.8em;
-  top: 3.2vh;
-  right: 2.5vh;
   text-align: right;
+  padding: 5px;
+  padding-right: 15px;
 `;
 
-const TextMiddle = styled(OverlayText)`
+const TextMiddle = styled.div`
   color: #838383;
   font-size: 0.8em;
-  top: 6.7vh;
-  left: 2.5vh;
-  width: 57%;
   text-align: left;
-  line-height: 2vh;
+  line-height: 1.3em;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  padding-left: 12px;
+  padding-top: 5px;
+  width: 200px;
 `;
 
-const TextMiddle2 = styled(OverlayText)`
+const TextMiddle2 = styled.div`
   color: #838383;
   font-size: 0.8em;
-  top: 6.7vh;
-  left: 2.5vh;
-  width: 80%;
   text-align: left;
-  line-height: 2vh;
+  line-height: 1.3em;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  padding-left: 12px;
+  padding-top: 5px;
+  width: 280px;
+  margin: 5px;
+  margin-bottom: 0px;
 `;
 
-const TextBottomLeft = styled(OverlayText)`
+const TextBottomLeft = styled.div`
   color: #7A7A7A;
   font-size: 0.7em;
   top: 13.8vh;
@@ -493,4 +556,23 @@ const BlueContainer = styled.div`
   border-bottom: 1.5px solid #d9d9d9;
   border-top: 1.5px solid #d9d9d9;
   margin-bottom: 1vh;
+`;
+
+const BetweenContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; 
+  padding: 5px;
+`;
+
+const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const InlineTextContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  padding: 10px;
+  margin-left: 3px;
 `;

@@ -38,7 +38,14 @@ function AccompanyPostPage() {
     const handleChange = (event) => {
       const newValue = event.target.value;
       if (!isNaN(newValue) && newValue.trim() !== '') {
-        setDaysDifference(parseInt(newValue, 10)); 
+        if (newValue <= limitDays)
+        {
+          setDaysDifference(parseInt(newValue, 10)); 
+        }
+        else
+        {
+          setDaysDifference(limitDays);
+        }
       } else {
         setDaysDifference(0); 
       }
