@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 
-export const ChatListLayout = styled.div`
+export const PageLayout = styled.div`
   width: 100vw;
   height: 100vh;
   max-width: 480px;
@@ -12,8 +12,7 @@ export const ChatListLayout = styled.div`
   align-items: center;
   flex-direction: column;
 `;
-
-export const ModeContainer = styled.section`
+export const ModeContainer = styled.div`
   display: flex;
   width: 100%;
   margin: 1.12rem 0 2rem 0;
@@ -23,18 +22,20 @@ export const ModeContainer = styled.section`
 `;
 
 export const ModeButton = styled.div`
-  width: 5.0625rem;
+  width: auto;
   height: 2.125rem;
   flex-shrink: 0;
+  box-sizing: border-box;
+  padding: 0 0.75rem;
   border-radius: 1.25rem;
-  border: 1px solid #c2c7ff;
+  border: 1px solid ${theme.lightPurple};
   color: #ad99ff;
   text-align: center;
   font-family: Inter;
   font-size: 0.8125rem;
   font-style: normal;
   font-weight: 500;
-  line-height: 2.125rem;
+  line-height: 2rem;
   margin-right: 0.5rem;
 
   background: ${(props) => (props.$active ? props.theme.purpleGra : 'none')};
@@ -46,14 +47,8 @@ export const ModeButton = styled.div`
   }
 `;
 
-export const ChatListWrapper = styled.section`
-  display: flex;
-  flex-direction: column;
-  width: 90%;
-`;
-
-export const Line = styled.div`
+export const PostWrapper = styled.section`
+  display: block;
   width: 100%;
-  border-top: 1px solid black;
-  transform: scaleY(0.1);
+  height: 100%;
 `;
