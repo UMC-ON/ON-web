@@ -3,10 +3,7 @@ import styled from 'styled-components';
 export const CompanyCalendar = styled.div`
   width: 100%;
   margin-top: 10px;
-  .react-datepicker__day--in-range {
-    background-color: #cce5ff;
-    color: #000;
-  }
+
 
     .top-header {
     width: 90%;
@@ -80,20 +77,17 @@ export const CompanyCalendar = styled.div`
   }
 
   .react-datepicker__day--selecting-range-start {
-    background: none;
-    border: 2px solid ${(props) => props.theme.lightPurple};
+    background: ${(props) => props.theme.blueGra}};
   }
   
-  // .react-datepicker__day--selecting-range-end {
-  //   background: ${(props) => props.theme.purpleGra};
-  // }
+
 
   .react-datepicker__day-name {
     margin: 0px 10px;
   }
 
   .react-datepicker__day--in-range {
-  background: ${(props) => props.theme.lightBlue}};
+  background: ${(props) => props.theme.blueGra}};
   
   .react-datepicker__day--outside-month {
     visibility: hidden;

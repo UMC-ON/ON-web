@@ -2,10 +2,89 @@ import styled from "styled-components";
 import React from 'react';
 
 import ItemDetailPageHeader from "../components/ItemDetailPageHeader";
+import ItemList from '../components/ItemList';
 
 import keyboard from "../assets/images/keyboard.svg";
 import compas from "../assets/images/compasIcon.svg";
-import profile from "../assets/images/profileIcon.svg";
+import icon from "../assets/images/profileIcon.svg";
+import item from "../assets/images/item.svg";
+
+const items = [
+    {
+        image: item,
+        title: '작은 냄비',
+        time: '10분 전',
+        how: '직거래',
+        now: '거래가능',
+        where: '독일 베를린',
+        icon: icon,
+        nickname: '루이',
+        id: 'fndl333',
+        price: '나눔'
+    },
+    {
+        image: item,
+        title: '작은 냄비',
+        time: '10분 전',
+        how: '직거래',
+        now: '거래가능',
+        where: '독일 베를린',
+        icon: icon,
+        nickname: '루이',
+        id: 'fndl333',
+        price: '나눔'
+    },    
+    {
+        image: item,
+        title: '작은 냄비',
+        time: '10분 전',
+        how: '직거래',
+        now: '거래가능',
+        where: '독일 베를린',
+        icon: icon,
+        nickname: '루이',
+        id: 'fndl333',
+        price: '나눔'
+    },    
+    {
+        image: item,
+        title: '작은 냄비',
+        time: '10분 전',
+        how: '직거래',
+        now: '거래가능',
+        where: '독일 베를린',
+        icon: icon,
+        nickname: '루이',
+        id: 'fndl333',
+        price: '나눔'
+    },
+    {
+        image: item,
+        title: '작은 냄비',
+        time: '10분 전',
+        how: '직거래',
+        now: '거래가능',
+        where: '독일 베를린',
+        icon: icon,
+        nickname: '루이',
+        id: 'fndl333',
+        price: '나눔'
+    },
+    {
+        image: item,
+        title: '작은 냄비',
+        time: '10분 전',
+        how: '직거래',
+        now: '거래가능',
+        where: '독일 베를린',
+        icon: icon,
+        nickname: '루이',
+        id: 'fndl333',
+        price: '5000'
+    },        
+];
+
+
 
 function ItemDetailPage() {
     const detail = [
@@ -28,19 +107,23 @@ function ItemDetailPage() {
         <>
             <ItemDetailPageHeader />
             <Space />
-            <ItemImage src={itemDetail.image} alt={itemDetail.title} />
-            <InfoContainer>
-                <Title>{itemDetail.title}</Title>
-                <State>{itemDetail.how} | {itemDetail.now}</State><br/>
-                <Price>{itemDetail.price === '나눔' ? itemDetail.price : `₩ ${itemDetail.price}`}</Price>
-                <Information>{itemDetail.info}</Information>
-                <GrayLine /><br/>
-                <Seller>판매자 정보</Seller><br/>
-                <SellerInfo>
-                    <Place><Image src={compas} alt="compas" style= {{marginRight: "5px"}} />{itemDetail.place}</Place>
-                    <User><Image src={profile} alt="profile" style= {{marginRight: "5px"}} />{itemDetail.nickname}({itemDetail.id})</User>
-                </SellerInfo>
-            </InfoContainer>
+            <ContentContainer>
+                <ItemImage src={itemDetail.image} alt={itemDetail.title} />
+                <InfoContainer>
+                    <Title>{itemDetail.title}</Title>
+                    <State>{itemDetail.how} | {itemDetail.now}</State><br/>
+                    <Price>{itemDetail.price === '나눔' ? itemDetail.price : `₩ ${itemDetail.price}`}</Price>
+                    <Information>{itemDetail.info}</Information>
+                    <GrayLine /><br/>
+                    <Seller>판매자 정보</Seller><br/>
+                    <SellerInfo>
+                        <Place><Image src={compas} alt="compas" style= {{marginRight: "5px"}} />{itemDetail.place}</Place>
+                        <User><Image src={icon} alt="profile" style= {{marginRight: "5px"}} />{itemDetail.nickname}({itemDetail.id})</User>
+                    </SellerInfo>
+                    <Nearby><span style={{color: '#3E7B2'}}>주변</span> 중고거래글</Nearby><br/>
+                    <ItemList items={items}/>
+                </InfoContainer>
+            </ContentContainer>
             <BottomTabLayout>
                 <ChatButton>
                     채팅으로 거래하기
@@ -54,6 +137,11 @@ export default ItemDetailPage;
 
 const Space = styled.div`
   margin-top: 7vh;
+`;
+
+const ContentContainer = styled.div`
+  max-height: calc(100vh - 7vh - 87px); /* Space + BottomTabLayout의 높이를 고려하여 설정 */
+  overflow-y: auto;
 `;
 
 const ItemImage = styled.img`
@@ -109,6 +197,7 @@ const SellerInfo = styled.div`
     padding: 10px;
     display: flex;
     justify-content: left;
+    margin-bottom: 2em;
 `;
 
 const Place = styled.p`
@@ -131,9 +220,9 @@ const Image = styled.img`
 `;
 
 const ChatButton = styled.div`
-    border-radius: 10px;
-    width: 40em;
+    width: 22em;
     height: 3em;
+    border-radius: 10px;
     background: ${(props) => props.theme.blueGra};
     display: flex;
     justify-content: center;
@@ -157,11 +246,11 @@ const BottomTabLayout = styled.div`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  padding: 0px 32px 30px 32px;
+  padding: 0px;
   box-shadow: 0px -1px 4px 0px #e2e2e2;
 `;
 
-
-/*
-채팅으로 거래하기 div 수정
-*/
+const Nearby = styled.p`
+    font-size: 22px;
+    font-weight: 600;
+`
