@@ -7,6 +7,7 @@ import theme from './styles/theme.js';
 // 페이지, 컴포넌트 import
 import NavBar from './components/NavBar/NavBar.jsx';
 import MyPage from './pages/MyPage/MyPage.jsx';
+import MyPost from './pages/MyPage/MyPost.jsx';
 import Notification from './pages/Notification/NotificationPage.jsx';
 import Search from './pages/Search/SearchPage.jsx';
 import BottomTabNav from './components/BottomTabNav/BottomTabNav.jsx';
@@ -102,6 +103,10 @@ function App() {
         <Route
           path="/mypage"
           element={<MyPage />}
+        />
+        <Route
+          path="/mypost"
+          element={<MyPost />}
         />
         <Route
           path="/notification"
