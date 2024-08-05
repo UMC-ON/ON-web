@@ -41,17 +41,17 @@ const StyledCheckbox = styled.div`
   display: inline-block;
   width: 16px;
   height: 16px;
-  background: white;
+  background: rgba(134, 142, 232, 0.2);
   border-radius: 30%;
-  border: 2px solid #bfd8e5;
+  border: 2px solid #868EE8;
   transition: all 150ms;
   position: relative;
 
   ${({ checked }) =>
     checked &&
     `
-    border-color: #BFD8E5;
-    background: white;
+    border-color: #868EE8;
+    background: #868EE8;
     
     &::after {
       content: '\\2713'; /* Unicode check mark character */
@@ -61,15 +61,15 @@ const StyledCheckbox = styled.div`
       width: 15px;
       height: 15px;
       font-size: 15px;
-      color: #BFD8E5; 
+      color: white; 
       transform: translate(-50%, -50%);
       text-align: center;
       font-weight: bold;
     }
   `}
 
-  /* Optional: Style for unchecked state */
+  
   &:not(:checked) {
-    /* You can also add styles for the unchecked state here if needed */
+    
   }
 `;

@@ -72,7 +72,10 @@ function AccompanyPage() {
         {showCalendar && 
           <>
             <Overlay onClick={handleCalendarClick} />
-            <BottomTabLayout>
+            <BottomTabLayout $height="53vh">
+              <TopHeader>
+                날짜
+              </TopHeader>
               <Close src={closeIcon} onClick={handleCalendarClick} />
               <DateRangePicker onApply={handleApplyClick} />
             </BottomTabLayout>
@@ -94,6 +97,14 @@ function AccompanyPage() {
 
 export default AccompanyPage;
 
+const TopHeader = styled.div`
+  font-size: 12px;
+  color: #CCCCCC;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+`;
+
 const Overlay = styled.div`
   position: fixed;
   top: 0;
@@ -114,6 +125,7 @@ const Close = styled.img`
 const BottomTabLayout = styled.div`
   width: 100%;
   max-width: 480px;
+  height: ${props => props.$height || 'auto'};
   position: fixed;
   bottom: 0;
   border-radius: 14px 14px 0px 0px;
