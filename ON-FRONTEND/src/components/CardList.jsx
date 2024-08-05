@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import airplaneImg from '../assets/images/airplaneImg.svg';
 
 
 const CardList = ({ cards }) => {
@@ -10,9 +11,13 @@ const CardList = ({ cards }) => {
           <Card>
             <CardImage src={card.image}/>
             <BlueCard>
-              <Left><CardDistance>{card.distance}</CardDistance></Left>
+              <Left><CardDistance>{card.place}</CardDistance></Left>
               <Left><CardName>{card.name}</CardName></Left>
               <Left><CardDescription>{card.description}</CardDescription></Left>
+              <Left>
+                <CardLabel>{card.label}</CardLabel>
+                <Icon src={airplaneImg}/>
+              </Left>
             </BlueCard>
           </Card>
         </CardContainer>
@@ -22,6 +27,11 @@ const CardList = ({ cards }) => {
 };
 
 export default CardList;
+
+const Icon = styled.img`
+  margin-left: 3px;
+  margin-bottom: 8px;
+`;
 
 
 const CardListContainer = styled.div`
@@ -62,7 +72,7 @@ const CardImage = styled.img`
 `;
 
 const CardDistance = styled.h2`
-  font-size: 0.3em;
+  font-size: 9px;
   padding-top: 8px;
   padding-bottom: 5px;
   color: #ffffff;
@@ -72,14 +82,22 @@ const CardName = styled.p`
   font-size: 0.8em;
   padding: 0px;
   font-weight: bold;
-  padding-bottom: 14px;
+  padding-bottom: 3px;
   color: #ffffff;
 `;
 
 const CardDescription = styled.p`
-  font-size: 0.3em;
+  font-size: 8px;
   padding: 0px;
-  padding-bottom: 13px;
+  padding-bottom: 15px;
+  color: #ffffff;
+  font-weight: bold;
+`;
+
+const CardLabel = styled.p`
+  font-size: 7px;
+  padding: 0px;
+  padding-bottom: 10px;
   color: #ffffff;
 `;
 

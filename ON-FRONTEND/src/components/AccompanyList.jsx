@@ -86,11 +86,12 @@ const GreyMiddleText = styled.p`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  width: 20vh;
+  // width: 20vh;
   line-height: 1.5vh;
   text-align: left;
   margin-top: 10px;
   margin-bottom: 10px;
+  width: 99%;
 `;
 
 const RoundContainer = styled.div`
@@ -105,8 +106,8 @@ const RoundContainer = styled.div`
 `;
 
 const Image = styled.img`
-  width: 16vh;
-  height: 16vh; 
+  width: 130px;
+  height: 130px; 
   object-fit: cover; 
   object-position: center;
   border-radius: 20px;
@@ -116,7 +117,7 @@ const Image = styled.img`
 const TextContainer = styled.div`
   padding-left: 10px; 
   display: flex;
-  height: 16vh; 
+  height: 130px;
   flex-direction: column;
   box-sizing: border-box; 
   padding-right: 15px;
@@ -127,9 +128,10 @@ const CardName = styled.p`
   padding: 0px;
   font-weight: bold;
   text-align: left;
-  line-height: 2.2vh;
+  line-height: 17px;
   padding-top: 10px;
   padding-bottom: 10px;
   color: #363636;
+  width: 98%;
 `;
 

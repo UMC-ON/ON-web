@@ -112,7 +112,7 @@ const CardName = styled.p`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   text-align: left;
-  line-height: 2.2vh;
+  line-height: 18px;
 `;
 
 const SmallGreyText = styled.p`

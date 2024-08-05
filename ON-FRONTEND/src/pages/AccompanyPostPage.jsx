@@ -1,9 +1,11 @@
 import styled from 'styled-components';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
 import postIcon from '../assets/images/writepost_icon.svg';
+import greyPlusButton from '../assets/images/greyPlusButton.svg';
+import greyMinusButton from '../assets/images/greyMinusButton.svg';
 import minusButton from '../assets/images/minusButton.svg';
 import plusButton from '../assets/images/plusButton.svg';
 import closeIcon from '../assets/images/close_button.svg';
@@ -26,6 +28,9 @@ function AccompanyPostPage() {
     const [isDateClicked, setIsDateClicked] = useState(false);
     const [showCalendar, setShowCalendar] = useState(false);
     const [personValue, setPersonValue] = useState(0);
+
+    const minusSrc = (daysDifference == 0) ? greyMinusButton : minusButton;
+    const plusSrc = (daysDifference == limitDays) ? greyPlusButton : plusButton;
 
     const handlePerson = (event) => {
       const newValue = event.target.value;
@@ -171,9 +176,9 @@ function AccompanyPostPage() {
                     {isDateClicked && (
                       <Left>
                         <MarginLeft/>
-                        <CircleButton src={minusButton} onClick={decreaseDays}/>
+                        <CircleButton src={minusSrc} onClick={decreaseDays}/>
                         <Input $width="20px" $left="8px" value={daysDifference.toString()} onChange={handleChange}/>
-                        <CircleButton src={plusButton} onClick={increaseDays}/>
+                        <CircleButton src={plusSrc} onClick={increaseDays}/>
                         <GreyText $left="6px">일</GreyText>
                       </Left>
                     )}

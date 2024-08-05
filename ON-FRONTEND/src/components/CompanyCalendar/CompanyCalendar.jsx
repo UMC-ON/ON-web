@@ -69,12 +69,12 @@ const DateRangePicker = ({ onApply }) => {
             {moment(startDate).format('MM/DD')} - {moment(endDate).format('MM/DD')}
           </div>
         )} */}
-        <div className="controls">
+        <s.Controls>
           <s.ResetButton onClick={handleReset}>초기화</s.ResetButton>
           <s.ApplyButton disabled={!startDate || !endDate} onClick={handleApply}>
             적용
           </s.ApplyButton>
-        </div>
+        </s.Controls>
       </div>
     </s.CompanyCalendar>
   );
