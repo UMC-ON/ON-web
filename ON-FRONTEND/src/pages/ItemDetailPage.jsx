@@ -20,7 +20,7 @@ const items = [
         icon: icon,
         nickname: '루이',
         id: 'fndl333',
-        price: '나눔'
+        price: '5000'
     },
     {
         image: item,
@@ -120,9 +120,9 @@ function ItemDetailPage() {
                         <Place><Image src={compas} alt="compas" style= {{marginRight: "5px"}} />{itemDetail.place}</Place>
                         <User><Image src={icon} alt="profile" style= {{marginRight: "5px"}} />{itemDetail.nickname}({itemDetail.id})</User>
                     </SellerInfo>
-                    <Nearby><span style={{color: '#3E7B2'}}>주변</span> 중고거래글</Nearby><br/>
-                    <ItemList items={items}/>
+                    <Nearby><Blue>주변</Blue> 중고거래글</Nearby>
                 </InfoContainer>
+                <ItemList items={items}/>
             </ContentContainer>
             <BottomTabLayout>
                 <ChatButton>
@@ -150,9 +150,8 @@ const ItemImage = styled.img`
 
 const InfoContainer = styled.div`
     width: 100%;
-    padding: 20px 26px; 
+    padding: 20px 20px; 
     box-sizing: border-box;
-    margin-bottom: 2vh;
     text-align: left;
 `;
 
@@ -198,6 +197,7 @@ const SellerInfo = styled.div`
     display: flex;
     justify-content: left;
     margin-bottom: 2em;
+    color: #7A7A7A;
 `;
 
 const Place = styled.p`
@@ -253,4 +253,9 @@ const BottomTabLayout = styled.div`
 const Nearby = styled.p`
     font-size: 22px;
     font-weight: 600;
-`
+    color: #363636;
+`;
+
+const Blue = styled.span`
+    color: #3E73B2;
+`;

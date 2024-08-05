@@ -18,11 +18,11 @@ const Item = ({ items }) => {
   return (
     <>
       {items && items.map((item, index) => (
-        <ItemDiv key={index} onClick={goDetail}>
+        <ItemDiv key={index}>
           <Photo src={item.image} />
           <Information>
             <StarContainer />
-            <Description>
+            <Description onClick={goDetail}>
               <Title>{item.title} | <Time>{item.time}</Time></Title>
               <State>{item.how} | {item.now}</State>
               <LocationAndUser>
@@ -57,7 +57,7 @@ export default Item;
 
 const ItemDiv = styled.div`
   margin: 0 auto;
-  width: 86vw;
+  width: 90%;
   border-radius: 20px;
   background: linear-gradient(90deg, #E7EBED, #FFFFFF);
   border: 1px solid #d9d9d9;
@@ -134,6 +134,7 @@ const Place = styled.p`
   display: flex;
   align-items: center;
   margin-right: 10px;
+  color: #838383
 `;
 
 const Profile = styled.img`
@@ -145,6 +146,7 @@ const User = styled.p`
   font-size: 0.7em;
   display: flex;
   align-items: center;
+  color: #838383;
 `;
 
 const LocationAndUser = styled.div`
