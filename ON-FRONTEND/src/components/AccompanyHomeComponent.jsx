@@ -119,10 +119,10 @@ const AccompanyHomeComponent =
                 <GreyPicker $isDateClicked={isDateClicked}>
                   <span onClick={calendarClick}>
                   {startDate && endDate ? `${startDate} - ${endDate}` : '날짜'}
-                  </span>
                   {!isDateClicked && (
                         <Icon src={arrowIcon} />
                    )}
+                  </span>
                   {isDateClicked && (
                         <Icon src={whiteCloseIcon} onClick={resetDate}/>
                    )}
@@ -136,10 +136,10 @@ const AccompanyHomeComponent =
                 <GreyPicker $isGenderClicked={isGenderClicked}>
                   <span onClick={genderClick}>
                   {gender ? `${gender}` : '성별'}
-                  </span>
                   {!isGenderClicked && (
                         <Icon src={arrowIcon} />
                    )}
+                  </span>
                   {isGenderClicked && (
                         <Icon src={whiteCloseIcon} onClick={resetGender}/>
                    )}

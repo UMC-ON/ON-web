@@ -69,7 +69,8 @@ const Button = styled.button`
 
 const ButtonWrapper = styled.div` 
   display: flex;
-  margin-bottom: 10px; 
+  margin-bottom: 26px; 
+  justify-content: space-between;
 `;
 
 const ResetButton = styled.button`
@@ -78,7 +79,7 @@ const ResetButton = styled.button`
   color: #007BFF;
   font-size: 0.8em;
   cursor: pointer;
-  margin-right: 10.5em;
+  margin-left: 1em;
 `;
 
 const ApplyButton = styled.button`
@@ -90,4 +91,5 @@ const ApplyButton = styled.button`
   font-size: 1em;
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   width: 10em;
+  margin-right: 1em;
 `;

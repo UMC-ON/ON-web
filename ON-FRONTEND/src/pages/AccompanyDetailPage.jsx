@@ -99,7 +99,7 @@ function AccompanyDetailPage() {
               </Left>
               <Left>
                 <SmallIcon src={coordinateIcon}/>
-                <GreyText $size="0.9em">영국</GreyText>
+                <GreyText $size="0.9em">영국 런던</GreyText>
               </Left>
             </TextContainer>
           </ProfileTextContainer>
@@ -107,7 +107,7 @@ function AccompanyDetailPage() {
 
         <BlueContainer>
           <BigText $size="1.3em">🔥🔥8/2 버로우 마켓 동행하실 분 구해요!!🔥🔥</BigText>
-          <Left><GreyText>1시간 전</GreyText></Left>
+          <Left><GreyText>24.08.05 5:38 PM</GreyText></Left>
         </BlueContainer>
 
         <BodyText>
@@ -195,11 +195,12 @@ const SmallIcon = styled.img`
   width: 15px;
   height: 15px;
   padding-top: 11px;
+  margin-right: 5px;
 `;
 
 
 const Space = styled.div`
-  margin-top: 7vh;
+  margin-top: 10vh;
 `;
 
 const BannerContainer = styled.div`

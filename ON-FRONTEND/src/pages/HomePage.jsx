@@ -28,6 +28,8 @@ import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
 import NavBar from '../components/NavBar/NavBar';
 import screenshotImg from '../assets/images/screenshot.svg'
 import CardAccompanyList from '../components/CardAccompanyList';
+import InfoCommunityCardList from '../components/InfoCommunityCardList';
+import FreeCommunityCardList from '../components/FreeCommunityCardList';
 
 
 const images = [bannerimg, bannerimg, bannerimg, bannerimg, bannerimg];
@@ -35,40 +37,39 @@ const images = [bannerimg, bannerimg, bannerimg, bannerimg, bannerimg];
 const cards = [
   {
     image: londonImg,
-    distance: '120km',
-    name: '런던 내셔널 갤러리',
-    description: '런던을 대표하는 미술관',
+    place: '영국',
+    name: '버로우 마켓',
+    description: '런던에서 가장 오래된 마켓',
+    label: '영국으로 함께 떠날 동행 구하기'
   },
   {
     image: londonImg,
-    distance: '120km',
-    name: '런던 내셔널 갤러리',
-    description: '런던을 대표하는 미술관',
+    place: '영국',
+    name: '버로우 마켓',
+    description: '런던에서 가장 오래된 마켓',
+    label: '영국으로 함께 떠날 동행 구하기'
   },
   {
     image: londonImg,
-    distance: '120km',
-    name: '런던 내셔널 갤러리',
-    description: '런던을 대표하는 미술관',
+    place: '영국',
+    name: '버로우 마켓',
+    description: '런던에서 가장 오래된 마켓',
+    label: '영국으로 함께 떠날 동행 구하기'
   },
   {
     image: londonImg,
-    distance: '120km',
-    name: '런던 내셔널 갤러리',
-    description: '런던을 대표하는 미술관',
+    place: '영국',
+    name: '버로우 마켓',
+    description: '런던에서 가장 오래된 마켓',
+    label: '영국으로 함께 떠날 동행 구하기'
   },
   {
     image: londonImg,
-    distance: '120km',
-    name: '런던 내셔널 갤러리',
-    description: '런던을 대표하는 미술관',
-  },
-  {
-    image: londonImg,
-    distance: '120km',
-    name: '런던 내셔널 갤러리',
-    description: '런던을 대표하는 미술관',
-  },
+    place: '영국',
+    name: '버로우 마켓',
+    description: '런던에서 가장 오래된 마켓',
+    label: '영국으로 함께 떠날 동행 구하기'
+  }
 ];
 
 const accompanycards = [
@@ -103,6 +104,43 @@ const accompanycards = [
     place: '런던 버로우 마켓',
   },
 ];
+
+const bluecards = [
+  {
+    title: '[🇬🇧 킹칼] 한 학기 교환 비용 정리',
+    time: '09:18',
+    body: '따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 독일로 교환학생을 앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약!',
+    id: '익명',
+    comment: 1,
+    image: screenshotImg,
+  },
+  {
+    title: '[🇬🇧 킹칼] 한 학기 교환 비용 정리',
+    time: '09:18',
+    body: '따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 독일로 교환학생을 앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약!',
+    id: '익명',
+    comment: 1,
+    image: screenshotImg,
+  },
+];
+
+const purplecards = [
+  {
+    title: '독일 방문학생 갈 때 어학점수',
+    time: '09:32',
+    body: '독일 방문학생 갈 때 어학점수 어느 정도 나와야 할까요? 가장 가고 싶은 학교는 프푸응과대입니다. 저는 3개월 만에 학기가 끝나는 학교로 가지만, 이후 보다 편안하고 안전한(?) 유럽 여행을 위해 비자를 발급받으려 합니다!',
+    id: '익명',
+    comment: 1,
+  },
+  {
+    title: '독일 방문학생 갈 때 어학점수',
+    time: '09:32',
+    body: '독일 방문학생 갈 때 어학점수 어느 정도 나와야 할까요? 가장 가고 싶은 학교는 프푸응과대입니다. 저는 3개월 만에 학기가 끝나는 학교로 가지만, 이후 보다 편안하고 안전한(?) 유럽 여행을 위해 비자를 발급받으려 합니다!',
+    id: '익명',
+    comment: 1,
+  },
+];
+
 
 function HomePage() {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -167,8 +205,9 @@ function HomePage() {
                 </Button>
                 <Button>
                     <Icon src={diaryIcon} alt="Diary Icon" />
-                    <SubText>일기쓰기</SubText>
-                    <SubText>&nbsp; &nbsp;</SubText>
+                    <SubText>일기</SubText>
+                    <SubText>쓰기</SubText>
+                    {/* <SubText>&nbsp; &nbsp;</SubText> */}
                 </Button>
             </Container>
 
@@ -203,48 +242,7 @@ function HomePage() {
               <RightIcon src={rightIcon}></RightIcon>
           </FlexContainer>
 
-          <ImgContainer>
-            <PaddingTop/>
-            <Stripe $blue={true}>
-              <TextTopLeft>[🇬🇧 킹칼] 한 학기 교환 비용 정리</TextTopLeft>
-              <TextTopRight>09:18</TextTopRight>
-            </Stripe>
-            <BetweenContainer>
-              <TextContainer>
-                <TextMiddle>
-                  따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 독일로 교환학생을 앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약!
-                </TextMiddle>
-                <InlineTextContainer>
-                  <TextBottomLeft>익명</TextBottomLeft>
-                  <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
-                  <TextBottomLeft2>1</TextBottomLeft2>
-                </InlineTextContainer>
-              </TextContainer>
-              <ImageRight src={screenshotImg}></ImageRight>
-            </BetweenContainer>
-          </ImgContainer>
-          
-          
-          <ImgContainer>
-            <PaddingTop/>
-            <Stripe $blue={true}>
-              <TextTopLeft>[🇬🇧 킹칼] 한 학기 교환 비용 정리</TextTopLeft>
-              <TextTopRight>09:18</TextTopRight>
-            </Stripe>
-            <BetweenContainer>
-              <TextContainer>
-                <TextMiddle>
-                  따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 독일로 교환학생을 앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약!
-                </TextMiddle>
-                <InlineTextContainer>
-                  <TextBottomLeft>익명</TextBottomLeft>
-                  <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
-                  <TextBottomLeft2>1</TextBottomLeft2>
-                </InlineTextContainer>
-              </TextContainer>
-              <ImageRight src={screenshotImg}></ImageRight>
-            </BetweenContainer>
-          </ImgContainer>
+          <InfoCommunityCardList cards={bluecards}/>
 
           <Space></Space>
           <Space></Space>
@@ -254,42 +252,7 @@ function HomePage() {
               <RightIcon src={rightIcon}></RightIcon>
           </FlexContainer>
 
-          <FreeContainer>
-            <PaddingTop/>
-            <Stripe $blue={false}>
-              <TextTopLeft>독일 방문학생 갈 때 어학점수</TextTopLeft>
-            </Stripe>
-              <TextContainer>
-                <TextMiddle2>독일 방문학생 갈 때 어학점수 어느 정도 나와야 할까요? 가장 가고 싶은 학교는 프푸응과대입니다.
-                            저는 3개월 만에 학기가 끝나는 학교로 가지만,이후 보다 편안하고 안전한(?) 유럽 여행을 위해비자를 발급받으려 합니다!
-                </TextMiddle2>
-                <InlineTextContainer>
-                  <MarginLeft/>
-                  <TextBottomLeft>익명</TextBottomLeft>
-                  <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
-                  <TextBottomLeft2>3</TextBottomLeft2>
-                </InlineTextContainer>
-              </TextContainer>
-          </FreeContainer>
-
-          <FreeContainer>
-            <PaddingTop/>
-            <Stripe $blue={false}>
-              <TextTopLeft>독일 방문학생 갈 때 어학점수</TextTopLeft>
-            </Stripe >
-              <TextContainer>
-                <TextMiddle2>독일 방문학생 갈 때 어학점수 어느 정도 나와야 할까요? 가장 가고 싶은 학교는 프푸응과대입니다.
-                            저는 3개월 만에 학기가 끝나는 학교로 가지만,이후 보다 편안하고 안전한(?) 유럽 여행을 위해비자를 발급받으려 합니다!
-                </TextMiddle2>
-                <InlineTextContainer>
-                  <MarginLeft/>
-                  <TextBottomLeft>익명</TextBottomLeft>
-                  <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
-                  <TextBottomLeft2>3</TextBottomLeft2>
-                </InlineTextContainer>
-              </TextContainer>
-          </FreeContainer>
-          
+          <FreeCommunityCardList cards={purplecards}/>
           
 
           <Space></Space>
@@ -311,123 +274,6 @@ function HomePage() {
 }
 
 export default HomePage;
-
-
-const ImgContainer = styled.div`
-  background-image: url(${infoImg});
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat; 
-  width: 340px; 
-  height: 130px; 
-  margin: 0 auto;
-  margin-bottom: 10px;
-  filter: drop-shadow(8px 8px 8px rgba(0, 0, 0, 0.1));
-`;
-
-const FreeContainer = styled.div`
-  background-image: url(${freeImg});
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat; 
-  width: 340px; 
-  height: 130px; 
-  margin: 0 auto;
-  margin-bottom: 10px;
-  filter: drop-shadow(8px 8px 8px rgba(0, 0, 0, 0.1));
-`;
-
-const IconBottomLeft = styled.img`
-  margin-left: 10px;
-`;
-
-const MarginLeft = styled.div`
-  margin-left: 5px;
-`;
-
-const ImageRight = styled.img`
-  width: 75px;
-  heigth: 75px;
-  border-radius: 10px;
-  margin-right: 20px;
-  padding-top: 3px;
-`;
-
-const TextBottomLeft2 = styled.div`
-  color: #ffffff;
-  font-size: 0.7em;
-  margin-left: 3px;
-`;
-
-const PaddingTop = styled.div`
-  padding-top: 13px;
-`;
-
-const Stripe = styled.div`
-  background-image:${props => props.$blue ? `url(${infoStripe})` : `url(${freeStripe})`};
-  
-  display: flex;
-  justify-content: space-between;
-  width: 340px; 
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat; 
-`;
-
-const TextTopLeft = styled.div`
-  color: #363636;
-  font-size: 0.9em;
-  font-weight: bold;
-  text-align: left;
-  padding: 5px;
-  padding-left: 20px;
-`;
-
-const TextTopRight = styled.div`
-  color: #7A7A7A;
-  font-size: 0.8em;
-  text-align: right;
-  padding: 5px;
-  padding-right: 15px;
-`;
-
-const TextMiddle = styled.div`
-  color: #838383;
-  font-size: 0.8em;
-  text-align: left;
-  line-height: 1.3em;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  padding-left: 12px;
-  padding-top: 5px;
-  width: 200px;
-`;
-
-const TextMiddle2 = styled.div`
-  color: #838383;
-  font-size: 0.8em;
-  text-align: left;
-  line-height: 1.3em;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  padding-left: 12px;
-  padding-top: 5px;
-  width: 280px;
-  margin: 5px;
-  margin-bottom: 0px;
-`;
-
-const TextBottomLeft = styled.div`
-  color: #7A7A7A;
-  font-size: 0.7em;
-  top: 13.8vh;
-  left: 2.5vh;
-  text-align: right;
-`;
 
 const FlexContainer = styled.div`
   margin-top: 1.5rem;
@@ -473,7 +319,7 @@ const BigText = styled.div`
   margin-right: ${props => props.spacing || '0'};
   font-weight: bold;
   font-family: 'Inter-Regular';
-  font-size: 1.4em;
+  font-size: 1.38em;
   margin-bottom: 3.5vh;
 `;
 
@@ -493,6 +339,7 @@ const Button = styled.button`
   background-color: #ffffff;
   font-size: 16px;
   cursor: pointer;
+  width: 23vw;
 `;
 
 const Icon = styled.img`
@@ -505,7 +352,7 @@ const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 2rem;
+  gap: 3vh;
 `;
 
 const SliderContainer = styled.div`
@@ -556,23 +403,4 @@ const BlueContainer = styled.div`
   border-bottom: 1.5px solid #d9d9d9;
   border-top: 1.5px solid #d9d9d9;
   margin-bottom: 1vh;
-`;
-
-const BetweenContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start; 
-  padding: 5px;
-`;
-
-const TextContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const InlineTextContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  padding: 10px;
-  margin-left: 3px;
 `;

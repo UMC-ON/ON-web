@@ -145,7 +145,7 @@ export const ResetButton = styled.button`
   font-size: 0.8em;
   cursor: pointer;
   width: 6em;
-  margin-right: 9em;
+  margin-right: 6em;
 `;
 
 export const ApplyButton = styled.button`
@@ -158,4 +158,8 @@ export const ApplyButton = styled.button`
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   margin: 1em;
   width: 10em;
+`;
+
+export const Controls = styled.div`
+
 `;
