@@ -57,7 +57,7 @@ export default Item;
 
 const ItemDiv = styled.div`
   margin: 0 auto;
-  width: 90%;
+  width: 86vw;
   border-radius: 20px;
   background: linear-gradient(90deg, #E7EBED, #FFFFFF);
   border: 1px solid #d9d9d9;
