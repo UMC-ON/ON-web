@@ -63,15 +63,10 @@ export const DiaryCalendar = styled.div`
   .react-calendar__navigation button:disabled {
     background-color: #f0f0f0;
   }
-  
-  /* .react-calendar__navigation button:enabled:hover,
-  .react-calendar__navigation button:enabled:focus {
-    background-color: #e6e6e6;
-  } */
+
   
   .react-calendar__month-view__weekdays {
     text-align: center;
-    /* text-transform: uppercase; */
     font: inherit;
     font-size: 0.75em;
     font-weight: bold;
@@ -91,10 +86,6 @@ export const DiaryCalendar = styled.div`
   }
   
   
-  /* .react-calendar__month-view__days__day--weekend {
-    color: #d10000;
-  } */
-  
   .react-calendar__month-view__days__day--neighboringMonth,
   .react-calendar__decade-view__years__year--neighboringDecade,
   .react-calendar__century-view__decades__decade--neighboringCentury {
@@ -108,15 +99,11 @@ export const DiaryCalendar = styled.div`
   }
   
   .react-calendar__tile {
-    max-width: 100%;
-    padding: 10px 6.6667px;
     background: none;
     text-align: center;
-    line-height: 16px;
     font: inherit;
     font-size: 0.833em;
     height: 60px;
-    width: 30px;
   }
   
   .react-calendar__tile:disabled {
@@ -130,51 +117,25 @@ export const DiaryCalendar = styled.div`
     color: #cdcdcd;
   }
   
-  /* .react-calendar__tile:enabled:hover,
-  .react-calendar__tile:enabled:focus {
-    background-color: #e6e6e6;
-  } */
-  
   .react-calendar__month-view__weekdays abbr {
     text-decoration: none;
   }
-  
-  /* .react-calendar__tile--now {
-    background: #ffff76;
-  } */
-  
-  .react-calendar__tile--now abbr {
-    background: #868EE8;
-    padding: 2.5px;
-    border-radius: 50%;
-  }
-  
-  /* .react-calendar__tile--now:enabled:hover,
-  .react-calendar__tile--now:enabled:focus {
-    background: #ffffa9;
-  } */
-  
-  .react-calendar__tile--hasActive {
-    background: #76baff;
-  }
-  
-  /* .react-calendar__tile--hasActive:enabled:hover,
-  .react-calendar__tile--hasActive:enabled:focus {
-    background: #a9d4ff;
-  }
-  
-  .react-calendar__tile--active abbr {
-    background: #868EE8;
-    color: white;
-  } */
-  
-  /* .react-calendar__tile--active:enabled:hover,
-  .react-calendar__tile--active:enabled:focus {
-    background: #1087ff;
-  } */
-  
-  /* .react-calendar--selectRange .react-calendar__tile--hover {
-    background-color: #e6e6e6;
-  } */
 
-`
+  
+.react-calendar__tile--now abbr {
+background: #868EE8 !important;
+color: white !important;
+padding: 20% 40%;
+font-size: 12px !important;
+border-radius: 50% !important;
+}
+
+`;
+
+export const Checkbox = styled.div`
+  width: 14px;
+  height: 14px;
+  background: #D9D9D9;
+  border-radius: 2px;
+  margin: 5px auto;
+`;

@@ -4,8 +4,18 @@
     height: 40px;
     font-size: 1.2em;
     caret-color: transparent;
+    position: relative;
+    color: transparent; /* 기본 텍스트 색상을 투명하게 설정 */
+    background: linear-gradient(135deg, #D6EBFF 0%, #C2C7FF 100%);
+    background-clip: text; /* 그라디언트를 텍스트처럼 보이게 */
 }
 
+.inputDate::placeholder {
+    font-weight: 600;
+    color: transparent;
+    background: linear-gradient(135deg, #D6EBFF 0%, #C2C7FF 100%);
+    background-clip: text;
+}
 
 .inputDate:focus {
     outline: none;

@@ -3,6 +3,8 @@ import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import DiaryCalendar from '../../components/DiaryCalendar/DiaryCalendar';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import DailyDiary from "../../components/DailyDiary";
+import * as s from './DiaryPageStyled.jsx';
+
 
 import styled from 'styled-components';
 import moment from 'moment';
@@ -47,9 +49,9 @@ const Diary = () => {
 
   const calculateDDay = (date) => {
     if (!date) return '';
-    const diffDays = moment(date).diff(moment(), 'days');
+
     if (diffDays === 0) {
-      return '오늘';
+      return ('오늘');
     } else if (diffDays > 0) {
       return `D-${diffDays}`;
     } else {
@@ -98,9 +100,8 @@ const Diary = () => {
           <AddButton src={plus_button} />
         </AddDiary>
         {newDiaryVisible && (
-          <NewDiary>
-            <p style={{padding: "20px", color: "#D9D9D9"}}>교환 생활의 시작,<br/>윤서님의 교환 1일차 하루는 어땠나요?</p>
-            <Save>저장하기</Save>
+          <NewDiary 
+          placeholder="교환 생활의 시작, &#13;&#10;윤서님의 교환 1일차 하루는 어땠나요?">
           </NewDiary>
         )}
         <DailyDiary items={diaries} />
@@ -152,12 +153,13 @@ const Today = styled.div`
   width: 6em;
   height: 1.5em;
   border-radius: 30px;
-  margin-left: 10em;
-  margin-top: 6em;
+  margin-left: 14.5em;
+  margin-top: 7em;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 12px;
 `;
 
 const RightContainer = styled.div`
@@ -167,6 +169,7 @@ const RightContainer = styled.div`
 const SubText = styled.div`
   margin-left: 2em;
   margin-bottom: 0.5em;
+  font-size: 11px;
 `;
 
 const SchoolContainer = styled.div`
@@ -181,7 +184,7 @@ const BigText = styled.div`
   margin-left: ${props => props.spacing || '0'};
   font-weight: bold;
   font-family: 'Inter-Regular';
-  font-size: 1em;
+  font-size: 15px;
   margin-bottom: 3.5vh;
 `;
 
@@ -213,19 +216,31 @@ const AddButton = styled.img`
   margin-left: 0.5em;
 `;
 
-const NewDiary = styled.div`
-  width: 90%;
-  height: 130px;
-  margin-bottom: 10px;
-  margin-left: 15px;
+const NewDiary = styled.textarea`
+  font-size: 13px;
+  width: 80%;
+  height: 10vh;
+  margin: 10px auto;
   border-radius: 15px;
   border: 0.5px solid ${props => props.theme.lightPurple};
   white-space: pre-wrap;
   text-align: left;
   display: flex;
-  align-items: right;
-  position: relative; // 상대 위치로 설정
+  flex-direction: column;
+  position: relative;
+  white-space: pre-wrap;
+  padding: 20px;
+  &::placeholder {
+        color: #B9B9B9;
+        font-size: 13px;
+  };
+
 `;
+
+const Description = styled.textarea`
+  padding: 20px; 
+  color: #D9D9D9;
+`
 
 const Save = styled.div`
   width: 70px;
