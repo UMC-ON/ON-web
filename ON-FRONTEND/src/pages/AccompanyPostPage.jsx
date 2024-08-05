@@ -7,6 +7,7 @@ import postIcon from '../assets/images/writepost_icon.svg';
 import minusButton from '../assets/images/minusButton.svg';
 import plusButton from '../assets/images/plusButton.svg';
 import closeIcon from '../assets/images/close_button.svg';
+import purplePlusButton from '../assets/images/purplePlusButton.svg';
 
 import CustomCheckbox from '../components/CustomCheckBox';
 import CameraBottom from '../components/CameraBottom';
@@ -151,14 +152,12 @@ function AccompanyPostPage() {
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>여행 지역 : </BlackText>
-                    <CircleContainer2>입력하기
-                    </CircleContainer2>
+                    <PlusButton src={purplePlusButton}/>
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>예상 일정 : </BlackText>
                     {!isDateClicked && (
-                        <CircleContainer2 onClick={handleCalendarClick}>입력하기
-                    </CircleContainer2>
+                      <PlusButton onClick={handleCalendarClick} src={purplePlusButton}/>
                     )}
                     {isDateClicked && (
                       <>
@@ -175,6 +174,7 @@ function AccompanyPostPage() {
                         <CircleButton src={minusButton} onClick={decreaseDays}/>
                         <Input $width="20px" $left="8px" value={daysDifference.toString()} onChange={handleChange}/>
                         <CircleButton src={plusButton} onClick={increaseDays}/>
+                        <GreyText $left="6px">일</GreyText>
                       </Left>
                     )}
             </BlueContainer>
@@ -185,6 +185,11 @@ function AccompanyPostPage() {
             <Overlay onClick={handleCalendarClick} />
             <BottomTabLayout>
               <Close src={closeIcon} onClick={handleCalendarClick} />
+              <TopHeader>
+                날짜
+              </TopHeader>
+              <LabelText>여행 가고 싶은 기간을 설정해 주세요!</LabelText>
+              <LabelText2>일정이 확정되지 않았다면 범위를 넓게 설정할 수 있어요.</LabelText2>
               <DateRangePicker onApply={handleApplyClick}/>
             </BottomTabLayout>
           </>
@@ -217,6 +222,14 @@ function AccompanyPostPage() {
 
 export default AccompanyPostPage;
 
+const TopHeader = styled.div`
+  font-size: 12px;
+  color: #CCCCCC;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+`;
+
 const LeftSpace = styled.section`
   margin-left: 27%;
 `;
@@ -226,7 +239,7 @@ const Space = styled.section`
 `;
 
 const CircleContainer = styled.section`
-  background: linear-gradient(to right bottom, #D6EBFF, #C2C7FF);
+  background: #868EE8;
   border-radius: 20px;
   font-size: 0.8rem;
   color: white;
@@ -327,7 +340,7 @@ const GreyButton = styled.button`
 
 const BlueButton = styled.button`
   border-radius: 20px;
-  background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
+  background: linear-gradient(135deg, #C2C7FF, #AD99FF);
   color: white;
   font-family: Inter;
   font-size: 1em;
@@ -370,6 +383,32 @@ const BlackText = styled.div`
   text-decoration: ${({ $isChecked }) => ($isChecked ? 'line-through' : 'none')};
 `;
 
+const LabelText = styled.div`
+  font-family: Inter;
+  font-weight: bold;
+  color: #3E73B2;
+  position: absolute;
+  top: 50px;
+  left: 20px;
+  font-size: 0.85em;
+`;
+
+const LabelText2 = styled.div`
+  font-family: Inter;
+  color: #7A7A7A;
+  position: absolute;
+  top: 67px;
+  left: 20px;
+  font-size: 0.85em;
+`;
+
+const PlusButton = styled.img`
+  margin-top: 7px;
+  margin-left: 7px;
+  width: 20px;
+  height: auto;
+`;
+
 
 const Overlay = styled.div`
   position: fixed;
@@ -390,6 +429,7 @@ const Close = styled.img`
 
 const BottomTabLayout = styled.div`
   width: 100%;
+  height: 58vh;
   max-width: 480px;
   position: fixed;
   bottom: 0;
