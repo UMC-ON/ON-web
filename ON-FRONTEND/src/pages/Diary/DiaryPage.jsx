@@ -3,8 +3,8 @@ import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import DiaryCalendar from '../../components/DiaryCalendar/DiaryCalendar';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import DailyDiary from "../../components/DailyDiary";
-import * as s from './DiaryPageStyled.jsx';
-
+import { CompanyCalendar } from '../../components/CompanyCalendar/CompanyCalendarStyled';
+import ko from "date-fns/locale/ko";
 
 import styled from 'styled-components';
 import moment from 'moment';
@@ -49,9 +49,9 @@ const Diary = () => {
 
   const calculateDDay = (date) => {
     if (!date) return '';
-
+    const diffDays = moment(date).diff(moment(), 'days');
     if (diffDays === 0) {
-      return ('오늘');
+      return '오늘';
     } else if (diffDays > 0) {
       return `D-${diffDays}`;
     } else {
@@ -65,7 +65,11 @@ const Diary = () => {
       <Content>
         <Information>
           <DDay>
-            {selectedDate ? `${calculateDDay(selectedDate)}` : <DatePicker
+            {selectedDate ? (
+              <DDayText>{calculateDDay(selectedDate)}</DDayText>
+            ) : (
+              <DatePicker
+                locale={ko}
                 className='inputDate'
                 placeholderText={'날짜 설정'} 
                 ref={datePickerRef}
@@ -79,7 +83,8 @@ const Diary = () => {
                   },
                 }}
                 onClickOutside={() => setCalendarOpen(false)}
-              />}
+              />
+            )}
           </DDay>
           <div>
             <Today>{todayDate}</Today>
@@ -100,9 +105,12 @@ const Diary = () => {
           <AddButton src={plus_button} />
         </AddDiary>
         {newDiaryVisible && (
-          <NewDiary 
-          placeholder="교환 생활의 시작, &#13;&#10;윤서님의 교환 1일차 하루는 어땠나요?">
-          </NewDiary>
+          <NewDiaryContainer>
+            <NewDiary 
+              placeholder="교환 생활의 시작, 윤서님의 교환 1일차 하루는 어땠나요?">
+            </NewDiary>
+            <Save>저장하기</Save>
+          </NewDiaryContainer>
         )}
         <DailyDiary items={diaries} />
       </Content>
@@ -117,6 +125,7 @@ const DiaryContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  font-family: 'Inter', sans-serif;
 `;
 
 const Content = styled.div`
@@ -147,19 +156,28 @@ const DDay = styled.div`
   border: 5px solid #DCDFFF; // 이후 border에 그라데이션 추가하기
 `;
 
+const DDayText = styled.div`
+  font-size: 45px;
+  font-weight: 700;
+  background: linear-gradient(90deg, #D6EBFF, #C2C7FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+`;
+
 const Today = styled.div`
   background: ${props => props.theme.lightPurple};
   margin-top: 4em;
   width: 6em;
   height: 1.5em;
   border-radius: 30px;
-  margin-left: 14.5em;
-  margin-top: 7em;
+  margin-left: 10em;
+  margin-top: 6em;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 12px;
 `;
 
 const RightContainer = styled.div`
@@ -169,7 +187,6 @@ const RightContainer = styled.div`
 const SubText = styled.div`
   margin-left: 2em;
   margin-bottom: 0.5em;
-  font-size: 11px;
 `;
 
 const SchoolContainer = styled.div`
@@ -184,7 +201,7 @@ const BigText = styled.div`
   margin-left: ${props => props.spacing || '0'};
   font-weight: bold;
   font-family: 'Inter-Regular';
-  font-size: 15px;
+  font-size: 1em;
   margin-bottom: 3.5vh;
 `;
 
@@ -216,31 +233,29 @@ const AddButton = styled.img`
   margin-left: 0.5em;
 `;
 
-const NewDiary = styled.textarea`
-  font-size: 13px;
-  width: 80%;
-  height: 10vh;
+const NewDiaryContainer = styled.div`
+  position: relative;
+  width: 90%;
   margin: 10px auto;
+`;
+
+const NewDiary = styled.textarea`
+  font-size: 14px;
+  width: 89%;
+  height: 10vh;
   border-radius: 15px;
   border: 0.5px solid ${props => props.theme.lightPurple};
   white-space: pre-wrap;
   text-align: left;
   display: flex;
   flex-direction: column;
-  position: relative;
-  white-space: pre-wrap;
   padding: 20px;
   &::placeholder {
-        color: #B9B9B9;
-        font-size: 13px;
-  };
-
+    color: #B9B9B9;
+    font-size: 13px;
+  }
+  outline: none;
 `;
-
-const Description = styled.textarea`
-  padding: 20px; 
-  color: #D9D9D9;
-`
 
 const Save = styled.div`
   width: 70px;
@@ -252,7 +267,7 @@ const Save = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute; // 절대 위치로 설정
-  bottom: 10px; // 아래에서 10px 간격
-  right: 10px; // 오른쪽에서 10px 간격
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 `;
