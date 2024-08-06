@@ -297,8 +297,9 @@ export const ImgSection = styled.section`
   width: 100%;
   display: flex;
   flex-direction: row;
+  justify-content: start;
+  gap: 1rem;
   padding-top: 1rem;
-  flex-wrap: nowrap;
   overflow-x: scroll;
   &::-webkit-scrollbar {
     display: none;
@@ -306,8 +307,7 @@ export const ImgSection = styled.section`
 `;
 
 export const ContentImg = styled.img`
-  width: 7rem;
-  height: 7rem;
-  padding: 0 0.5rem;
+  width: 112px;
+  height: 112px;
   object-fit: cover;
 `;

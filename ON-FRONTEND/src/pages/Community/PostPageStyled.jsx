@@ -217,7 +217,7 @@ export const Footer = styled.div`
 export const ImgSection = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: start;
   gap: 10px;
   align-items: center;
   flex-wrap: nowrap;
