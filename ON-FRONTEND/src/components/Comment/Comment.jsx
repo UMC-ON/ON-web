@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Reply from './Reply';
-
-import { ReplyList } from '../Common/TempDummyData/PostList';
+import replyBtnImg from '../../assets/images/replyBtnImg.svg';
+import { showWriter } from '../Common/InfoExp';
 
 const Comment = ({
   comment,
@@ -9,22 +9,13 @@ const Comment = ({
   clickedComment,
   postWriter_id,
 }) => {
-  const showWriter = (thisComment) => {
-    if (thisComment.is_anonymous === true) {
-      return thisComment.writerInfo.user_id === postWriter_id
-        ? '글쓴이'
-        : '익명';
-    } else {
-      return thisComment.writerInfo.nickName;
-    }
-  };
   return (
     <CommentAndReplyWrapper>
       <CommentDiv
         onClick={() => {
           onCommentClick({
             target: {
-              writer: showWriter(comment),
+              writer: showWriter(comment, postWriter_id),
               comment: comment,
             },
           });
@@ -34,7 +25,10 @@ const Comment = ({
             clickedComment === comment ? '#bfd8e5dd' : '#d9d9d933',
         }}
       >
-        <Writer writer={showWriter(comment)}>{showWriter(comment)}</Writer>
+        <Writer writer={`${comment.writerInfo.user_id === postWriter_id}`}>
+          {showWriter(comment, postWriter_id)}
+          <img src={replyBtnImg} />
+        </Writer>
         {comment.content}
       </CommentDiv>
       {comment.replyList.map((reply, index) => (
@@ -61,7 +55,7 @@ const CommentAndReplyWrapper = styled.div`
 
 const CommentDiv = styled.div`
   box-sizing: border-box;
-  padding: 10px 19px;
+  padding: 10px 0.56rem 0.88rem 1.19rem;
   width: 100%;
   height: auto;
   background-color: #d9d9d933;
@@ -79,10 +73,15 @@ const CommentDiv = styled.div`
 
 const Writer = styled.div`
   padding: 3px 0;
-  color: ${(props) => (props.writer === '글쓴이' ? '#35bed6' : '#525252')};
+  color: ${(props) => (props.writer === 'true' ? '#3E73B2' : '#525252')};
   font-family: Inter;
   font-size: 13px;
   font-style: normal;
   font-weight: bold;
   line-height: normal;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;

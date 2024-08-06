@@ -140,6 +140,9 @@ export const TitleSection = styled.section`
 `;
 
 export const EditorWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   box-sizing: border-box;
   width: 100%;
   height: 100%;
@@ -151,6 +154,7 @@ export const EditorWrapper = styled.div`
   padding-top: 7px;
 
   margin-top: 5px;
+  overflow-x: hidden;
 `;
 export const Editor = styled.textarea`
   border: none;
@@ -208,4 +212,27 @@ export const Footer = styled.div`
   background: white;
   box-shadow: 0px -3px 3px 0px rgba(0, 0, 0, 0.05);
   padding: 1.5rem;
+`;
+
+export const ImgSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  height: 80px;
+  width: 100%;
+  padding: 1rem 0;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const PreviewImg = styled.img`
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 13px;
 `;

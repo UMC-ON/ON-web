@@ -14,7 +14,6 @@ import { useNavigate } from 'react-router-dom';
 import { CountryList } from '../../../components/CountryList.jsx';
 
 import { PostList } from '../../../components/Common/TempDummyData/PostList.jsx';
-import { Post } from '../../../components/CommunityPost/CommunityPostStyled.jsx';
 
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 
@@ -23,7 +22,10 @@ const InfoCommunityHome = () => {
   const nav = () => {
     navigate('./post');
   };
-  const mylist = [1, 2, 3, 4, '와진짜개짱짱긴텍스트'];
+  const currentBoard_id = 1;
+  const currentPostList = PostList.filter(
+    (post) => post.board_id === currentBoard_id,
+  );
   return (
     <>
       <s.PageContainer>
@@ -44,9 +46,9 @@ const InfoCommunityHome = () => {
           />
         </s.FilterSection>
         <s.PostListSection>
-          {PostList.map((post) => (
+          {currentPostList.map((post) => (
             <CommunityPost
-              key={post.createdDate}
+              key={post.post_id}
               post={post}
             />
           ))}

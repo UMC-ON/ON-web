@@ -184,7 +184,7 @@ function CommunityHomePage() {
 
       <SmallSpace />
 
-      <FlexContainer>
+      <FlexContainer onClick={() => navigate('/community/general')}>
         <Span>
           <RoundIcon src={freeCircleIcon} />
           <MiddleText spacing="1vh">자유 커뮤니티</MiddleText>

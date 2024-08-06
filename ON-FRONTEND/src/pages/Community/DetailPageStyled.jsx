@@ -14,12 +14,10 @@ export const PostInfoHeader = styled.div`
   background-color: white;
   border-width: 0.5px 0;
   box-sizing: border-box;
-  padding: 0 1.5rem 0 1.5rem;
+  padding: 0 1.5rem 0 17px;
 `;
 
-export const BackButton = styled.div`
-  margin-left: 17px;
-`;
+export const BackButton = styled.div``;
 
 export const PostInfo = styled.div`
   display: flex;
@@ -49,7 +47,9 @@ export const InfoLabel = styled.div`
 export const Title = styled.div`
   box-sizing: border-box;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: start;
   text-align: left;
   padding: 1.3rem 2rem;
   width: 100%;
@@ -64,6 +64,17 @@ export const Title = styled.div`
   font-style: normal;
   font-weight: 600;
   line-height: 26px;
+`;
+
+export const DispatchedInfo = styled.div`
+  color: #fff;
+  font-family: Inter;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.015rem;
+  padding-top: 0.31rem;
 `;
 export const DetailPageLayout = styled.div`
   background: white;
@@ -80,6 +91,8 @@ export const DetailPageLayout = styled.div`
 export const Content = styled.pre`
   box-sizing: border-box;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 
   padding: 2rem 1.5rem;
 
@@ -279,4 +292,22 @@ export const ColorButtonTag = styled.button`
   &:focus {
     outline: none;
   }
+`;
+export const ImgSection = styled.section`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding-top: 1rem;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const ContentImg = styled.img`
+  width: 7rem;
+  height: 7rem;
+  padding: 0 0.5rem;
+  object-fit: cover;
 `;

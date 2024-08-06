@@ -8,6 +8,7 @@ import {
   userInfo,
   PostList,
 } from '../../../components/Common/TempDummyData/PostList.jsx';
+import { showDispatchedUniv } from '../../../components/Common/InfoExp.jsx';
 
 import Comment from '../../../components/Comment/Comment.jsx';
 
@@ -100,6 +101,8 @@ const InfoDetailPage = () => {
     setContent('');
     setSelectedComment(null);
     replyToText.current = null;
+    const textarea = document.querySelector('.commentEditor');
+    textarea.style.height = 'auto';
   };
 
   const addComment = (key = [], value = [], pushList = []) => {
@@ -114,10 +117,12 @@ const InfoDetailPage = () => {
       }
     }
 
-    console.log(comment);
+    //scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    //자식에게 ref전달 알아보기
 
     pushList.push(comment);
   };
+  console.log(currentPost);
 
   const currentVisualViewHeight = window.visualViewport.height;
   //replyToText.current = currentVisualViewHeight;
@@ -158,13 +163,36 @@ const InfoDetailPage = () => {
         </s.PostInfo>
       </s.PostInfoHeader>
       <s.DetailPageLayout>
-        <s.Title>{currentPost.title}</s.Title>
-        <s.Content>{currentPost.content}</s.Content>{' '}
+        <s.Title>
+          {currentPost.title}
+          <s.DispatchedInfo>
+            {showDispatchedUniv(
+              currentPost.writerInfo,
+              currentPost.is_anonymous_univ,
+            )}
+          </s.DispatchedInfo>
+        </s.Title>
+        <s.Content>
+          {currentPost.content}
+          <s.ImgSection>
+            {currentPost.img_id_list
+              ? currentPost.img_id_list.map((img, index) => (
+                  <s.ContentImg
+                    src={img}
+                    key={index}
+                    onClick={() => {
+                      //window.open(this.src);
+                    }}
+                  />
+                ))
+              : null}
+          </s.ImgSection>
+        </s.Content>
         <s.CommentNumSection>
           <img src={commentImg} />
           {getNumberOfComment()}
         </s.CommentNumSection>
-        <s.CommentSection>
+        <s.CommentSection ref={scrollRef}>
           {currentFilteredCommentList.map((comment, index) => {
             return (
               <Comment
@@ -176,7 +204,7 @@ const InfoDetailPage = () => {
               />
             );
           })}
-        </s.CommentSection>{' '}
+        </s.CommentSection>
       </s.DetailPageLayout>
       <s.CommentWritingDiv id="commentDiv">
         <DefaultCheckBox

@@ -2,14 +2,17 @@ import { useNavigate } from 'react-router-dom';
 import * as s from '../PostPageStyled.jsx';
 import camera from '../../../assets/images/camera.svg';
 import DefaultCheckBox from '../../../components/DefaultCheckBox/DefaultCheckBox.jsx';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
   PostList,
   userInfo,
 } from '../../../components/Common/TempDummyData/PostList.jsx';
 
+import styled from 'styled-components';
+
 const InfoPostPage = () => {
   const [input, setInput] = useState({
+    board_id: 1,
     post_id: PostList.length + 1,
     createdDate: new Date(),
     writerInfo: { ...userInfo },
@@ -18,7 +21,11 @@ const InfoPostPage = () => {
     title: '',
     content: '',
     commentList: [],
+    img_id_list: [],
   });
+
+  const images = useRef([]);
+
   const onChangeInput = (e) => {
     let name = e.target.name;
     let value = e.target.value;
@@ -28,8 +35,26 @@ const InfoPostPage = () => {
       [name]: value,
     });
   };
+
+  const onChangeImgFile = (fileList) => {
+    if (fileList) {
+      console.log(fileList);
+      const imgList = Array.from(fileList);
+      const selectedFiles = imgList.map((file) => {
+        return URL.createObjectURL(file);
+      });
+
+      images.current = images.current.concat(selectedFiles);
+      console.log(images.current);
+      setInput({
+        ...input,
+        img_id_list: images.current,
+      });
+    }
+  };
   const onSubmit = () => {
     PostList.unshift(input); //DB에 저장
+
     navigate('/community/info', { replace: true });
   };
   const navigate = useNavigate();
@@ -89,16 +114,38 @@ const InfoPostPage = () => {
         </s.TitleSection>
         <s.ContentSection>
           <s.HeadingTitle>내용</s.HeadingTitle>
-          <s.EditorWrapper style={{ height: '585px' }}>
+          <s.EditorWrapper style={{ minHeight: '585px' }}>
             <s.Editor
               name="content"
               onChange={onChangeInput}
             />
+            <s.ImgSection>
+              {images.current.map((url, i) => (
+                <s.PreviewImg
+                  src={url}
+                  width="160"
+                  height="160"
+                  alt={`image${i}`}
+                  key={url}
+                />
+              ))}
+            </s.ImgSection>
           </s.EditorWrapper>
         </s.ContentSection>
       </s.BigContainer>
       <s.Footer>
-        <img src={camera} />
+        <label>
+          <input
+            accept=".jpg, .jpeg, .png, .mp4"
+            type="file"
+            style={{ display: 'none' }}
+            multiple
+            onChange={(e) => {
+              onChangeImgFile(e.target.files);
+            }}
+          />
+          <img src={camera} />
+        </label>
         <DefaultCheckBox
           after="익명"
           wrapperStyle={{ fontSize: '14px' }}
