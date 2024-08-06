@@ -1,0 +1,14 @@
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="11"
+        height="12"
+        viewBox="0 0 11 12"
+        fill="none"
+      >
+        <path
+          d="M1 0V8.73529H10M10 8.73529L8.43478 6.47059M10 8.73529L8.43478 11"
+          stroke="black"
+          strokeOpacity="0.5"
+          strokeWidth="0.5"
+        />
+      </svg>

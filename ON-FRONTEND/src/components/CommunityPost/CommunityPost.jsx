@@ -4,6 +4,7 @@ s;
 import commentImg from '../../assets/images/commentImg.svg';
 import verifiedBadge from '../../assets/images/verifiedBadge.svg';
 import { useNavigate } from 'react-router-dom';
+import { showDate } from '../Common/InfoExp';
 
 const CommunityPost = ({ post }) => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const CommunityPost = ({ post }) => {
     return numOfComment;
   };
 
+  console.log(post.img_id_list);
   return (
     <s.Post
       onClick={() =>
@@ -28,7 +30,7 @@ const CommunityPost = ({ post }) => {
     >
       <HeaderSection>
         <Title>{post.title}</Title>
-        <Date>{post.date}</Date>
+        <Date>{showDate(post.createdDate)}</Date>
       </HeaderSection>
       <ContentSection>
         <ContentWrapper>
@@ -49,8 +51,8 @@ const CommunityPost = ({ post }) => {
           </PostInfoWrapper>
         </ContentWrapper>
         <ContentImg
-          src={post.img_id_list}
-          showimg={post.img_id_list}
+          src={post.img_id_list ? post.img_id_list[0] : null}
+          showimg={(post.img_id_list.length > 0).toString()}
         />
       </ContentSection>
     </s.Post>
@@ -65,6 +67,7 @@ const HeaderSection = styled.section`
   flex: auto;
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: space-between;
   height: 30%;
 `;
@@ -81,6 +84,8 @@ const ContentSection = styled.section`
 `;
 
 const Title = styled.h4`
+  flex: auto;
+  width: auto;
   height: 100%;
   overflow: hidden;
   color: #363636;
@@ -95,6 +100,7 @@ const Title = styled.h4`
   letter-spacing: 0.28px;
 `;
 const Date = styled.div`
+  white-space: nowrap;
   color: #7a7a7a;
 
   font-family: Inter;
@@ -107,12 +113,13 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-content: start;
-  flex: auto;
-  height: 100%;
+  justify-content: space-between;
+
+  height: auto;
   width: 100%;
 `;
 const ContentImg = styled.img`
-  display: ${(props) => (props.showimg ? 'inline' : 'none')};
+  display: ${(props) => (props.showimg === 'true' ? 'inline' : 'none')};
   width: 82px;
   height: 82px;
   margin-left: 12px;

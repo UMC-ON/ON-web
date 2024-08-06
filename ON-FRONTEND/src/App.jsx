@@ -19,7 +19,7 @@ import DiaryCalendar from './components/DiaryCalendar/DiaryCalendar.jsx';
 import CompanyCalendar from './components/CompanyCalendar/CompanyCalendar.jsx';
 import SellPage from './pages/SellPage.jsx';
 import ScrapList from './pages/ScrapList.jsx';
-import SellPost from "./pages/SellPostPage.jsx";
+import SellPost from './pages/SellPostPage.jsx';
 import ItemDetailPage from './pages/ItemDetailPage.jsx';
 
 import TermsOfServicePage from './pages/SignUp/TermsOfServicePage.jsx';
@@ -81,7 +81,7 @@ function App() {
           element={<FreeCommunityHome />}
         />
         <Route
-          path="/community/general/detail"
+          path="/community/general/detail/:id"
           element={<FreeDetailPage />}
         />
         <Route
