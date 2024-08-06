@@ -49,29 +49,31 @@ const BottomTabNav = () => {
         </s.IconContainer>
       </NavLink>
       {/*물품거래 버튼*/}
-      <s.IconContainer className={currentPath === '/수정' ? 'active' : ''}>
-        <s.Icon
-          xmlns="http://www.w3.org/2000/svg"
-          width="22"
-          height="22"
-          viewBox="0 0 22 22"
-          fill="current"
-        >
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M0 2C0 0.895431 0.895431 0 2 0H20C21.1046 0 22 0.895431 22 2C22 3.10457 21.1046 4 20 4H2C0.89543 4 0 3.10457 0 2Z"
+      <NavLink to="/sell">
+        <s.IconContainer className={currentPath === '/sell' ? 'active' : ''}>
+          <s.Icon
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 22 22"
             fill="current"
-          />
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M2 6C0.895431 6 0 6.89543 0 8V20C0 21.1046 0.89543 22 2 22H20C21.1046 22 22 21.1046 22 20V8C22 6.89543 21.1046 6 20 6H2ZM6.5 8C5.67157 8 5 8.67157 5 9.5C5 10.3284 5.67157 11 6.5 11H15.5C16.3284 11 17 10.3284 17 9.5C17 8.67157 16.3284 8 15.5 8H6.5Z"
-            fill="current"
-          />
-        </s.Icon>
-        <s.IconTag>물품거래</s.IconTag>
-      </s.IconContainer>
+          >
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M0 2C0 0.895431 0.895431 0 2 0H20C21.1046 0 22 0.895431 22 2C22 3.10457 21.1046 4 20 4H2C0.89543 4 0 3.10457 0 2Z"
+              fill="current"
+            />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M2 6C0.895431 6 0 6.89543 0 8V20C0 21.1046 0.89543 22 2 22H20C21.1046 22 22 21.1046 22 20V8C22 6.89543 21.1046 6 20 6H2ZM6.5 8C5.67157 8 5 8.67157 5 9.5C5 10.3284 5.67157 11 6.5 11H15.5C16.3284 11 17 10.3284 17 9.5C17 8.67157 16.3284 8 15.5 8H6.5Z"
+              fill="current"
+            />
+          </s.Icon>
+          <s.IconTag>물품거래</s.IconTag>
+        </s.IconContainer>
+      </NavLink>
 
       {/*채팅 버튼*/}
       <NavLink to="/chatlist">

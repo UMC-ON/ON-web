@@ -2,6 +2,36 @@ import styled from 'styled-components';
 
 
 export const DiaryCalendar = styled.div`
+
+
+    .react-calendar__navigation__arrow.react-calendar__navigation__prev-button {
+
+      font-size: 40px;
+      position: absolute;
+      top: 225px;
+    }
+
+    .react-calendar__navigation__arrow.react-calendar__navigation__next-button {
+
+      font-size: 40px;
+      position: absolute;
+      top: 225px;
+      right: 20px;
+    }
+
+    .react-calendar__navigation__label__labelText {
+      font-size: 22px;
+      position: absolute;
+      top: 260px;
+      right: 150px;
+    }
+
+    .react-calendar__navigation__label {
+      font-weight: 600;
+      font-family: Inter;
+      padding: 10px;
+    }
+
     .react-calendar {
     width: 350px;
     max-width: 100%;

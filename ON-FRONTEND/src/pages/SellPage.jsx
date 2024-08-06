@@ -88,39 +88,42 @@ const items = [
 
 function SellPage() {
   const navigate = useNavigate();
-    const goPost = () => {
-      navigate('./post');
-    };
+  const goPost = () => {
+    navigate('./post');
+  };
 
-    return(
-        <>
-          <PageHeader pageName={'거래하기'}></PageHeader>
-          <Space /><br/>
-          <Search>국가 / 물품으로 검색해 보세요.<SearchIcon src={search_icon} size={'25px'}/></Search><br/><br/>
-          <FlexContainer>
-            <Span>
-              <GreyPicker>
-                국가 
-              <Icon src={arrowIcon}/>
-              </GreyPicker>
-
-              <GreyPicker>
-                거래 여부
-              <Icon src={arrowIcon}/>
-              </GreyPicker>
-              <GreyPicker>
-                거래 방식
-              <Icon src={arrowIcon}/>
-              </GreyPicker>
-            </Span>
-          </FlexContainer><br/>
-          <ItemList items={items}/>
-          <WriteButton onClick={goPost}>
-            <img src={pencilImg} />
-          글쓰기
-        </WriteButton>
-        </>
-    )
+  return (
+    <>
+      <PageHeader pageName={'거래하기'} />
+      <Space /><br />
+      <SearchContainer>
+        <Search placeholder='국가 / 물품으로 검색해 보세요.' />
+        <SearchIcon src={search_icon} />
+      </SearchContainer>
+      <br /><br />
+      <FlexContainer>
+        <Span>
+          <GreyPicker>
+            국가 
+            <Icon src={arrowIcon} />
+          </GreyPicker>
+          <GreyPicker>
+            거래 여부
+            <Icon src={arrowIcon} />
+          </GreyPicker>
+          <GreyPicker>
+            거래 방식
+            <Icon src={arrowIcon} />
+          </GreyPicker>
+        </Span>
+      </FlexContainer><br />
+      <ItemList items={items} />
+      <WriteButton onClick={goPost}>
+        <img src={pencilImg} alt="pencil icon" />
+        글쓰기
+      </WriteButton>
+    </>
+  );
 }
 
 export default SellPage;
@@ -133,17 +136,33 @@ const SmallSpace = styled.div`
   margin-top: 3vh;
 `;
 
-const Search = styled.div`
+const SearchContainer = styled.div`
+  position: relative;
+  width: 96%;
+  margin: 0 auto;
+`;
+
+const Search = styled.textarea`
   margin: 0 auto;
   width: 90%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 8px;
   border-radius: 18px;
   color: #838383;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  margin-left: 1em;
+  box-shadow: 0 4px 8px rgba(134, 142, 232, 0.3); /* #868EE8 with 30% opacity */
+  border: 0.1px rgba(255, 255, 255, 0.1);
+  outline: none;
 `;
 
+
 const SearchIcon = styled.img`
-  margin-left: 6em;
+  position: absolute;
+  right: 20px; // Adjust the value to position the icon correctly
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 const FlexContainer = styled.div`
