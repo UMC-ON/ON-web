@@ -24,8 +24,8 @@ export const showDate = (createdDate) => {
   const min = parseInt(time / 1000 / 60);
   if (today.getFullYear() - createdDate.getFullYear() > 0) {
     //올해 이 전에 작성된 글 : YY/MM/DD
-    const yy = createdDate.getFullYear().slice(-2);
-    const mm = '0' + createdDate.getMonth() + 1;
+    const yy = ('' + createdDate.getFullYear()).slice(-2);
+    const mm = ('0' + (createdDate.getMonth() + 1)).slice(-2);
     const dd = ('0' + createdDate.getDate()).slice(-2);
     return `${yy}/${mm}/${dd}`;
   } else if (
