@@ -116,7 +116,7 @@ const CardName = styled.p`
 `;
 
 const SmallGreyText = styled.p`
-  font-size: 0.3em;
+  font-size: 0.7em;
   padding-left: 6px;
   padding-top: 2px;
   padding-bottom: 13px;

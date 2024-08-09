@@ -157,12 +157,12 @@ function AccompanyPostPage() {
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>여행 지역 : </BlackText>
-                    <PlusButton src={purplePlusButton}/>
+                    <PlusButton src={plusButton}/>
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>예상 일정 : </BlackText>
                     {!isDateClicked && (
-                      <PlusButton onClick={handleCalendarClick} src={purplePlusButton}/>
+                      <PlusButton onClick={handleCalendarClick} src={plusButton}/>
                     )}
                     {isDateClicked && (
                       <>
@@ -410,8 +410,6 @@ const LabelText2 = styled.div`
 const PlusButton = styled.img`
   margin-top: 7px;
   margin-left: 7px;
-  width: 20px;
-  height: auto;
 `;
 
 
@@ -434,7 +432,7 @@ const Close = styled.img`
 
 const BottomTabLayout = styled.div`
   width: 100%;
-  height: 58vh;
+  height: 59vh;
   max-width: 480px;
   position: fixed;
   bottom: 0;
