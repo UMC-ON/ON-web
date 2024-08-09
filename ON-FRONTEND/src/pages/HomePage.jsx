@@ -16,11 +16,6 @@ import diaryIcon from '../assets/images/diary_icon.svg';
 import bannerimg from '../assets/images/home_banner.svg';
 import londonImg from '../assets/images/london_gallery.svg';
 import rightIcon from '../assets/images/right_arrow.svg';
-import infoImg from '../assets/images/info_container.svg';
-import infoStripe from '../assets/images/infoStripe.svg';
-import freeStripe from '../assets/images/freeStripe.svg';
-import freeImg from '../assets/images/free_container.svg';
-import bubbleIcon from '../assets/images/bubble.svg'
 import marketImg from '../assets/images/borough_market.svg';
 
 
@@ -108,7 +103,7 @@ const accompanycards = [
 const bluecards = [
   {
     title: '[🇬🇧 킹칼] 한 학기 교환 비용 정리',
-    time: '09:18',
+    time: '5:38 PM',
     body: '따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 독일로 교환학생을 앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약!',
     id: '익명',
     comment: 1,
@@ -116,7 +111,7 @@ const bluecards = [
   },
   {
     title: '[🇬🇧 킹칼] 한 학기 교환 비용 정리',
-    time: '09:18',
+    time: '5:38 PM',
     body: '따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 독일로 교환학생을 앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약!',
     id: '익명',
     comment: 1,
@@ -127,14 +122,14 @@ const bluecards = [
 const purplecards = [
   {
     title: '독일 방문학생 갈 때 어학점수',
-    time: '09:32',
+    time: '5:38 PM',
     body: '독일 방문학생 갈 때 어학점수 어느 정도 나와야 할까요? 가장 가고 싶은 학교는 프푸응과대입니다. 저는 3개월 만에 학기가 끝나는 학교로 가지만, 이후 보다 편안하고 안전한(?) 유럽 여행을 위해 비자를 발급받으려 합니다!',
     id: '익명',
     comment: 1,
   },
   {
     title: '독일 방문학생 갈 때 어학점수',
-    time: '09:32',
+    time: '5:38 PM',
     body: '독일 방문학생 갈 때 어학점수 어느 정도 나와야 할까요? 가장 가고 싶은 학교는 프푸응과대입니다. 저는 3개월 만에 학기가 끝나는 학교로 가지만, 이후 보다 편안하고 안전한(?) 유럽 여행을 위해 비자를 발급받으려 합니다!',
     id: '익명',
     comment: 1,
@@ -339,7 +334,7 @@ const Button = styled.button`
   background-color: #ffffff;
   font-size: 16px;
   cursor: pointer;
-  width: 23vw;
+  width: 6rem;
 `;
 
 const Icon = styled.img`

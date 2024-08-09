@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import detailImg from '../assets/images/accompany_img.svg';
-import profileImg from '../assets/images/profile_img.jpeg';
+import profileImg from '../assets/images/englandIcon.svg';
 import coordinateIcon from '../assets/images/coordinate_icon.svg';
 
 import calendarIcon from '../assets/images/black_calendar_icon.svg';
@@ -14,6 +14,7 @@ import CardAccompanyList from '../components/CardAccompanyList';
 import AccompanyHeader from '../components/AccompanyHeader';
 import FirstModal from '../components/FirstModal';
 import SecondModal from '../components/SecondModal';
+import LoadingScreen from '../components/LoadingScreen';
 
 const accompanycards = [
   {
@@ -82,9 +83,24 @@ function AccompanyDetailPage() {
     openSecondModal();
   };
 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); 
+    // 2 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
 
     return (
       <>
+      {loading ? (
+        <LoadingScreen/>
+      ) : (
+        <>
         <AccompanyHeader/>
         <Space/>
         <BannerContainer>
@@ -161,7 +177,8 @@ function AccompanyDetailPage() {
         <FirstModal closeModal={closeFirstModal} openNextModal={handleBlueButtonClick} />
         )}
         {isSecondModalOpen && <SecondModal closeModal={closeSecondModal} />}
-
+      </>
+      )}
       </>
     );
 }
@@ -240,7 +257,7 @@ const ProfileImg = styled.img`
   height: 12vh; 
   object-fit: cover; 
   object-position: center;
-  border: 1px solid #D9D9D9;
+  // border: 1px solid #D9D9D9;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 `;
 
