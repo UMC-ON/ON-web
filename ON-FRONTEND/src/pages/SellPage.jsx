@@ -8,8 +8,9 @@ import arrowIcon from '../assets/images/bottomArrow.svg';
 import search_icon from '../assets/images/search_icon.svg';
 import pencilImg from '../assets/images/pencilIcon.svg';
 
-import PageHeader from '../components/PageHeader/PageHeader';
+import SellPageHeader from '../components/SellPageHeader';
 import ItemList from '../components/ItemList';
+import TransactionPicker from "../components/TransactionPicker";
 
 const items = [
     {
@@ -88,15 +89,27 @@ const items = [
 
 function SellPage() {
   const [showAvailable, setShowAvailable] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState('');
+  const [isPickerVisible, setIsPickerVisible] = useState(false); // Picker의 가시성 상태
+
   const navigate = useNavigate();
 
   const handleCheckClick = () => {
     setShowAvailable(!showAvailable);
   };
 
-  const filteredItems = showAvailable
-    ? items.filter(item => item.now !== '거래완료')
-    : items;
+  const handleTransactionChange = (transaction) => {
+    setSelectedTransaction(transaction);
+    setIsPickerVisible(false); // 선택 후 Picker 숨기기
+  };
+
+  const togglePickerVisibility = () => {
+    setIsPickerVisible(!isPickerVisible);
+  };
+
+  const filteredItems = items
+    .filter(item => !showAvailable || item.now !== '거래완료')
+    .filter(item => !selectedTransaction || item.how === selectedTransaction);
 
   const goPost = () => {
     navigate('./post');
@@ -104,7 +117,7 @@ function SellPage() {
 
   return (
     <>
-      <PageHeader pageName={'거래하기'} />
+      <SellPageHeader pageName={'거래하기'} />
       <Space /><br />
       <SearchContainer>
         <Search placeholder='국가 / 물품으로 검색해 보세요.' />
@@ -113,12 +126,12 @@ function SellPage() {
       <br /><br />
       <FlexContainer>
         <Span>
-          <GreyPicker>
-            국가 
+          <GreyPicker onClick={togglePickerVisibility}>
+            거래방식 
             <Icon src={arrowIcon} />
           </GreyPicker>
           <GreyPicker>
-            거래 방식
+            국가
             <Icon src={arrowIcon} />
           </GreyPicker>
           <Available>
@@ -132,6 +145,43 @@ function SellPage() {
         <img src={pencilImg} alt="pencil icon" />
         글쓰기
       </WriteButton>
+
+      {/* 거래방식 선택 Picker 표시
+      {isPickerVisible && (
+        <PickerOverlay>
+          <PickerContainer>
+            <PickerHeader>
+              <Title>거래방식</Title>
+              <CloseButton onClick={() => setIsPickerVisible(false)}>×</CloseButton>
+            </PickerHeader>
+            <ButtonContainer>
+              <PickerButton
+                selected={selectedTransaction === '직거래'}
+                onClick={() => handleTransactionChange('직거래')}
+              >
+                직거래
+              </PickerButton>
+              <PickerButton
+                selected={selectedTransaction === '택배거래'}
+                onClick={() => handleTransactionChange('택배거래')}
+              >
+                택배거래
+              </PickerButton>
+            </ButtonContainer>
+            <ActionContainer>
+              <ResetButton onClick={() => setSelectedTransaction('')}>
+                초기화
+              </ResetButton>
+              <ApplyButton
+                disabled={!selectedTransaction}
+                onClick={() => setIsPickerVisible(false)}
+              >
+                적용
+              </ApplyButton>
+            </ActionContainer>
+          </PickerContainer>
+        </PickerOverlay>
+      )} */}
     </>
   );
 }
@@ -148,6 +198,11 @@ const SearchContainer = styled.div`
   margin: 0 auto;
 `;
 
+const Bookmark = styled.img`
+  z-index: 3;
+
+`
+
 const Search = styled.textarea`
   margin: 0 auto;
   width: 90%;
@@ -158,14 +213,14 @@ const Search = styled.textarea`
   display: flex;
   align-items: center;
   margin-left: 1em;
-  box-shadow: 0 4px 8px rgba(134, 142, 232, 0.3); /* #868EE8 with 30% opacity */
+  box-shadow: 0 4px 8px rgba(134, 142, 232, 0.3);
   border: 0.1px rgba(255, 255, 255, 0.1);
   outline: none;
 `;
 
 const SearchIcon = styled.img`
   position: absolute;
-  right: 20px; // Adjust the value to position the icon correctly
+  right: 20px;
   top: 50%;
   transform: translateY(-50%);
 `;
@@ -226,8 +281,8 @@ const WriteButton = styled.button`
   justify-content: space-around;
   position: fixed;
   bottom: 70px;
-  left: 50%; /* 화면의 가로 중앙에 배치 */
-  transform: translateX(-50%); /* 자신의 너비의 50%만큼 왼쪽으로 이동 */
+  left: 50%;
+  transform: translateX(-50%);
   border-radius: 55px;
   border: none;
   width: 148px;
@@ -242,4 +297,90 @@ const WriteButton = styled.button`
   line-height: normal;
   z-index: 2;
   border: 1px solid #CCCCCC;
+`;
+
+const PickerOverlay = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const PickerContainer = styled.div`
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+`;
+
+const PickerHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const Title = styled.div`
+  font-size: 16px;
+  font-weight: bold;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 24px;
+  line-height: 24px;
+  cursor: pointer;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const PickerButton = styled.button`
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #A7A7A7;
+  background-color: ${({ selected }) => selected ? '#E5E6FF' : '#FFFFFF'};
+  color: ${({ selected }) => selected ? '#5F5FD9' : '#000000'};
+  cursor: pointer;
+
+  &:hover {
+    background-color: #E5E6FF;
+  }
+`;
+
+const ActionContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+`;
+
+const ResetButton = styled.button`
+  background: none;
+  border: none;
+  color: #5F5FD9;
+  cursor: pointer;
+`;
+
+const ApplyButton = styled.button`
+  background-color: #5F5FD9;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: ${({ disabled }) => disabled ? 'not-allowed' : 'pointer'};
+  opacity: ${({ disabled }) => disabled ? 0.5 : 1};
 `;
