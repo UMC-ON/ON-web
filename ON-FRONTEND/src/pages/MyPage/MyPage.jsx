@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import * as s from './MyPageStyled';
+import theme from '../../styles/theme';
 
 const MyPage = () => {
   const [editSchoolName, setEditSchoolName] = useState(false);
@@ -12,7 +14,7 @@ const MyPage = () => {
   const [originalLink, setOriginalLink] = useState('');
 
   const [editNickname, setEditNickname] = useState(false);
-  const [nickname, setNickname] = useState('루이');
+  const [nickname, setNickname] = useState('ON');
   const [originalNickname, setOriginalNickname] = useState('');
 
   const inputRef = useRef(null);
@@ -60,22 +62,27 @@ const MyPage = () => {
   return (
     <s.MyPageLayout>
       <PageHeader pageName="마이페이지" />
-      <s.MyPosts>
-        <span>내 글 보기</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="8"
-          height="20"
-          viewBox="0 0 6 11"
-          fill="none"
-        >
-          <path
-            d="M1 9.57153L5.1142 6.04508C5.57981 5.64598 5.57981 4.92566 5.1142 4.52656L1 1.00011"
-            stroke="black"
-            strokeLinecap="round"
-          />
-        </svg>
-      </s.MyPosts>
+      <NavLink
+        to="/mypost"
+        style={{ width: '100%' }}
+      >
+        <s.MyPosts>
+          <span>내 글 보기</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="8"
+            height="20"
+            viewBox="0 0 6 11"
+            fill="none"
+          >
+            <path
+              d="M1 9.57153L5.1142 6.04508C5.57981 5.64598 5.57981 4.92566 5.1142 4.52656L1 1.00011"
+              stroke="black"
+              strokeLinecap="round"
+            />
+          </svg>
+        </s.MyPosts>
+      </NavLink>
 
       <s.MyInfoTitle>개인정보</s.MyInfoTitle>
       <s.MyInfoWrapper>
@@ -85,11 +92,12 @@ const MyPage = () => {
         >
           <s.InfoContainer>
             <s.Title>나의 파견교</s.Title>
-            {!editSchoolName ? (
-              <s.EditBtn onClick={clickEditSchoolName}>수정</s.EditBtn>
-            ) : (
-              <p onClick={clickEditSchoolName}>수정중</p>
-            )}
+            <s.EditBtn
+              onClick={clickEditSchoolName}
+              color={editSchoolName ? theme.blueGra : theme.lightGray}
+            >
+              {editSchoolName ? '완료' : '수정'}
+            </s.EditBtn>
             <s.SchoolNameBox>
               <div style={{ display: 'flex' }}>
                 <s.SchoolNameSpan ref={spanRef}>
@@ -129,11 +137,12 @@ const MyPage = () => {
 
           <s.InfoContainer>
             <s.Title>파견교 홈페이지 링크</s.Title>
-            {!editLink ? (
-              <s.EditBtn onClick={clickEditLink}>수정</s.EditBtn>
-            ) : (
-              <p onClick={clickEditLink}>수정중</p>
-            )}
+            <s.EditBtn
+              onClick={clickEditLink}
+              color={editLink ? theme.blueGra : theme.lightGray}
+            >
+              {editLink ? '완료' : '수정'}
+            </s.EditBtn>
             <s.TextInput
               disabled={!editLink}
               value={link}
@@ -149,31 +158,32 @@ const MyPage = () => {
           <s.InfoContainer>
             <s.Title>Email</s.Title>
             <s.InfoBox>
-              <span>sjhan0814@gmial.com</span>
+              <span>on@gmail.com</span> {/* 추후에 값 불러와서 넣어주기 */}
             </s.InfoBox>
           </s.InfoContainer>
 
           <s.InfoContainer>
             <s.Title>이름</s.Title>
             <s.InfoBox>
-              <span>한서정</span>
+              <span>김온</span> {/* 추후에 값 불러와서 넣어주기 */}
             </s.InfoBox>
           </s.InfoContainer>
 
           <s.InfoContainer>
             <s.Title>전화번호</s.Title>
             <s.InfoBox>
-              <span>010-1111-1111</span>
+              <span>010-1111-1111</span> {/* 추후에 값 불러와서 넣어주기 */}
             </s.InfoBox>
           </s.InfoContainer>
 
           <s.InfoContainer style={{ paddingBottom: '2rem' }}>
             <s.Title>닉네임</s.Title>
-            {!editNickname ? (
-              <s.EditBtn onClick={clickEditNickname}>수정</s.EditBtn>
-            ) : (
-              <p onClick={clickEditNickname}>수정중</p>
-            )}
+            <s.EditBtn
+              onClick={clickEditNickname}
+              color={editNickname ? theme.blueGra : theme.lightGray}
+            >
+              {editNickname ? '완료' : '수정'}
+            </s.EditBtn>
             <s.TextInput
               disabled={!editNickname}
               value={nickname}

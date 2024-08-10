@@ -81,7 +81,7 @@ export const EditBtn = styled.div`
   height: 1rem;
   flex-shrink: 0;
   border-radius: 0.625rem;
-  background: #d9d9d9;
+  background: ${(props) => props.color};
   color: #fff;
   text-align: center;
   font-family: Inter;
