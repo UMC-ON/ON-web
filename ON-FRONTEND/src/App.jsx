@@ -27,7 +27,8 @@ import UserInfoPage from './pages/SignUp/UserInfoPage.jsx';
 import UserInfoSchoolPage from './pages/SignUp/UserInfoSchoolPage.jsx';
 import UserInfoSchoolAuthPage from './pages/SignUp/UserInfoSchoolAuthPage.jsx';
 import SignUpCompletePage from './pages/SignUp/SignUpCompletePage.jsx';
-
+import SelectCity from './pages/SelectCity/SelectCity.jsx';
+import SelectCountry from './pages/SelectCountry/SelectCountry.jsx';
 import FreeCommunityHome from './pages/Community/FreeCommunity/FreeCommunityHome.jsx';
 import InfoCommunityHome from './pages/Community/InfoCommunity/InfoCommunityHome.jsx';
 import InfoPostPage from './pages/Community/InfoCommunity/InfoPostPage.jsx';
@@ -159,6 +160,14 @@ function App() {
         <Route
           path="/scrap"
           element={<ScrapList />}
+        />
+        <Route
+          path="/selectCity"
+          element={<SelectCity />}
+        />
+        <Route
+          path="/selectCountry"
+          element={<SelectCountry />}
         />
       </Routes>
     </ThemeProvider>
