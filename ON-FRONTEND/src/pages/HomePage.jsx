@@ -157,6 +157,38 @@ function HomePage() {
       navigate("/accompany");
     }
 
+    function goToGeneralPost() {
+      navigate("/community/general/post");
+    }
+
+    function goToInfoPost() {
+      navigate("/community/info/post");
+    }
+
+    function goToInfoCommunity() {
+      navigate("/community/info");
+    }
+
+    function goToGeneralCommunity() {
+      navigate("/community/general");
+    }
+
+    function goToAccompany() {
+      navigate("/accompany");
+    }
+
+    function goToDiary() {
+      navigate("/diary");
+    }
+
+    function goToCollege() {
+      window.location.href = "https://www.kcl.ac.uk/";
+    }
+
+    function goToMigration() {
+      window.location.href = "https://www.gov.uk/government/organisations/uk-visas-and-immigration";
+    }
+
     return (
       <>
         <NavBar></NavBar>
@@ -171,12 +203,12 @@ function HomePage() {
             </LeftContainer>
 
             <Container>
-                <Button>
+                <Button onClick={goToCollege}>
                     <Icon src={schoolIcon} alt="School Icon" />
                     <SubText>교환교</SubText>
                     <SubText>홈페이지</SubText>
                 </Button>
-                <Button>
+                <Button onClick={goToMigration}>
                     <Icon src={migrationIcon} alt="Migration Icon" />
                     <SubText>영국</SubText>
                     <SubText>이민국</SubText>
@@ -188,17 +220,17 @@ function HomePage() {
                 </Button>
             </Container>
             <Container>
-                <Button>
+                <Button onClick={goToInfoPost}>
                     <Icon src={informationIcon} alt="Information Icon" />
                     <SubText>정보글</SubText>
                     <SubText>쓰기</SubText>
                 </Button>
-                <Button>
+                <Button onClick={goToGeneralPost}>
                     <Icon src={writeIcon} alt="Write Icon" />
                     <SubText>자유글</SubText>
                     <SubText>쓰기</SubText>
                 </Button>
-                <Button>
+                <Button onClick={goToDiary}>
                     <Icon src={diaryIcon} alt="Diary Icon" />
                     <SubText>일기</SubText>
                     <SubText>쓰기</SubText>
@@ -232,7 +264,7 @@ function HomePage() {
             <CardList cards={cards} />
           </BlueContainer>
 
-          <FlexContainer>
+          <FlexContainer onClick={goToInfoCommunity}>
               <MiddleText spacing="1vh">최신 정보글</MiddleText>
               <RightIcon src={rightIcon}></RightIcon>
           </FlexContainer>
@@ -242,7 +274,7 @@ function HomePage() {
           <Space></Space>
           <Space></Space>
 
-          <FlexContainer>
+          <FlexContainer onClick={goToGeneralCommunity}>
               <MiddleText spacing="1vh">최신 자유글</MiddleText>
               <RightIcon src={rightIcon}></RightIcon>
           </FlexContainer>
@@ -253,7 +285,7 @@ function HomePage() {
           <Space></Space>
           <Space></Space>
 
-          <FlexContainer>
+          <FlexContainer onClick={goToAccompany}>
               <MiddleText spacing="1vh">내 주변 동행글</MiddleText>
               <RightIcon src={rightIcon}></RightIcon>
           </FlexContainer>
