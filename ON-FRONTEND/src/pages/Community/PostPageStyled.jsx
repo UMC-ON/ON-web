@@ -160,6 +160,7 @@ export const Editor = styled.textarea`
   border: none;
   width: 100%;
   height: 100%;
+  flex-grow: 1;
 
   font-family: Inter;
   font-size: 15px;
@@ -174,6 +175,30 @@ export const Editor = styled.textarea`
     outline: none;
   }
   resize: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const TitleEditor = styled.input`
+  box-sizing: border-box;
+  border: none;
+  width: 100%;
+  height: 100%;
+  padding: none;
+
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  color: black;
+
+  background-color: transparent;
+
+  &:focus {
+    outline: none;
+  }
   &::-webkit-scrollbar {
     display: none;
   }
@@ -235,4 +260,5 @@ export const PreviewImg = styled.img`
   height: 80px;
   object-fit: cover;
   border-radius: 13px;
+  flex-shrink: 0;
 `;
