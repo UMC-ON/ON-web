@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 
 import camera from "../assets/images/camera.svg";
 import postIcon from '../assets/images/writepost_icon.svg';
+import PhotoAdd from "../assets/images/PhotoAdd.svg";
 
 import SellPostHeader from "../components/SellPostHeader";
 
@@ -13,7 +14,7 @@ function SellPost() {
 
     const handleImageUpload = (event) => {
         const files = Array.from(event.target.files);
-        setImages(files.map(file => URL.createObjectURL(file)));
+        setImages(prevImages => [...prevImages, ...files.map(file => URL.createObjectURL(file))]);
     };
 
     const handleCameraClick = () => {
@@ -24,44 +25,55 @@ function SellPost() {
         <>
             <SellPostHeader />
             <Space />
-            <Photo onClick={handleCameraClick}>
-                <Camera src={camera}></Camera>
+            <Photo isPreviewVisible={images.length > 0}> {/* isPreviewVisible prop 전달 */}
+                {images.length === 0 ? (
+                    <Camera src={camera} onClick={handleCameraClick} />
+                ) : (
+                    <>
+                        <ImagePreview>
+                            <ImageContainer>
+                                {images.map((image, index) => (
+                                    <img key={index} src={image} alt={`Preview ${index + 1}`} />
+                                ))}
+                            </ImageContainer>
+                            <AddButton onClick={handleCameraClick}>
+                                <img src={PhotoAdd} style={{ width: "22px", height: "22px" }} />
+                            </AddButton>
+                        </ImagePreview>
+                    </>
+                )}
                 <FileInput
                     type="file"
                     multiple
                     ref={fileInputRef}
                     onChange={handleImageUpload}
                 />
-                <ImagePreview>
-                    {images.map((image, index) => (
-                        <img key={index} src={image} alt={`Preview ${index + 1}`} />
-                    ))}
-                </ImagePreview>
             </Photo>
+
             <Information>
                 <TitleText>물품 등록하기</TitleText><br />
                 <Location>
                     현재 위치:
                     <Country>
                         영국
-                        <img src={postIcon} alt="post icon" style={{ marginLeft: "5px" }}></img>
+                        <img src={postIcon} alt="post icon" style={{ marginLeft: "5px" }} />
                     </Country>
                     <Region>
                         런던
-                        <img src={postIcon} alt="post icon" style={{ marginLeft: "5px" }}></img>
+                        <img src={postIcon} alt="post icon" style={{ marginLeft: "5px" }} />
                     </Region>
                     <p style={{ fontSize: "10px", color: "#B9B9B9", marginTop: "10px" }}>원활한 거래를 위해 지역까지 작성해주세요.</p>
                 </Location><br />
                 <Section>
                     <Label>제목</Label>
-                    <Add placeholder="제목을 입력해 주세요."></Add>
+                    <Add placeholder="제목을 입력해 주세요." />
                 </Section><br />
                 <Section>
                     <Label>판매 금액</Label>
                     <Add placeholder="₩ 판매 금액을 입력해 주세요." type="number" />
                 </Section>
                 <CheckboxContainer>
-                    <input type="checkbox"></input><span style={{ fontSize: "11px"}}>나눔</span>
+                    <input type="checkbox" /><span style={{ fontSize: "11px" }}>나눔</span>
                 </CheckboxContainer>
                 <Section>
                     <Label>거래 형식</Label>
@@ -102,11 +114,12 @@ const Photo = styled.div`
     align-items: center;
     flex-direction: column;
     width: 100%;
-    height: 20vh;
-    background: linear-gradient(135deg, #C2C7FF80 0%, #AD99FF80 50%);
+    height: 12em;
     margin-bottom: 2vh;
     cursor: pointer;
+    background: ${(props) => (props.isPreviewVisible ? 'white' : 'linear-gradient(135deg, #C2C7FF80 0%, #AD99FF80 50%)')};
 `;
+
 
 const Camera = styled.img`
     width: 15%;
@@ -119,16 +132,43 @@ const FileInput = styled.input`
 
 const ImagePreview = styled.div`
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* 이미지들이 가로로 나열되도록 함 */
+    overflow-x: auto; /* 가로로 넘칠 경우 스크롤 가능하게 함 */
     margin-top: 10px;
+    width: 100%;
 
     img {
-        width: 50px;
-        height: 50px;
+        width: 120px;
+        height: 120px;
         object-fit: cover;
         margin: 5px;
+        border-radius: 16px;
+        flex-shrink: 0; /* 이미지가 축소되지 않도록 함 */
     }
 `;
+
+const ImageContainer = styled.div`
+    display: flex;
+`;
+
+const AddButton = styled.div`
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    flex-shrink: 0; /* 추가된 부분: 크기가 줄어들지 않도록 함 */
+    background: #F5F5F5;
+
+    span {
+        font-size: 32px;
+        color: #B9B9B9;
+    }
+`;
+
 
 const Information = styled.div`
     width: 100%;
@@ -153,9 +193,9 @@ const Country = styled.div`
     align-items: center;
     justify-content: space-between;
     width: auto;
-    height: 0.5em;
+    height: 0.8em;
     padding: 0.5em;
-    background: #CABCCB;
+    background: ${props => props.theme.lightPurple};
     margin: 0px 0.6em;
     border-radius: 20px;
     color: white;
@@ -166,9 +206,9 @@ const Region = styled.div`
     align-items: center;
     justify-content: space-between;
     width: auto;
-    height: 0.5em;
+    height: 0.8em;
     padding: 0.5em;
-    background: #CABCCB;
+    background: ${props => props.theme.lightPurple};
     border-radius: 20px;
     color: white;
 `;
@@ -247,7 +287,6 @@ const Description = styled.textarea`
     margin-bottom: 2vh;
     width: 99%;
     resize: none;
-    overflow: auto;
     font-size: 14px;
     color: #B9B9B9;
     line-height: 1.5;

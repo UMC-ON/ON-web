@@ -7,33 +7,34 @@ import profile from "../assets/images/profileIcon.svg";
 import empty_star from "../assets/images/empty_star.svg";
 import filled_star from "../assets/images/filled_star.svg";
 
-
 const Item = ({ items }) => {
-
   const navigate = useNavigate();
-    const goDetail = () => {
-      navigate('./id');
-    };
-  
+  const goDetail = () => {
+    navigate('./id');
+  };
+
   return (
     <>
-      {items && items.map((item, index) => (
-        <ItemDiv key={index}>
-          <Photo src={item.image} />
-          <Information>
-            <StarContainer />
-            <Description onClick={goDetail}>
-              <Title>{item.title} | <Time>{item.time}</Time></Title>
-              <State>{item.how} | {item.now}</State>
-              <LocationAndUser>
-                <Place><Compas src={compas} />독일 베를린</Place>
-                <User><Profile src={profile} />루이(fndl333)</User>
-              </LocationAndUser><br/>
-              <Price>{item.price === '나눔' ? item.price : `₩ ${item.price}`}</Price>
-            </Description>
-          </Information>
-        </ItemDiv>
-      ))}
+      {items && items.map((item, index) => {
+        const isCompleted = item.now === "거래완료";
+        return (
+          <ItemDiv key={index} isCompleted={isCompleted}>
+            <Photo src={item.image} />
+            <Information>
+              <StarContainer />
+              <Description onClick={goDetail}>
+                <Title>{item.title} | <Time>{item.time}</Time></Title><br/>
+                <State how={item.how} now={item.now} isCompleted={isCompleted} />
+                <LocationAndUser>
+                  <Place><Compas src={compas} />독일 베를린</Place>
+                  <User><Profile src={profile} />루이(fndl333)</User>
+                </LocationAndUser><br/>
+                <Price>{item.price === '나눔' ? item.price : `₩ ${item.price}`}</Price>
+              </Description>
+            </Information>
+          </ItemDiv>
+        );
+      })}
     </>
   );
 };
@@ -66,6 +67,7 @@ const ItemDiv = styled.div`
   margin-bottom: 1vh;
   position: relative;
   text-align: left;
+  opacity: ${({ isCompleted }) => isCompleted ? 0.5 : 1}; /* 거래완료 시 불투명도 조절 */
 `;
 
 const Star = styled.img`
@@ -112,11 +114,21 @@ const Time = styled.span`
   font-size: 0.6em;
 `;
 
-const State = styled.p`
+const StateWrapper = styled.p`
   color: #7A7A7A;
   font-size: 0.7em;
-  margin: 10px 0px;
+  margin-bottom: 5px;
 `;
+
+const StyledNow = styled.span`
+  color: ${({ theme, isCompleted }) => isCompleted ? theme.lightPurple : '#7A7A7A'};
+`;
+
+const State = ({ how, now, isCompleted }) => (
+  <StateWrapper>
+    {how} | <StyledNow isCompleted={isCompleted}>{now}</StyledNow>
+  </StateWrapper>
+);
 
 const Price = styled.p`
   font-size: 19px;
@@ -134,7 +146,7 @@ const Place = styled.p`
   display: flex;
   align-items: center;
   margin-right: 10px;
-  color: #838383
+  color: #838383;
 `;
 
 const Profile = styled.img`
@@ -152,7 +164,6 @@ const User = styled.p`
 const LocationAndUser = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
   width: 11em;
 `;
 
