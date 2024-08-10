@@ -74,10 +74,10 @@ const items = [
     },
     {
         image: item,
-        title: '작은 냄비',
+        title: '체크하면 안나와야됨',
         time: '10분 전',
         how: '직거래',
-        now: '거래가능',
+        now: '거래완료',
         where: '독일 베를린',
         icon: icon,
         nickname: '루이',
@@ -87,7 +87,17 @@ const items = [
 ];
 
 function SellPage() {
+  const [showAvailable, setShowAvailable] = useState(false);
   const navigate = useNavigate();
+
+  const handleCheckClick = () => {
+    setShowAvailable(!showAvailable);
+  };
+
+  const filteredItems = showAvailable
+    ? items.filter(item => item.now !== '거래완료')
+    : items;
+
   const goPost = () => {
     navigate('./post');
   };
@@ -108,16 +118,16 @@ function SellPage() {
             <Icon src={arrowIcon} />
           </GreyPicker>
           <GreyPicker>
-            거래 여부
-            <Icon src={arrowIcon} />
-          </GreyPicker>
-          <GreyPicker>
             거래 방식
             <Icon src={arrowIcon} />
           </GreyPicker>
+          <Available>
+            <Check onClick={handleCheckClick} checked={showAvailable} />
+            <span>거래 가능 물품만 보기</span>
+          </Available>
         </Span>
       </FlexContainer><br />
-      <ItemList items={items} />
+      <ItemList items={filteredItems} />
       <WriteButton onClick={goPost}>
         <img src={pencilImg} alt="pencil icon" />
         글쓰기
@@ -130,10 +140,6 @@ export default SellPage;
 
 const Space = styled.div`
   margin-top: 7vh;
-`;
-
-const SmallSpace = styled.div`
-  margin-top: 3vh;
 `;
 
 const SearchContainer = styled.div`
@@ -156,7 +162,6 @@ const Search = styled.textarea`
   border: 0.1px rgba(255, 255, 255, 0.1);
   outline: none;
 `;
-
 
 const SearchIcon = styled.img`
   position: absolute;
@@ -187,6 +192,27 @@ const GreyPicker = styled.button`
   padding-right: 8px;
   margin-right: 8px;
   color: #363636;
+`;
+
+const Available = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: #7A7A7A;
+  margin-left: 14vw;
+  width: 160px;
+`;
+
+const Check = styled.div`
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: ${({ checked }) => checked 
+    ? "linear-gradient(135deg, #c2c7ff, #ad99ff)" 
+    : "#E8E8E8"};
+  margin-right: 5px;
+  cursor: pointer;
 `;
 
 const Icon = styled.img`
