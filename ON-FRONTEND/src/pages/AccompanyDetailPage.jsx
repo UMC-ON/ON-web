@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React, {useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import detailImg from '../assets/images/accompany_img.svg';
 import profileImg from '../assets/images/englandIcon.svg';
@@ -57,6 +58,8 @@ function AccompanyDetailPage() {
 
   const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const openFirstModal = () => {
     console.log("First modal opened");
@@ -169,7 +172,7 @@ function AccompanyDetailPage() {
         <Space/>
 
         <BottomTabLayout>
-          <GreyButton>채팅 문의</GreyButton>
+          <GreyButton onClick={() => navigate('/chat')}>채팅 문의</GreyButton>
           <BlueButton onClick={openFirstModal}>동행 신청</BlueButton>
         </BottomTabLayout>
 
