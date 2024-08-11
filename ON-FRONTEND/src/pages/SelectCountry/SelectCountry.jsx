@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import PageHeader from '../../components/PageHeader/PageHeader.jsx';
 import { countryFlags, countries } from '../../assets/cityDatabase.js';
+import styled from 'styled-components';
 
 /*사용 방법
 import { useLocation } from 'react-router-dom';
@@ -91,8 +92,14 @@ const SelectCountry = ({ closeModal, getCountry }) => {
             ))}
           </s.ContinentWrapper>
         ))}
+        {/* <Space/> */}
       </s.PageLayout>
   );
 };
 
 export default SelectCountry;
+
+const Space = styled.div`
+  margin-top: 10vh;
+  background-color: white;
+`;

@@ -32,20 +32,19 @@ export const PageName = styled.p`
 
 export const PageLayout = styled.div`
  width: 100%;
-  max-height: 100vh; /* Ensures the container does not exceed viewport height */
+  max-height: 100vh;
   box-sizing: border-box;
-  padding: 61px 0 0px;
-  align-items: flex-start; /* Align content to the top (if justify-content is used) */
+  padding: 61px 0 15vh; 
+  align-items: flex-start;
   flex-direction: column;
   background-color: white;
   z-index: 999;
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba(255, 255, 255, 0.6);
   display: flex;
   align-items: center;
-  overflow-y: auto; /* Enables vertical scrolling */
+  overflow-y: auto;
 `;
 export const ContinentWrapper = styled.div`
   width: 100%;

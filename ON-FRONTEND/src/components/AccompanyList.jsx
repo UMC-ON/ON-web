@@ -146,6 +146,6 @@ const Overlay = styled.div`
   background-image: linear-gradient(to right, rgba(208,214,218,0.5), rgba(231,235,237,0.5), rgba(255,255,255,0.5));
   display: ${(props) => (props.$isClosed ? 'block' : 'none')};
   border-radius: 20px;
-  z-index: 10; 
+  z-index: 1; 
 `;
 
