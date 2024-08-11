@@ -2,13 +2,13 @@ import { useNavigate } from 'react-router-dom';
 import * as s from '../PostPageStyled.jsx';
 import camera from '../../../assets/images/camera.svg';
 import DefaultCheckBox from '../../../components/DefaultCheckBox/DefaultCheckBox.jsx';
-import { useState, useRef } from 'react';
-import {
-  PostList,
-  userInfo,
-} from '../../../components/Common/TempDummyData/PostList.jsx';
+import { useState, useRef, useEffect } from 'react';
+import { PostList } from '../../../components/Common/TempDummyData/PostList.jsx';
+import { useSelector } from 'react-redux';
 
 const InfoPostPage = () => {
+  const userInfo = useSelector((state) => state.user.user);
+
   const [input, setInput] = useState({
     board_id: 2,
     post_id: PostList.length + 1,
@@ -26,12 +26,10 @@ const InfoPostPage = () => {
 
   const onChangeImgFile = (fileList) => {
     if (fileList) {
-      console.log(fileList);
       const imgList = Array.from(fileList);
       const selectedFiles = imgList.map((file) => {
         return URL.createObjectURL(file);
       });
-      console.log(selectedFiles);
       images.current = images.current.concat(selectedFiles);
       setInput({
         ...input,
@@ -50,6 +48,14 @@ const InfoPostPage = () => {
     });
   };
   const onSubmit = () => {
+    if (!input.title) {
+      alert('제목을 입력하세요');
+      return;
+    }
+    if (!input.content) {
+      alert('내용을 입력하세요');
+      return;
+    }
     PostList.unshift(input); //DB에 저장
     navigate('/community/general', { replace: true });
   };
@@ -74,8 +80,8 @@ const InfoPostPage = () => {
         </s.ColorButton>
       </s.ConfirmHeader>
       <s.BigContainer>
-        <s.HeadingTitle style={{ fontSize: '25px', color: '#BFD8E5' }}>
-          정보글 작성
+        <s.HeadingTitle style={{ fontSize: '25px', color: '#CBCDE9' }}>
+          자유글 작성
         </s.HeadingTitle>
         <s.PostInfoSection>
           <s.InfoLabel>
@@ -106,7 +112,7 @@ const InfoPostPage = () => {
             style={{ height: '38px' }}
             color="#CBCDE9"
           >
-            <s.Editor
+            <s.TitleEditor
               wrap="off"
               style={{ fontWeight: 'bold' }}
               name="title"
@@ -117,7 +123,7 @@ const InfoPostPage = () => {
         <s.ContentSection>
           <s.HeadingTitle>내용</s.HeadingTitle>
           <s.EditorWrapper
-            style={{ height: '585px' }}
+            style={{ minHeight: '400px' }} //585px
             color={'#CBCDE9'}
           >
             <s.Editor
@@ -156,6 +162,7 @@ const InfoPostPage = () => {
           wrapperStyle={{ fontSize: '14px' }}
           onChange={onChangeInput}
           name="is_anonymous"
+          checkBoxStyle={{ color: '#CBCDE9' }}
         />
       </s.Footer>
     </>

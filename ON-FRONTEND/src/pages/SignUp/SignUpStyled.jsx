@@ -135,10 +135,7 @@ export const PurpleButton = styled.button`
 `;
 export const InputWrapper = styled.div`
   color: black;
-
   width: 100%;
-  flex-direction: column;
-  flex-wrap: wrap;
   border-bottom: 1px solid #b0b0b0;
   justify-content: center;
   margin-top: 40px;
@@ -178,6 +175,9 @@ export const TransparentInput = styled.input`
   outline: none;
   padding: 0 0.06rem;
 
+  &:invalid {
+    background-color: #f3f3f3;
+  }
   &::placeholder {
     font-size: 0.75rem;
   }
@@ -189,6 +189,7 @@ export const TransparentInput = styled.input`
 `;
 
 export const GrayButton = styled.button`
+  flex-shrink: 0;
   background-color: #d0d0d0;
   color: white;
   font-size: 0.625rem;
@@ -239,6 +240,7 @@ export const StyledComboBox = styled.select`
 `;
 
 export const CenterContainer = styled.div`
+  box-sizing: border-box;
   width: 100%;
   height: auto;
   display: flex;

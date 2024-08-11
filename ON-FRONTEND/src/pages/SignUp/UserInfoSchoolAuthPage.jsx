@@ -2,20 +2,36 @@ import styled from 'styled-components';
 import * as s from './SignUpStyled';
 import groupLogo from '../../assets/images/groupLogo.svg';
 import addPhoto from '../../assets/images/addPhoto.svg';
-import { useNavigate } from 'react-router-dom';
-import {
-  userInfo,
-  UserList,
-} from '../../components/Common/TempDummyData/PostList';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { UserList } from '../../components/Common/TempDummyData/PostList';
+import { useState } from 'react';
 
 const UserInfoSchoolAuthPage = () => {
+  const userInfo = useLocation().state.value;
+  const [photoURL, setPhotoURL] = useState(null);
   const navigate = useNavigate();
-  const nav = () => {
-    userInfo.userid = userList.length;
-    UserList.push(userInfo); //DB 유저 리스트에 유저 추가
-    navigate('/signUp/complete');
-    console.log(userInfo);
+  const nav = (photo) => {
+    if (photo) {
+      UserList.unshift(userInfo); //DB 유저 리스트에 유저 추가
+      console.log(UserList);
+      navigate('/signUp/complete');
+      console.log(userInfo);
+    } else {
+      navigate('/signUp/notVerified', {
+        state: {
+          value: userInfo,
+          text: '파견교 인증을 건너뜁니다.',
+        },
+      });
+    }
   };
+  const onChangeImgFile = (fileList) => {
+    if (fileList[0]) {
+      console.log(fileList);
+      setPhotoURL(URL.createObjectURL(fileList[0]));
+    }
+  };
+
   return (
     <s.FormPage>
       <s.SectionWrapper>
@@ -47,7 +63,17 @@ const UserInfoSchoolAuthPage = () => {
             </s.InputWrapper>
           </fieldset>
           <s.CenterContainer>
-            <AddPhoto src={addPhoto} />
+            <label>
+              <input
+                accept=".jpg, .jpeg, .png"
+                type="file"
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  onChangeImgFile(e.target.files);
+                }}
+              />
+              <AddPhoto src={photoURL ? photoURL : addPhoto} />
+            </label>
           </s.CenterContainer>
         </s.ContentSection>
       </s.SectionWrapper>
@@ -56,11 +82,13 @@ const UserInfoSchoolAuthPage = () => {
         <s.TwoColumnWrapper>
           <s.PurpleButton
             style={{ backgroundColor: ' #d7dff4' }}
-            onClick={nav}
+            onClick={() => nav(photoURL)}
           >
             건너뛰기
           </s.PurpleButton>
-          <s.PurpleButton onClick={nav}>입력완료</s.PurpleButton>
+          <s.PurpleButton onClick={() => nav(photoURL)}>
+            입력완료
+          </s.PurpleButton>
         </s.TwoColumnWrapper>
       </s.ButtonSection>
     </s.FormPage>
@@ -74,4 +102,5 @@ const AddPhoto = styled.img`
   height: 310px;
   margin: 26px 40px;
   flex-shrink: 0;
+  object-fit: cover;
 `;

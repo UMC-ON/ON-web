@@ -14,12 +14,10 @@ const CommunityPost = ({ post }) => {
     post.commentList.forEach((comment) => {
       numOfComment += comment.replyList.length;
       numOfComment++;
-      console.log(numOfComment);
     });
     return numOfComment;
   };
 
-  console.log(post.img_id_list);
   return (
     <s.Post
       onClick={() =>
@@ -78,6 +76,7 @@ const ContentSection = styled.section`
   flex: auto;
   display: flex;
   flex-direction: row;
+  white-space: nowrap;
   justify-content: space-between;
   height: 90%;
   width: 100%;
@@ -119,11 +118,13 @@ const ContentWrapper = styled.div`
   width: 100%;
 `;
 const ContentImg = styled.img`
+  flex-shrink: 0;
   display: ${(props) => (props.showimg === 'true' ? 'inline' : 'none')};
   width: 82px;
   height: 82px;
   margin-left: 12px;
   border-radius: 0.5rem;
+  object-fit: cover;
 `;
 const TextContent = styled.span`
   display: -webkit-box;

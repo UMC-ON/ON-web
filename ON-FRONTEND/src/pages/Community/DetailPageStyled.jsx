@@ -298,6 +298,7 @@ export const ImgSection = styled.section`
   display: flex;
   flex-direction: row;
   justify-content: start;
+  flex-wrap: nowrap;
   gap: 1rem;
   padding-top: 1rem;
   overflow-x: scroll;
@@ -310,4 +311,5 @@ export const ContentImg = styled.img`
   width: 112px;
   height: 112px;
   object-fit: cover;
+  flex-shrink: 0;
 `;

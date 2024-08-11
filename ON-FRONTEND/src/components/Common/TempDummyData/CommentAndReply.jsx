@@ -1,5 +1,3 @@
-import { userInfo } from './PostList';
-
 export const Comment = {
   comment_id: null,
   post_id: null,

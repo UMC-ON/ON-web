@@ -22,6 +22,7 @@ import ScrapList from './pages/ScrapList.jsx';
 import SellPost from './pages/SellPostPage.jsx';
 import ItemDetailPage from './pages/ItemDetailPage.jsx';
 
+import NotVerifiedPage from './pages/SignUp/NotVerifiedPage.jsx';
 import TermsOfServicePage from './pages/SignUp/TermsOfServicePage.jsx';
 import UserInfoPage from './pages/SignUp/UserInfoPage.jsx';
 import UserInfoSchoolPage from './pages/SignUp/UserInfoSchoolPage.jsx';
@@ -46,6 +47,10 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Routes>
+        <Route
+          path="/signUp/notVerified"
+          element={<NotVerifiedPage />}
+        />
         <Route
           path="/signUp"
           element={<TermsOfServicePage />}

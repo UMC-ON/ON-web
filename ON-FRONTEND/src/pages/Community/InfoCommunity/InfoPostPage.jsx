@@ -2,15 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import * as s from '../PostPageStyled.jsx';
 import camera from '../../../assets/images/camera.svg';
 import DefaultCheckBox from '../../../components/DefaultCheckBox/DefaultCheckBox.jsx';
-import { useState, useRef } from 'react';
-import {
-  PostList,
-  userInfo,
-} from '../../../components/Common/TempDummyData/PostList.jsx';
-
-import styled from 'styled-components';
+import { useState, useRef, useEffect } from 'react';
+import { PostList } from '../../../components/Common/TempDummyData/PostList.jsx';
+import { useSelector } from 'react-redux';
 
 const InfoPostPage = () => {
+  const navigate = useNavigate();
+  const userInfo = useSelector((state) => state.user.user);
+
   const [input, setInput] = useState({
     board_id: 1,
     post_id: PostList.length + 1,
@@ -38,14 +37,12 @@ const InfoPostPage = () => {
 
   const onChangeImgFile = (fileList) => {
     if (fileList) {
-      console.log(fileList);
       const imgList = Array.from(fileList);
       const selectedFiles = imgList.map((file) => {
         return URL.createObjectURL(file);
       });
 
       images.current = images.current.concat(selectedFiles);
-      console.log(images.current);
       setInput({
         ...input,
         img_id_list: images.current,
@@ -53,11 +50,18 @@ const InfoPostPage = () => {
     }
   };
   const onSubmit = () => {
+    if (!input.title) {
+      alert('제목을 입력하세요');
+      return;
+    }
+    if (!input.content) {
+      alert('내용을 입력하세요');
+      return;
+    }
     PostList.unshift(input); //DB에 저장
 
     navigate('/community/info', { replace: true });
   };
-  const navigate = useNavigate();
 
   return (
     <>
@@ -104,7 +108,7 @@ const InfoPostPage = () => {
         <s.TitleSection>
           <s.HeadingTitle>제목</s.HeadingTitle>
           <s.EditorWrapper style={{ height: '38px' }}>
-            <s.Editor
+            <s.TitleEditor
               wrap="off"
               style={{ fontWeight: 'bold' }}
               name="title"
@@ -114,7 +118,7 @@ const InfoPostPage = () => {
         </s.TitleSection>
         <s.ContentSection>
           <s.HeadingTitle>내용</s.HeadingTitle>
-          <s.EditorWrapper style={{ minHeight: '585px' }}>
+          <s.EditorWrapper style={{ minHeight: '400px' }}>
             <s.Editor
               name="content"
               onChange={onChangeInput}

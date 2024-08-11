@@ -5,7 +5,6 @@ import plane from '../../../assets/images/detailPagePlane.svg';
 
 import {
   CommentList,
-  userInfo,
   PostList,
 } from '../../../components/Common/TempDummyData/PostList.jsx';
 import { showDispatchedUniv } from '../../../components/Common/InfoExp.jsx';
@@ -13,9 +12,11 @@ import { showDispatchedUniv } from '../../../components/Common/InfoExp.jsx';
 import Comment from '../../../components/Comment/Comment.jsx';
 
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const InfoDetailPage = () => {
+  const userInfo = useSelector((state) => state.user.user);
   const currentPost_id = useLocation().state.value; //post_id 정보만 받아오기
   //useLocation으로 post_id만 받아 온 뒤, postListDB에서 현재 포스트 찾아와 불러옴.
   //그 뒤에는 선택사항: commentList DB를 따로 사용하느냐,
@@ -51,7 +52,6 @@ const InfoDetailPage = () => {
     currentPost.commentList.forEach((comment) => {
       numOfComment += comment.replyList.length;
       numOfComment++;
-      console.log(numOfComment);
     });
     return numOfComment;
   };
@@ -69,15 +69,12 @@ const InfoDetailPage = () => {
     if (selectedComment === null) {
       setSelectedComment(e.target.comment);
       replyToText.current = `${e.target.writer}에게 답장`;
-      console.log(selectedComment);
     } else if (selectedComment === e.target.comment) {
       setSelectedComment(null);
       replyToText.current = null;
-      console.log(selectedComment);
     } else {
       setSelectedComment(e.target.comment);
       replyToText.current = `${e.target.writer}에게 답장`;
-      console.log(selectedComment);
     }
   };
   const onCommentSubmit = () => {
@@ -94,8 +91,6 @@ const InfoDetailPage = () => {
       value = [currentPost_id, currentPost.commentList.length + 1, []];
       pushList = currentCommentList;
     }
-
-    console.log(pushList);
 
     addComment(key, value, pushList);
     setContent('');
@@ -150,11 +145,6 @@ const InfoDetailPage = () => {
             {currentPost.is_anonymous
               ? '익명'
               : currentPost.writerInfo.nickName}
-          </s.InfoLabel>
-          <s.InfoLabel>
-            {currentPost.writerInfo.from}
-            <img src={plane} />
-            {currentPost.writerInfo.dispatched_country_id}
           </s.InfoLabel>
           <s.InfoLabel>
             {currentPost.createdDate.toLocaleString('ko-KR')}
@@ -223,7 +213,9 @@ const InfoDetailPage = () => {
           {replyToText.current}
           <s.CommentEditor
             className="commentEditor"
-            placeholder="댓글을 작성해주세요."
+            placeholder={
+              userInfo ? '댓글을 작성해주세요.' : '로그인이 필요합니다.'
+            }
             onInput={handleResizeHeight}
             rows={1}
             onChange={(e) => setContent(e.target.value)}
@@ -239,6 +231,7 @@ const InfoDetailPage = () => {
             }}
             value={content}
             ref={commentEditor}
+            disabled={!userInfo}
           />
         </s.EditorWrapper>
 

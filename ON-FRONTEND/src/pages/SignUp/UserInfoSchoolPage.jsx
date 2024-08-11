@@ -1,46 +1,66 @@
 import styled from 'styled-components';
 import * as s from './SignUpStyled';
 import groupLogo from '../../assets/images/groupLogo.svg';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox';
-import { useState, useRef } from 'react';
-import { userInfo } from '../../components/Common/TempDummyData/PostList';
+import { useState, useEffect } from 'react';
 
 const UserInfoSchoolPage = () => {
-  const navigate = useNavigate();
-  const nav = () => {
-    userInfo.dispatched_univ = univ.current.value;
-    userInfo.dispatched_country_id = dispatched_country.current.value;
-    userInfo.dispatched_type = dispatched_type.current.value;
-    userInfo.is_dispatch_confirmed = isConfirmed;
-    navigate('/signUp/userInfo_schoolAuth');
-  };
+  const prevUserInfo = useLocation().state.value;
 
-  const univ = useRef('');
-  const univ_link = useRef('');
-  const dispatched_country = useRef('');
-  const dispatched_type = useRef('');
   const [isDisabled, setDisabled] = useState(true);
   const [isConfirmed, setIsConfirmed] = useState(true);
-
-  const onClickIsConfirmed = (e) => {
-    if (e.target.value) {
-      univ.current.value = '';
-      univ_link.current.value = '';
-      console.log(dispatched_type.current.value);
-      dispatched_type.current = '';
+  const [userInfo, setUserInfo] = useState({
+    ...prevUserInfo,
+    is_dispatch_confirmed: false,
+    dispatched_univ: '',
+    univ_homepage: '',
+    dispatched_country_id: '',
+    dispatched_type: '',
+    start_date: '',
+    is_verified: false,
+  });
+  const navigate = useNavigate();
+  const nav = (confirmed) => {
+    if (confirmed) {
+      navigate('/signUp/userInfo_schoolAuth', { state: { value: userInfo } });
     } else {
+      navigate('/signUp/notVerified', {
+        state: { value: userInfo, text: '파견교 미정을 선택하셨습니다.' },
+      });
     }
-    setDisabled(!isConfirmed); //useState의 비동기성 때문에 미리 해준다
-    setIsConfirmed(!e.target.value);
   };
-  const onChangeHandler = () => {
-    console.log(univ.current.value);
-    if (univ.current.value && dispatched_country.current.value) {
-      setDisabled(false);
+  useEffect(() => {
+    //useState의 비동기적..때문에
+    if (
+      !isConfirmed || //미정이거나
+      !(!userInfo.dispatched_univ || !userInfo.dispatched_country_id) //확정이고 필수란 채운 경우
+    ) {
+      setDisabled(false); //다음단계 활성화
     } else {
       setDisabled(true);
     }
+  }, [userInfo]);
+
+  const onClickDsptchNotConfirmed = (e) => {
+    if (e.target.value) {
+      userInfo.dispatched_univ = '미정';
+      userInfo.univ_homepage = '미정';
+      userInfo.dispatched_country_id = '미정';
+      userInfo.dispatched_type = '미정';
+    } else {
+    }
+    setDisabled(!isConfirmed); //useState의 비동기성 때문에?.. 교환 확정이면 비활성화
+    setIsConfirmed(!e.target.value);
+  };
+  const onChangeHandler = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+
+    setUserInfo({
+      ...userInfo,
+      [name]: value,
+    });
   };
   return (
     <s.FormPage>
@@ -68,8 +88,8 @@ const UserInfoSchoolPage = () => {
               </div>
               <s.TransparentInput
                 placeholder="학교의 공식 영문명을 작성해주세요"
+                name="dispatched_univ"
                 onChange={onChangeHandler}
-                ref={univ}
                 disabled={!isConfirmed}
               />
             </s.InputWrapper>
@@ -85,15 +105,17 @@ const UserInfoSchoolPage = () => {
                 height: '11px',
                 borderRadius: '3px',
               }}
-              onChange={onClickIsConfirmed}
+              onChange={onClickDsptchNotConfirmed}
+              name="is_dispatch_confirmed"
             />
 
             <s.InputWrapper style={{ opacity: isConfirmed ? '100%' : '50%' }}>
               <div>교환/방문교 홈페이지 링크 </div>
               <s.TransparentInput
                 placeholder="교환/방문교의 웹 사이트 주소를 붙여넣기 해주세요."
-                ref={univ_link}
                 disabled={!isConfirmed}
+                onChange={onChangeHandler}
+                name="univ_homepage"
               />
             </s.InputWrapper>
             <s.Explanation style={{ fontSize: '9px' }}>
@@ -110,9 +132,9 @@ const UserInfoSchoolPage = () => {
               <div className="required">교환/방문교 소재 국가</div>
               <s.SchoolComboBox
                 defaultValue={''}
-                ref={dispatched_country}
                 onChange={onChangeHandler}
                 disabled={!isConfirmed}
+                name="dispatched_country_id"
               >
                 <option
                   value=""
@@ -183,7 +205,7 @@ const UserInfoSchoolPage = () => {
 
       <s.ButtonSection>
         <s.PurpleButton
-          onClick={nav}
+          onClick={() => nav(isConfirmed)}
           disabled={isDisabled}
         >
           다음단계

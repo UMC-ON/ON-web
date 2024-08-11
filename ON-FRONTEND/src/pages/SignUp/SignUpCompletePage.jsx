@@ -2,14 +2,27 @@ import * as s from './SignUpStyled';
 import groupLogo from '../../assets/images/groupLogo.svg';
 import { useNavigate } from 'react-router-dom';
 import SignUpCompleteImg from '../../assets/images/SignUpCompleteImg.svg';
-import { userInfo } from '../../components/Common/TempDummyData/PostList';
+import { UserList } from '../../components/Common/TempDummyData/PostList';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../redux/actions';
 
 const SignUpCompletePage = () => {
   const navigate = useNavigate();
   const nav = () => {
-    console.log(userInfo);
+    handleCompleteSignup();
     navigate('/');
   };
+
+  const dispatch = useDispatch();
+
+  const handleCompleteSignup = () => {
+    const userInfo = UserList[0];
+    console.log(userInfo);
+
+    // Redux 스토어에 user 정보 저장
+    dispatch(setUser(userInfo));
+  };
+
   return (
     <s.FormPage>
       <s.SectionWrapper>

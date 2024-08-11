@@ -8,12 +8,16 @@ export const showWriter = (comment = null, postWriter_id = '') => {
   }
 };
 
-//파견교 정보
-export const showDispatchedUniv = (writerInfo, is_anonymous) => {
+//파견교 정보: 비공개 vs 공개(미정vs확정)
+export const showDispatchedUniv = (writerInfo, is_anonymous = false) => {
   if (is_anonymous) {
     return '파견교 비공개';
   } else {
-    return `${writerInfo.dispatched_country_id} ${writerInfo.dispatched_univ}`;
+    if (writerInfo.is_dispatch_confirmed) {
+      return `${writerInfo.dispatched_country_id} ${writerInfo.dispatched_univ}`;
+    } else {
+      return '파견 미정';
+    }
   }
 };
 

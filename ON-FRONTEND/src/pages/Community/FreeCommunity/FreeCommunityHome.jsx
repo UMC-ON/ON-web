@@ -2,25 +2,34 @@ import styled from 'styled-components';
 import * as s from '../CommunityStyled.jsx';
 
 import PageHeader from '../../../components/PageHeader/PageHeader.jsx';
-import CustomSlider from '../../../components/Slider/CustomSlider.jsx';
+import DotInsideSlider from '../../../components/DotInsideSlider.jsx';
 import CommunityPost from '../../../components/CommunityPost/CommunityPost.jsx';
 import FilterButton from '../../../components/FilterButton/FilterButton.jsx';
 
 import communityBannerImg from '../../../assets/images/communityBannerImg.svg';
 import pencilImg from '../../../assets/images/pencil.svg';
 import gradientRec from '../../../assets/images/gradientRec.svg';
-import { useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import { CountryList } from '../../../components/CountryList.jsx';
 
 import { PostList } from '../../../components/Common/TempDummyData/PostList.jsx';
-import { Post } from '../../../components/CommunityPost/CommunityPostStyled.jsx';
+import { useSelector } from 'react-redux';
 
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 
 const InfoCommunityHome = () => {
+  const userInfo = useSelector((state) => state.user);
   const navigate = useNavigate();
   const nav = () => {
+    if (!userInfo) {
+      if (confirm('로그인이 필요합니다.')) {
+        navigate('/signUp');
+        return null;
+      } else {
+        return null;
+      }
+    }
     navigate('./post');
   };
   const mylist = [1, 2, 3, 4, '와진짜개짱짱긴텍스트'];
@@ -36,10 +45,7 @@ const InfoCommunityHome = () => {
           color="#6458BF"
         ></PageHeader>
         <s.SliderWrapper>
-          <CustomSlider
-            images={images}
-            height={'172'}
-          ></CustomSlider>
+          <DotInsideSlider images={images}></DotInsideSlider>
         </s.SliderWrapper>
 
         <s.FilterSection>
