@@ -135,6 +135,14 @@ function CommunityHomePage() {
     navigate('/accompany');
   }
 
+  function goToGeneralPost() {
+    navigate("/community/general/post");
+  }
+
+  function goToInfoPost() {
+    navigate("/community/info/post");
+  }
+
   return (
     <>
       <NavBar />
@@ -142,7 +150,7 @@ function CommunityHomePage() {
 
       <RoundContainer>
         <Container>
-          <Button>
+          <Button onClick={goToInfoPost}>
             <Icon
               src={informationIcon}
               alt="Information Icon"
@@ -150,7 +158,7 @@ function CommunityHomePage() {
             <SubText>정보글</SubText>
             <SubText>쓰기</SubText>
           </Button>
-          <Button>
+          <Button onClick={goToGeneralPost}>
             <Icon
               src={writeIcon}
               alt="Write Icon"
@@ -197,7 +205,7 @@ function CommunityHomePage() {
 
       <SmallSpace />
 
-      <FlexContainer>
+      <FlexContainer onClick={() => navigate('/accompany')}>
         <Span>
           <RoundIcon src={accompanyCircleIcon} />
           <MiddleText spacing="1vh">동행 구하기</MiddleText>
