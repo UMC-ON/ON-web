@@ -14,6 +14,8 @@ import purplePlusButton from '../assets/images/purplePlusButton.svg';
 import CustomCheckbox from '../components/CustomCheckBox';
 import CameraBottom from '../components/CameraBottom';
 import DateRangePicker from '../components/CompanyCalendar/CompanyCalendar.jsx';
+import SelectCountry from './SelectCountry/SelectCountry.jsx';
+import SelectCity from './SelectCity/SelectCity.jsx';
 
 
 function AccompanyPostPage() {
@@ -28,6 +30,19 @@ function AccompanyPostPage() {
     const [isDateClicked, setIsDateClicked] = useState(false);
     const [showCalendar, setShowCalendar] = useState(false);
     const [personValue, setPersonValue] = useState(0);
+
+    const [showCountry, setShowCountry] = useState(false);
+    const [country, setCountry] = useState(null);
+    const [isCountryClicked, setIsCountryClicked] = useState(false);
+
+    const [showCity, setShowCity] = useState(false);
+    const [city, setCity] = useState(null);
+
+    const [showCity2, setShowCity2] = useState(false);
+    const [city2, setCity2] = useState(null);
+
+    const [isCityClicked, setIsCityClicked] = useState(false);
+    const [isCityClicked2, setIsCityClicked2] = useState(false);
 
     const minusSrc = (daysDifference == 0) ? greyMinusButton : minusButton;
     const plusSrc = (daysDifference == limitDays) ? greyPlusButton : plusButton;
@@ -88,6 +103,24 @@ function AccompanyPostPage() {
       setShowCalendar(false);
     };
 
+    const handleGetCountry = (country) => {
+      setCountry(country);
+      setIsCountryClicked(true);
+      setShowCountry(false);
+    };
+
+    const handleGetCity = (city) => {
+      setCity(city);
+      setIsCityClicked(true);
+      setShowCity(false);
+    };
+
+    const handleGetCity2 = (city) => {
+      setCity2(city);
+      setIsCityClicked2(true);
+      setShowCity2(false);
+    };
+
     const checkAge = (e) => {
       setAgeChecked(e.target.checked);
     };
@@ -106,6 +139,18 @@ function AccompanyPostPage() {
       setShowCalendar(!showCalendar);
     };
 
+    const handleCountryClick = () => {
+      setShowCountry(!showCountry);
+    };
+
+    const handleCityClick = () => {
+      setShowCity(!showCity);
+    };
+
+    const handleCityClick2 = () => {
+      setShowCity2(!showCity2);
+    };
+    
     return (
       <>
         <RightContainer>
@@ -140,9 +185,16 @@ function AccompanyPostPage() {
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>현재 국가 : </BlackText>
-                    <CircleContainer>독일
-                        <SmallIcon src={postIcon} $left="5px"/>
-                    </CircleContainer>
+                    {!isCountryClicked && (
+                      <CircleContainer onClick={handleCountryClick}>독일
+                      <SmallIcon src={postIcon} $left="5px"/>
+                      </CircleContainer>
+                    )}
+                    {isCountryClicked && (
+                      <CircleContainer onClick={handleCountryClick}>{`${country}`}
+                      <SmallIcon src={postIcon} $left="5px"/>
+                      </CircleContainer>
+                    )}
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>파견교 : </BlackText>
@@ -157,7 +209,24 @@ function AccompanyPostPage() {
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>여행 지역 : </BlackText>
-                    <PlusButton src={plusButton}/>
+                    {!isCityClicked && (
+                      <PlusButton src={plusButton} onClick={handleCityClick}/>
+                    )}
+                    {isCityClicked && (
+                      <>
+                      <CircleContainer onClick={handleCityClick}>{`${city}`}
+                      <SmallIcon src={postIcon} $left="5px"/>
+                      </CircleContainer>
+                        {!isCityClicked2 && (
+                          <PlusButton src={plusButton} onClick={handleCityClick2}/>
+                        )}
+                        {isCityClicked2 && (
+                          <CircleContainer onClick={handleCityClick2}>{`${city2}`}
+                          <SmallIcon src={postIcon} $left="5px"/>
+                          </CircleContainer>
+                        )}
+                      </>
+                    )}
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>예상 일정 : </BlackText>
@@ -197,6 +266,24 @@ function AccompanyPostPage() {
               <LabelText2>일정이 확정되지 않았다면 범위를 넓게 설정할 수 있어요.</LabelText2>
               <DateRangePicker onApply={handleApplyClick}/>
             </BottomTabLayout>
+          </>
+        }
+
+        { showCountry &&
+          <>
+            <SelectCountry closeModal={handleCountryClick} getCountry={handleGetCountry}/>
+          </>
+        }
+
+        { showCity &&
+          <>
+            <SelectCity closeModal={handleCityClick} getCity={handleGetCity}/>
+          </>
+        }
+
+        { showCity2 &&
+          <>
+            <SelectCity closeModal={handleCityClick2} getCity={handleGetCity2}/>
           </>
         }
 

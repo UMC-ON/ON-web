@@ -15,7 +15,7 @@ import closeIcon from '../assets/images/close_button.svg';
 import whiteCloseIcon from '../assets/images/whiteCloseIcon.svg';
 import resetIcon from '../assets/images/resetIcon.svg';
 
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
 
 const images = [bannerImg, bannerImg, bannerImg, bannerImg, bannerImg];
@@ -81,6 +81,7 @@ const accompanyCards = [
 const AccompanyHomeComponent = 
 ({ startDate, endDate, isDateClicked, calendarClick, updateIsDateClicked, 
     genderClick, gender, isGenderClicked, updateIsGenderClicked,
+    countryClick, country, isCountryClicked, updateIsCountryClicked,
     updateEverything
     }) => {
 
@@ -97,6 +98,10 @@ const AccompanyHomeComponent =
         updateIsGenderClicked();
     };
 
+    const resetCountry = () => {
+      updateIsCountryClicked();
+  };
+
     const resetEverything = () => {
         updateEverything();
     };
@@ -109,10 +114,10 @@ const AccompanyHomeComponent =
           <DotInslideSlider images={images} />
           <SmallSpace />
     
-          <RoundContainer $isDateClicked={isDateClicked} $isGenderClicked={isGenderClicked}>
+          <RoundContainer $isDateClicked={isDateClicked} $isGenderClicked={isGenderClicked} $isCountryClicked={isCountryClicked}>
             <FlexContainer>
               <Span>
-              {isDateClicked || isGenderClicked ? (
+              {isDateClicked || isGenderClicked || isCountryClicked ? (
               <Icon src={resetIcon} size={'25px'} $right={'7px'} onClick={resetEverything}/>
                 ) : null}
 
@@ -128,9 +133,16 @@ const AccompanyHomeComponent =
                    )}
                 </GreyPicker>
 
-                <GreyPicker>
-                  국가
-                  <Icon src={arrowIcon} />
+                <GreyPicker $isCountryClicked={isCountryClicked}>
+                  <span onClick={countryClick}>
+                  {country ? `${country}` : '국가'}
+                  {!isCountryClicked && (
+                        <Icon src={arrowIcon} />
+                   )}
+                  </span>
+                  {isCountryClicked && (
+                        <Icon src={whiteCloseIcon} onClick={resetCountry}/>
+                   )}
                 </GreyPicker>
 
                 <GreyPicker $isGenderClicked={isGenderClicked}>
@@ -146,7 +158,7 @@ const AccompanyHomeComponent =
                 </GreyPicker>
 
               </Span>
-              {!isDateClicked && !isGenderClicked ? (
+              {!isDateClicked && !isGenderClicked && !isCountryClicked ? (
               <Icon src={searchIcon} size={'25px'} />
               ) : null }
             </FlexContainer>
@@ -194,7 +206,7 @@ const Icon = styled.img`
 const RoundContainer = styled.div`
     margin: 0 auto;
     width: 90%;
-    box-shadow: ${props => props.$isDateClicked || props.$isGenderClicked ? 'none' : '0 4px 8px rgba(0, 0, 0, 0.1)'};
+    box-shadow: ${props => props.$isDateClicked || props.$isGenderClicked || props.$isCountryClicked ? 'none' : '0 4px 8px rgba(0, 0, 0, 0.1)'};
     padding: 8px;
     border-radius: 18px;
 `;
@@ -208,8 +220,8 @@ const GreyPicker = styled.div`
   padding-left: 8px;
   padding-right: 8px;
   margin-right: 8px;
-  color: ${props => props.$isDateClicked || props.$isGenderClicked ? '#FFFFFF' : '#363636'};
-  background: ${props => props.$isDateClicked || props.$isGenderClicked ?  'linear-gradient(135deg, #C2C7FF, #AD99FF);' : ''};
+  color: ${props => props.$isDateClicked || props.$isGenderClicked || props.$isCountryClicked ? '#FFFFFF' : '#363636'};
+  background: ${props => props.$isDateClicked || props.$isGenderClicked || props.$isCountryClicked ?  'linear-gradient(135deg, #C2C7FF, #AD99FF);' : ''};
 `;
 
 const SmallSpace = styled.div`

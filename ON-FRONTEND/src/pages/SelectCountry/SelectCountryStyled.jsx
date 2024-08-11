@@ -1,17 +1,57 @@
 import styled from 'styled-components';
+import theme from '../../styles/theme';
+
+export const PageHeaderLayout = styled.div`
+  width: 100%;
+  max-width: 480px;
+  height: 61px;
+  position: fixed;
+  z-index: 2;
+  display: flex;
+  top: 0;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: solid ${theme.lightGray};
+  border-width: 0.5px 0;
+  box-sizing: border-box;
+  padding: 0 17px 0 17px;
+`;
+export const BackButton = styled.div`
+  position: absolute;
+  left: 17px;
+`;
+export const PageName = styled.p`
+  text-align: center;
+  font-family: Inter;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+`;
+
 
 export const PageLayout = styled.div`
   width: 100%;
-  height: 100%;
-  display: flex;
+  max-height: 100vh; /* Ensures the container does not exceed viewport height */
   box-sizing: border-box;
   padding: 61px 0 0px;
-  /* justify-content: center; */
-  align-items: center;
+  align-items: flex-start; /* Align content to the top (if justify-content is used) */
   flex-direction: column;
+  background-color: white;
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  overflow-y: auto; /* Enables vertical scrolling */
 `;
+
 export const ContinentWrapper = styled.div`
   width: 100%;
+  background-color: white;
 `;
 
 export const ContinentTitle = styled.p`

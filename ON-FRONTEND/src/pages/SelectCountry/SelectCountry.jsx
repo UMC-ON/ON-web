@@ -14,18 +14,18 @@ import { useLocation } from 'react-router-dom';
   selectedCountry는 필요에 따라서 useState로 구현하는것도 추천
   */
 
-const SelectCountry = () => {
+const SelectCountry = ({ closeModal, getCountry }) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const [prevURL, setPrevURL] = useState('');
+  // const [prevURL, setPrevURL] = useState('');
 
-  const navigate = useNavigate();
-  const location = useLocation();
+  // const navigate = useNavigate();
+  // const location = useLocation();
 
-  useEffect(() => {
-    const { url } = location.state || {};
-    console.log('이전 페이지:' + url);
-    setPrevURL(url);
-  }, []);
+  // useEffect(() => {
+  //   const { url } = location.state || {};
+  //   console.log('이전 페이지:' + url);
+  //   setPrevURL(url);
+  // }, []);
 
   // // Set 객체를 사용하여 중복된 나라를 제거
   // const uniqueCountries = Array.from(new Set(cities.map((e) => e.country))).map(
@@ -47,29 +47,51 @@ const SelectCountry = () => {
     setSelectedCountry(
       selectedCountry === country.country ? null : country.country,
     );
-    navigate(prevURL, { state: { selectedCountry: country.country } });
-    console.log('Navigating with country:', country.country);
+    console.log(country.country);
+    getCountry(country.country);
+    // navigate(prevURL, { state: { selectedCountry: country.country } });
+    // console.log('Navigating with country:', country.country);
+    closeModal;
   };
 
   return (
-    <s.PageLayout>
-      <PageHeader pageName={'국가 선택'} />
-      {Object.entries(continents).map(([continent, countries]) => (
-        <s.ContinentWrapper key={continent}>
-          <s.ContinentTitle>{continent}</s.ContinentTitle>
-          {countries.map((country) => (
-            <s.SingleCountryContainer
-              key={country.id}
-              onClick={() => handleCountryClick(country)}
+      <s.PageLayout>
+        <s.PageHeaderLayout>
+          <s.BackButton onClick={closeModal}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="10"
+              height="16"
+              viewBox="0 0 10 16"
+              fill="none"
+              positions="fixed"
             >
-              {console.log(country.country)}
-              <s.Flag>{countryFlags[country.country]}</s.Flag>
-              <s.Country>{country.country}</s.Country>
-            </s.SingleCountryContainer>
-          ))}
-        </s.ContinentWrapper>
-      ))}
-    </s.PageLayout>
+              <path
+                d="M8 2L1.8858 7.24074C1.42019 7.63984 1.42019 8.36016 1.8858 8.75926L8 14"
+                stroke="#7A7A7A"
+                strokeWidth="3"
+                strokeLinecap="round"
+              />
+            </svg>
+          </s.BackButton>
+          <s.PageName style={{ color: '#3E73B2' }}>국가 선택</s.PageName>
+        </s.PageHeaderLayout>
+        {Object.entries(continents).map(([continent, countries]) => (
+          <s.ContinentWrapper key={continent}>
+            <s.ContinentTitle>{continent}</s.ContinentTitle>
+            {countries.map((country) => (
+              <s.SingleCountryContainer
+                key={country.id}
+                onClick={() => handleCountryClick(country)}
+              >
+                {console.log(country.country)}
+                <s.Flag>{countryFlags[country.country]}</s.Flag>
+                <s.Country>{country.country}</s.Country>
+              </s.SingleCountryContainer>
+            ))}
+          </s.ContinentWrapper>
+        ))}
+      </s.PageLayout>
   );
 };
 

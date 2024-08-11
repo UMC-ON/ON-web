@@ -6,6 +6,7 @@ import AccompanyHomeComponent from '../components/AccompanyHomeComponent';
 import DateRangePicker from '../components/CompanyCalendar/CompanyCalendar.jsx';
 import closeIcon from '../assets/images/close_button.svg';
 import GenderChoice from '../components/GenderChoice.jsx';
+import SelectCountry from './SelectCountry/SelectCountry.jsx';
 
 function AccompanyPage() {
     const [startDate, setStartDate] = useState(null);
@@ -16,6 +17,10 @@ function AccompanyPage() {
     const [showGender, setShowGender] = useState(false);
     const [gender, setGender] = useState(null);
     const [isGenderClicked, setIsGenderClicked] = useState(false);
+
+    const [showCountry, setShowCountry] = useState(false);
+    const [country, setCountry] = useState(null);
+    const [isCountryClicked, setIsCountryClicked] = useState(false);
 
     const handleIsDateClickedChange = () => {
       setIsDateClicked(false);
@@ -28,9 +33,15 @@ function AccompanyPage() {
       setGender(null);
     };
 
+    const resetCountryClick = () => {
+      setIsCountryClicked(false);
+      setCountry(null);
+    };
+
     const handleResetAll = () => {
       handleIsDateClickedChange();
       resetGenderClick();
+      resetCountryClick();
     };
 
     const handleApplyClick = (start, end) => {
@@ -46,12 +57,22 @@ function AccompanyPage() {
       setShowGender(false);
     };
 
+    const handleGetCountry = (country) => {
+      setCountry(country);
+      setIsCountryClicked(true);
+      setShowCountry(false);
+    };
+
     const handleCalendarClick = () => {
       setShowCalendar(!showCalendar);
     };
 
     const handleGenderClick = () => {
       setShowGender(!showGender);
+    };
+
+    const handleCountryClick = () => {
+      setShowCountry(!showCountry);
     };
 
     return (
@@ -66,6 +87,10 @@ function AccompanyPage() {
           gender={gender}
           isGenderClicked={isGenderClicked}
           updateIsGenderClicked={resetGenderClick}
+          countryClick={handleCountryClick}
+          country={country}
+          isCountryClicked={isCountryClicked}
+          updateIsCountryClicked={resetCountryClick}
           updateEverything={handleResetAll}
         />
         
@@ -90,6 +115,10 @@ function AccompanyPage() {
               <GenderChoice getGender={handleGetGender}/>
             </BottomTabLayout>
           </>
+        }
+
+        {showCountry &&
+          <SelectCountry closeModal={handleCountryClick} getCountry={handleGetCountry}/>
         }
       </>
     );
