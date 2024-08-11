@@ -16,6 +16,8 @@ import AccompanyHeader from '../components/AccompanyHeader';
 import FirstModal from '../components/FirstModal';
 import SecondModal from '../components/SecondModal';
 import LoadingScreen from '../components/LoadingScreen';
+import ReportModal from '../components/ReportModal';
+import ShareModal from '../components/ShareModal';
 
 const accompanycards = [
   {
@@ -58,6 +60,8 @@ function AccompanyDetailPage() {
 
   const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -79,6 +83,26 @@ function AccompanyDetailPage() {
   const closeSecondModal = () => {
     console.log("Second modal closed");
     setIsSecondModalOpen(false);
+  };
+
+  const openReportModal = () => {
+    console.log("Report modal opened");
+    setIsReportModalOpen(true);
+  };
+
+  const closeReportModal = () => {
+    console.log("Report modal closed");
+    setIsReportModalOpen(false);
+  };
+
+  const openShareModal = () => {
+    console.log("Share modal opened");
+    setIsShareModalOpen(true);
+  };
+
+  const closeShareModal = () => {
+    console.log("Share modal closed");
+    setIsShareModalOpen(false);
   };
 
   const handleBlueButtonClick = () => {
@@ -104,7 +128,7 @@ function AccompanyDetailPage() {
         <LoadingScreen/>
       ) : (
         <>
-        <AccompanyHeader/>
+        <AccompanyHeader openModal={openShareModal}/>
         <Space/>
         <BannerContainer>
           <BannerImg src={detailImg} alt="Banner" />
@@ -156,7 +180,7 @@ function AccompanyDetailPage() {
         </PurpleContainer>
 
         <Left>
-        <LittleButton>이 게시물 신고하기</LittleButton>
+        <LittleButton onClick={openReportModal}>이 게시물 신고하기</LittleButton>
         </Left>
 
         <Line/>
@@ -180,6 +204,8 @@ function AccompanyDetailPage() {
         <FirstModal closeModal={closeFirstModal} openNextModal={handleBlueButtonClick} />
         )}
         {isSecondModalOpen && <SecondModal closeModal={closeSecondModal} />}
+        {isReportModalOpen && <ReportModal closeModal={closeReportModal} />}
+        {isShareModalOpen && <ShareModal closeModal={closeShareModal} />}
       </>
       )}
       </>

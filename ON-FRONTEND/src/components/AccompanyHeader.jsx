@@ -6,7 +6,7 @@ import theme from '../styles/theme';
 import shareIcon from '../assets/images/share_icon.svg';
 
 
-const AccompanyHeader = () => {
+const AccompanyHeader = ({openModal, closeModal}) => {
 
   const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ const AccompanyHeader = () => {
         </svg>
       </BackButton>
 
-      <RightButton src={shareIcon}/>
+      <RightButton src={shareIcon} onClick={openModal}/>
 
     </PageHeaderLayout>
     </>

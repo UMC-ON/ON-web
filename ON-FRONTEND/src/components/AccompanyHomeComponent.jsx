@@ -22,6 +22,7 @@ const images = [bannerImg, bannerImg, bannerImg, bannerImg, bannerImg];
 
 const accompanyCards = [
   {
+    isClosed: true,
     image: marketImg,
     title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!🔥🔥',
     date: '8/2',
@@ -33,6 +34,7 @@ const accompanyCards = [
     gender: '여',
   },
   {
+    isClosed: false,
     image: marketImg,
     title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!🔥🔥',
     date: '8/2',
@@ -44,6 +46,7 @@ const accompanyCards = [
     gender: '여',
   },
   {
+    isClosed: false,
     image: marketImg,
     title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!🔥🔥',
     date: '8/2',
@@ -55,6 +58,7 @@ const accompanyCards = [
     gender: '여',
   },
   {
+    isClosed: false,
     image: marketImg,
     title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!🔥🔥',
     date: '8/2',
@@ -66,6 +70,7 @@ const accompanyCards = [
     gender: '여',
   },
   {
+    isClosed: false,
     image: marketImg,
     title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!🔥🔥',
     date: '8/2',

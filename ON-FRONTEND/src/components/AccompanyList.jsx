@@ -39,6 +39,7 @@ function AccompanyList({datas}) {
                     <SmallGreyText>{data.gender}</SmallGreyText>
               </Left>
             </TextContainer>
+            <Overlay $isClosed={data.isClosed} />
         </RoundContainer>
         ))}
       </>
@@ -95,6 +96,7 @@ const GreyMiddleText = styled.p`
 `;
 
 const RoundContainer = styled.div`
+  position: relative;
   margin: 0 auto;
   width: 90%;
   border-radius: 20px;
@@ -133,5 +135,17 @@ const CardName = styled.p`
   padding-bottom: 10px;
   color: #363636;
   width: 98%;
+`;
+
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to right, rgba(208,214,218,0.5), rgba(231,235,237,0.5), rgba(255,255,255,0.5));
+  display: ${(props) => (props.$isClosed ? 'block' : 'none')};
+  border-radius: 20px;
+  z-index: 10; 
 `;
 

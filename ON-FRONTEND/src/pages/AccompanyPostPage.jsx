@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, {useState, useEffect} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
@@ -9,6 +9,7 @@ import greyMinusButton from '../assets/images/greyMinusButton.svg';
 import minusButton from '../assets/images/minusButton.svg';
 import plusButton from '../assets/images/plusButton.svg';
 import closeIcon from '../assets/images/close_button.svg';
+import cameraIcon from '../assets/images/camera_icon.svg';
 import purplePlusButton from '../assets/images/purplePlusButton.svg';
 
 import CustomCheckbox from '../components/CustomCheckBox';
@@ -149,6 +150,29 @@ function AccompanyPostPage() {
 
     const handleCityClick2 = () => {
       setShowCity2(!showCity2);
+    };
+
+    const fileInputRef = useRef(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null);
+    const [fileSize, setFileSize] = useState(null);
+
+    const handleButtonClick = () => {
+      fileInputRef.current.click();
+    };
+
+    const handleFileChange = (event) => {
+      const file = event.target.files[0];
+      setSelectedFile(file);
+      setFileSize((file.size / 1024).toFixed(2));
+      // send to server
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewUrl(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
     };
     
     return (
@@ -306,8 +330,30 @@ function AccompanyPostPage() {
 
         <GreyInput placeholder='요청사항과 동행인에게 하고 싶은 말을 적어주세요. ' $height="30vh"/>
 
+
+        <HiddenFileInput
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="image/*"
+        />
+        {previewUrl && 
+          <>
+            <ImagePreview src={previewUrl}/>
+
+            <Right>
+            <SmallGreyText>({fileSize} KB)</SmallGreyText>
+            </Right>
+          </>
+        }
+
         <Space/>
-        <CameraBottom/>
+        
+
+
+        <BottomTabLayout2>
+            <LeftButton src={cameraIcon} onClick={handleButtonClick}/>
+        </BottomTabLayout2>
       </>
     );
 }
@@ -327,7 +373,7 @@ const LeftSpace = styled.section`
 `;
 
 const Space = styled.section`
-  margin-bottom: 10vh;
+  margin-bottom: 15vh;
 `;
 
 const CircleContainer = styled.section`
@@ -543,4 +589,54 @@ const CircleButton = styled.img`
 const MarginLeft = styled.div`
   margin-left: 90px;
   margin-top: 30px;
+`;
+
+
+export const LeftButton = styled.img`
+  position: absolute;
+  left: 25px;
+`;
+
+
+const BottomTabLayout2 = styled.div`
+  width: 100%;
+  max-width: 480px;
+  height: 87px;
+  position: fixed;
+  bottom: 0;
+  border-radius: 14px 14px 0px 0px;
+  border: 1px solid white;
+  background: #ffffff;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0px 32px 30px 32px;
+  box-shadow: 0px -1px 4px 4px #e2e2e2;
+`;
+
+const HiddenFileInput = styled.input`
+  display: none;
+`;
+
+const ImagePreview = styled.img`
+  max-width: 90%;
+  height: auto;
+  border-radius: 10px;
+`;
+
+const Right = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: ${props => props.$bottom || '0'};
+`;
+
+const SmallGreyText = styled.div`
+  color: ${props => props.$color || '#838383'};
+  font-family: Inter;
+  font-size: ${props => props.$size || '0.875rem'};
+  margin-top: ${props => props.$top || '1vh'};
+  margin-left: ${props => props.$left || '0'};
+  margin-right: 1.5rem;
 `;
