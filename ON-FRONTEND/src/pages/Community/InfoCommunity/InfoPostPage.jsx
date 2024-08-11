@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 
 const InfoPostPage = () => {
   const navigate = useNavigate();
-  const userInfo = useSelector((state) => state.user);
+  const userInfo = useSelector((state) => state.user.user);
 
   const [input, setInput] = useState({
     board_id: 1,

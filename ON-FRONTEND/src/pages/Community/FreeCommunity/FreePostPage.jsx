@@ -2,12 +2,13 @@ import { useNavigate } from 'react-router-dom';
 import * as s from '../PostPageStyled.jsx';
 import camera from '../../../assets/images/camera.svg';
 import DefaultCheckBox from '../../../components/DefaultCheckBox/DefaultCheckBox.jsx';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { PostList } from '../../../components/Common/TempDummyData/PostList.jsx';
 import { useSelector } from 'react-redux';
 
 const InfoPostPage = () => {
-  const userInfo = useSelector((state) => state.user);
+  const userInfo = useSelector((state) => state.user.user);
+
   const [input, setInput] = useState({
     board_id: 2,
     post_id: PostList.length + 1,

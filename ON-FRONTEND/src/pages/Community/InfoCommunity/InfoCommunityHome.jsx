@@ -23,9 +23,12 @@ const InfoCommunityHome = () => {
   const navigate = useNavigate();
   const nav = () => {
     if (!userInfo) {
-      alert('로그인이 필요합니다.');
-      navigate('/signUp');
-      return null;
+      if (confirm('로그인이 필요합니다.')) {
+        navigate('/signUp');
+        return null;
+      } else {
+        return null;
+      }
     }
     navigate('./post');
   };

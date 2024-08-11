@@ -1,7 +1,8 @@
 import { SET_USER, CLEAR_USER } from './actionTypes';
+import { UserList } from '../components/Common/TempDummyData/PostList';
 
 const initialState = {
-  user: null,
+  user: UserList[0],
 };
 
 const userReducer = (state = initialState, action) => {

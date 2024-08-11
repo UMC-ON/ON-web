@@ -15,7 +15,7 @@ import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const InfoDetailPage = () => {
-  const userInfo = useSelector((state) => state.user);
+  const userInfo = useSelector((state) => state.user.user);
   const currentPost_id = useLocation().state.value; //post_id 정보만 받아오기
   //useLocation으로 post_id만 받아 온 뒤, postListDB에서 현재 포스트 찾아와 불러옴.
   //그 뒤에는 선택사항: commentList DB를 따로 사용하느냐,
