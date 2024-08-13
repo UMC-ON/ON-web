@@ -10,17 +10,11 @@ const SignUpCompletePage = () => {
   const navigate = useNavigate();
   const nav = () => {
     handleCompleteSignup();
-    navigate('/');
+    navigate('/signIn');
   };
 
-  const dispatch = useDispatch();
-
   const handleCompleteSignup = () => {
-    const userInfo = UserList[0];
-    console.log(userInfo);
-
     // Redux 스토어에 user 정보 저장
-    dispatch(setUser(userInfo));
   };
 
   return (

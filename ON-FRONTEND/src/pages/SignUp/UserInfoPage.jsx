@@ -13,7 +13,9 @@ const UserInfoAdditionalPage = () => {
   const validNickName = useRef('');
   const [isDisabled, setDisabled] = useState(true);
   const [userInfo, setUserInfo] = useState({
-    user_id: UserList.length + 1,
+    userId: UserList.length + 1, //후에 백과 연결할 땐 삭제
+    email: '',
+    password: '',
     name: '',
     age: '',
     gender: '',
@@ -26,7 +28,9 @@ const UserInfoAdditionalPage = () => {
         !userInfo.name ||
         !userInfo.age ||
         !userInfo.gender ||
-        !userInfo.nickName
+        !userInfo.nickName ||
+        !userInfo.email ||
+        !userInfo.password
       )
     ) {
       setDisabled(false);
@@ -84,6 +88,21 @@ const UserInfoAdditionalPage = () => {
           <form>
             <fieldset>
               <s.InputWrapper>
+                <div>Email</div>
+                <s.TransparentInput
+                  onChange={onChangeHandler}
+                  name="email"
+                />
+              </s.InputWrapper>
+              <s.InputWrapper>
+                <div>Password</div>
+                <s.TransparentInput
+                  type="password"
+                  onChange={onChangeHandler}
+                  name="password"
+                />
+              </s.InputWrapper>
+              <s.InputWrapper>
                 <div>이름</div>
                 <s.TransparentInput
                   placeholder="본명으로 작성해 주세요"
@@ -139,6 +158,17 @@ const UserInfoAdditionalPage = () => {
                   </s.StyledComboBox>
                 </s.InputWrapper>
               </s.TwoColumnWrapper>
+              <s.InputWrapper>
+                <div>전화번호</div>
+                <s.TransparentInput
+                  type="number"
+                  placeholder="숫자만 입력해주세요"
+                  inputMode="numeric"
+                  onChange={onChangeHandler}
+                  pattern="\d*"
+                  name="phone"
+                />
+              </s.InputWrapper>
 
               <s.InputWrapper>
                 <div>닉네임</div>

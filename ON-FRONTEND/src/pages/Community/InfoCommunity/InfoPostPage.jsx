@@ -11,16 +11,16 @@ const InfoPostPage = () => {
   const userInfo = useSelector((state) => state.user.user);
 
   const [input, setInput] = useState({
-    board_id: 1,
-    post_id: PostList.length + 1,
+    boardType: 'INFO',
+    postId: PostList.length + 1,
     createdDate: new Date(),
     writerInfo: { ...userInfo },
-    is_anonymous: null,
-    is_anonymous_univ: null,
+    anonymous: null,
+    anonymousUniv: null,
     title: '',
     content: '',
     commentList: [],
-    img_id_list: [],
+    imgIdList: [],
   });
 
   const images = useRef([]);
@@ -88,15 +88,15 @@ const InfoPostPage = () => {
         <s.PostInfoSection>
           <s.InfoLabel>
             교환 국가:
-            <s.ColorButtonTag>
-              {userInfo.dispatched_country_id}
-            </s.ColorButtonTag>
+            <s.ColorButtonTag>{userInfo.country}</s.ColorButtonTag>
           </s.InfoLabel>
           <s.SpaceBetweenContainer>
             <s.InfoLabel>
               <div style={{ whiteSpace: 'nowrap' }}>교환교:</div>
 
-              <s.ColorButtonTag>{userInfo.dispatched_univ}</s.ColorButtonTag>
+              <s.ColorButtonTag>
+                {userInfo.dispatchedUniversity}
+              </s.ColorButtonTag>
             </s.InfoLabel>
             <DefaultCheckBox
               after="파견교 비공개"

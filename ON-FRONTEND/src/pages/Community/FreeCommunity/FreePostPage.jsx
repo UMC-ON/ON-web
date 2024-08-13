@@ -10,16 +10,16 @@ const InfoPostPage = () => {
   const userInfo = useSelector((state) => state.user.user);
 
   const [input, setInput] = useState({
-    board_id: 2,
-    post_id: PostList.length + 1,
+    boardType: 'FREE',
+    postId: PostList.length + 1,
     createdDate: new Date(),
     writerInfo: { ...userInfo },
-    is_anonymous: null,
-    is_anonymous_univ: null,
+    anonymous: null,
+    anonymousUniv: null,
     title: '',
     content: '',
     commentList: [],
-    img_id_list: [],
+    imgIdList: [],
   });
 
   const images = useRef([]);

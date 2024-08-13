@@ -33,9 +33,9 @@ const InfoCommunityHome = () => {
     navigate('./post');
   };
   const mylist = [1, 2, 3, 4, '와진짜개짱짱긴텍스트'];
-  const currentBoard_id = 2;
+  const currentBoardType = 'FREE';
   const currentPostList = PostList.filter(
-    (post) => post.board_id === currentBoard_id,
+    (post) => post.boardType === currentBoardType,
   );
   return (
     <>
@@ -59,7 +59,7 @@ const InfoCommunityHome = () => {
         <s.PostListSection>
           {currentPostList.map((post) => (
             <CommunityPost
-              key={post.createdDate}
+              key={post.post_id}
               post={post}
             />
           ))}

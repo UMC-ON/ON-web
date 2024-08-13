@@ -30,11 +30,11 @@ const InfoDetailPage = () => {
 
   const postListDB = PostList;
   const currentPost = postListDB.filter(
-    (post) => post.post_id === currentPost_id,
+    (post) => post.postId === currentPost_id,
   )[0];
 
-  const currentCommentList = currentPost.commentList; //or commentListDB
-  const currentFilteredCommentList = currentPost.commentList; //or filteredCommentListDB
+  const currentCommentList = commentListDB; //or currentPost.commentList
+  const currentFilteredCommentList = filteredCommentListDB; //or filteredCommentListDB
 
   /// 여기서부터 메인 변수들 ///
   const [content, setContent] = useState('');
@@ -46,11 +46,12 @@ const InfoDetailPage = () => {
   const commentEditor = useRef(null);
   const mobileViewRef = useRef(null);
 
-  const getNumberOfComment = () => {
+  const getNumOfComment = () => {
     let numOfComment = 0;
-    currentPost.commentList.forEach((comment) => {
-      numOfComment += comment.replyList.length;
-      numOfComment++;
+    CommentList.filter((comment) => {
+      if (comment.post_id === currentPost.postId) {
+        numOfComment++;
+      }
     });
     return numOfComment;
   };
@@ -91,7 +92,7 @@ const InfoDetailPage = () => {
       pushList = selectedComment.replyList;
     } else {
       key = ['post_id', 'comment_id', 'replyList'];
-      value = [currentPost_id, currentPost.commentList.length + 1, []];
+      value = [currentPost_id, currentCommentList.length + 1, []];
       pushList = currentCommentList;
     }
     addComment(key, value, pushList);
@@ -144,9 +145,7 @@ const InfoDetailPage = () => {
         </s.BackButton>
         <s.PostInfo>
           <s.InfoLabel>
-            {currentPost.is_anonymous
-              ? '익명'
-              : currentPost.writerInfo.nickName}
+            {currentPost.anonymous ? '익명' : currentPost.writerInfo.nickName}
           </s.InfoLabel>
           <s.InfoLabel>
             {currentPost.createdDate.toLocaleString('ko-KR')}
@@ -159,15 +158,15 @@ const InfoDetailPage = () => {
           <s.DispatchedInfo>
             {showDispatchedUniv(
               currentPost.writerInfo,
-              currentPost.is_anonymous_univ,
+              currentPost.anonymousUniv,
             )}
           </s.DispatchedInfo>
         </s.Title>
         <s.Content>
           {currentPost.content}
           <s.ImgSection>
-            {currentPost.img_id_list
-              ? currentPost.img_id_list.map((img, index) => (
+            {currentPost.imgIdList
+              ? currentPost.imgIdList.map((img, index) => (
                   <s.ContentImg
                     src={img}
                     key={index}
@@ -181,7 +180,7 @@ const InfoDetailPage = () => {
         </s.Content>
         <s.CommentNumSection>
           <img src={commentImg} />
-          {getNumberOfComment()}
+          {getNumOfComment()}
         </s.CommentNumSection>
         <s.CommentSection ref={scrollRef}>
           {currentFilteredCommentList.map((comment, index) => {

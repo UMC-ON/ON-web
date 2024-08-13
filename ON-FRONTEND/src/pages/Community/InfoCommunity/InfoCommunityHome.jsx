@@ -32,9 +32,9 @@ const InfoCommunityHome = () => {
     }
     navigate('./post');
   };
-  const currentBoard_id = 1;
+  const currentBoardType = 'INFO';
   const currentPostList = PostList.filter(
-    (post) => post.board_id === currentBoard_id,
+    (post) => post.boardType === currentBoardType,
   );
   return (
     <>
@@ -55,7 +55,7 @@ const InfoCommunityHome = () => {
         <s.PostListSection>
           {currentPostList.map((post) => (
             <CommunityPost
-              key={post.post_id}
+              key={post.postId}
               post={post}
             />
           ))}
