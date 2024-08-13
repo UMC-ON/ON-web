@@ -8,8 +8,9 @@ const DefaultCheckBox = ({
   checkBoxStyle = {},
   onChange = () => {},
   name = {},
+  defaultValue = false,
 }) => {
-  let checked = useRef(false);
+  let checked = useRef(defaultValue);
   return (
     <CheckBoxWrapper style={wrapperStyle}>
       <TextDiv>{before}</TextDiv>
@@ -27,6 +28,7 @@ const DefaultCheckBox = ({
             },
           });
         }}
+        defaultChecked={defaultValue}
       />
       <TextDiv>{after}</TextDiv>
     </CheckBoxWrapper>

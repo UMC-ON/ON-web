@@ -23,9 +23,6 @@ import SellPost from './pages/SellPostPage.jsx';
 import ItemDetailPage from './pages/ItemDetailPage.jsx';
 
 import NotVerifiedPage from './pages/SignUp/NotVerifiedPage.jsx';
-import TermsOfServicePage from './pages/SignUp/TermsOfServicePage.jsx';
-import UserInfoPage from './pages/SignUp/UserInfoPage.jsx';
-import UserInfoSchoolPage from './pages/SignUp/UserInfoSchoolPage.jsx';
 import UserInfoSchoolAuthPage from './pages/SignUp/UserInfoSchoolAuthPage.jsx';
 import SignUpCompletePage from './pages/SignUp/SignUpCompletePage.jsx';
 import SelectCity from './pages/SelectCity/SelectCity.jsx';
@@ -42,27 +39,20 @@ import AccompanyPage from './pages/AccompanyPage.jsx';
 import AccompanyDetailPage from './pages/AccompanyDetailPage.jsx';
 import DiaryPage from './pages/Diary/DiaryPage.jsx';
 import AccompanyPostPage from './pages/AccompanyPostPage.jsx';
+import SignInPage from './pages/SignUp/SignInPage.jsx';
+import SignUpPage from './pages/SignUp/SignUpPage.jsx';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Routes>
         <Route
+          path="/signUp"
+          element={<SignUpPage />}
+        />
+        <Route
           path="/signUp/notVerified"
           element={<NotVerifiedPage />}
-        />
-        <Route
-          path="/signUp"
-          element={<TermsOfServicePage />}
-        />
-        <Route
-          path="/signUp/userInfo"
-          element={<UserInfoPage />}
-        />
-
-        <Route
-          path="/signUp/userInfo_school"
-          element={<UserInfoSchoolPage />}
         />
 
         <Route
@@ -77,6 +67,10 @@ function App() {
         <Route
           path="/"
           element={<HomePage />}
+        />
+        <Route
+          path="/signIn"
+          element={<SignInPage />}
         />
         <Route
           path="/community"

@@ -5,15 +5,17 @@ import commentImg from '../../assets/images/commentImg.svg';
 import verifiedBadge from '../../assets/images/verifiedBadge.svg';
 import { useNavigate } from 'react-router-dom';
 import { showDate } from '../Common/InfoExp';
+import { CommentList } from '../Common/TempDummyData/PostList';
 
 const CommunityPost = ({ post }) => {
   const navigate = useNavigate();
 
   const getNumOfComment = () => {
     let numOfComment = 0;
-    post.commentList.forEach((comment) => {
-      numOfComment += comment.replyList.length;
-      numOfComment++;
+    CommentList.filter((comment) => {
+      if (comment.post_id === post.postId) {
+        numOfComment++;
+      }
     });
     return numOfComment;
   };
@@ -21,8 +23,8 @@ const CommunityPost = ({ post }) => {
   return (
     <s.Post
       onClick={() =>
-        navigate(`./detail/${post.post_id}`, {
-          state: { value: post.post_id },
+        navigate(`./detail/${post.postId}`, {
+          state: { value: post.postId },
         })
       }
     >
@@ -39,7 +41,7 @@ const CommunityPost = ({ post }) => {
               {post.is_anonymous ? '익명' : post.writerInfo.nickName}
               <VerifiedImg
                 src={verifiedBadge}
-                is_verified={post.writerInfo.is_verified.toString()}
+                is_verified={post.writerInfo.userState}
               />
             </Writer>
             <Comment>
@@ -49,8 +51,8 @@ const CommunityPost = ({ post }) => {
           </PostInfoWrapper>
         </ContentWrapper>
         <ContentImg
-          src={post.img_id_list ? post.img_id_list[0] : null}
-          showimg={(post.img_id_list.length > 0).toString()}
+          src={post.imgIdList ? post.imgIdList[0] : null}
+          showimg={(post.imgIdList.length > 0).toString()}
         />
       </ContentSection>
     </s.Post>
@@ -172,7 +174,7 @@ const Writer = styled.div`
 const VerifiedImg = styled.img`
   padding: 0 2px;
   display: ${(props) =>
-    props.is_verified === 'true' ? 'inline-block' : 'none'};
+    props.is_verified === 'ACTIVE' ? 'inline-block' : 'none'};
 `;
 const Comment = styled.div`
   padding-top: 2px;

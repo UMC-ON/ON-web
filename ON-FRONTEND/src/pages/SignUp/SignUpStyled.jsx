@@ -119,7 +119,6 @@ export const PurpleButton = styled.button`
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
-  margin: 0 0.6rem;
   border-radius: 16px;
   background: #c2c7ff;
   color: white;
@@ -176,8 +175,9 @@ export const TransparentInput = styled.input`
   padding: 0 0.06rem;
 
   &:invalid {
-    background-color: #f3f3f3;
+    background-color: #ffc0cb91;
   }
+
   &::placeholder {
     font-size: 0.75rem;
   }
@@ -218,6 +218,7 @@ export const TwoColumnWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
+  gap: 1.2rem;
 
   & > * {
     width: calc((100%) / 2.5);

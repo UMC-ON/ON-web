@@ -97,13 +97,6 @@ const TermsOfServicePage = () => {
 
 export default TermsOfServicePage;
 
-const Title = styled.div`
-  font-family: 'BalooBhai-Regular';
-  color: #87c3f8;
-  font-size: 2.188rem;
-  padding: 0.375rem 0;
-`;
-
 const TermContent = styled.div`
   color: black;
   overflow: auto;

@@ -14,7 +14,7 @@ export const showDispatchedUniv = (writerInfo, is_anonymous = false) => {
     return '파견교 비공개';
   } else {
     if (writerInfo.is_dispatch_confirmed) {
-      return `${writerInfo.dispatched_country_id} ${writerInfo.dispatched_univ}`;
+      return `${writerInfo.country} ${writerInfo.dispatchedUniversity}`;
     } else {
       return '파견 미정';
     }

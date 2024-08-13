@@ -1,10 +1,10 @@
 export const Comment = {
-  comment_id: null,
-  post_id: null,
-  writerInfo: {},
+  comment_id: 1,
+  post_id: 1,
+  writerInfo: { userId: -1, nickName: '실험용' },
   replyList: [],
   is_anonymous: null,
-  content: '',
+  content: '시험용 예제 댓글',
 };
 
 export const Reply = {

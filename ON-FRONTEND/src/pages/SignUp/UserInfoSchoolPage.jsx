@@ -44,10 +44,10 @@ const UserInfoSchoolPage = () => {
 
   const onClickDsptchNotConfirmed = (e) => {
     if (e.target.value) {
-      userInfo.dispatched_univ = '미정';
+      userInfo.dispatchedUniversity = '미정';
       userInfo.univ_homepage = '미정';
-      userInfo.dispatched_country_id = '미정';
-      userInfo.dispatched_type = '미정';
+      userInfo.country = '미정';
+      userInfo.dispatchedType = '미정';
     } else {
     }
     setDisabled(!isConfirmed); //useState의 비동기성 때문에?.. 교환 확정이면 비활성화
