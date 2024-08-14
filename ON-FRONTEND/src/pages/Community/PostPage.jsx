@@ -45,7 +45,7 @@ const PostPage = ({ color, title }) => {
       images.current = images.current.concat(selectedFiles);
       setInput({
         ...input,
-        img_id_list: images.current,
+        imgIdList: images.current,
       });
     }
   };
@@ -103,7 +103,7 @@ const PostPage = ({ color, title }) => {
             <DefaultCheckBox
               after="파견교 비공개"
               onChange={onChangeInput}
-              name="is_anonymous_univ"
+              name="anonymousUniv"
               checkBoxStyle={{ color: `${color}` }}
             />
           </s.SpaceBetweenContainer>
@@ -163,7 +163,7 @@ const PostPage = ({ color, title }) => {
           after="익명"
           wrapperStyle={{ fontSize: '14px' }}
           onChange={onChangeInput}
-          name="is_anonymous"
+          name="anonymous"
           checkBoxStyle={{ color: `${color}` }}
         />
       </s.Footer>

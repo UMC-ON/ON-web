@@ -25,7 +25,7 @@ const Comment = ({
             clickedComment === comment ? '#bfd8e5dd' : '#d9d9d933',
         }}
       >
-        <Writer writer={`${comment.writerInfo.user_id === postWriter_id}`}>
+        <Writer writer={`${comment.writerInfo.userId === postWriter_id}`}>
           {showWriter(comment, postWriter_id)}
           <img src={replyBtnImg} />
         </Writer>
@@ -69,6 +69,8 @@ const CommentDiv = styled.div`
   font-weight: 400;
   line-height: normal;
   text-align: left;
+
+  white-space: pre-wrap;
 `;
 
 const Writer = styled.div`

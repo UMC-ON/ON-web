@@ -22,8 +22,6 @@ import ScrapList from './pages/ScrapList.jsx';
 import SellPost from './pages/SellPostPage.jsx';
 import ItemDetailPage from './pages/ItemDetailPage.jsx';
 
-import NotVerifiedPage from './pages/SignUp/NotVerifiedPage.jsx';
-import UserInfoSchoolAuthPage from './pages/SignUp/UserInfoSchoolAuthPage.jsx';
 import SignUpCompletePage from './pages/SignUp/SignUpCompletePage.jsx';
 import SelectCity from './pages/SelectCity/SelectCity.jsx';
 import SelectCountry from './pages/SelectCountry/SelectCountry.jsx';
@@ -41,6 +39,7 @@ import DiaryPage from './pages/Diary/DiaryPage.jsx';
 import AccompanyPostPage from './pages/AccompanyPostPage.jsx';
 import SignInPage from './pages/SignUp/SignInPage.jsx';
 import SignUpPage from './pages/SignUp/SignUpPage.jsx';
+import UserInfoSchoolPage from './pages/SignUp/UserInfoSchoolPage.jsx';
 
 function App() {
   return (
@@ -51,27 +50,22 @@ function App() {
           element={<SignUpPage />}
         />
         <Route
-          path="/signUp/notVerified"
-          element={<NotVerifiedPage />}
-        />
-
-        <Route
-          path="/signUp/userInfo_schoolAuth"
-          element={<UserInfoSchoolAuthPage />}
-        />
-
-        <Route
           path="/signUp/complete"
           element={<SignUpCompletePage />}
-        />
-        <Route
-          path="/"
-          element={<HomePage />}
         />
         <Route
           path="/signIn"
           element={<SignInPage />}
         />
+        <Route
+          path="/signUp/credentials"
+          element={<UserInfoSchoolPage />}
+        />
+        <Route
+          path="/"
+          element={<HomePage />}
+        />
+
         <Route
           path="/community"
           element={<CommunityHomePage />}

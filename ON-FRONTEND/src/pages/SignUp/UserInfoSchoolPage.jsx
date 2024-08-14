@@ -4,26 +4,18 @@ import groupLogo from '../../assets/images/groupLogo.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
 import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox';
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser } from '../../redux/actions';
 
 const UserInfoSchoolPage = () => {
-  const prevUserInfo = useLocation().state.value;
-
   const [isDisabled, setDisabled] = useState(true);
   const [isConfirmed, setIsConfirmed] = useState(true);
-  const [userInfo, setUserInfo] = useState({
-    ...prevUserInfo,
-    is_dispatch_confirmed: false,
-    dispatched_univ: '',
-    univ_homepage: '',
-    dispatched_country_id: '',
-    dispatched_type: '',
-    start_date: '',
-    is_verified: false,
-  });
+  let userInfo = useSelector((state) => state.user);
   const navigate = useNavigate();
   const nav = (confirmed) => {
     if (confirmed) {
       navigate('/signUp/userInfo_schoolAuth', { state: { value: userInfo } });
+      dispatch(setUser(userInfo));
     } else {
       navigate('/signUp/notVerified', {
         state: { value: userInfo, text: '파견교 미정을 선택하셨습니다.' },
@@ -34,7 +26,7 @@ const UserInfoSchoolPage = () => {
     //useState의 비동기적..때문에
     if (
       !isConfirmed || //미정이거나
-      !(!userInfo.dispatched_univ || !userInfo.dispatched_country_id) //확정이고 필수란 채운 경우
+      !(!userInfo.dispatchedUniversity || !userInfo.country) //확정이고 필수란 채운 경우
     ) {
       setDisabled(false); //다음단계 활성화
     } else {
@@ -44,11 +36,13 @@ const UserInfoSchoolPage = () => {
 
   const onClickDsptchNotConfirmed = (e) => {
     if (e.target.value) {
-      userInfo.dispatchedUniversity = '미정';
-      userInfo.univ_homepage = '미정';
-      userInfo.country = '미정';
-      userInfo.dispatchedType = '미정';
+      userInfo.dispatchedUniversity = '';
+      userInfo.univ_homepage = '';
+      userInfo.country = '';
+      userInfo.dispatchedType = '';
+      userInfo.userState = 'NON_CERTIFY';
     } else {
+      userInfo.userState = 'TEMPORARY';
     }
     setDisabled(!isConfirmed); //useState의 비동기성 때문에?.. 교환 확정이면 비활성화
     setIsConfirmed(!e.target.value);
@@ -57,10 +51,8 @@ const UserInfoSchoolPage = () => {
     let name = e.target.name;
     let value = e.target.value;
 
-    setUserInfo({
-      ...userInfo,
-      [name]: value,
-    });
+    userInfo = { ...userInfo, [name]: value };
+    console.log(userInfo);
   };
   return (
     <s.FormPage>
@@ -88,7 +80,7 @@ const UserInfoSchoolPage = () => {
               </div>
               <s.TransparentInput
                 placeholder="학교의 공식 영문명을 작성해주세요"
-                name="dispatched_univ"
+                name="dispatchedUniversity"
                 onChange={onChangeHandler}
                 disabled={!isConfirmed}
               />
@@ -106,7 +98,7 @@ const UserInfoSchoolPage = () => {
                 borderRadius: '3px',
               }}
               onChange={onClickDsptchNotConfirmed}
-              name="is_dispatch_confirmed"
+              name="userState"
             />
 
             <s.InputWrapper style={{ opacity: isConfirmed ? '100%' : '50%' }}>
@@ -182,18 +174,20 @@ const UserInfoSchoolPage = () => {
                 <label>
                   <s.RadioButton
                     type="radio"
-                    name="type"
+                    name="dispatchedType"
                     value="exchange"
                     disabled={!isConfirmed}
+                    onChange={onChangeHandler}
                   />
                   교환학생
                 </label>
                 <label>
                   <s.RadioButton
                     type="radio"
-                    name="type"
+                    name="dispatchedType"
                     value="visit"
                     disabled={!isConfirmed}
+                    onChange={onChangeHandler}
                   />
                   방문학생
                 </label>
@@ -222,17 +216,5 @@ const RadioBtnDiv = styled.div`
     display: inline-block;
     padding-top: 0.938rem;
     margin-right: 0.938rem;
-  }
-`;
-
-const StyledCheckBox = styled.input`
-  width: 11px;
-  height: 11px;
-  flex-shrink: 0;
-  fill: #fff;
-  stroke-width: 0.5px;
-  stroke: #c6c6c6;
-  &:checked {
-    accent-color: white;
   }
 `;

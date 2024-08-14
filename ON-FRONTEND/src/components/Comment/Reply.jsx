@@ -7,7 +7,7 @@ const Reply = ({ reply, postWriter_id }) => {
     <ReplyDiv>
       <ReplyImg src={replyImg} />
       <div>
-        <Writer writer={`${reply.writerInfo.user_id === postWriter_id}`}>
+        <Writer writer={`${reply.writerInfo.userId === postWriter_id}`}>
           {showWriter(reply, postWriter_id)}
         </Writer>
         {reply.content}
@@ -48,6 +48,8 @@ const ReplyDiv = styled.div`
   display: flex;
   flex-direction: row;
   align-items: start;
+
+  white-space: pre-wrap;
 `;
 
 const ReplyImg = styled.img`

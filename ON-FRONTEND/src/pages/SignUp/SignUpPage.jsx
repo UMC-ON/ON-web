@@ -3,15 +3,14 @@ import * as s from './SignUpStyled';
 import * as FormElement from './FormElements';
 import groupLogo from '../../assets/images/groupLogo.svg';
 import { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
 import { UserList } from '../../components/Common/TempDummyData/PostList';
 import { useNavigate } from 'react-router-dom';
-import SignUpCompletePage from './SignUpCompletePage';
+import axios from 'axios';
 
 const SignUpPage = () => {
   const nav = useNavigate();
   const [userInfo, setUserInfo] = useState({
-    userId: UserList.length + 1, //백이랑 연결시 삭제
+    //userId: UserList.length + 1, //백이랑 연결시 삭제
     email: '',
     password: '',
     nickName: '',
@@ -19,12 +18,12 @@ const SignUpPage = () => {
     age: '',
     gender: '',
     phone: '',
-    is_dispatch_confirmed: true,
-    dispatchedUniversity: '',
-    univ_homepage: '',
-    country: '',
-    dispatchedType: '',
-    userState: 'TEMPORARY',
+    // is_dispatch_confirmed: true,
+    // dispatchedUniversity: '',
+    // univ_homepage: '',
+    // country: '',
+    // dispatchedType: '',
+    // userState: 'TEMPORARY',
   });
   const [isActive, setActive] = useState(false);
   const updateUserInfo = (e) => {
@@ -69,7 +68,22 @@ const SignUpPage = () => {
     if (isLastStep) {
       console.log('제출');
       // TODO: Request form
-      UserList.unshift(userInfo);
+      //UserList.unshift(userInfo);
+
+      const options = {
+        method: 'POST',
+        url: 'http://13.209.255.118:8080/api/v1/user/sign-up',
+        data: { ...userInfo },
+      };
+
+      axios
+        .request(options)
+        .then(function (response) {
+          console.log(response.data);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
       alert('Submitted!');
       nav('/signUp/complete');
       return false;
