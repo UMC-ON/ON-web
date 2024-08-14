@@ -32,13 +32,14 @@ const SignInPage = () => {
 
     //   dispatch(setUser(user)); //로그인 성공 시 유저 세팅
     // }
+    const userData = {
+      email: inputValue.current.email,
+      password: inputValue.current.password,
+    };
     const options = {
       method: 'GET',
       url: 'http://13.209.255.118:8080/api/v1/user/sign-in',
-      data: {
-        email: inputValue.current.email,
-        password: inputValue.current.password,
-      },
+      data: userData,
     };
 
     axios
