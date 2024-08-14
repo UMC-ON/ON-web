@@ -3,9 +3,10 @@ import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import DiaryCalendar from '../../components/DiaryCalendar/DiaryCalendar';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import DailyDiary from "../../components/DailyDiary";
-import { CompanyCalendar } from '../../components/CompanyCalendar/CompanyCalendarStyled';
+import DDayCalendar from '../../components/DDayCalendar.jsx';
 import ko from "date-fns/locale/ko";
-
+import closeIcon from '../../assets/images/close_button.svg';
+import DailyDiaryCalendar from "../../components/DailyDiaryCalendar/DailyDiaryCalendar.jsx";
 import styled from 'styled-components';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
@@ -27,29 +28,46 @@ const diaries = [
 ];
 
 const Diary = () => {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate1, setSelectedDate1] = useState(null); // DDayCalendar의 상태
+  const [selectedDate2, setSelectedDate2] = useState(null); // DailyDiaryCalendar의 상태
+
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [newDiaryVisible, setNewDiaryVisible] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+
   const datePickerRef = useRef(null);
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    setCalendarOpen(false); // 날짜 선택 후 달력 닫기
+  const handleDateChange1 = (date) => {
+    setSelectedDate1(date);
+    setCalendarOpen(false);
   };
 
-  const handleDateClick = () => {
-    setCalendarOpen(!calendarOpen); // 달력 열기/닫기 토글
+  const handleDateChange2 = (date) => {
+    setSelectedDate2(date);
+    setShowDatePicker(false); // 달력 닫기
+    setNewDiaryVisible(true); // 날짜 선택 후 일기 작성 컨테이너 보이기
   };
 
   const handleAddDiaryClick = () => {
-    setNewDiaryVisible(!newDiaryVisible); // NewDiary 표시 여부 토글
+    setShowDatePicker(true); // 달력을 엽니다.
+    setNewDiaryVisible(false); // 일기 작성 컨테이너는 숨깁니다.
+  };
+
+  const handleCalendarClick = () => {
+    setShowDatePicker(false); // 달력을 숨깁니다.
   };
 
   const todayDate = moment().format('YYYY.MM.DD');
 
   const calculateDDay = (date) => {
     if (!date) return '';
-    const diffDays = moment(date).diff(moment(), 'days');
+
+    const startOfDay = moment().startOf('day');
+    const selectedDay = moment(date).startOf('day');
+
+    const diffDays = selectedDay.diff(startOfDay, 'days');
+
     if (diffDays === 0) {
       return '오늘';
     } else if (diffDays > 0) {
@@ -65,34 +83,24 @@ const Diary = () => {
       <Content>
         <Information>
           <DDay>
-            {selectedDate ? (
-              <DDayText>{calculateDDay(selectedDate)}</DDayText>
+            {selectedDate1 ? (
+              <DDayText>{calculateDDay(selectedDate1)}</DDayText>
             ) : (
-              <DatePicker
-                locale={ko}
-                className='inputDate'
-                placeholderText={'날짜 설정'} 
-                ref={datePickerRef}
-                selected={selectedDate}
-                onChange={handleDateChange}
-                dateFormat="yyyy-MM-dd"
-                popperModifiers={{
-                  offset: {
-                    enabled: true,
-                    offset: '0px, 10px',
-                  },
-                }}
-                onClickOutside={() => setCalendarOpen(false)}
+              <DDayCalendar
+                selectedDate={selectedDate1}
+                handleDateChange={handleDateChange1} // DDayCalendar에만 적용되는 상태
+                setCalendarOpen={setCalendarOpen}
+                datePickerRef={datePickerRef}
               />
             )}
           </DDay>
           <div>
-            <Today>{todayDate}</Today>
             <RightContainer>
+              <Today>{todayDate}</Today>
               <SubText>나의 교환교</SubText>
               <SchoolContainer>
                 <BigText>영국,</BigText>
-                <BigText style={{color:"#3E73B2", marginLeft: "0.5em"}}>King’s College London</BigText>
+                <BigText style={{ color: "#3E73B2", marginLeft: "0.5em" }}>King’s College London</BigText>
               </SchoolContainer>
             </RightContainer>
           </div>
@@ -104,6 +112,17 @@ const Diary = () => {
           <div>기록 남기기</div>
           <AddButton src={plus_button} />
         </AddDiary>
+
+        {showDatePicker && (
+          <BottomTabLayout $height="44vh">
+            <TopHeader>
+              날짜
+            </TopHeader>
+            <Close src={closeIcon} onClick={handleCalendarClick} />
+            <DailyDiaryCalendar onApply={handleDateChange2} /> {/* DailyDiaryCalendar에만 적용되는 상태 */}
+          </BottomTabLayout>
+        )}
+
         {newDiaryVisible && (
           <NewDiaryContainer>
             <NewDiary 
@@ -112,6 +131,7 @@ const Diary = () => {
             <Save>저장하기</Save>
           </NewDiaryContainer>
         )}
+
         <DailyDiary items={diaries} />
       </Content>
       <BottomTabNav />
@@ -119,14 +139,19 @@ const Diary = () => {
   );
 };
 
+
 export default Diary;
 
 const DiaryContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter';
+  overflow-y: auto; // 필요시 스크롤 허용
+  position: relative; // 자식 요소가 absolute일 경우 기준이 될 수 있도록 설정
 `;
+
+
 
 const Content = styled.div`
   flex: 1;
@@ -142,19 +167,58 @@ const Information = styled.div`
   position: relative;
 `;
 
+const DatePickerWrapper = styled.div`
+  position: fixed;  // 화면에 고정되도록 설정
+  bottom: 0;  // 화면의 맨 아래에 위치하도록 설정
+  left: 0;  // 화면의 왼쪽에 맞춤
+  width: 100%;  // 전체 화면 너비를 차지하도록 설정
+  background-color: white;  // 배경색 설정
+  z-index: 1000;  // 다른 요소들 위에 나타나도록 우선순위 설정
+  padding: 10px 0;  // 상하 패딩 추가
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);  // 그림자 추가로 상단에 약간의 분리감을 줌
+  border-top: 1px solid #E0E0E0;  // 상단에 경계선 추가
+  display: flex;
+  justify-content: center;  // DatePicker를 중앙에 위치하도록 설정
+`;
+
+const DatePickerStyled = styled(DatePicker)`
+  .react-datepicker {
+    width: 100%;  // 달력 너비를 전체로 확장
+    border: none;  // 테두리 제거
+  }
+  
+  .react-datepicker__header {
+    background-color: #f7f8fa;  // 헤더 배경색 변경
+    border-bottom: 1px solid #eaeaea;  // 하단에 경계선 추가
+  }
+  
+  .react-datepicker__day--selected {
+    background-color: #3E73B2;  // 선택된 날짜 배경색 설정
+    color: white;  // 선택된 날짜 텍스트 색상 설정
+  }
+  
+  // 필요에 따라 추가적인 스타일을 설정
+`;
+
+
+
 const DDay = styled.div`
-  position: absolute;
+  position: absolute; // 부모 요소를 기준으로 위치 고정
   width: 130px;
   height: 130px;
-  top: 30%;
+  top: 30%; 
   left: 6%;
   font-size: 1.2em !important;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 5px solid #DCDFFF; // 이후 border에 그라데이션 추가하기
+  border: 5px solid #DCDFFF;
+  z-index: 1; // 다른 요소들 위에 나타나도록 우선순위 설정
+  background-color: white; // 필요시 배경색 설정
 `;
+
+
 
 const DDayText = styled.div`
   font-size: 45px;
@@ -166,14 +230,13 @@ const DDayText = styled.div`
   text-fill-color: transparent;
 `;
 
+
 const Today = styled.div`
   background: ${props => props.theme.lightPurple};
   margin-top: 4em;
   width: 6em;
   height: 1.5em;
   border-radius: 30px;
-  margin-left: 10em;
-  margin-top: 6em;
   color: white;
   display: flex;
   justify-content: center;
@@ -181,34 +244,39 @@ const Today = styled.div`
 `;
 
 const RightContainer = styled.div`
-  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; // Ensures left alignment for all children
+  margin-top: 2.5em;
+  margin-left: 11em; // Adjust this value as needed to achieve the desired spacing from the DDay component
 `;
 
 const SubText = styled.div`
-  margin-left: 2em;
+  margin-top: 1em; // Adjust this value to add some spacing between Today and SubText
   margin-bottom: 0.5em;
 `;
 
 const SchoolContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
-  margin-right: 1em;
+  flex-wrap: wrap; // Ensures that text will wrap if there's not enough space
 `;
 
 const BigText = styled.div`
   margin-top: 1vh;
   color: ${props => props.color || '#000000'};
-  margin-left: ${props => props.spacing || '0'};
   font-weight: bold;
   font-family: 'Inter-Regular';
   font-size: 1em;
   margin-bottom: 3.5vh;
+  margin-left: ${props => props.spacing || '0'};
 `;
 
 const CalendarContainer = styled.div`
   flex: 1;
   display: flex;
   justify-content: center;
+  position: relative;
+  z-index: 0;
 `;
 
 const AddDiary = styled.div`
@@ -270,4 +338,36 @@ const Save = styled.div`
   position: absolute;
   bottom: 10px;
   right: 10px;
+`;
+
+const BottomTabLayout = styled.div`
+  width: 100%;
+  max-width: 480px;
+  height: ${props => props.$height || 'auto'};
+  position: fixed;
+  bottom: 0;
+  border-radius: 14px 14px 0px 0px;
+  border: 1px solid white;
+  background: #ffffff;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  box-sizing: border-box;
+  box-shadow: 0px -1px 4px 0px #e2e2e2;
+`;
+
+const TopHeader = styled.div`
+  font-size: 12px;
+  color: #CCCCCC;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+`;
+
+const Close = styled.img`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
 `;
