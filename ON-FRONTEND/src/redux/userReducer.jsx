@@ -2,7 +2,7 @@ import { SET_USER, CLEAR_USER } from './actionTypes';
 import { UserList } from '../components/Common/TempDummyData/PostList';
 
 const initialState = {
-  user: UserList[0],
+  ...UserList[0],
 };
 
 const userReducer = (state = initialState, action) => {
@@ -10,13 +10,10 @@ const userReducer = (state = initialState, action) => {
     case SET_USER:
       return {
         ...state,
-        user: action.payload,
+        ...action.payload,
       };
     case CLEAR_USER:
-      return {
-        ...state,
-        user: null,
-      };
+      return null;
     default:
       return state;
   }

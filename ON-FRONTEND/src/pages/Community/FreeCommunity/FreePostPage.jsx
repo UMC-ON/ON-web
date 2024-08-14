@@ -5,7 +5,6 @@ const FreePostPage = () => {
     <PostPage
       color="#CBCDE9"
       title="FREE"
-      returnAddress="/community/general"
     />
   );
 };
