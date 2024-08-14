@@ -5,7 +5,6 @@ const InfoPostPage = () => {
     <PostPage
       color="#BFD8E5"
       title="INFO"
-      returnAddress="/community/info"
     />
   );
 };

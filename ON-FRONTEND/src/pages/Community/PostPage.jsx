@@ -6,9 +6,9 @@ import { useState, useRef, useEffect } from 'react';
 import { PostList } from '../../components/Common/TempDummyData/PostList.jsx';
 import { useSelector } from 'react-redux';
 
-const PostPage = ({ color, title, returnAddress }) => {
+const PostPage = ({ color, title }) => {
   const navigate = useNavigate();
-  const userInfo = useSelector((state) => state.user.user);
+  const userInfo = useSelector((state) => state.user);
 
   const [input, setInput] = useState({
     boardType: `${title}`,
@@ -60,7 +60,7 @@ const PostPage = ({ color, title, returnAddress }) => {
     }
     PostList.unshift(input); //DB에 저장
 
-    navigate(`${returnAddress}`, { replace: true });
+    navigate(-1, { replace: true });
   };
 
   return (
