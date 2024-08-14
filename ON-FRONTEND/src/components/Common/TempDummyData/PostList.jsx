@@ -44,6 +44,18 @@ export const UserList = [
 
 export const PostList = [
   {
+    boardType: 'FREE',
+    postId: 4,
+    is_anonymous: false,
+    is_anonymous_univ: '',
+    writerInfo: UserList[0],
+    title: '한식 먹고싶다',
+    content: '근데 한식 너무 비쌈 ㅜㅜㅜㅜ',
+    imgIdList: [],
+    createdDate: new Date(),
+    numOfComment: 0,
+  },
+  {
     boardType: 'INFO',
     postId: 3,
     is_anonymous: false,

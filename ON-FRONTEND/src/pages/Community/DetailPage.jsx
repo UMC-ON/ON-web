@@ -190,7 +190,7 @@ const DetailPage = ({ color1, color2, titleColor }) => {
                 onCommentClick={onCommentSelection}
                 key={index}
                 clickedComment={selectedComment}
-                postWriter_id={currentPost.writerInfo.user_id}
+                postWriter_id={currentPost.writerInfo.userId}
               />
             );
           })}

@@ -2,7 +2,7 @@
 //판별하려는 객체와 post 작성자 id 넘겨주어야함.
 export const showWriter = (comment = null, postWriter_id = '') => {
   if (comment && comment.is_anonymous) {
-    return comment.writerInfo.user_id === postWriter_id ? '글쓴이' : '익명';
+    return comment.writerInfo.userId === postWriter_id ? '글쓴이' : '익명';
   } else {
     return comment.writerInfo.nickName;
   }
@@ -13,7 +13,7 @@ export const showDispatchedUniv = (writerInfo, is_anonymous = false) => {
   if (is_anonymous) {
     return '파견교 비공개';
   } else {
-    if (writerInfo.is_dispatch_confirmed) {
+    if (writerInfo.userState === 'ACTIVE') {
       return `${writerInfo.country} ${writerInfo.dispatchedUniversity}`;
     } else {
       return '파견 미정';

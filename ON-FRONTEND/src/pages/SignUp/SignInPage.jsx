@@ -4,8 +4,9 @@ import groupLogo from '../../assets/images/groupLogo.svg';
 import { useNavigate } from 'react-router-dom';
 import { UserList } from '../../components/Common/TempDummyData/PostList';
 import { setUser } from '../../redux/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRef } from 'react';
+import axios from 'axios';
 const SignInPage = () => {
   const nav = useNavigate();
   const inputValue = useRef({ email: '', password: '' });
@@ -16,18 +17,38 @@ const SignInPage = () => {
 
     inputValue.current = { ...inputValue.current, [name]: value };
   };
-
+  const currentUser = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const user = UserList.filter(
-      (user) => user.email === inputValue.current.email,
-    )[0];
-    console.log(user.password === inputValue.current.password);
-    if (user && inputValue.current.password === user.password) {
-      dispatch(setUser(user));
-      return nav('/');
-    }
+
+    // const user = UserList.filter(
+    //   (user) => user.email === inputValue.current.email,
+    // )[0];
+    // if (user && inputValue.current.password === user.password) {
+    //   //여기까지가 백에서 해줄 일..true반환시
+    //   //토큰 저장
+
+    //   dispatch(setUser(user)); //로그인 성공 시 유저 세팅
+    // }
+    const options = {
+      method: 'GET',
+      url: 'http://13.209.255.118:8080/api/v1/user/sign-in',
+      data: {
+        email: inputValue.current.email,
+        password: inputValue.current.password,
+      },
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
     return alert('아이디나 비밀번호가 일치하지 않습니다.');
   };
 
