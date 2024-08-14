@@ -254,7 +254,7 @@ const Available = styled.div`
   font-size: 12px;
   color: #7A7A7A;
   margin-left: 14vw;
-  width: 160px;
+  margin-left: 60px;
 `;
 
 const Check = styled.div`
@@ -263,7 +263,7 @@ const Check = styled.div`
   border-radius: 50%;
   border: 1px solid transparent;
   background: ${({ checked }) => checked 
-    ? "linear-gradient(135deg, #c2c7ff, #ad99ff)" 
+    ? "#C2C7FF" 
     : "#E8E8E8"};
   margin-right: 5px;
   cursor: pointer;
@@ -288,7 +288,7 @@ const WriteButton = styled.button`
   height: 50px;
   padding: 15px 26px;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #c2c7ff, #ad99ff);
+  background: linear-gradient(135deg, #D6EBFF, #C2C7FF);
   color: white;
   text-align: center;
   font-size: 16px;

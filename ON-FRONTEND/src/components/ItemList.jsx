@@ -28,7 +28,7 @@ const Item = ({ items }) => {
                 <LocationAndUser>
                   <Place><Compas src={compas} />독일 베를린</Place>
                   <User><Profile src={profile} />루이(fndl333)</User>
-                </LocationAndUser><br/>
+                </LocationAndUser>
                 <Price>{item.price === '나눔' ? item.price : `₩ ${item.price}`}</Price>
               </Description>
             </Information>
@@ -165,6 +165,7 @@ const LocationAndUser = styled.div`
   display: flex;
   align-items: center;
   width: 11em;
+  margin-bottom: 1.5vh;
 `;
 
 const Space = styled.div`

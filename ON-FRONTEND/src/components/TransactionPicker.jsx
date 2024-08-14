@@ -106,7 +106,7 @@ const PickerButton = styled.button`
   font-size: 16px;
   border-radius: 10px;
   border: 1px solid #C2C7FF;
-  background: ${({selected}) => (selected ? '#C2C7FF' : '#E0E0E0')};
+  background: ${({selected}) => (selected ? '#C2C7FF' : 'white')};
   color: ${({ selected }) => selected ? 'white' : '#000000'};
   cursor: pointer;
 `;
