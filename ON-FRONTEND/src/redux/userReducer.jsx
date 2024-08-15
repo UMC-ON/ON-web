@@ -1,4 +1,4 @@
-import { SET_USER, CLEAR_USER } from './actionTypes';
+import { SET_USER, CLEAR_USER, SIGN_IN_USER } from './actionTypes';
 import { UserList } from '../components/Common/TempDummyData/PostList';
 
 const initialState = {
@@ -14,6 +14,11 @@ const userReducer = (state = initialState, action) => {
       };
     case CLEAR_USER:
       return null;
+    case SIGN_IN_USER:
+      return {
+        ...state,
+        signInSuccess: action.payload,
+      };
     default:
       return state;
   }

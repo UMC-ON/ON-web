@@ -39,12 +39,17 @@ import DiaryPage from './pages/Diary/DiaryPage.jsx';
 import AccompanyPostPage from './pages/AccompanyPostPage.jsx';
 import SignInPage from './pages/SignUp/SignInPage.jsx';
 import SignUpPage from './pages/SignUp/SignUpPage.jsx';
-import UserInfoSchoolPage from './pages/SignUp/UserInfoSchoolPage.jsx';
+import SchoolAuthPage from './pages/SignUp/SchoolAuthPage.jsx';
+import AdminPage from './pages/AdminPage/AdminPage.jsx';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Routes>
+        <Route
+          path="/admin"
+          element={<AdminPage />}
+        />
         <Route
           path="/signUp"
           element={<SignUpPage />}
@@ -59,7 +64,7 @@ function App() {
         />
         <Route
           path="/signUp/credentials"
-          element={<UserInfoSchoolPage />}
+          element={<SchoolAuthPage />}
         />
         <Route
           path="/"

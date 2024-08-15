@@ -225,10 +225,11 @@ export const UserInfoForm2 = ({ state, updateUserInfo, setActive }) => {
     }
   }, [state]);
   useEffect(() => {
+    //이전 단계를 눌로 페이지에 다시 돌아왔을 때, 렌더링하며 조건 상태 체크
     for (let key in state) {
       SignUpValidCheck({ name: key, value: state[key] }, isAllValid);
     }
-  }, []);
+  }, [state]);
 
   return (
     <>
@@ -337,21 +338,44 @@ const EmptyDiv = styled.div`
 `;
 
 import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox';
+import { countries } from '../../assets/cityDatabase';
 
-export const SchoolInfoForm = ({ state, updateUserInfo }) => {
-  const [isConfirmed, setIsConfirmed] = useState(state.is_dispatch_confirmed);
+export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
+  const id = useRef(-1);
+  const [isConfirmed, setIsConfirmed] = useState(true);
+
   const onClickDsptchNotConfirmed = (e) => {
-    // if (e.target.value) {
-    //   userInfo.dispatchedUniversity = '미정';
-    //   userInfo.univ_homepage = '미정';
-    //   userInfo.country = '미정';
-    //   userInfo.dispatchedType = '미정';
-    // }
+    if (e.target.value) {
+      state.dispatchedUniversity = '';
+      state.univ_homepage = '';
+      state.country = '';
+      state.dispatchedType = '';
+    }
     setIsConfirmed(!e.target.value);
-    onChangeHandler({
-      target: { name: e.target.name, value: !e.target.value },
+    updateUserInfo({
+      target: { name: e.target.name, value: !e.target.value }, //state는 비동기적이라 바로 적용안됨
     });
   };
+  console.log(state);
+
+  useEffect(() => {
+    //이전 단계를 눌로 페이지에 다시 돌아왔을 때, 렌더링하며 이전 입력값 불러오고 조건 체크
+    console.log(`폼페이지:${state.name}`);
+    if (!state.is_dispatch_confirmed) {
+      console.log('안그러하다');
+      setIsConfirmed(false);
+      setActive(true);
+    } else {
+      console.log('최아악');
+      if (state.dispatchedUniversity && state.country) {
+        console.log('그러하다');
+        setActive(true);
+      } else {
+        setActive(false);
+      }
+    }
+  }, [state]);
+
   return (
     <>
       <s.InputWrapper style={{ opacity: isConfirmed ? '100%' : '50%' }}>
@@ -364,7 +388,9 @@ export const SchoolInfoForm = ({ state, updateUserInfo }) => {
         <s.TransparentInput
           placeholder="학교의 공식 영문명을 작성해주세요"
           name="dispatchedUniversity"
-          onChange={updateUserInfo}
+          onChange={(e) => {
+            updateUserInfo(e);
+          }}
           disabled={!isConfirmed}
           defaultValue={state.dispatchedUniversity}
         />
@@ -420,31 +446,28 @@ export const SchoolInfoForm = ({ state, updateUserInfo }) => {
           >
             국가
           </option>
-          <option disabled>----북미----</option>
-          <option value="US">미국 </option>
-          <option value="CA">캐나다</option>
-          <option disabled>----유럽----</option>
-          <option value="UK">영국 </option>
-          <option value="FR">프랑스</option>
-          <option value="DE">독일 </option>
-          <option value="CH">스위스</option>
-          <option value="SE">스웨덴</option>
-          <option value="IT">이탈리아</option>
-          <option value="NL">네덜란드</option>
-          <option value="ES">스페인</option>
-          <option value="PT">포르투갈</option>
-          <option value="AT">오스트리아</option>
-          <option value="BE">벨기에</option>
-          <option value="PL">폴란드</option>
-          <option value="DK">덴마크</option>
-          <option value="FI">핀란드</option>
-          <option disabled>----아시아----</option>
-          <option value="JP">일본 </option>
-          <option value="CN">중국 </option>
-          <option value="TW">대만 </option>
-          <option disabled>----오세아니아----</option>
-          <option value="AU">호주 </option>
-          <option value="NZ">뉴질랜드</option>
+          {countries.map((content, index) => {
+            if (content.id[0] > id.current) {
+              id.current = content.id[0];
+              console.log(content.continent);
+              return (
+                <option
+                  key={index}
+                  value={'?'}
+                >
+                  ----{content.continent}----
+                </option>
+              );
+            }
+            return (
+              <option
+                key={index}
+                value={content.country}
+              >
+                {content.country}
+              </option>
+            );
+          })}
         </s.SchoolComboBox>
       </s.InputWrapper>
 
@@ -493,8 +516,7 @@ const RadioBtnDiv = styled.div`
 
 import addPhoto from '../../assets/images/addPhoto.svg';
 
-export const SchoolAuthForm = ({ univ }) => {
-  const [photoURL, setPhotoURL] = useState(null);
+export const SchoolAuthForm = ({ state, setActive, photoURL, setPhotoURL }) => {
   const onChangeImgFile = (fileList) => {
     if (fileList[0]) {
       console.log(fileList);
@@ -507,7 +529,11 @@ export const SchoolAuthForm = ({ univ }) => {
         <div>나의 교환/방문교</div>
         <s.TransparentInput
           disabled={true}
-          value={univ ? univ : '파견교 미정'}
+          value={
+            state.dispatchedUniversity
+              ? state.dispatchedUniversity
+              : '파견교 미정'
+          }
         />
       </s.InputWrapper>
 

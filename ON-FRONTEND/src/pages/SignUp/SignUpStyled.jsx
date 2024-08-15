@@ -119,8 +119,8 @@ export const PurpleButton = styled.button`
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
-  border-radius: 16px;
-  background: #c2c7ff;
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, #c2c7ff, #ad99ff);
   color: white;
   font-family: Inter;
   font-size: 1.25rem;

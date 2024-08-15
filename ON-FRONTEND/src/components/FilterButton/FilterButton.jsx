@@ -2,13 +2,20 @@ import { useState } from 'react';
 import * as s from './FilterButtonStyled';
 import ButtonStyleList from './ButtonStyleList';
 
-const FilterButton = ({ color1, color2, myList, placeholder }) => {
+const FilterButton = ({
+  color1,
+  color2,
+  myList,
+  placeholder,
+  setCurrentFilterValue,
+}) => {
   const [isOptionVisible, setOptionVisible] = useState(false);
-  const [currentValue, setCurrentValue] = useState(placeholder);
+  const [currentText, setCurrentText] = useState(placeholder);
   const clickHandler = (e) => {
     setOptionVisible(!isOptionVisible);
-    const { innerText } = e.target;
-    setCurrentValue(innerText);
+    const innerText = e.target.country;
+    setCurrentText(innerText);
+    setCurrentFilterValue(e.target.value);
   };
   return (
     <>
@@ -18,7 +25,7 @@ const FilterButton = ({ color1, color2, myList, placeholder }) => {
             setOptionVisible((prev) => !prev);
           }}
         >
-          {currentValue}
+          {currentText}
         </s.FilterSelectionButton>
 
         <s.FilterList show={isOptionVisible.toString()}>

@@ -81,3 +81,5 @@ export const PostList = [
   },
   Post,
 ];
+
+export const AuthRequests = [];
