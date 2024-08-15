@@ -26,6 +26,29 @@ export const FilterSection = styled.section`
   width: 100%;
   padding: 0 14px;
 `;
+export const GreyPicker = styled.div`
+  background-color: #e8e8e8;
+  font-family: 'Inter-Regular';
+  font-size: 0.8em;
+  padding: 5px;
+  border-radius: 18px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-right: 8px;
+  color: ${(props) => (props.$isCountryClicked ? '#FFFFFF' : '#363636')};
+  background: ${(props) =>
+    props.$isCountryClicked
+      ? `linear-gradient(135deg, ${props.color1}, ${props.color2});`
+      : ''};
+`;
+
+export const Icon = styled.img`
+  width: ${(props) => props.size || '10px'};
+  height: ${(props) => props.size || '10px'};
+  padding-left: 3px;
+  padding-right: ${(props) => props.$right || '0'};
+`;
+
 export const FilterSelectionButton = styled.button`
   color: black;
   box-sizing: border-box;

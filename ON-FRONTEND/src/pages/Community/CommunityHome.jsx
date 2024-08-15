@@ -3,22 +3,36 @@ import * as s from './CommunityStyled.jsx';
 import PageHeader from '../../components/PageHeader/PageHeader.jsx';
 import DotInslideSlider from '../../components/DotInsideSlider.jsx';
 import CommunityPost from '../../components/CommunityPost/CommunityPost.jsx';
-import FilterButton from '../../components/FilterButton/FilterButton.jsx';
+import arrowIcon from '../../assets/images/bottomArrow.svg';
+import whiteCloseIcon from '../../assets/images/whiteCloseIcon.svg';
+import SelectCountry from '../SelectCountry/SelectCountry.jsx';
 
 import communityBannerImg from '../../assets/images/communityBannerImg.svg';
 import pencilImg from '../../assets/images/pencil.svg';
 import gradientRec from '../../assets/images/gradientRec.svg';
 import { useNavigate } from 'react-router-dom';
-import { CountryList } from '../../components/CountryList.jsx';
+import { countries } from '../../assets/cityDatabase.js';
 
 import { PostList } from '../../components/Common/TempDummyData/PostList.jsx';
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
 
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 
 const CommunityHome = ({ boardType, color1, color2 }) => {
   const userInfo = useSelector((state) => state.user);
   const navigate = useNavigate();
+
+  const [showCountry, setShowCountry] = useState(false); //모달창
+  const [country, setCountry] = useState(null); //선택된 국가
+
+  const handleCountryClick = () => {
+    setShowCountry(!showCountry);
+  };
+  const resetCountry = () => {
+    setCountry(null);
+  };
+
   const nav = () => {
     if (!userInfo) {
       if (confirm('로그인이 필요합니다.')) {
@@ -46,20 +60,36 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
         </s.SliderWrapper>
 
         <s.FilterSection>
-          <FilterButton
+          <s.GreyPicker
+            $isCountryClicked={country}
             color1={color1}
             color2={color2}
-            myList={CountryList}
-            placeholder="국가"
-          />
+          >
+            <span onClick={handleCountryClick}>
+              {country ? `${country}` : '국가'}
+              {!country && <s.Icon src={arrowIcon} />}
+            </span>
+            {country && (
+              <s.Icon
+                src={whiteCloseIcon}
+                onClick={resetCountry}
+              />
+            )}
+          </s.GreyPicker>
         </s.FilterSection>
         <s.PostListSection>
-          {currentPostList.map((post) => (
-            <CommunityPost
-              key={post.postId}
-              post={post}
-            />
-          ))}
+          {country //나중에 백이랑 연결시 삭제하고 매핑만.
+            ? currentPostList.filter((post) => {
+                if (post.writerInfo.country === country) {
+                  return <CommunityPost post={post} />;
+                }
+              })
+            : currentPostList.map((post) => (
+                <CommunityPost
+                  key={post.postId}
+                  post={post}
+                />
+              ))}
         </s.PostListSection>
         <s.WriteButton
           style={{ background: `linear-gradient(135deg,${color1},${color2})` }}
@@ -79,6 +109,18 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
             maxWidth: '480px',
           }}
         />
+
+        {showCountry && (
+          <SelectCountry
+            closeModal={() => {
+              setShowCountry(!showCountry);
+            }}
+            getCountry={(country) => {
+              setCountry(country);
+              setShowCountry(false);
+            }}
+          />
+        )}
       </s.PageContainer>
     </>
   );

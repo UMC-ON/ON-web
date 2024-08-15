@@ -3,11 +3,13 @@ import * as s from './SignUpStyled';
 import groupLogo from '../../assets/images/groupLogo.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
 import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../../redux/actions';
+import { countries } from '../../assets/cityDatabase';
 
 const UserInfoSchoolPage = () => {
+  const id = useRef(-1);
   const [isDisabled, setDisabled] = useState(true);
   const [isConfirmed, setIsConfirmed] = useState(true);
   let userInfo = useSelector((state) => state.user);
@@ -126,7 +128,7 @@ const UserInfoSchoolPage = () => {
                 defaultValue={''}
                 onChange={onChangeHandler}
                 disabled={!isConfirmed}
-                name="dispatched_country_id"
+                name="country"
               >
                 <option
                   value=""
@@ -134,31 +136,28 @@ const UserInfoSchoolPage = () => {
                 >
                   국가
                 </option>
-                <option disabled>----북미----</option>
-                <option value="US">미국 </option>
-                <option value="CA">캐나다</option>
-                <option disabled>----유럽----</option>
-                <option value="UK">영국 </option>
-                <option value="FR">프랑스</option>
-                <option value="DE">독일 </option>
-                <option value="CH">스위스</option>
-                <option value="SE">스웨덴</option>
-                <option value="IT">이탈리아</option>
-                <option value="NL">네덜란드</option>
-                <option value="ES">스페인</option>
-                <option value="PT">포르투갈</option>
-                <option value="AT">오스트리아</option>
-                <option value="BE">벨기에</option>
-                <option value="PL">폴란드</option>
-                <option value="DK">덴마크</option>
-                <option value="FI">핀란드</option>
-                <option disabled>----아시아----</option>
-                <option value="JP">일본 </option>
-                <option value="CN">중국 </option>
-                <option value="TW">대만 </option>
-                <option disabled>----오세아니아----</option>
-                <option value="AU">호주 </option>
-                <option value="NZ">뉴질랜드</option>
+                {countries.map((content, index) => {
+                  if (content.id[0] > id.current) {
+                    id.current = content.id[0];
+                    console.log(content.continent);
+                    return (
+                      <option
+                        key={index}
+                        value={'?'}
+                      >
+                        ----{content.continent}----
+                      </option>
+                    );
+                  }
+                  return (
+                    <option
+                      key={index}
+                      value={content.country}
+                    >
+                      {content.country}
+                    </option>
+                  );
+                })}
               </s.SchoolComboBox>
             </s.InputWrapper>
 

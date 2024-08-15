@@ -5,11 +5,16 @@ import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox.js
 import { useState, useRef, useEffect } from 'react';
 import { PostList } from '../../components/Common/TempDummyData/PostList.jsx';
 import { useSelector } from 'react-redux';
+import Loading from '../../components/Loading/Loading.jsx';
+import axios from 'axios';
+import { setUser } from '../../redux/actions.jsx';
 
 const PostPage = ({ color, title }) => {
   const navigate = useNavigate();
+  const images = useRef([]);
+  const [isLoading, setLoading] = useState(false);
   const userInfo = useSelector((state) => state.user);
-
+  //const [userInfo, setUserInfo] = useState(null);
   const [input, setInput] = useState({
     boardType: `${title}`,
     postId: PostList.length + 1,
@@ -23,7 +28,46 @@ const PostPage = ({ color, title }) => {
     imgIdList: [],
   });
 
-  const images = useRef([]);
+  const BETest = false;
+
+  useEffect(() => {
+    if (BETest) {
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const options = {
+            method: 'GET',
+            url: 'http://13.209.255.118:8080/api/v1/user/current/info',
+            headers: {
+              'Content-Type': `application/json`, // application/json 타입 선언
+              Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+            },
+          };
+          const response = await axios
+            .request(options)
+            .then(function (response) {
+              console.log(response.data);
+              setUserInfo(response.data.result);
+            })
+            .catch(function (error) {
+              console.error(error);
+            });
+        } catch (e) {
+          console.log(e);
+        }
+        setLoading(false);
+      };
+      fetchData();
+      console.log('useEffect 실행');
+    }
+  }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (BETest && !userInfo) {
+    return null;
+  }
 
   const onChangeInput = (e) => {
     let name = e.target.name;

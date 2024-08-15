@@ -6,7 +6,9 @@ const ButtonStyleList = ({ setOptionVisible, color1, color2, myList }) => {
       <StyledButton
         color1={color1}
         color2={color2}
-        onClick={setOptionVisible}
+        onClick={() => {
+          setOptionVisible({ target: { name: this } });
+        }}
       >
         {text}
       </StyledButton>
@@ -14,13 +16,21 @@ const ButtonStyleList = ({ setOptionVisible, color1, color2, myList }) => {
   };
   return (
     <>
-      {myList.map((content, index) => (
-        <li key={index}>
-          <ColoredButton
+      {myList.map((content) => (
+        <li key={content.id}>
+          <StyledButton
             color1={color1}
             color2={color2}
-            text={content}
-          />
+            value={content.id}
+            onClick={() => {
+              setOptionVisible({
+                target: { country: content.country, value: content.id },
+              });
+              console.log(content.country);
+            }}
+          >
+            {content.country}
+          </StyledButton>
         </li>
       ))}
       <li>

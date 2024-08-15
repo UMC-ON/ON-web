@@ -6,9 +6,12 @@ import { useState, useEffect, useRef } from 'react';
 import { UserList } from '../../components/Common/TempDummyData/PostList';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { setUser } from '../../redux/actions';
+import { useDispatch } from 'react-redux';
 
 const SignUpPage = () => {
   const nav = useNavigate();
+  const dispatch = useDispatch();
   const [userInfo, setUserInfo] = useState({
     //userId: UserList.length + 1, //백이랑 연결시 삭제
     email: '',
@@ -18,12 +21,12 @@ const SignUpPage = () => {
     age: '',
     gender: '',
     phone: '',
-    // is_dispatch_confirmed: true,
-    // dispatchedUniversity: '',
-    // univ_homepage: '',
-    // country: '',
-    // dispatchedType: '',
-    // userState: 'TEMPORARY',
+    is_dispatch_confirmed: true,
+    dispatchedUniversity: '',
+    univ_homepage: '',
+    country: '',
+    dispatchedType: '',
+    userState: 'TEMPORARY',
   });
   const [isActive, setActive] = useState(false);
   const updateUserInfo = (e) => {
@@ -62,7 +65,18 @@ const SignUpPage = () => {
       },
     ]);
   const animationDiv = useRef(null);
-  const handleSubmit = (e) => {
+
+  const handleSubmitFE = (e) => {
+    e.preventDefault();
+    dispatch(setUser(userInfo));
+    if (isLastStep) {
+      UserList.unshift(userInfo); //DB에 저장
+      alert('회원가입이 완료되었습니다.');
+      return nav('/signIn');
+    }
+    next();
+  };
+  const handleSubmitBE = (e) => {
     e.preventDefault();
 
     if (isLastStep) {
@@ -93,7 +107,7 @@ const SignUpPage = () => {
   };
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmitFE}>
         <s.FormPage>
           <s.SectionWrapper>
             <s.TitleSection>

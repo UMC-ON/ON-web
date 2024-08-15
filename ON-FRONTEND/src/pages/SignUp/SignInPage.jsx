@@ -3,63 +3,83 @@ import styled from 'styled-components';
 import groupLogo from '../../assets/images/groupLogo.svg';
 import { useNavigate } from 'react-router-dom';
 import { UserList } from '../../components/Common/TempDummyData/PostList';
-import { setUser } from '../../redux/actions';
+import { setUser, signInUser } from '../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import axios from 'axios';
 const SignInPage = () => {
   const nav = useNavigate();
   const inputValue = useRef({ email: '', password: '' });
-
+  const currentUser = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const [isLoading, setLoading] = useState(false);
   const onChangeHandler = (e) => {
     let name = e.target.name;
     let value = e.target.value;
 
     inputValue.current = { ...inputValue.current, [name]: value };
   };
-  const currentUser = useSelector((state) => state.user);
-  const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
+  const handleSubmitFE = (e) => {
     e.preventDefault();
+    const user = UserList.filter(
+      (user) => user.email === inputValue.current.email,
+    )[0];
+    if (user && inputValue.current.password === user.password) {
+      //여기까지가 백에서 해줄 일..true반환시
+      //토큰 저장
 
-    // const user = UserList.filter(
-    //   (user) => user.email === inputValue.current.email,
-    // )[0];
-    // if (user && inputValue.current.password === user.password) {
-    //   //여기까지가 백에서 해줄 일..true반환시
-    //   //토큰 저장
-
-    //   dispatch(setUser(user)); //로그인 성공 시 유저 세팅
-    // }
-    const userData = {
-      email: inputValue.current.email,
-      password: inputValue.current.password,
-    };
-    const options = {
-      method: 'GET',
-      url: 'http://13.209.255.118:8080/api/v1/user/sign-in',
-      data: userData,
-    };
-
-    axios
-      .request(options)
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-    return alert('아이디나 비밀번호가 일치하지 않습니다.');
+      dispatch(setUser(user)); //로그인 성공 시 유저 세팅
+      console.log(currentUser);
+      if (currentUser.userState === 'TEMPORARY') {
+        return nav('/signUp/credentials');
+      }
+      return nav('/');
+    } else {
+      alert('아이디나 비밀번호가 일치하지 않습니다.');
+    }
   };
 
-  console.log(UserList);
-  console.log(inputValue.current);
+  const handleSubmitBE = (e) => {
+    e.preventDefault();
+
+    const userData = JSON.stringify({
+      email: inputValue.current.email,
+      password: inputValue.current.password,
+    });
+
+    const options = {
+      method: 'POST',
+      url: 'http://13.209.255.118:8080/api/v1/user/sign-in',
+      headers: {
+        'Content-Type': `application/json`, // application/json 타입 선언
+      },
+      data: userData,
+    };
+    const fetchData = async () => {
+      await axios
+        .request(options)
+        .then((response) => {
+          console.log(response.data);
+          localStorage.setItem('grantType', response.data.result.grantType);
+          localStorage.setItem('AToken', response.data.result.accessToken);
+          localStorage.setItem('RToken', response.data.result.refreshToken);
+          nav('/');
+          return response.data;
+        })
+        .catch((error) => {
+          return alert('아이디나 비밀번호가 일치하지 않습니다.');
+        });
+    };
+    fetchData();
+    //const request = fetchData();
+  };
+
   return (
     <>
       <form
         action="#"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmitFE}
       >
         <s.FormPage>
           <s.SectionWrapper>

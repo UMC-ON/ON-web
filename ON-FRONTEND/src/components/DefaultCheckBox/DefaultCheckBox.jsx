@@ -21,6 +21,7 @@ const DefaultCheckBox = ({
         name={name}
         onClick={() => {
           checked.current = !checked.current;
+          console.log(`디폴트 체크박스 체크 ${checked.current}`);
           onChange({
             target: {
               name: name,
