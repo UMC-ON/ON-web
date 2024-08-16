@@ -10,12 +10,14 @@ import {
   AuthRequests,
   UserList,
 } from '../../components/Common/TempDummyData/PostList';
+import Modal from '../../components/Modal/Modal';
 
 const SchoolAuthPage = () => {
   const [isActive, setActive] = useState(false);
   const [userInfo, setUserInfo] = useState(useSelector((state) => state.user));
   const [isModalOpen, setModalOpen] = useState(false);
   const [photoURL, setPhotoURL] = useState(null);
+
   const nav = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
@@ -51,8 +53,6 @@ const SchoolAuthPage = () => {
         requestDate: new Date(),
       });
       setModalOpen(true);
-      alert('제출 완료!');
-      return nav('/admin');
     }
   };
   const { currentTitle, currentStep, prev, next, isFirstStep, isLastStep } =
@@ -119,6 +119,20 @@ const SchoolAuthPage = () => {
           </s.TwoColumnWrapper>
         </s.ButtonSection>
       </s.FormPage>
+      {isModalOpen && (
+        <Modal
+          title="교환, 방문교 인증
+      요청이 완료되었어요."
+          content="인증이 완료되면 마이페이지에서
+      일주일 이내로 확인할 수 있어요."
+          closeModal={() => {
+            setModalOpen(false);
+          }}
+          onExitModal={() => {
+            nav('/admin');
+          }}
+        />
+      )}
     </form>
   );
 };

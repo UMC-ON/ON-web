@@ -340,8 +340,27 @@ const EmptyDiv = styled.div`
 import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox';
 import { countries } from '../../assets/cityDatabase';
 
+const ContinentAndCountryItem = ({ content }) => {
+  return (
+    <>
+      <option
+        value={content.continent}
+        disabled
+      >
+        ----{content.continent}----
+      </option>
+      <option
+        key={content.id}
+        value={content.country}
+      >
+        {content.country}
+      </option>
+    </>
+  );
+};
+
 export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
-  const id = useRef(-1);
+  let id = -1;
   const [isConfirmed, setIsConfirmed] = useState(true);
 
   const onClickDsptchNotConfirmed = (e) => {
@@ -360,15 +379,11 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
 
   useEffect(() => {
     //이전 단계를 눌로 페이지에 다시 돌아왔을 때, 렌더링하며 이전 입력값 불러오고 조건 체크
-    console.log(`폼페이지:${state.name}`);
     if (!state.is_dispatch_confirmed) {
-      console.log('안그러하다');
       setIsConfirmed(false);
       setActive(true);
     } else {
-      console.log('최아악');
       if (state.dispatchedUniversity && state.country) {
-        console.log('그러하다');
         setActive(true);
       } else {
         setActive(false);
@@ -446,22 +461,19 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           >
             국가
           </option>
-          {countries.map((content, index) => {
-            if (content.id[0] > id.current) {
-              id.current = content.id[0];
-              console.log(content.continent);
+          {countries.map((content) => {
+            if (content.id[0] > id) {
+              id = content.id[0];
               return (
-                <option
-                  key={index}
-                  value={'?'}
-                >
-                  ----{content.continent}----
-                </option>
+                <ContinentAndCountryItem
+                  key={content.continent}
+                  content={content}
+                />
               );
             }
             return (
               <option
-                key={index}
+                key={content.id}
                 value={content.country}
               >
                 {content.country}
