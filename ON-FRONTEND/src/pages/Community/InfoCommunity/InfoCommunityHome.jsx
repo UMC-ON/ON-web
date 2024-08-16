@@ -30,7 +30,7 @@ const InfoCommunityHome = () => {
           눌러주세요!"
           type="BUTTON"
           buttonText="다음"
-          openNextModal={() => {
+          onBtnClick={() => {
             setSecondModalOpen(true);
           }}
         />

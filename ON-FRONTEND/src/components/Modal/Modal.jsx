@@ -11,7 +11,7 @@ function Modal({
   content = '',
   onExitModal = () => {}, //혹시 모달을 닫았을 때 navigate등 특정 함수를 실행시키고 싶다면 전달
   type = 'NORMAL', //여기서부터 아래 3가지 props는 type="BUTTON"일때 전달해주세요.
-  openNextModal = () => {}, //다음으로 열 모달의 setState 함수'만' 전달(현재 모달 닫는거까지 포함해서 전달하지 마세요!!)
+  onBtnClick = () => {}, //버튼 클릭 시 실행할 함수 전달. 다음 모달을 열려면 현재 모달을 닫는 함수와 다음 모달을 여는 함수를 함께 전달해주세요.
   buttonText = '', //버튼에 들어갈 텍스트
 }) {
   return (
@@ -35,12 +35,7 @@ function Modal({
         {type === 'BUTTON' && <Space />}
 
         {type === 'BUTTON' && (
-          <BlueButton
-            onClick={() => {
-              closeModal();
-              openNextModal();
-            }}
-          >
+          <BlueButton onClick={onBtnClick}>
             <pre style={{ whiteSpace: 'pre-line' }}>{buttonText}</pre>
           </BlueButton>
         )}
