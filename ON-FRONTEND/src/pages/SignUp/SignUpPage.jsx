@@ -13,7 +13,7 @@ const SignUpPage = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
   const [userInfo, setUserInfo] = useState({
-    //userId: UserList.length + 1, //백이랑 연결시 삭제
+    userId: UserList.length + 1, //백이랑 연결시 삭제
     email: '',
     password: '',
     nickName: '',
@@ -68,7 +68,6 @@ const SignUpPage = () => {
 
   const handleSubmitFE = (e) => {
     e.preventDefault();
-    dispatch(setUser(userInfo));
     if (isLastStep) {
       UserList.unshift(userInfo); //DB에 저장
       alert('회원가입이 완료되었습니다.');

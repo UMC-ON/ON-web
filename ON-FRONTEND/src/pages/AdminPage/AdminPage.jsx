@@ -33,7 +33,7 @@ const AdminPage = () => {
     <s.Page>
       <div>관리자 페이지</div>
       <s.GridContainer>
-        <s.KeepAllDiv width="2rem">승인 신청 일자</s.KeepAllDiv>
+        <s.KeepAllDiv width="2rem">승인 요청 일자</s.KeepAllDiv>
         <s.WrapDiv width="3rem">이름</s.WrapDiv>
         <s.WrapDiv width="1.5rem">id</s.WrapDiv>
         <s.KeepAllDiv width="2rem">파견 국가</s.KeepAllDiv>
@@ -52,8 +52,6 @@ const AdminPage = () => {
           imgShow={showImgModal}
         />
       ))}
-
-      {isModalOpen && <s.Image src={imgURL} />}
     </s.Page>
   );
 };

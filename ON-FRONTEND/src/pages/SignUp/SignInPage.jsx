@@ -5,12 +5,16 @@ import { useNavigate } from 'react-router-dom';
 import { UserList } from '../../components/Common/TempDummyData/PostList';
 import { setUser, signInUser } from '../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
+import { current } from '@reduxjs/toolkit';
 const SignInPage = () => {
+  const didMount = useRef(0); //백에 연결하기 전에 임시로...
+  //지금 편의를 위해 userInitialState가 너구리로 돼있어서 첫 렌더링시에 자꾸 useEffect 작동해서 막으려고 ㅠ
   const nav = useNavigate();
   const inputValue = useRef({ email: '', password: '' });
   const currentUser = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
   const onChangeHandler = (e) => {
@@ -19,6 +23,20 @@ const SignInPage = () => {
 
     inputValue.current = { ...inputValue.current, [name]: value };
   };
+  useEffect(() => {
+    if (didMount.current === 2) {
+      if (currentUser && currentUser.userState === 'TEMPORARY') {
+        console.log('실행');
+        return nav('/signUp/credentials');
+      } else if (currentUser) {
+        return nav('/');
+      }
+    } else {
+      didMount.current++;
+      console.log('렌더링');
+      console.log(currentUser);
+    }
+  }, [currentUser]);
 
   const handleSubmitFE = (e) => {
     e.preventDefault();
@@ -27,14 +45,8 @@ const SignInPage = () => {
     )[0];
     if (user && inputValue.current.password === user.password) {
       //여기까지가 백에서 해줄 일..true반환시
-      //토큰 저장
-
-      dispatch(setUser(user)); //로그인 성공 시 유저 세팅
-      console.log(currentUser);
-      if (currentUser.userState === 'TEMPORARY') {
-        return nav('/signUp/credentials');
-      }
-      return nav('/');
+      /////토큰 저장/////
+      dispatch(setUser(user)); //FE:로그인 성공 시 유저 세팅
     } else {
       alert('아이디나 비밀번호가 일치하지 않습니다.');
     }
