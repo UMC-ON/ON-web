@@ -7,7 +7,7 @@ import { PostList } from '../../components/Common/TempDummyData/PostList.jsx';
 import { useSelector } from 'react-redux';
 import Loading from '../../components/Loading/Loading.jsx';
 import axios from 'axios';
-import { setUser } from '../../redux/actions.jsx';
+import { getData } from '../../api/Functions.jsx';
 
 const PostPage = ({ color, title }) => {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const PostPage = ({ color, title }) => {
     imgIdList: [],
   });
 
-  const BETest = false;
+  const BETest = true;
 
   useEffect(() => {
     if (BETest) {

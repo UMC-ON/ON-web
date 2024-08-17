@@ -38,7 +38,7 @@ const CommunityPost = ({ post }) => {
 
           <PostInfoWrapper>
             <Writer>
-              {post.anonymous ? '익명' : post.writerInfo.nickName}
+              {post.anonymous ? '익명' : post.writerInfo.nickname}
               <VerifiedImg
                 src={verifiedBadge}
                 is_verified={post.writerInfo.userState}

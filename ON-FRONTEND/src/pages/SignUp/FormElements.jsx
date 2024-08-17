@@ -366,7 +366,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
   const onClickDsptchNotConfirmed = (e) => {
     if (e.target.value) {
       state.dispatchedUniversity = '';
-      state.univ_homepage = '';
+      state.universityUrl = '';
       state.country = '';
       state.dispatchedType = '';
     }
@@ -433,8 +433,8 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           placeholder="교환/방문교의 웹 사이트 주소를 붙여넣기 해주세요."
           disabled={!isConfirmed}
           onChange={updateUserInfo}
-          name="univ_homepage"
-          defaultValue={state.univ_homepage}
+          name="universityUrl"
+          defaultValue={state.universityUrl}
         />
       </s.InputWrapper>
       <s.Explanation style={{ fontSize: '9px' }}>

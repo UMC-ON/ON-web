@@ -4,7 +4,7 @@ export const showWriter = (comment = null, postWriter_id = '') => {
   if (comment && comment.is_anonymous) {
     return comment.writerInfo.userId === postWriter_id ? '글쓴이' : '익명';
   } else {
-    return comment.writerInfo.nickName;
+    return comment.writerInfo.nickname;
   }
 };
 

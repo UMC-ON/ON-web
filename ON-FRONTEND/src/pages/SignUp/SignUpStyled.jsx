@@ -113,8 +113,8 @@ export const ButtonSection = styled.section`
 
 export const PurpleButton = styled.button`
   display: flex;
-  width: 308px;
-  height: 59px;
+  width: auto;
+  height: auto;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -131,6 +131,7 @@ export const PurpleButton = styled.button`
     outline: none;
   }
   opacity: ${(props) => (props.disabled ? '50%' : '100%')};
+  padding: 0.75rem;
 `;
 export const InputWrapper = styled.div`
   color: black;
