@@ -8,26 +8,40 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { setUser } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
+import { postData } from '../../api/Functions';
+import { SIGN_UP_URL } from '../../api/urls';
+
+const userInfoFE = {
+  userId: UserList.length + 1, //백이랑 연결시 삭제
+  email: '',
+  password: '',
+  nickname: '',
+  name: '',
+  age: '',
+  gender: '',
+  phone: '',
+  is_dispatch_confirmed: true, //여기서부터 백이랑 연결 시 다 삭제
+  dispatchedUniversity: '',
+  universityUrl: '',
+  country: '',
+  dispatchedType: '',
+  userState: 'TEMPORARY',
+};
+
+const userInfoBE = {
+  email: '',
+  password: '',
+  nickname: '',
+  name: '',
+  age: '',
+  gender: '',
+  phone: '',
+};
 
 const SignUpPage = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const [userInfo, setUserInfo] = useState({
-    userId: UserList.length + 1, //백이랑 연결시 삭제
-    email: '',
-    password: '',
-    nickName: '',
-    name: '',
-    age: '',
-    gender: '',
-    phone: '',
-    is_dispatch_confirmed: true,
-    dispatchedUniversity: '',
-    univ_homepage: '',
-    country: '',
-    dispatchedType: '',
-    userState: 'TEMPORARY',
-  });
+  const [userInfo, setUserInfo] = useState(userInfoBE);
   const [isActive, setActive] = useState(false);
   const updateUserInfo = (e) => {
     if (e) {
@@ -82,23 +96,15 @@ const SignUpPage = () => {
       console.log('제출');
       // TODO: Request form
       //UserList.unshift(userInfo);
+      const formData = JSON.stringify(userInfo);
+      const response = postData(SIGN_UP_URL, formData);
+      if (response) {
+        alert('Submitted!');
+        nav('/signUp/complete');
+      } else {
+        alert('처리하는 중 오류가 생겼습니다. 처음부터 다시 시도해주세요.');
+      }
 
-      const options = {
-        method: 'POST',
-        url: 'http://13.209.255.118:8080/api/v1/user/sign-up',
-        data: { ...userInfo },
-      };
-
-      axios
-        .request(options)
-        .then(function (response) {
-          console.log(response.data);
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
-      alert('Submitted!');
-      nav('/signUp/complete');
       return false;
     }
 
@@ -106,7 +112,7 @@ const SignUpPage = () => {
   };
   return (
     <div>
-      <form onSubmit={handleSubmitFE}>
+      <form onSubmit={handleSubmitBE}>
         <s.FormPage>
           <s.SectionWrapper>
             <s.TitleSection>

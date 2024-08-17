@@ -8,11 +8,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 import { current } from '@reduxjs/toolkit';
+import { GET_USER_STATUS, SIGN_IN_URL } from '../../api/urls';
+import { postData, getData } from '../../api/Functions';
+
 const SignInPage = () => {
   const didMount = useRef(0); //백에 연결하기 전에 임시로...
   //지금 편의를 위해 userInitialState가 너구리로 돼있어서 첫 렌더링시에 자꾸 useEffect 작동해서 막으려고 ㅠ
   const nav = useNavigate();
   const inputValue = useRef({ email: '', password: '' });
+
   const currentUser = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
@@ -23,20 +27,20 @@ const SignInPage = () => {
 
     inputValue.current = { ...inputValue.current, [name]: value };
   };
-  useEffect(() => {
-    if (didMount.current === 2) {
-      if (currentUser && currentUser.userState === 'TEMPORARY') {
-        console.log('실행');
-        return nav('/signUp/credentials');
-      } else if (currentUser) {
-        return nav('/');
-      }
-    } else {
-      didMount.current++;
-      console.log('렌더링');
-      console.log(currentUser);
-    }
-  }, [currentUser]);
+  // useEffect(() => {
+  //   if (didMount.current === 2) {
+  //     if (currentUser && currentUser.userState === 'TEMPORARY') {
+  //       console.log('실행');
+  //       return nav('/signUp/credentials');
+  //     } else if (currentUser) {
+  //       return nav('/');
+  //     }
+  //   } else {
+  //     didMount.current++;
+  //     console.log('렌더링');
+  //     console.log(currentUser);
+  //   }
+  // }, [currentUser]);
 
   const handleSubmitFE = (e) => {
     e.preventDefault();
@@ -52,38 +56,27 @@ const SignInPage = () => {
     }
   };
 
-  const handleSubmitBE = (e) => {
+  const handleSubmitBE = async (e) => {
     e.preventDefault();
+    const formData = JSON.stringify(inputValue.current);
+    const response = await postData(SIGN_IN_URL, formData);
+    if (response) {
+      console.log('실행');
+      console.log(response.data);
+      localStorage.setItem('grantType', response.data.result.grantType);
+      localStorage.setItem('AToken', response.data.result.accessToken);
+      localStorage.setItem('RToken', response.data.result.refreshToken);
+      const res = await getData(GET_USER_STATUS, {
+        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+      });
+      console.log(res.data); //지우기.... USERSTATE 확인, 조건부 네비게이트
+      if (res.data.result === 'TEMPORARY') {
+        nav('/signUp/credentials');
+      } else {
+        nav('/');
+      }
+    } //로그인 성공/실패 확인 함수
 
-    const userData = JSON.stringify({
-      email: inputValue.current.email,
-      password: inputValue.current.password,
-    });
-
-    const options = {
-      method: 'POST',
-      url: 'http://13.209.255.118:8080/api/v1/user/sign-in',
-      headers: {
-        'Content-Type': `application/json`, // application/json 타입 선언
-      },
-      data: userData,
-    };
-    const fetchData = async () => {
-      await axios
-        .request(options)
-        .then((response) => {
-          console.log(response.data);
-          localStorage.setItem('grantType', response.data.result.grantType);
-          localStorage.setItem('AToken', response.data.result.accessToken);
-          localStorage.setItem('RToken', response.data.result.refreshToken);
-          nav('/');
-          return response.data;
-        })
-        .catch((error) => {
-          return alert('아이디나 비밀번호가 일치하지 않습니다.');
-        });
-    };
-    fetchData();
     //const request = fetchData();
   };
 
@@ -91,7 +84,7 @@ const SignInPage = () => {
     <>
       <form
         action="#"
-        onSubmit={handleSubmitFE}
+        onSubmit={handleSubmitBE}
       >
         <s.FormPage>
           <s.SectionWrapper>

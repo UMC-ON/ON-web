@@ -95,9 +95,14 @@ const ModalTitle = styled.pre`
 `;
 
 const ModalText = styled.pre`
-  font-size: 0.8em;
-  margin-bottom: 0.5vh;
+  color: #363636;
   text-align: center;
+  font-family: Inter;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.015rem;
   white-space: pre-line;
 `;
 

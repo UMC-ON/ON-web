@@ -145,7 +145,7 @@ const DetailPage = ({ color1, color2, titleColor }) => {
         </s.BackButton>
         <s.PostInfo>
           <s.InfoLabel>
-            {currentPost.anonymous ? '익명' : currentPost.writerInfo.nickName}
+            {currentPost.anonymous ? '익명' : currentPost.writerInfo.nickname}
           </s.InfoLabel>
           <s.InfoLabel>
             {currentPost.createdDate.toLocaleString('ko-KR')}
