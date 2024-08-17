@@ -64,7 +64,7 @@ const PickerOverlay = styled.div`
 const PickerContainer = styled.div`
   background-color: #FFFFFF;
   border-radius: 14px 14px 0px 0px;
-  width: 90%;
+  width: 100%;
   max-width: 400px;
   padding: 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);

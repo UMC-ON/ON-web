@@ -2,15 +2,35 @@ import styled from "styled-components";
 import React, { useState, useRef } from 'react';
 
 import camera from "../assets/images/camera.svg";
-import postIcon from '../assets/images/writepost_icon.svg';
 import PhotoAdd from "../assets/images/PhotoAdd.svg";
 
 import SellPostHeader from "../components/SellPostHeader";
+import SelectCity from "./SelectCity/SelectCity";
+import SellPostCitySelect from "../components/SellPostCitySelect";
+
 
 function SellPost() {
     const [selectedOption, setSelectedOption] = useState(null);
     const [images, setImages] = useState([]);
     const fileInputRef = useRef(null);
+    const [showCity, setShowCity] = useState(false);
+  const [city, setCity] = useState(null);
+  const [isCityClicked, setIsCityClicked] = useState(false);
+
+  const resetCityClick = () => {
+    setIsCityClicked(false);
+    setCity(null);
+  };
+
+  const handleGetCity = (city) => {
+    setCity(city);
+    setIsCityClicked(true);
+    setShowCity(false);
+  };
+
+  const handleCityClick = () => {
+    setShowCity(!showCity);
+  };
 
     const handleImageUpload = (event) => {
         const files = Array.from(event.target.files);
@@ -54,15 +74,17 @@ function SellPost() {
                 <TitleText>물품 등록하기</TitleText><br />
                 <Location>
                     현재 위치:
-                    <Country>
-                        영국
-                        <img src={postIcon} alt="post icon" style={{ marginLeft: "5px" }} />
-                    </Country>
                     <Region>
-                        런던
-                        <img src={postIcon} alt="post icon" style={{ marginLeft: "5px" }} />
+                        <SellPostCitySelect
+                            cityClick={handleCityClick}
+                            city={city}
+                            isCityClicked={isCityClicked}
+                            updateIsCityClicked={resetCityClick}
+                            />
+                        {showCity &&
+                        <SelectCity closeModal={handleCityClick} getCity={handleGetCity} />
+                        }
                     </Region>
-                    <p style={{ fontSize: "10px", color: "#B9B9B9", marginTop: "10px" }}>원활한 거래를 위해 지역까지 작성해주세요.</p>
                 </Location><br />
                 <Section>
                     <Label>제목</Label>
@@ -105,7 +127,7 @@ function SellPost() {
 export default SellPost;
 
 const Space = styled.div`
-  margin-top: 7vh;
+  margin-top: 6.5vh;
 `;
 
 const Photo = styled.div`
@@ -188,27 +210,25 @@ const Location = styled.div`
     margin-bottom: 2vh;
 `;
 
-const Country = styled.div`
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-    width: auto;
-    height: 0.8em;
-    padding: 0.5em;
-    background: ${props => props.theme.lightPurple};
-    margin: 0px 0.6em;
-    border-radius: 20px;
-    color: white;
-`;
+// const Country = styled.div`
+//     display: inline-flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     width: auto;
+//     height: 0.8em;
+//     padding: 0.5em;
+//     background: ${props => props.theme.lightPurple};
+//     margin: 0px 0.6em;
+//     border-radius: 20px;
+//     color: white;
+// `;
 
 const Region = styled.div`
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    width: auto;
     height: 0.8em;
     padding: 0.5em;
-    background: ${props => props.theme.lightPurple};
     border-radius: 20px;
     color: white;
 `;

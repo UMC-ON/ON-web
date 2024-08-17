@@ -12,6 +12,8 @@ import whiteCloseIcon from '../assets/images/whiteCloseIcon.svg';
 import SellPageHeader from '../components/SellPageHeader';
 import ItemList from '../components/ItemList';
 import TransactionPicker from "../components/TransactionPicker";
+import SelectCountry from './SelectCountry/SelectCountry.jsx';
+import SellPageCountrySelect from '../components/SellPageCountrySelect.jsx';
 
 const items = [
     {
@@ -93,6 +95,24 @@ function SellPage() {
   const [selectedTransaction, setSelectedTransaction] = useState('');
   const [isPickerVisible, setIsPickerVisible] = useState(false);
   const [tempTransaction, setTempTransaction] = useState('');  // 임시 선택 상태 추가
+  const [showCountry, setShowCountry] = useState(false);
+  const [country, setCountry] = useState(null);
+  const [isCountryClicked, setIsCountryClicked] = useState(false);
+
+  const resetCountryClick = () => {
+    setIsCountryClicked(false);
+    setCountry(null);
+  };
+
+  const handleGetCountry = (country) => {
+    setCountry(country);
+    setIsCountryClicked(true);
+    setShowCountry(false);
+  };
+
+  const handleCountryClick = () => {
+    setShowCountry(!showCountry);
+  };
 
   const navigate = useNavigate();
 
@@ -147,10 +167,15 @@ function SellPage() {
       <br /><br />
       <FlexContainer>
         <Span>
-          <GreyPicker>
-            국가
-            <Icon src={arrowIcon} />
-          </GreyPicker>
+          <SellPageCountrySelect
+          countryClick={handleCountryClick}
+          country={country}
+          isCountryClicked={isCountryClicked}
+          updateIsCountryClicked={resetCountryClick}
+           />
+        {showCountry &&
+          <SelectCountry closeModal={handleCountryClick} getCountry={handleGetCountry}/>
+        }
           <GreyPicker onClick={togglePickerVisibility} selected={!!selectedTransaction}>
             {selectedTransaction || '거래방식'}
             <Icon
