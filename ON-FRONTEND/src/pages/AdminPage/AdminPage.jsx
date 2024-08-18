@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { AuthRequests } from '../../components/Common/TempDummyData/PostList';
 import RequestItem from './RequestItem';
 import * as s from './AdminPageStyled';
+import { getData, postData } from '../../api/Functions';
+import { GET_REQUESTS_OF } from '../../api/urls';
+import axios from 'axios';
 
 const AdminPage = () => {
   const [imgURL, setImgUrl] = useState(null);
@@ -29,13 +32,58 @@ const AdminPage = () => {
       }
     }
   };
+
+  const status = {
+    ADMIN: 1, // 관리자
+
+    ACTIVE: 2, // 교환/파견교 관리자 인증 승인 완료
+    AWAIT: 3, // 교환/파견교 관리자 인증 승인 대기
+    DENIED: 4, // 교환/파견교 관리자 인증 승인 거절
+
+    NON_CERTIFIED: 5, // 교환/파견교 미정 선택
+
+    TEMPORARY: 6,
+  };
+
+  const permitStatus = 'AWAIT';
+  const url = `http://13.209.255.118:8080/api/v1/dispatch-certify/info/${permitStatus}`;
+
+  const getPost = async (funcParamURL) => {
+    return await axios.post(
+      funcParamURL,
+      {},
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+        params: { page: 1, size: 20, sort: 'DESC' },
+      },
+    );
+  };
+
+  const fetchData = async () => {
+    const response = await getPost(url);
+    if (response) {
+      console.log(response);
+    }
+
+    const res = await getData('/api/v1/user/current/info', {
+      Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+    });
+
+    if (res) {
+      console.log(res);
+    }
+  };
+  fetchData();
   return (
     <s.Page>
       <div>관리자 페이지</div>
       <s.GridContainer>
-        <s.KeepAllDiv width="2rem">승인 요청 일자</s.KeepAllDiv>
+        <s.KeepAllDiv width="2rem">요청 일자</s.KeepAllDiv>
         <s.WrapDiv width="3rem">이름</s.WrapDiv>
-        <s.WrapDiv width="1.5rem">id</s.WrapDiv>
+        <s.WrapDiv width="2rem">상태</s.WrapDiv>
         <s.KeepAllDiv width="2rem">파견 국가</s.KeepAllDiv>
         <s.WrapDiv width="4.5rem">파견교</s.WrapDiv>
         <s.WrapDiv width="3.4rem">이미지</s.WrapDiv>

@@ -67,27 +67,46 @@ const TermContent = styled.div`
   }
 `;
 
-export const UserInfoForm1 = ({ state, updateUserInfo, setActive }) => {
+export const UserInfoForm1 = ({
+  state,
+  updateUserInfo,
+  setActive,
+  setDupCheck,
+  dupCheck,
+}) => {
   const [pwCheck, setPwCheck] = useState('');
+  const apiDupCheck = async (url, target) => {
+    const response = await postData(url, target.value, {
+      'Content-Type': 'text/plain',
+    });
+    if (response) {
+      console.log(response);
+      if (response.data.result) {
+        //true면 존재한다는 것
+        setDupCheck({ ...dupCheck, [target.name]: -1 });
+      } else {
+        setDupCheck({ ...dupCheck, [target.name]: 1 });
+      }
+    }
+  };
+
+  const isAllValid = useRef({
+    //형식체크 valid
+    password: false,
+    email: false,
+  });
   useEffect(() => {
     if (
-      isAllValid.current.email &&
+      dupCheck.email === 1 &&
       isAllValid.current.password &&
       pwCheck === state.password &&
-      isAllValid.current.nickName
+      dupCheck.nickname === 1
     ) {
       setActive(true);
     } else {
       setActive(false);
     }
-  }, [state, pwCheck]);
-
-  const isAllValid = useRef({
-    email: false,
-    password: false,
-    pw_check: false,
-    nickName: false,
-  });
+  }, [state, pwCheck, isAllValid.current]); //이럴거면 머하러 ref쓰냐고,.
 
   return (
     <>
@@ -95,27 +114,44 @@ export const UserInfoForm1 = ({ state, updateUserInfo, setActive }) => {
         <div>이메일</div>
         <SpaceBetweenContainer>
           <s.TransparentInput
+            type="text"
             onChange={updateUserInfo}
             name="email"
             defaultValue={state.email}
           />
-          <img
-            src={
-              SignUpValidCheck(
-                { name: 'email', value: state.email },
-                isAllValid,
-              )
-                ? validImg
-                : null
-            }
-          />
+          {dupCheck.email < 1 ? (
+            <s.GrayButton
+              onClick={(e) => {
+                e.preventDefault();
+                if (!isAllValid.current.email) {
+                  return;
+                }
+                apiDupCheck(CHECK_DUPLICATE_EMAIL, {
+                  name: 'email',
+                  value: state.email,
+                });
+              }}
+            >
+              중복확인
+            </s.GrayButton>
+          ) : (
+            <img src={validImg} />
+          )}
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      <s.Explanation>
-        {SignUpValidCheck({ name: 'email', value: state.email }, isAllValid)
-          ? '사용할 수 있는 이메일입니다.'
-          : '이메일 형식으로 작성해주세요'}
-      </s.Explanation>
+      {dupCheck.email === 0 && (
+        <s.Explanation>
+          {SignUpValidCheck({ name: 'email', value: state.email }, isAllValid)
+            ? '중복 검사를 해주세요.'
+            : '이메일 형식으로 작성해주세요'}
+        </s.Explanation>
+      )}
+      {dupCheck.email === 1 && (
+        <s.Explanation>사용할 수 있는 이메일입니다.</s.Explanation>
+      )}
+      {dupCheck.email === -1 && (
+        <s.Explanation>이미 존재하는 이메일입니다.</s.Explanation>
+      )}
       <s.InputWrapper>
         <div>비밀번호</div>
         <SpaceBetweenContainer>
@@ -168,32 +204,38 @@ export const UserInfoForm1 = ({ state, updateUserInfo, setActive }) => {
           <s.TransparentInput
             onChange={updateUserInfo}
             type="text"
-            name="nickName"
-            defaultValue={state.nickName}
+            name="nickname"
+            defaultValue={state.nickname}
           />
-          <img
-            src={
-              state.nickName &&
-              SignUpValidCheck(
-                { name: 'nickName', value: state.nickName },
-                isAllValid,
-              )
-                ? validImg
-                : null
-            }
-          />
+          {dupCheck.nickname < 1 ? (
+            <s.GrayButton
+              onClick={async (e) => {
+                e.preventDefault();
+                if (state.nickname === '') {
+                  return;
+                }
+                apiDupCheck(CHECK_DUPLICATE_NICK, {
+                  name: 'nickname',
+                  value: state.nickname,
+                });
+              }}
+            >
+              중복확인
+            </s.GrayButton>
+          ) : (
+            <img src={validImg} />
+          )}
         </SpaceBetweenContainer>
       </s.InputWrapper>
-      <s.Explanation>
-        {!state.nickName
-          ? null
-          : SignUpValidCheck(
-                { name: 'nickName', value: state.nickName },
-                isAllValid,
-              )
-            ? '사용할 수 있는 닉네임입니다.'
-            : '이미 존재하는 닉네임입니다.'}
-      </s.Explanation>
+      {dupCheck.nickname === 0 && state.nickname && (
+        <s.Explanation>중복검사를 해주세요.</s.Explanation>
+      )}
+      {dupCheck.nickname === 1 && (
+        <s.Explanation>사용할 수 있는 닉네임입니다.</s.Explanation>
+      )}
+      {dupCheck.nickname === -1 && (
+        <s.Explanation>이미 존재하는 닉네임입니다.</s.Explanation>
+      )}
     </>
   );
 };
@@ -495,8 +537,8 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           <label>
             <s.RadioButton
               type="radio"
-              name="dispatchedType"
-              value="exchange"
+              name="dispatchType"
+              value="DISPATCHED"
               disabled={!isConfirmed}
               onChange={updateUserInfo}
             />
@@ -505,8 +547,8 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           <label>
             <s.RadioButton
               type="radio"
-              name="dispatchedType"
-              value="visit"
+              name="dispatchType"
+              value="VISIT"
               disabled={!isConfirmed}
               onChange={updateUserInfo}
             />
@@ -527,12 +569,28 @@ const RadioBtnDiv = styled.div`
 `;
 
 import addPhoto from '../../assets/images/addPhoto.svg';
+import { postData } from '../../api/Functions';
+import {
+  BASE_URL,
+  CHECK_DUPLICATE_EMAIL,
+  CHECK_DUPLICATE_NICK,
+} from '../../api/urls';
+import { isValid } from 'date-fns';
+import axios from 'axios';
 
-export const SchoolAuthForm = ({ state, setActive, photoURL, setPhotoURL }) => {
+export const SchoolAuthForm = ({
+  state,
+  setActive,
+  photoURL,
+  setPhotoPreview,
+  setFile,
+}) => {
   const onChangeImgFile = (fileList) => {
     if (fileList[0]) {
-      console.log(fileList);
-      setPhotoURL(URL.createObjectURL(fileList[0]));
+      console.log(fileList[0]);
+      const uploadImg = fileList[0];
+      setPhotoPreview(URL.createObjectURL(fileList[0]));
+      setFile(uploadImg);
     }
   };
   return (

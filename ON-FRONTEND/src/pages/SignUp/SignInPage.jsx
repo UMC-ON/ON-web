@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 import { current } from '@reduxjs/toolkit';
-import { GET_USER_STATUS, SIGN_IN_URL } from '../../api/urls';
+import { GET_USER_INFO, GET_USER_STATUS, SIGN_IN_URL } from '../../api/urls';
 import { postData, getData } from '../../api/Functions';
 
 const SignInPage = () => {
@@ -59,20 +59,32 @@ const SignInPage = () => {
   const handleSubmitBE = async (e) => {
     e.preventDefault();
     const formData = JSON.stringify(inputValue.current);
-    const response = await postData(SIGN_IN_URL, formData);
+    const response = await postData(SIGN_IN_URL, formData, {});
     if (response) {
       console.log('실행');
       console.log(response.data);
       localStorage.setItem('grantType', response.data.result.grantType);
       localStorage.setItem('AToken', response.data.result.accessToken);
       localStorage.setItem('RToken', response.data.result.refreshToken);
-      const res = await getData(GET_USER_STATUS, {
-        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-      });
+      const res = await getData(
+        GET_USER_STATUS,
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+        {},
+      );
       console.log(res.data); //지우기.... USERSTATE 확인, 조건부 네비게이트
       if (res.data.result === 'TEMPORARY') {
         nav('/signUp/credentials');
       } else {
+        const userInfo = await getData(GET_USER_INFO, {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        });
+        if (userInfo) {
+          console.log(userInfo);
+        }
+        console.log('디스패치');
+        dispatch(setUser(userInfo.data.result));
         nav('/');
       }
     } //로그인 성공/실패 확인 함수
