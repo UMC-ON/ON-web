@@ -87,9 +87,9 @@ const AdminPage = () => {
           >
             상태
           </option>
-          <option value="AWAIT">신규 신청</option>
-          <option value="ACTIVE">변경 신청</option>
-          <option value="DENIED">재신청</option>
+          <option value="AWAIT">AWAIT</option>
+          <option value="ACTIVE">ACTIVE</option>
+          <option value="DENIED">DENIED</option>
         </select>
       </div>
       <s.GridContainer style={{ padding: '1rem 0 ' }}>

@@ -1,7 +1,18 @@
+import { putData } from '../../api/Functions';
 import * as s from './AdminPageStyled';
 import { useState } from 'react';
 
 const RequestItem = ({ userInfo, photoURL, requestDate }) => {
+  const changePermitStatus = async (status) => {
+    console.log(status);
+    const url = `/api/v1/dispatch-certify/change-status/${userInfo.id}`;
+    const response = await putData(url, status, {
+      Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+    });
+    if (response) {
+      console.log(response);
+    }
+  };
   console.log(requestDate);
   const [imgURL, setImgUrl] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -41,8 +52,26 @@ const RequestItem = ({ userInfo, photoURL, requestDate }) => {
         >
           이미지
         </s.StyledBtn>
-        <s.StyledBtn>승인</s.StyledBtn>
-        <s.StyledBtn>거절</s.StyledBtn>
+        <s.StyledBtn
+          value="ACTIVE"
+          onClick={(e) => {
+            if (confirm('승인하시겠습니까?')) {
+              changePermitStatus(e.target.value);
+            }
+          }}
+        >
+          승인
+        </s.StyledBtn>
+        <s.StyledBtn
+          value="DENIED"
+          onClick={(e) => {
+            if (confirm('거절하시겠습니까?')) {
+              changePermitStatus(e.target.value);
+            }
+          }}
+        >
+          거절
+        </s.StyledBtn>
       </s.GridContainer>
       {isModalOpen && <s.Image src={imgURL} />}
     </>
