@@ -32,7 +32,7 @@ export const postData = async (url, formData, headers = {}, params = {}) => {
 
 export const getData = async (url, headers = {}, params = {}) => {
   const response = await apiClient
-    .get(`${url}`, { headers: { ...headers }, params: { ...params } })
+    .get(url, { headers: { ...headers }, params: { ...params } })
     .then((response) => {
       return response;
     })

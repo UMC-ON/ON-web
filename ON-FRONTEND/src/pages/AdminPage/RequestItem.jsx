@@ -24,11 +24,12 @@ const RequestItem = ({ userInfo, photoURL, requestDate }) => {
   return (
     <>
       <s.GridContainer style={{ border: '1px solid black' }}>
-        <s.WrapDiv width="2rem">
+        {/* <s.WrapDiv width="2rem">
           {requestDate.getMonth() + 1}/{requestDate.getDate()}
-        </s.WrapDiv>
-        <s.WrapDiv width="3rem">{userInfo.name}</s.WrapDiv>
-        <s.WrapDiv width="2rem">{userInfo.userState}</s.WrapDiv>
+        </s.WrapDiv> */}
+        <s.WrapDiv width="3rem">{userInfo.id}</s.WrapDiv>
+        <s.WrapDiv width="3rem">{userInfo.userId}</s.WrapDiv>
+        <s.WrapDiv width="2rem">{userInfo.permitStatus}</s.WrapDiv>
         <s.WrapDiv width="2rem">{userInfo.country}</s.WrapDiv>
         <s.KeepAllDiv width="4.5rem">
           {userInfo.dispatchedUniversity}

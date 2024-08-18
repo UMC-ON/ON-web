@@ -11,7 +11,7 @@ import {
   UserList,
 } from '../../components/Common/TempDummyData/PostList';
 import Modal from '../../components/Modal/Modal';
-import { multiFilePostData } from '../../api/Functions';
+import { multiFilePostData, postData } from '../../api/Functions';
 import { DISPATCH_CERTIFY_REQUEST } from '../../api/urls';
 
 const SchoolAuthPage = () => {
@@ -22,10 +22,10 @@ const SchoolAuthPage = () => {
     country: '',
     universityUrl: '',
     dispatchType: '',
+    isDispatchConfirmed: true,
   });
   const [isFirstModalOpen, setFirstModalOpen] = useState(true);
   const [isLastModalOpen, setLastModalOpen] = useState(false);
-  const [photoPreview, setPhotoPreview] = useState(null); //지우기
   const [file, setFile] = useState(null);
 
   const nav = useNavigate();
@@ -33,7 +33,7 @@ const SchoolAuthPage = () => {
 
   useEffect(() => {
     //마지막 단계에 인증 사진 있으면 활성화
-    if (isLastStep && photoPreview) {
+    if (isLastStep && file) {
       setActive(true);
     } else {
       setActive(false);
@@ -65,7 +65,7 @@ const SchoolAuthPage = () => {
       //인증 요청 제출
       AuthRequests.unshift({
         user: currentUser,
-        photoURL: photoPreview,
+        //photoURL: photoPreview,
         requestDate: new Date(),
       });
       setLastModalOpen(true);
@@ -76,9 +76,18 @@ const SchoolAuthPage = () => {
     e.preventDefault();
 
     if (isLastStep) {
+      if (!userInfo.isDispatchConfirmed) {
+        // const request = postData()
+      }
       const formData = new FormData();
       formData.append('fileList', file);
-      const json = JSON.stringify(userInfo);
+      const request = {
+        dispatchedUniversity: userInfo.dispatchedUniversity,
+        country: userInfo.country,
+        universityUrl: userInfo.universityUrl,
+        dispatchType: userInfo.dispatchType,
+      };
+      const json = JSON.stringify(request);
       const blob = new Blob([json], { type: 'application/json' });
       formData.append('dispatchCertifyApplyRequestDto', blob);
       const response = await multiFilePostData(
@@ -113,9 +122,6 @@ const SchoolAuthPage = () => {
         element: (
           <FormElements.SchoolAuthForm
             state={userInfo}
-            setActive={setActive}
-            photoURL={photoPreview}
-            setPhotoPreview={setPhotoPreview}
             setFile={setFile}
           />
         ),

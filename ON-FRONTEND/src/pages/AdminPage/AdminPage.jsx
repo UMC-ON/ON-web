@@ -5,9 +5,13 @@ import * as s from './AdminPageStyled';
 import { getData, postData } from '../../api/Functions';
 import { GET_REQUESTS_OF } from '../../api/urls';
 import axios from 'axios';
+import Loading from '../../components/Loading/Loading';
 
 const AdminPage = () => {
   const [imgURL, setImgUrl] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [requestList, setRequestList] = useState(null);
+  const [permitStatus, setPermitStatus] = useState('AWAIT');
   const [isModalOpen, setModalOpen] = useState(false);
   useEffect(() => {
     if (isModalOpen) {
@@ -33,54 +37,62 @@ const AdminPage = () => {
     }
   };
 
-  const status = {
-    ADMIN: 1, // 관리자
-
-    ACTIVE: 2, // 교환/파견교 관리자 인증 승인 완료
-    AWAIT: 3, // 교환/파견교 관리자 인증 승인 대기
-    DENIED: 4, // 교환/파견교 관리자 인증 승인 거절
-
-    NON_CERTIFIED: 5, // 교환/파견교 미정 선택
-
-    TEMPORARY: 6,
-  };
-
-  const permitStatus = 'AWAIT';
   const url = `http://13.209.255.118:8080/api/v1/dispatch-certify/info/${permitStatus}`;
-
-  const getPost = async (funcParamURL) => {
-    return await axios.post(
-      funcParamURL,
-      {},
-      {
-        headers: {
-          'Content-Type': 'application/json',
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      const response = await postData(
+        url,
+        {},
+        {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         },
-        params: { page: 1, size: 20, sort: 'DESC' },
-      },
-    );
-  };
+        { page: 0, size: 20, sort: 'DESC' },
+      );
+      if (response) {
+        console.log(response.data.result.content);
+        setRequestList(response.data.result.content);
+        return response.data.result.content;
+      }
+    };
+    fetchData();
+    setIsLoading(false);
+  }, [permitStatus]);
+  if (isLoading) {
+    return <Loading />;
+  }
 
-  const fetchData = async () => {
-    const response = await getPost(url);
-    if (response) {
-      console.log(response);
-    }
-
-    const res = await getData('/api/v1/user/current/info', {
-      Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-    });
-
-    if (res) {
-      console.log(res);
-    }
-  };
-  fetchData();
   return (
     <s.Page>
       <div>관리자 페이지</div>
-      <s.GridContainer>
+      <div
+        style={{
+          display: 'Flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0.4rem',
+        }}
+      >
+        <select
+          style={{ color: 'black', justifySelf: 'start', width: 'auto' }}
+          onChange={(e) => {
+            setPermitStatus(e.target.value);
+          }}
+        >
+          <option
+            value="STATUS"
+            disabled
+            hidden
+          >
+            상태
+          </option>
+          <option value="AWAIT">신규 신청</option>
+          <option value="ACTIVE">변경 신청</option>
+          <option value="DENIED">재신청</option>
+        </select>
+      </div>
+      <s.GridContainer style={{ padding: '1rem 0 ' }}>
         <s.KeepAllDiv width="2rem">요청 일자</s.KeepAllDiv>
         <s.WrapDiv width="3rem">이름</s.WrapDiv>
         <s.WrapDiv width="2rem">상태</s.WrapDiv>
@@ -91,15 +103,22 @@ const AdminPage = () => {
         <s.WrapDiv width="2rem">거절</s.WrapDiv>
       </s.GridContainer>
 
-      {AuthRequests.map((request, index) => (
-        <RequestItem
-          key={index}
-          userInfo={request.user}
-          photoURL={request.photoURL}
-          requestDate={request.requestDate}
-          imgShow={showImgModal}
-        />
-      ))}
+      {requestList && requestList.length > 0 ? (
+        requestList.map((request, index) => {
+          console.log('출력');
+          return (
+            <RequestItem
+              key={index}
+              userInfo={request}
+              photoURL={request.uuidFileUrlList[0]}
+              //requestDate={request.requestDate}
+              imgShow={showImgModal}
+            />
+          );
+        })
+      ) : (
+        <div style={{ padding: '5rem 0' }}>요청 내역이 없습니다.</div>
+      )}
     </s.Page>
   );
 };
