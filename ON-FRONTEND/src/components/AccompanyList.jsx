@@ -6,13 +6,20 @@ import calendarIcon from '../assets/images/grey_calendar_icon.svg';
 import plusIcon from '../assets/images/grey_plus_icon.svg';
 import placeIcon from '../assets/images/grey_place_icon.svg';
 
+import { useLocation, useNavigate } from 'react-router-dom';
+
 
 function AccompanyList({datas}) {
+
+    const navigate = useNavigate();
+    const goDetail = () => {
+      navigate('./detail');
+    };
 
     return (
       <>
        {datas.map((data, index) => (
-        <RoundContainer key={index}>
+        <RoundContainer key={index} onClick={goDetail}>
             <Image src={data.image}/>
             <TextContainer>
                 <CardName>{data.title}</CardName>

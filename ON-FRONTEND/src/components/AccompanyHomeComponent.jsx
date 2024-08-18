@@ -6,6 +6,7 @@ import DotInslideSlider from '../components/DotInsideSlider';
 import DateRangePicker from '../components/CompanyCalendar/CompanyCalendar.jsx';
 
 import bannerImg from '../assets/images/adBanner.svg';
+import detailImg from '../assets/images/accompany_img.svg';
 import arrowIcon from '../assets/images/bottomArrow.svg';
 import searchIcon from '../assets/images/searchIcon.svg';
 import AccompanyList from '../components/AccompanyList';
@@ -35,7 +36,7 @@ const accompanyCards = [
   },
   {
     isClosed: false,
-    image: marketImg,
+    image: detailImg,
     title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!🔥🔥',
     date: '8/2',
     people: '(1/4)',

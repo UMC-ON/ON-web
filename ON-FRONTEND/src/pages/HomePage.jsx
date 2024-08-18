@@ -261,7 +261,7 @@ function HomePage() {
                 </LeftContainer>
             </BigContainer>
 
-            <CardList cards={cards} />
+            <CardList selectedCountry={'영국'}/>
           </BlueContainer>
 
           <FlexContainer onClick={goToInfoCommunity}>

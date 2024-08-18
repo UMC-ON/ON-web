@@ -76,6 +76,7 @@ import closeIcon from '../assets/images/close_button.svg';
   const ModalText = styled.div`
     font-size: 0.8em;
     margin-bottom: 0.5vh;
+    color: black;
   `;
   
   const Close = styled.img`
