@@ -66,6 +66,7 @@ const TermContent = styled.div`
     display: none;
   }
 `;
+import { CHECK_DUPLICATE_EMAIL, CHECK_DUPLICATE_NICK } from '../../api/urls';
 
 export const UserInfoForm1 = ({
   state,
@@ -421,7 +422,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
 
   useEffect(() => {
     //이전 단계를 눌로 페이지에 다시 돌아왔을 때, 렌더링하며 이전 입력값 불러오고 조건 체크
-    if (!state.is_dispatch_confirmed) {
+    if (!state.isDispatchConfirmed) {
       setIsConfirmed(false);
       setActive(true);
     } else {
@@ -465,8 +466,8 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
           borderRadius: '3px',
         }}
         onChange={onClickDsptchNotConfirmed}
-        name="is_dispatch_confirmed"
-        defaultValue={!state.is_dispatch_confirmed}
+        name="isDispatchConfirmed"
+        defaultValue={!state.isDispatchConfirmed}
       />
 
       <s.InputWrapper style={{ opacity: isConfirmed ? '100%' : '50%' }}>
@@ -538,7 +539,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
             <s.RadioButton
               type="radio"
               name="dispatchType"
-              value="DISPATCHED"
+              value="EXCHANGE"
               disabled={!isConfirmed}
               onChange={updateUserInfo}
             />
@@ -570,26 +571,14 @@ const RadioBtnDiv = styled.div`
 
 import addPhoto from '../../assets/images/addPhoto.svg';
 import { postData } from '../../api/Functions';
-import {
-  BASE_URL,
-  CHECK_DUPLICATE_EMAIL,
-  CHECK_DUPLICATE_NICK,
-} from '../../api/urls';
-import { isValid } from 'date-fns';
-import axios from 'axios';
 
-export const SchoolAuthForm = ({
-  state,
-  setActive,
-  photoURL,
-  setPhotoPreview,
-  setFile,
-}) => {
+export const SchoolAuthForm = ({ state, setFile }) => {
+  const [preview, setPreview] = useState(null);
   const onChangeImgFile = (fileList) => {
     if (fileList[0]) {
       console.log(fileList[0]);
       const uploadImg = fileList[0];
-      setPhotoPreview(URL.createObjectURL(fileList[0]));
+      setPreview(URL.createObjectURL(uploadImg));
       setFile(uploadImg);
     }
   };
@@ -617,7 +606,7 @@ export const SchoolAuthForm = ({
               onChangeImgFile(e.target.files);
             }}
           />
-          <AddPhoto src={photoURL ? photoURL : addPhoto} />
+          <AddPhoto src={preview ? preview : addPhoto} />
         </label>
       </s.CenterContainer>
     </>

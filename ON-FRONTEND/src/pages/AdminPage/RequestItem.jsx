@@ -1,7 +1,18 @@
+import { putData } from '../../api/Functions';
 import * as s from './AdminPageStyled';
 import { useState } from 'react';
 
 const RequestItem = ({ userInfo, photoURL, requestDate }) => {
+  const changePermitStatus = async (status) => {
+    console.log(status);
+    const url = `/api/v1/dispatch-certify/change-status/${userInfo.id}`;
+    const response = await putData(url, status, {
+      Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+    });
+    if (response) {
+      console.log(response);
+    }
+  };
   console.log(requestDate);
   const [imgURL, setImgUrl] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -24,11 +35,12 @@ const RequestItem = ({ userInfo, photoURL, requestDate }) => {
   return (
     <>
       <s.GridContainer style={{ border: '1px solid black' }}>
-        <s.WrapDiv width="2rem">
+        {/* <s.WrapDiv width="2rem">
           {requestDate.getMonth() + 1}/{requestDate.getDate()}
-        </s.WrapDiv>
-        <s.WrapDiv width="3rem">{userInfo.name}</s.WrapDiv>
-        <s.WrapDiv width="2rem">{userInfo.userState}</s.WrapDiv>
+        </s.WrapDiv> */}
+        <s.WrapDiv width="3rem">{userInfo.id}</s.WrapDiv>
+        <s.WrapDiv width="3rem">{userInfo.userId}</s.WrapDiv>
+        <s.WrapDiv width="2rem">{userInfo.permitStatus}</s.WrapDiv>
         <s.WrapDiv width="2rem">{userInfo.country}</s.WrapDiv>
         <s.KeepAllDiv width="4.5rem">
           {userInfo.dispatchedUniversity}
@@ -40,8 +52,26 @@ const RequestItem = ({ userInfo, photoURL, requestDate }) => {
         >
           이미지
         </s.StyledBtn>
-        <s.StyledBtn>승인</s.StyledBtn>
-        <s.StyledBtn>거절</s.StyledBtn>
+        <s.StyledBtn
+          value="ACTIVE"
+          onClick={(e) => {
+            if (confirm('승인하시겠습니까?')) {
+              changePermitStatus(e.target.value);
+            }
+          }}
+        >
+          승인
+        </s.StyledBtn>
+        <s.StyledBtn
+          value="DENIED"
+          onClick={(e) => {
+            if (confirm('거절하시겠습니까?')) {
+              changePermitStatus(e.target.value);
+            }
+          }}
+        >
+          거절
+        </s.StyledBtn>
       </s.GridContainer>
       {isModalOpen && <s.Image src={imgURL} />}
     </>

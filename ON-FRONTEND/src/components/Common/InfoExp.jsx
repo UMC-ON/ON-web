@@ -13,7 +13,7 @@ export const showDispatchedUniv = (writerInfo, is_anonymous = false) => {
   if (is_anonymous) {
     return '파견교 비공개';
   } else {
-    if (writerInfo.userState === 'ACTIVE') {
+    if (writerInfo.userState === 'ACTIVE' || writerInfo.userState === 'ADMIN') {
       return `${writerInfo.country} ${writerInfo.dispatchedUniversity}`;
     } else {
       return '파견 미정';

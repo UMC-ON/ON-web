@@ -32,7 +32,7 @@ export const postData = async (url, formData, headers = {}, params = {}) => {
 
 export const getData = async (url, headers = {}, params = {}) => {
   const response = await apiClient
-    .get(`${url}`, { headers: { ...headers }, params: { ...params } })
+    .get(url, { headers: { ...headers }, params: { ...params } })
     .then((response) => {
       return response;
     })
@@ -42,7 +42,20 @@ export const getData = async (url, headers = {}, params = {}) => {
 
   return response;
 };
+export const putData = async (url, formData, headers = {}, params = {}) => {
+  const response = await apiClient
+    .put(url, formData, { headers: { ...headers }, params: { ...params } })
+    .then((response) => {
+      console.log(response);
+      return response;
+    })
+    .catch((error) => {
+      console.log(error);
+      return null;
+    });
 
+  return response;
+};
 export const multiFilePostData = async (url, formData, headers = {}) => {
   const response = await multipartApiClient
     .post(url, formData, { headers: { ...headers } })
