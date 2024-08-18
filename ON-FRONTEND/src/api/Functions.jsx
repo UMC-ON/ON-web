@@ -8,9 +8,31 @@ const apiClient = axios.create({
   },
 });
 
-export const postData = async (url, formData, headers = {}) => {
+const multipartApiClient = axios.create({
+  baseURL: 'http://13.209.255.118:8080/',
+  headers: {
+    'Content-Type': 'multipart/form-data;',
+  },
+});
+
+export const postData = async (url, formData, headers = {}, params = {}) => {
   const response = await apiClient
-    .post(url, formData, { headers: { ...headers } })
+    .post(url, formData, { headers: { ...headers }, params: { ...params } })
+    .then((response) => {
+      console.log(response);
+      return response;
+    })
+    .catch((error) => {
+      console.log(error);
+      return null;
+    });
+
+  return response;
+};
+
+export const getData = async (url, headers = {}, params = {}) => {
+  const response = await apiClient
+    .get(`${url}`, { headers: { ...headers }, params: { ...params } })
     .then((response) => {
       return response;
     })
@@ -21,9 +43,9 @@ export const postData = async (url, formData, headers = {}) => {
   return response;
 };
 
-export const getData = async (url, headers = {}) => {
-  const response = await apiClient
-    .get(url, { headers: { ...headers } })
+export const multiFilePostData = async (url, formData, headers = {}) => {
+  const response = await multipartApiClient
+    .post(url, formData, { headers: { ...headers } })
     .then((response) => {
       return response;
     })

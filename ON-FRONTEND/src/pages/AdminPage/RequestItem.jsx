@@ -28,7 +28,7 @@ const RequestItem = ({ userInfo, photoURL, requestDate }) => {
           {requestDate.getMonth() + 1}/{requestDate.getDate()}
         </s.WrapDiv>
         <s.WrapDiv width="3rem">{userInfo.name}</s.WrapDiv>
-        <s.WrapDiv width="1.5rem">{userInfo.userId}</s.WrapDiv>
+        <s.WrapDiv width="2rem">{userInfo.userState}</s.WrapDiv>
         <s.WrapDiv width="2rem">{userInfo.country}</s.WrapDiv>
         <s.KeepAllDiv width="4.5rem">
           {userInfo.dispatchedUniversity}

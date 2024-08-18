@@ -9,36 +9,36 @@ export const ReplyList = [];
 
 export const UserList = [
   {
-    userId: 2, //백이랑 연결시 삭제
+    id: 2, //백이랑 연결시 삭제
     email: 'lmy@highkick.com',
     password: 'bradpitt01!',
-    nickName: '너구리',
+    nickname: '너구리',
     name: '이민용',
     age: '28',
     gender: 'MALE',
     phone: '',
-    is_dispatch_confirmed: true,
+    isDispatchConfirmed: true,
     dispatchedUniversity: '풍파고',
-    univ_homepage: '',
+    universityUrl: '',
     country: '흑석동',
-    dispatchedType: '',
-    userState: 'ACTIVE',
+    dispatchType: '',
+    userStatus: 'NON_CERTIFY',
   },
   {
-    userId: 1, //백이랑 연결시 삭제
+    id: 1, //백이랑 연결시 삭제
     email: 'smj@highkick.com',
     password: 'rappermj01!',
-    nickName: '방방거사',
+    nickname: '방방거사',
     name: '서민정',
     age: '27',
     gender: 'FEMALE',
     phone: '',
-    is_dispatch_confirmed: true,
+    isDispatchConfirmed: true,
     dispatchedUniversity: 'EHWA',
-    univ_homepage: '',
+    universityUrl: '',
     country: '미국',
-    dispatchedType: '',
-    userState: 'ACTIVE',
+    dispatchType: '',
+    userStaus: 'ACTIVE',
   },
 ];
 

@@ -11,10 +11,11 @@ import {
   UserList,
 } from '../../components/Common/TempDummyData/PostList';
 import Modal from '../../components/Modal/Modal';
+import { multiFilePostData } from '../../api/Functions';
+import { DISPATCH_CERTIFY_REQUEST } from '../../api/urls';
 
 const SchoolAuthPage = () => {
   const currentUser = useSelector((state) => state.user);
-  const [isDispatchConfirmed, setIsDispatchConfirmed] = useState(true);
   const [isActive, setActive] = useState(false);
   const [userInfo, setUserInfo] = useState({
     dispatchedUniversity: '',
@@ -24,14 +25,15 @@ const SchoolAuthPage = () => {
   });
   const [isFirstModalOpen, setFirstModalOpen] = useState(true);
   const [isLastModalOpen, setLastModalOpen] = useState(false);
-  const [photoURL, setPhotoURL] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(null); //지우기
+  const [file, setFile] = useState(null);
 
   const nav = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
     //마지막 단계에 인증 사진 있으면 활성화
-    if (isLastStep && photoURL) {
+    if (isLastStep && photoPreview) {
       setActive(true);
     } else {
       setActive(false);
@@ -63,10 +65,35 @@ const SchoolAuthPage = () => {
       //인증 요청 제출
       AuthRequests.unshift({
         user: currentUser,
-        photoURL: photoURL,
+        photoURL: photoPreview,
         requestDate: new Date(),
       });
       setLastModalOpen(true);
+    }
+  };
+
+  const handleSubmitBE = async (e) => {
+    e.preventDefault();
+
+    if (isLastStep) {
+      const formData = new FormData();
+      formData.append('fileList', file);
+      const json = JSON.stringify(userInfo);
+      const blob = new Blob([json], { type: 'application/json' });
+      formData.append('dispatchCertifyApplyRequestDto', blob);
+      const response = await multiFilePostData(
+        DISPATCH_CERTIFY_REQUEST,
+        formData,
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+      );
+      if (response) {
+        console.log(response);
+        setLastModalOpen(true);
+      }
+    } else {
+      next();
     }
   };
   const { currentTitle, currentStep, prev, next, isFirstStep, isLastStep } =
@@ -87,15 +114,16 @@ const SchoolAuthPage = () => {
           <FormElements.SchoolAuthForm
             state={userInfo}
             setActive={setActive}
-            photoURL={photoURL}
-            setPhotoURL={setPhotoURL}
+            photoURL={photoPreview}
+            setPhotoPreview={setPhotoPreview}
+            setFile={setFile}
           />
         ),
       },
     ]);
   return (
     <>
-      <form onSubmit={handleSubmitFE}>
+      <form onSubmit={handleSubmitBE}>
         <s.FormPage>
           <s.SectionWrapper>
             <s.TitleSection>

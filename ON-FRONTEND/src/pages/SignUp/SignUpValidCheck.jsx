@@ -29,19 +29,6 @@ export const SignUpValidCheck = (target, isAllValid) => {
         return true;
       }
     }
-    case 'nickName': {
-      if (!target.value) {
-        isAllValid.current.nickName = false;
-        return;
-      }
-      if (UserList.filter((user) => user.nickName === target.value)[0]) {
-        isAllValid.current.nickName = false;
-        return false;
-      } else {
-        isAllValid.current.nickName = true;
-        return true;
-      }
-    }
     case 'name': {
       if (!specialChar.test(target.value)) {
         isAllValid.current.name = true;
