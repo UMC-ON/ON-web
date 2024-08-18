@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import detailImg from '../assets/images/accompany_img.svg';
 import profileImg from '../assets/images/englandIcon.svg';
 import coordinateIcon from '../assets/images/coordinate_icon.svg';
+import marketImg2 from '../assets/images/borough_market.svg';
 
 import calendarIcon from '../assets/images/black_calendar_icon.svg';
 import placeIcon from '../assets/images/black_place_icon.svg';
@@ -52,6 +53,27 @@ const accompanycards = [
     date: '8/2',
     people: '(1/4)',
     place: '런던 버로우 마켓',
+  },
+];
+
+const infocards = [
+  {
+    imageIdList: marketImg2,
+    nickName: '제로',
+    age: '22',
+    gender: '여',
+    departurePlace: '영국',
+    ageAnonymous: false,
+    universityAnonymous: false,
+    university: 'Kings College London',
+    title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!!🔥🔥',
+    time: '24.08.05 5:38 PM',
+    content: '같이 시장 구경하면서 사진 찍으며 좋은 추억 남기고 싶으신 분들을 찾습니다!! 구경은 하고 싶은데, 그동안 혼자라서 고민하셨던 분들 대환영입니다!😄',
+    date: '8/2',
+    days: '당일치기',
+    arrivePlace: '영국 런던',
+    currentPeople: 1,
+    totalPeople: 4,
   },
 ];
 
@@ -130,50 +152,58 @@ function AccompanyDetailPage() {
         <>
         <AccompanyHeader openModal={openShareModal}/>
         <Space/>
-        <BannerContainer>
-          <BannerImg src={detailImg} alt="Banner" />
-          <GradientOverlay />
-          <ProfileTextContainer>
-            <ProfileImg src={profileImg} alt="Profile" />
-            <TextContainer>
-              <Left>
-                <BigText>제로</BigText>
-                <GreyText $left="8px">(20대/여)</GreyText>
-              </Left>
-              <Left>
-                <SmallIcon src={coordinateIcon}/>
-                <GreyText $size="0.9em">영국 런던</GreyText>
-              </Left>
-            </TextContainer>
-          </ProfileTextContainer>
-        </BannerContainer>
+        {infocards.map((card, index) => (
+          <div key={index}>
+          <BannerContainer>
+            <BannerImg src={card.imageIdList} alt="Banner" />
+            <GradientOverlay />
+            <ProfileTextContainer>
+              <ProfileImg src={profileImg} alt="Profile" />
+              <TextContainer>
+                <Left>
+                  <BigText>제로</BigText>
+                  <GreyText $left="8px">(</GreyText>
+                  <GreyText>{card.age}</GreyText>
+                  <GreyText>/</GreyText>
+                  <GreyText>{card.gender}</GreyText>
+                  <GreyText>)</GreyText>
+                </Left>
+                <Left>
+                  <SmallIcon src={coordinateIcon}/>
+                  <GreyText $size="0.9em">{card.departurePlace}</GreyText>
+                  <GreyText $size="0.9em">,&nbsp;</GreyText>
+                  <GreyText $size="0.9em">{card.university}</GreyText>
+                </Left>
+              </TextContainer>
+            </ProfileTextContainer>
+          </BannerContainer>
+       
 
         <BlueContainer>
-          <BigText $size="1.3em">🔥🔥8/2 버로우 마켓 동행하실 분 구해요!!🔥🔥</BigText>
-          <Left><GreyText>24.08.05 5:38 PM</GreyText></Left>
+          <BigText $size="1.3em">{card.title}</BigText>
+          <Left><GreyText>{card.time}</GreyText></Left>
         </BlueContainer>
 
         <BodyText>
-          같이 시장 구경하면서 사진 찍으며 좋은 추억 남기고 싶으신 분들을 찾습니다!! 구경은 하고 싶은데, 그동안
-          혼자라서 고민하셨던 분들 대환영입니다!😄
+          {card.content}
         </BodyText>
 
         <PurpleContainer>
           <FlexContainer>
             <Row>
               <RowText><BlackIcon src={calendarIcon}/>희망일정</RowText>
-              <RowText><BlackIcon src={placeIcon}/>장소</RowText>
+              <RowText><BlackIcon src={placeIcon}/>지역</RowText>
               <RowText><BlackIcon src={plusIcon}/>모집 인원</RowText>
             </Row>
             <Row>
               <RowText $size="0.9em" $weight="normal" $color="#7a7a7a">
-                8/2 당일치기
+                {card.date} {card.days}
               </RowText>
               <RowText $size="0.9em" $weight="normal" $color="#7a7a7a">
-                런던 버로우 마켓
+                {card.arrivePlace}
               </RowText>
               <RowText $size="0.9em" $weight="normal" $color="#7a7a7a">
-                (1/4)
+                ({card.currentPeople}/{card.totalPeople})
               </RowText>
             </Row>
           </FlexContainer>
@@ -199,6 +229,8 @@ function AccompanyDetailPage() {
           <GreyButton onClick={() => navigate('/chat')}>채팅 문의</GreyButton>
           <BlueButton onClick={openFirstModal}>동행 신청</BlueButton>
         </BottomTabLayout>
+        </div>
+         ))}
 
         {isFirstModalOpen && (
         <FirstModal closeModal={closeFirstModal} openNextModal={handleBlueButtonClick} />
@@ -246,7 +278,7 @@ const SmallIcon = styled.img`
 
 
 const Space = styled.div`
-  margin-top: 10vh;
+  margin-top: 7vh;
 `;
 
 const BannerContainer = styled.div`
@@ -257,9 +289,13 @@ const BannerContainer = styled.div`
 `;
 
 const BannerImg = styled.img`
+  // width: 100%;
+  // height: auto;
+  // display: block;
+
+  object-fit: cover;
   width: 100%;
-  height: auto;
-  display: block;
+  height: 220px;
 `;
 
 const GradientOverlay = styled.div`

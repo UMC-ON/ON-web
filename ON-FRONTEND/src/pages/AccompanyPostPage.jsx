@@ -48,6 +48,32 @@ function AccompanyPostPage() {
     const minusSrc = (daysDifference == 0) ? greyMinusButton : minusButton;
     const plusSrc = (daysDifference == limitDays) ? greyPlusButton : plusButton;
 
+    const [input, setInput] = useState({
+      age: 22,
+      ageAnonymous: false,
+      country: '',
+      university: 'Kings College London',
+      universityAnonymous: false,
+      people: 0,
+      place1: '',
+      place2: '',
+      days: 0,
+    });
+
+    const onChangeInput = (e) => {
+      let name = e.target.name;
+      let value = e.target.value;
+  
+      setInput({
+        ...input,
+        [name]: value,
+      });
+    };
+
+    const onSubmit = () => {
+      console.log(input);
+    };
+
     const handlePerson = (event) => {
       const newValue = event.target.value;
       if (!isNaN(newValue) && newValue.trim() !== '') {
@@ -179,7 +205,7 @@ function AccompanyPostPage() {
       <>
         <RightContainer>
             <GreyButton onClick={onClickBackButton}>취소</GreyButton>
-            <BlueButton>등록</BlueButton>
+            <BlueButton onClick={onSubmit}>등록</BlueButton>
         </RightContainer>
 
         <LeftContainer>

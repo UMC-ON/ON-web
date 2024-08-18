@@ -13,10 +13,10 @@ import closeIcon from '../assets/images/close_button.svg';
       .then(() => {
         setCopySuccess('링크가 복사되었습니다!');
       })
-      // .catch(err => {
-      //   setCopySuccess('Failed to copy the link');
-      //   console.error('Failed to copy: ', err);
-      // });
+      .catch(err => {
+        setCopySuccess('Failed to copy the link');
+        console.error('Failed to copy: ', err);
+      });
     };
 
     return (
