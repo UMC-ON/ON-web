@@ -1,15 +1,19 @@
 import PageHeader from '../../components/PageHeader/PageHeader';
 import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import * as s from './ChatListStyled';
-import { useState, useEffect } from 'react';
-import SingleChat from '../../components/ChatList/SingleChat/SingleChat';
+import React, { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
+import SingleAccompanyChat from '../../components/ChatList/SingleChat/SingleAccompanyChat';
+import SingleTradeChat from '../../components/ChatList/SingleChat/SingleTradeChat';
 import NoContent from '../../components/NoContent/NoContent';
 import Loading from '../../components/Loading/Loading';
+import img from '../../assets/images/country_flag/000.svg';
+
 const ChatList = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentMode, setCurrentMode] = useState('accompany');
-  const [isAccompanyChat, setIsAccompanyChat] = useState([]);
-  const [isTradeChat, setIsTradeChat] = useState([]);
+  const [isAccompanyChat, setIsAccompanyChat] = useState(['내용']);
+  const [isTradeChat, setIsTradeChat] = useState(['임시내용']);
 
   const handleModeChange = (mode) => () => {
     if (currentMode !== mode) {
@@ -30,7 +34,6 @@ const ChatList = () => {
 
   return (
     <s.ChatListLayout>
-      <Loading />
       <PageHeader pageName="채팅" />
       {/*위쪽 버튼*/}
       <s.ModeContainer>
@@ -48,33 +51,41 @@ const ChatList = () => {
         </s.ModeButton>
       </s.ModeContainer>
 
-      {currentMode === 'accompany' ? (
+      {isLoading ? (
+        <Loading />
+      ) : currentMode === 'accompany' ? ( //동행 구하기
         isAccompanyChatEmpty ? (
           <NoContent
             content="채팅 내역"
             style={{ paddingBottom: '10rem' }}
           />
         ) : (
+          <NavLink to="/chat">
+            <s.ChatListWrapper>
+              <SingleAccompanyChat
+                img={img} //컨트리 넘겨줘야 함.
+                nickName="동행"
+                time="2023"
+                message="혹시 8월 중 며칠 정도에 출발하실 예정이신가요?"
+              />
+              <s.Line />
+            </s.ChatListWrapper>
+          </NavLink>
+        )
+      ) : isTradeChatEmpty ? ( //물품거래
+        <NoContent content="채팅 내역" />
+      ) : (
+        <NavLink to="/chat">
           <s.ChatListWrapper>
-            <SingleChat
-              nickName="동행"
+            <SingleTradeChat
+              img={img}
+              nickName="물품거래"
               time="2023"
-              message="혹시 8월 중 며칠 정도에 출발하실 예정이신가요?ddddddddd"
+              message="혹시 8월 중 며칠 정도에 출발하실 예정이신가요?"
             />
             <s.Line />
           </s.ChatListWrapper>
-        )
-      ) : isTradeChatEmpty ? (
-        <s.ChatListWrapper>
-          <SingleChat
-            nickName="물품거래"
-            time="2023"
-            message="혹시 8월 중 며칠 정도에 출발하실 예정이신가요?ddddddddd"
-          />
-          <s.Line />
-        </s.ChatListWrapper>
-      ) : (
-        <NoContent content="채팅 내역" />
+        </NavLink>
       )}
 
       <BottomTabNav />
