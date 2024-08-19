@@ -14,6 +14,8 @@ const multipartApiClient = axios.create({
   },
 });
 
+///일반, content-type이 application/json인 post,get,put///
+///url,params만 필수///
 export const postData = async (url, formData, headers = {}, params = {}) => {
   const response = await apiClient
     .post(url, formData, { headers: { ...headers }, params: { ...params } })
@@ -55,9 +57,16 @@ export const putData = async (url, formData, headers = {}, params = {}) => {
 
   return response;
 };
-export const multiFilePostData = async (url, formData, headers = {}) => {
+
+////이미지 전송 등 multipart/form-data 형식의 post///
+export const multiFilePostData = async (
+  url,
+  formData,
+  headers = {},
+  params = {},
+) => {
   const response = await multipartApiClient
-    .post(url, formData, { headers: { ...headers } })
+    .post(url, formData, { headers: { ...headers }, params: { ...params } })
     .then((response) => {
       return response;
     })
