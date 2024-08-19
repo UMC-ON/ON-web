@@ -16,17 +16,14 @@ const FreeCommunityCardList = ({ cards }) => {
           <PaddingTop/>
           <Stripe $blue={false}>
             <TextTopLeft>{card.title}</TextTopLeft>
-            <TextTopRight>{showDate(card.createdAt)}</TextTopRight>
+            <TextTopRight>{card.postTime}</TextTopRight>
           </Stripe>
           <TextContainer>
-            <TextMiddle2>{card.body}
+            <TextMiddle2>{card.content}
             </TextMiddle2>
             <InlineTextContainer>
               <MarginLeft/>
-              {card.anonymous ? 
-              <TextBottomLeft>익명</TextBottomLeft> :
-              <TextBottomLeft>{card.userNickname}</TextBottomLeft>
-              }       
+              <TextBottomLeft>{card.writer}</TextBottomLeft>
               <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
               <TextBottomLeft2>{card.commentCount}</TextBottomLeft2>
             </InlineTextContainer>
@@ -93,6 +90,7 @@ const TextMiddle2 = styled.div`
   width: 280px;
   margin: 5px;
   margin-bottom: 0px;
+    height: 4em;
 `;
 
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import PageHeader from '../components/PageHeader/PageHeader';
 import DotInslideSlider from '../components/DotInsideSlider';
@@ -85,7 +85,8 @@ const accompanyCards = [
 ];
 
 const AccompanyHomeComponent = 
-({ startDate, endDate, isDateClicked, calendarClick, updateIsDateClicked, 
+({ allData,
+  startDate, endDate, isDateClicked, calendarClick, updateIsDateClicked, 
     genderClick, gender, isGenderClicked, updateIsGenderClicked,
     countryClick, country, isCountryClicked, updateIsCountryClicked,
     updateEverything
@@ -171,7 +172,7 @@ const AccompanyHomeComponent =
           </RoundContainer>
     
           <SmallSpace />
-          <AccompanyList datas={accompanyCards} />
+          <AccompanyList datas={allData} />
           <Space />
     
           <WriteButton onClick={goPost}>

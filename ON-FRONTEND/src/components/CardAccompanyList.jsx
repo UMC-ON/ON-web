@@ -22,7 +22,7 @@ const CardAccompanyList = ({ color, cards }) => {
       {cards.map((card, index) => (
         <CardContainer key={index}>
           <Card>
-            <CardImage src={card.imageUrls[0]}/>
+            <CardImage src={card.postImg}/>
             <GreyCard color={color}>
               <Left><CardName>{card.title}</CardName></Left>
               <Left>
@@ -49,10 +49,10 @@ const CardAccompanyList = ({ color, cards }) => {
               </Left>
               <Left>
                 <CardIcon src={placeIcon}/>
-                <GreyText>{card.travelArea[0]}</GreyText>
-                {card.travelArea[1] ?
+                <GreyText>{card.travelPlace}</GreyText>
+                {/* {card.travelArea[1] ?
                 <GreyText $left="0px">, {card.travelArea[1]}</GreyText>:null
-                }
+                } */}
               </Left>
               <SmallSpace/>
             </GreyCard>

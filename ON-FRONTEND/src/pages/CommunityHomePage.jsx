@@ -123,21 +123,23 @@ function CommunityHomePage() {
     navigate("/community/info/post");
   }
 
-  const [infoData, setInfoData] = useState(null);
+  const [infoData, setInfoData] = useState([]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await getData(GET_RECENT_POST_OF('INFO')); 
-  //       setInfoData(data);
-  //       console.log(data);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getData(GET_RECENT_POST_OF('INFO'),{
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        }); 
+        setInfoData(data);
+        console.log(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
-  //   fetchData(); 
-  // }, []); 
+    fetchData(); 
+  }, []); 
 
   return (
     <>
@@ -183,7 +185,7 @@ function CommunityHomePage() {
         <RightIcon src={rightIcon} />
       </FlexContainer>
       <Shadow>
-        <CommunityHomeList bgcolor='rgba(191, 216, 229, 0.6)' datas={ifData} />
+        <CommunityHomeList bgcolor='rgba(191, 216, 229, 0.6)' datas={infoData} />
       </Shadow>
 
       <SmallSpace />
