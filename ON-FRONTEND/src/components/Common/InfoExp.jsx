@@ -1,8 +1,8 @@
 //익명일 경우 글쓴이/익명으로 표시, 아닐 경우 닉네임 표시
 //판별하려는 객체와 post 작성자 id 넘겨주어야함.
 export const showWriter = (comment = null, postWriter_id = '') => {
-  if (comment && comment.is_anonymous) {
-    return comment.writerInfo.userId === postWriter_id ? '글쓴이' : '익명';
+  if (comment && comment.anonymous) {
+    return comment.writerInfo.id === postWriter_id ? '글쓴이' : '익명';
   } else {
     return comment.writerInfo.nickname;
   }
