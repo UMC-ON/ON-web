@@ -6,6 +6,7 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 const multipartApiClient = axios.create({
@@ -13,6 +14,7 @@ const multipartApiClient = axios.create({
   headers: {
     'Content-Type': 'multipart/form-data;',
   },
+  withCredentials: true,
 });
 
 export const postData = async (url, formData, headers = {}, params = {}) => {

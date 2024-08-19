@@ -6,6 +6,7 @@ import CommunityPost from '../../components/CommunityPost/CommunityPost.jsx';
 import arrowIcon from '../../assets/images/bottomArrow.svg';
 import whiteCloseIcon from '../../assets/images/whiteCloseIcon.svg';
 import SelectCountry from '../SelectCountry/SelectCountry.jsx';
+import Loading from '../../components/Loading/Loading.jsx';
 
 import communityBannerImg from '../../assets/images/communityBannerImg.svg';
 import pencilImg from '../../assets/images/pencil.svg';
@@ -25,6 +26,8 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
 
   const [showCountry, setShowCountry] = useState(false); //모달창
   const [country, setCountry] = useState(null); //선택된 국가
+  const [isLoading, setIsLoading] = useState(false);
+  const [postList, setPostList] = useState(null);
 
   const handleCountryClick = () => {
     setShowCountry(!showCountry);
@@ -48,6 +51,31 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
   const currentPostList = PostList.filter(
     (post) => post.boardType === currentBoardType,
   );
+
+  const url = `http://13.209.255.118:8080/api/v1/post/${currentBoardType}`;
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      const response = await postData(
+        url,
+        {},
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+      );
+      if (response) {
+        console.log(response.data.result.content);
+        setPostList(response.data.result.content);
+        return response.data.result.content;
+      }
+    };
+    fetchData();
+    setIsLoading(false);
+  }, [postList]);
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
       <s.PageContainer>
