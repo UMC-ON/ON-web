@@ -6,8 +6,7 @@ import { useState, useRef, useEffect } from 'react';
 import { PostList } from '../../components/Common/TempDummyData/PostList.jsx';
 import { useSelector } from 'react-redux';
 import Loading from '../../components/Loading/Loading.jsx';
-import axios from 'axios';
-import { getData, postData } from '../../api/Functions.jsx';
+import { getData } from '../../api/Functions.jsx';
 import { GET_USER_INFO } from '../../api/urls.jsx';
 
 const PostPage = ({ color, title }) => {
@@ -18,7 +17,6 @@ const PostPage = ({ color, title }) => {
   //const [userInfo, setUserInfo] = useState(null);
   const [input, setInput] = useState({
     boardType: `${title}`,
-    postId: PostList.length + 1,
     createdDate: new Date(),
     writerInfo: {
       id: userInfo.id,

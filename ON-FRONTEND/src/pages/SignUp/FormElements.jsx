@@ -539,7 +539,7 @@ export const SchoolInfoForm = ({ state, updateUserInfo, setActive }) => {
             <s.RadioButton
               type="radio"
               name="dispatchType"
-              value="EXCHANGE"
+              value="DISPATCHED"
               disabled={!isConfirmed}
               onChange={updateUserInfo}
             />
