@@ -16,7 +16,8 @@ import { countries } from '../../assets/cityDatabase.js';
 
 import { PostList } from '../../components/Common/TempDummyData/PostList.jsx';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getData } from '../../api/Functions.jsx';
 
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 
@@ -56,22 +57,17 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const response = await postData(
-        url,
-        {},
-        {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        },
-      );
+      const response = await getData(url, {
+        Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+      });
       if (response) {
-        console.log(response.data.result.content);
-        setPostList(response.data.result.content);
-        return response.data.result.content;
+        console.log(response.data);
+        setPostList(response.data);
       }
     };
     fetchData();
     setIsLoading(false);
-  }, [postList]);
+  }, []);
   if (isLoading) {
     return <Loading />;
   }
@@ -106,18 +102,16 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
           </s.GreyPicker>
         </s.FilterSection>
         <s.PostListSection>
-          {country //나중에 백이랑 연결시 삭제하고 매핑만.
-            ? postList.filter((post) => {
-                if (post.writerInfo.country === country) {
-                  return <CommunityPost post={post} />;
-                }
-              })
-            : postList.map((post) => (
-                <CommunityPost
-                  key={post.postId}
-                  post={post}
-                />
-              ))}
+          {postList && postList.length > 0 ? (
+            postList.map((post) => (
+              <CommunityPost
+                key={post.postId}
+                post={post}
+              />
+            ))
+          ) : (
+            <div style={{ padding: '5rem 0' }}>아직 글이 없습니다.</div>
+          )}
         </s.PostListSection>
         <s.WriteButton
           style={{ background: `linear-gradient(135deg,${color1},${color2})` }}

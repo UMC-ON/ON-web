@@ -20,6 +20,9 @@ const CommunityPost = ({ post }) => {
     return numOfComment;
   };
 
+  if (!post) {
+    return null;
+  }
   return (
     <s.Post
       onClick={() =>
@@ -30,7 +33,7 @@ const CommunityPost = ({ post }) => {
     >
       <HeaderSection>
         <Title>{post.title}</Title>
-        <Date>{showDate(post.createdDate)}</Date>
+        //<Date>{showDate(post.createdDate)}</Date>
       </HeaderSection>
       <ContentSection>
         <ContentWrapper>
