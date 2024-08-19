@@ -15,7 +15,7 @@ const multipartApiClient = axios.create({
 });
 
 ///일반, content-type이 application/json인 post,get,put///
-///url,params만 필수///
+///url,formData만 필수///
 export const postData = async (url, formData, headers = {}, params = {}) => {
   const response = await apiClient
     .post(url, formData, { headers: { ...headers }, params: { ...params } })
