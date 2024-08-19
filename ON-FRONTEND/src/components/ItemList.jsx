@@ -1,35 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import compas from "../assets/images/compasIcon.svg";
 import profile from "../assets/images/profileIcon.svg";
-import empty_star from "../assets/images/empty_star.svg";
-import filled_star from "../assets/images/filled_star.svg";
+// import empty_star from "../assets/images/empty_star.svg";
+// import filled_star from "../assets/images/filled_star.svg";
 
-const Item = ({ items }) => {
+// 환경 변수로부터 accessToken 가져오기
+const accessToken = import.meta.env.VITE_accessToken;
+
+const Item = () => {
   const navigate = useNavigate();
-  const goDetail = () => {
-    navigate('./id');
-  };
+  const [items, setItems] = useState([]); // 판매 물품 목록 상태를 빈 배열로 초기화
+
+  // 판매 물품 목록을 API로부터 가져오기
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get(`/api/v1/market-post`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+    
+        console.log('API Response:', response.data);
+    
+        // 서버에서 반환된 데이터 구조에 맞게 설정
+        setItems(response.data.result); // 또는 response.data.items 등
+      } catch (error) {
+        console.error('판매 물품 목록을 불러오는 중 오류 발생:', error);
+      }
+    };
+    
+
+    fetchItems();
+  }, []); // 컴포넌트가 마운트될 때 한 번만 실행
 
   return (
     <>
       {items && items.map((item, index) => {
-        const isCompleted = item.now === "거래완료";
+        const isCompleted = item.dealStatus === "COMPLETE";
         return (
           <ItemDiv key={index} isCompleted={isCompleted}>
-            <Photo src={item.image} />
+            <Photo src={item.imageFiles} />
             <Information>
-              <StarContainer />
-              <Description onClick={goDetail}>
-                <Title>{item.title} | <Time>{item.time}</Time></Title><br/>
-                <State how={item.how} now={item.now} isCompleted={isCompleted} />
+              {/* <StarContainer
+                marketPostId={item.marketPostId}
+                isFilled={item.isScrapped} // 서버에서 받은 스크랩 여부를 반영
+                onStarClick={handleStarClick}
+              /> */}
+              <Description onClick={() => navigate(`./${item.marketPostId}`)}>
+                <Title>{item.title} | <Time>올린 시간</Time></Title><br/>
+                <State how={item.dealType} now={item.dealStatus} isCompleted={isCompleted} />
                 <LocationAndUser>
-                  <Place><Compas src={compas} />독일 베를린</Place>
-                  <User><Profile src={profile} />루이(fndl333)</User>
+                  <Place><Compas src={compas} />{item.where}</Place>
+                  <User><Profile src={profile} />{item.nickname}({item.id})</User>
                 </LocationAndUser>
-                <Price>{item.price === '나눔' ? item.price : `₩ ${item.price}`}</Price>
+                <Price>{item.share === 'true' ? item.price : `₩ ${item.price}`}</Price>
               </Description>
             </Information>
           </ItemDiv>
@@ -39,22 +68,10 @@ const Item = ({ items }) => {
   );
 };
 
-const StarContainer = () => {
-  const [isFilled, setIsFilled] = useState(false);
-
-  const toggleStar = () => {
-    setIsFilled(!isFilled);
-  };
-
-  return (
-    <Star
-      src={isFilled ? filled_star : empty_star}
-      onClick={toggleStar}
-    />
-  );
-};
 
 export default Item;
+
+
 
 const ItemDiv = styled.div`
   margin: 0 auto;
