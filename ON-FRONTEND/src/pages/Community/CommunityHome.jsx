@@ -107,12 +107,12 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
         </s.FilterSection>
         <s.PostListSection>
           {country //나중에 백이랑 연결시 삭제하고 매핑만.
-            ? currentPostList.filter((post) => {
+            ? postList.filter((post) => {
                 if (post.writerInfo.country === country) {
                   return <CommunityPost post={post} />;
                 }
               })
-            : currentPostList.map((post) => (
+            : postList.map((post) => (
                 <CommunityPost
                   key={post.postId}
                   post={post}
