@@ -18,13 +18,7 @@ const PostPage = ({ color, title }) => {
   const [input, setInput] = useState({
     boardType: `${title}`,
     createdDate: new Date(),
-    writerInfo: {
-      id: userInfo.id,
-      nickname: userInfo.nickname,
-      dispatchedUniversity: userInfo.dispatchedUniversity,
-      country: userInfo.country,
-      userStatus: userInfo.userStatus,
-    },
+    id: userInfo.id,
     anonymous: null,
     anonymousUniv: null,
     title: '',

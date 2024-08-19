@@ -63,7 +63,7 @@ const MyPage = () => {
     <s.MyPageLayout>
       <PageHeader pageName="마이페이지" />
       <NavLink
-        to="/mypost"
+        to="/mypage/mypost"
         style={{ width: '100%' }}
       >
         <s.MyPosts>
@@ -99,7 +99,7 @@ const MyPage = () => {
               {editSchoolName ? '완료' : '수정'}
             </s.EditBtn>
             <s.SchoolNameBox>
-              <div style={{ display: 'flex' }}>
+              <div style={{ display: 'flex', alignItems: ' center' }}>
                 <s.SchoolNameSpan ref={spanRef}>
                   {schoolName || '파견교를 입력하세요'}
                 </s.SchoolNameSpan>
@@ -113,8 +113,9 @@ const MyPage = () => {
                     width: inputWidth,
                   }}
                 />
-
-                <s.VerifyButton>인증하기</s.VerifyButton>
+                <NavLink to="/mypage/schoolAuth">
+                  <s.VerifyButton>인증하기</s.VerifyButton>
+                </NavLink>
               </div>
               <s.RadioBox>
                 <s.TypeRadio

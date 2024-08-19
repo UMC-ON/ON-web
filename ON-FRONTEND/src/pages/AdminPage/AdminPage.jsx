@@ -37,12 +37,11 @@ const AdminPage = () => {
     }
   };
 
-  const url = `http://13.209.255.118:8080/api/v1/dispatch-certify/info/${permitStatus}`;
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       const response = await postData(
-        url,
+        GET_REQUESTS_OF(permitStatus),
         {},
         {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,

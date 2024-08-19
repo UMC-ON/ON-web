@@ -2,10 +2,11 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 import * as s from './NotificationPageStyled';
 import notification_circle from '../../assets/images/notification_circle.svg';
 import NoContent from '../../components/NoContent/NoContent';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const Notification = () => {
-  const [isNotification, setIsNotification] = useState(false);
+  const [notification, setNotification] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -15,7 +16,7 @@ const Notification = () => {
         <p>로딩중</p>
       ) : (
         <>
-          {isNotification ? (
+          {notification ? (
             <>
               <s.NotificationWrapper>
                 <s.NotificationContainer>

@@ -293,6 +293,7 @@ const countries = [
   { id: '010', continent: '아시아', country: '홍콩' },
   { id: '011', continent: '아시아', country: '카자흐스탄' },
   { id: '100', continent: '아프리카', country: '남아프리카 공화국' },
+  { id: '201', continent: '북미', country: '캐나다' },
   { id: '210', continent: '북미', country: '미국' },
   { id: '300', continent: '남미', country: '브라질' },
   { id: '301', continent: '남미', country: '아르헨티나' },
@@ -310,6 +311,8 @@ const countries = [
   { id: '408', continent: '유럽', country: '그리스' },
   { id: '409', continent: '유럽', country: '포르투갈' },
   { id: '410', continent: '유럽', country: '스웨덴' },
+  { id: '411', continent: '유럽', country: '덴마크' }, //위 city에 없음
+  { id: '412', continent: '유럽', country: '벨기에' }, //위 city에 없음
   { id: '500', continent: '오세아니아', country: '호주' },
   { id: '501', continent: '오세아니아', country: '뉴질랜드' },
   { id: '502', continent: '오세아니아', country: '피지' },
