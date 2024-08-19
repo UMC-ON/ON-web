@@ -21,7 +21,9 @@ export const showDispatchedUniv = (writerInfo, is_anonymous = false) => {
   }
 };
 
-export const showDate = (createdDate) => {
+export const showDate = (postDate) => {
+  //string형태로 전달
+  const createdDate = new Date(postDate);
   const today = new Date();
   const time = today.getTime() - createdDate.getTime();
   const oneHour = 3600000; //1hour in ms
