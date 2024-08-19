@@ -33,7 +33,7 @@ function AccompanyPostPage() {
     const [personValue, setPersonValue] = useState(0);
 
     const [showCountry, setShowCountry] = useState(false);
-    const [country, setCountry] = useState(null);
+    const [country, setCountry] = useState('독일');
     const [isCountryClicked, setIsCountryClicked] = useState(false);
 
     const [showCity, setShowCity] = useState(false);
@@ -48,17 +48,9 @@ function AccompanyPostPage() {
     const minusSrc = (daysDifference == 0) ? greyMinusButton : minusButton;
     const plusSrc = (daysDifference == limitDays) ? greyPlusButton : plusButton;
 
-    const [input, setInput] = useState({
-      age: 22,
-      ageAnonymous: false,
-      country: '',
-      university: 'Kings College London',
-      universityAnonymous: false,
-      people: 0,
-      place1: '',
-      place2: '',
-      days: 0,
-    });
+    useEffect(() => {
+      console.log(endDate);
+    }, [endDate]);
 
     const onChangeInput = (e) => {
       let name = e.target.name;
@@ -72,6 +64,7 @@ function AccompanyPostPage() {
 
     const onSubmit = () => {
       console.log(input);
+      // alert(input);
     };
 
     const handlePerson = (event) => {
@@ -119,7 +112,7 @@ function AccompanyPostPage() {
 
     const handleApplyClick = (start, end) => {
       setStartDate(moment(start).format('YYYY/MM/DD'));
-      setEndDate(moment(end).format('YYYY/MM/DD'));
+      setEndDate((moment(end).format('YYYY/MM/DD')));
 
       const startMoment = moment(start);
       const endMoment = moment(end);
@@ -200,6 +193,34 @@ function AccompanyPostPage() {
         reader.readAsDataURL(file);
       }
     };
+
+    const [input, setInput] = useState({
+      userId: 1234,
+      age: 22,
+      ageAnonymous: ageChecked,
+      country: country,
+      university: 'Kings College London',
+      universityAnonymous: schoolChecked,
+      title: '',
+      content: '',
+      travelArea: [city, city2],
+      totalRecruitNumber: personValue,
+      schedulePeriodDay: daysDifference,
+      startDate: startDate,
+      endDate: endDate,
+      imageFiles: [selectedFile],
+    });
+
+    useEffect(() => {
+      setInput((prevInput) => ({
+        ...prevInput,
+        startDate: startDate,
+        endDate: endDate,
+        schedulePeriodDay: daysDifference,
+        travelArea: [city, city2],
+        imageFiles: [selectedFile],
+      }));
+    }, [startDate, endDate, daysDifference, city, city2, selectedFile]);
     
     return (
       <>
@@ -344,7 +365,7 @@ function AccompanyPostPage() {
                 </Title>
             </Left>
         </BigContainer>
-        <GreyInput placeholder='제목을 입력해 주세요.' $height="2.5vh"/>
+        <GreyInput placeholder='제목을 입력해 주세요.' $height="2.5vh" onChange={onChangeInput} name="title"/>
 
         <BigContainer>
             <Left>
@@ -354,7 +375,7 @@ function AccompanyPostPage() {
             </Left>
         </BigContainer>
 
-        <GreyInput placeholder='요청사항과 동행인에게 하고 싶은 말을 적어주세요. ' $height="30vh"/>
+        <GreyInput placeholder='요청사항과 동행인에게 하고 싶은 말을 적어주세요. ' $height="30vh" onChange={onChangeInput} name="content"/>
 
 
         <HiddenFileInput
@@ -647,7 +668,8 @@ const HiddenFileInput = styled.input`
 `;
 
 const ImagePreview = styled.img`
-  max-width: 90%;
+  // max-width: 90%;
+  width: 89%;
   height: auto;
   border-radius: 10px;
 `;

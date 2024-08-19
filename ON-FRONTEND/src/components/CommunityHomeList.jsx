@@ -3,26 +3,38 @@ import React from 'react';
 
 import bubbleIcon from '../assets/images/greybubble.svg';
 
-function CommunityHomeList({ datas }) {
+import { showDate } from '../components/Common/InfoExp';
+
+function CommunityHomeList({ bgcolor, datas }) {
+
+  const defaultRadius = '0 0 0 0';
+  const topRadius = '15px 15px 0 0';
+  const bottomRadius = '0 0 15px 15px';
+
   return (
     <>
-      {datas.map((data, index) => (
-        <Container key={index} radius={data.radius} color={data.color}>
-          <FlexContainer>
-            <TextTopLeft>{data.title}</TextTopLeft>
-            <Span>
-                <SmallGreyText>{data.date}</SmallGreyText>
-                {data.comment && (
-                    <>
+      {datas.map((data, index) => {
+        const radius = index === 0 ? topRadius : index === datas.length - 1 ? bottomRadius : defaultRadius;
+        const color = bgcolor;
+
+        return (
+          <Container key={index} radius={radius} color={color}>
+            <FlexContainer>
+              <TextTopLeft>{data.title}</TextTopLeft>
+              <Span>
+                <SmallGreyText>{showDate(data.createdAt)}</SmallGreyText>
+                {data.commentCount && (
+                  <>
                     <IconTopLeft src={bubbleIcon} />
-                    <SmallGreyText>{data.comment}</SmallGreyText>
-                    </>
+                    <SmallGreyText>{data.commentCount}</SmallGreyText>
+                  </>
                 )}
-            </Span>
-          </FlexContainer>
-          <TextMiddle2>{data.content}</TextMiddle2>
-        </Container>
-      ))}
+              </Span>
+            </FlexContainer>
+            <TextMiddle2>{data.content}</TextMiddle2>
+          </Container>
+        );
+      })}
     </>
   );
 }
@@ -43,6 +55,10 @@ const TextTopLeft = styled.p`
   color: #363636;
   font-size: 1em;
   font-weight: bold;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
 const TextMiddle2 = styled.p`
@@ -70,9 +86,9 @@ const Span = styled.span`
 
 const FlexContainer = styled.div`
   display: flex;
-  justify-content: space-between;  /* This keeps items on left and right */
-  align-items: center;  /* Add this to center vertically */
-  padding: 10px; 
+  justify-content: space-between; 
+  align-items: center;  
+  padding: 10px 7px;
 `;
 
 const IconTopLeft = styled.img`

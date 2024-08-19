@@ -6,6 +6,8 @@ import freeImg from '../assets/images/free_container.svg';
 import infoStripe from '../assets/images/infoStripe.svg';
 import freeStripe from '../assets/images/freeStripe.svg';
 
+import { showDate } from '../components/Common/InfoExp';
+
 const FreeCommunityCardList = ({ cards }) => {
   return (
     <div>
@@ -14,16 +16,19 @@ const FreeCommunityCardList = ({ cards }) => {
           <PaddingTop/>
           <Stripe $blue={false}>
             <TextTopLeft>{card.title}</TextTopLeft>
-            <TextTopRight>{card.time}</TextTopRight>
+            <TextTopRight>{showDate(card.createdAt)}</TextTopRight>
           </Stripe>
           <TextContainer>
             <TextMiddle2>{card.body}
             </TextMiddle2>
             <InlineTextContainer>
               <MarginLeft/>
-              <TextBottomLeft>{card.id}</TextBottomLeft>
+              {card.anonymous ? 
+              <TextBottomLeft>익명</TextBottomLeft> :
+              <TextBottomLeft>{card.userNickname}</TextBottomLeft>
+              }       
               <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
-              <TextBottomLeft2>{card.comment}</TextBottomLeft2>
+              <TextBottomLeft2>{card.commentCount}</TextBottomLeft2>
             </InlineTextContainer>
           </TextContainer>
       </FreeContainer>

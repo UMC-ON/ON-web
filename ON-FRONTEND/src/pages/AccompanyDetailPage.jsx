@@ -20,60 +20,66 @@ import LoadingScreen from '../components/LoadingScreen';
 import ReportModal from '../components/ReportModal';
 import ShareModal from '../components/ShareModal';
 
+import { showDate } from '../components/Common/InfoExp';
+
 const accompanycards = [
   {
-    image: marketImg,
-    color: '#c5d3e0',
+    imageUrls: [marketImg],
     title: '8/2 버로우 마켓 동행하실 분 구해요!',
-    id: 'wjdscl',
-    age: '20대',
-    gender: '여',
-    date: '8/2',
-    people: '(1/4)',
-    place: '런던 버로우 마켓',
+    nickname: '몽몽',
+    age: 22,
+    gender: 'FEMALE',
+    startDate: "2024-08-19",
+    endDate: "2024-08-19",
+    currentRecruitNumber: 1,
+    totalRecruitNumber: 4,
+    travelArea: ['영국 전체', '영국 런던'],
   },
   {
-    image: marketImg,
-    color: '#c5d3e0',
+    imageUrls: [marketImg],
     title: '8/2 버로우 마켓 동행하실 분 구해요!',
-    id: 'wjdscl',
-    age: '20대',
-    gender: '여',
-    date: '8/2',
-    people: '(1/4)',
-    place: '런던 버로우 마켓',
+    nickname: '몽몽',
+    age: 22,
+    gender: 'FEMALE',
+    startDate: "2024-08-19",
+    endDate: "2024-08-19",
+    currentRecruitNumber: 1,
+    totalRecruitNumber: 4,
+    travelArea: ['영국 전체', '영국 런던'],
   },
   {
-    image: marketImg,
-    color: '#c5d3e0',
+    imageUrls: [marketImg],
     title: '8/2 버로우 마켓 동행하실 분 구해요!',
-    id: 'wjdscl',
-    age: '20대',
-    gender: '여',
-    date: '8/2',
-    people: '(1/4)',
-    place: '런던 버로우 마켓',
+    nickname: '몽몽',
+    age: 22,
+    gender: 'FEMALE',
+    startDate: "2024-08-19",
+    endDate: "2024-08-19",
+    currentRecruitNumber: 1,
+    totalRecruitNumber: 4,
+    travelArea: ['영국 전체', '영국 런던'],
   },
 ];
 
 const infocards = [
   {
-    imageIdList: marketImg2,
-    nickName: '제로',
-    age: '22',
-    gender: '여',
-    departurePlace: '영국',
+    age: 22,
     ageAnonymous: false,
+    dispatchedUniversity: 'Kings College London',
+    nickName: '제로',
+    gender: 'FEMALE',
     universityAnonymous: false,
-    university: 'Kings College London',
+    country: '영국',
     title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!!🔥🔥',
-    time: '24.08.05 5:38 PM',
     content: '같이 시장 구경하면서 사진 찍으며 좋은 추억 남기고 싶으신 분들을 찾습니다!! 구경은 하고 싶은데, 그동안 혼자라서 고민하셨던 분들 대환영입니다!😄',
-    date: '8/2',
-    days: '당일치기',
-    arrivePlace: '영국 런던',
-    currentPeople: 1,
-    totalPeople: 4,
+    travelArea: ['영국 런던', '영국 전체'],
+    currentRecruitNumber: 1,
+    totalRecruitNumber: 4,
+    schedulePeriodDay: 1,
+    startDate: '2024-08-19',
+    endDate: '2024-08-19',
+    imageUrls: [marketImg],
+    createdAt: '2024-08-19T04:23:33.451Z',
   },
 ];
 
@@ -132,6 +138,10 @@ function AccompanyDetailPage() {
     openSecondModal();
   };
 
+  function replaceHyphenWithDot(dateString) {
+    return dateString.replace(/-/g, '.');
+  }
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -155,7 +165,7 @@ function AccompanyDetailPage() {
         {infocards.map((card, index) => (
           <div key={index}>
           <BannerContainer>
-            <BannerImg src={card.imageIdList} alt="Banner" />
+            <BannerImg src={card.imageUrls[0]} alt="Banner" />
             <GradientOverlay />
             <ProfileTextContainer>
               <ProfileImg src={profileImg} alt="Profile" />
@@ -163,16 +173,26 @@ function AccompanyDetailPage() {
                 <Left>
                   <BigText>제로</BigText>
                   <GreyText $left="8px">(</GreyText>
-                  <GreyText>{card.age}</GreyText>
-                  <GreyText>/</GreyText>
-                  <GreyText>{card.gender}</GreyText>
+                  {card.ageAnonymous ? 
+                  <></> :
+                  <GreyText>{card.age}세/</GreyText>
+                  }
+                  {card.gender == 'FEMALE' ? 
+                  <GreyText>여</GreyText>:
+                  <GreyText>남</GreyText>
+                   }
                   <GreyText>)</GreyText>
                 </Left>
                 <Left>
                   <SmallIcon src={coordinateIcon}/>
-                  <GreyText $size="0.9em">{card.departurePlace}</GreyText>
-                  <GreyText $size="0.9em">,&nbsp;</GreyText>
-                  <GreyText $size="0.9em">{card.university}</GreyText>
+                  <GreyText $size="0.9em">{card.country}</GreyText>
+                  {card.universityAnonymous ?
+                  <></> :
+                  <>
+                    <GreyText $size="0.9em">,&nbsp;</GreyText>
+                    <GreyText $size="0.9em">{card.dispatchedUniversity}</GreyText>
+                  </>
+                  }
                 </Left>
               </TextContainer>
             </ProfileTextContainer>
@@ -181,7 +201,7 @@ function AccompanyDetailPage() {
 
         <BlueContainer>
           <BigText $size="1.3em">{card.title}</BigText>
-          <Left><GreyText>{card.time}</GreyText></Left>
+          <Left><GreyText>{showDate(card.createdAt)}</GreyText></Left>
         </BlueContainer>
 
         <BodyText>
@@ -196,14 +216,21 @@ function AccompanyDetailPage() {
               <RowText><BlackIcon src={plusIcon}/>모집 인원</RowText>
             </Row>
             <Row>
+              
+                {(card.startDate == card.endDate) ?
+                  <RowText $size="0.9em" $weight="normal" $color="#7a7a7a">
+                  {replaceHyphenWithDot(card.startDate)} <br/><LittleSpace/>당일치기
+                  </RowText>
+                :
+                  <RowText $size="0.9em" $weight="normal" $color="#7a7a7a">
+                  {replaceHyphenWithDot(card.startDate)} <br/><LittleSpace/>~ {replaceHyphenWithDot(card.endDate)}
+                  </RowText>
+                }
               <RowText $size="0.9em" $weight="normal" $color="#7a7a7a">
-                {card.date} {card.days}
+                {card.travelArea[0]}<br/><LittleSpace/>{card.travelArea[1]}
               </RowText>
               <RowText $size="0.9em" $weight="normal" $color="#7a7a7a">
-                {card.arrivePlace}
-              </RowText>
-              <RowText $size="0.9em" $weight="normal" $color="#7a7a7a">
-                ({card.currentPeople}/{card.totalPeople})
+                ({card.currentRecruitNumber}/{card.totalRecruitNumber})
               </RowText>
             </Row>
           </FlexContainer>
@@ -222,12 +249,17 @@ function AccompanyDetailPage() {
             </LeftContainer>
         </BigContainer>
 
-        <CardAccompanyList cards={accompanycards}></CardAccompanyList>
+        <CardAccompanyList color="#c5d3e0" cards={accompanycards}></CardAccompanyList>
         <Space/>
 
         <BottomTabLayout>
+          {(card.currentRecruitNumber == card.totalRecruitNumber) ?
+          <GreyButton $width="500px">모집이 완료된 동행 글이에요.</GreyButton> :
+          <>
           <GreyButton onClick={() => navigate('/chat')}>채팅 문의</GreyButton>
           <BlueButton onClick={openFirstModal}>동행 신청</BlueButton>
+          </>
+          }
         </BottomTabLayout>
         </div>
          ))}
@@ -245,6 +277,10 @@ function AccompanyDetailPage() {
 }
 
 export default AccompanyDetailPage;
+
+const LittleSpace = styled.div`
+  margin-top: 5px;
+`;
 
 const BlueContainer = styled.div`
   margin: 0 auto;
@@ -445,7 +481,7 @@ const GreyButton = styled.button`
   right: 0;
   margin: 0 auto;
   border-radius: 10px;
-  width: 148px;
+  width: ${props => props.$width || '148px'};
   height: 50px;
   padding: 15px 26px;
   background-color: #d9d9d9;
