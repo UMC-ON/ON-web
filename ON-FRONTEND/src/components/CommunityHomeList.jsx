@@ -23,10 +23,10 @@ function CommunityHomeList({ bgcolor, datas }) {
               <TextTopLeft>{data.title}</TextTopLeft>
               <Span>
                 <SmallGreyText>{showDate(data.createdAt)}</SmallGreyText>
-                {data.commentCount && (
+                {data.postId && (
                   <>
                     <IconTopLeft src={bubbleIcon} />
-                    <SmallGreyText>{data.commentCount}</SmallGreyText>
+                    <SmallGreyText>{data.postId}</SmallGreyText>
                   </>
                 )}
               </Span>
@@ -70,6 +70,7 @@ const TextMiddle2 = styled.p`
   overflow: hidden;
   width: 70%;
   padding-left: 1vh;
+  text-align: left;
 `;
 
 const SmallGreyText = styled.p`
@@ -80,7 +81,7 @@ const SmallGreyText = styled.p`
 
 const Span = styled.span`
   display: flex;
-  align-items: center;  /* Add this to center vertically */
+  align-items: center; 
   padding-left: 1.2vh;
 `;
 

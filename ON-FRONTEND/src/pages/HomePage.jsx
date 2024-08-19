@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
@@ -25,6 +25,9 @@ import screenshotImg from '../assets/images/screenshot.svg'
 import CardAccompanyList from '../components/CardAccompanyList';
 import InfoCommunityCardList from '../components/InfoCommunityCardList';
 import FreeCommunityCardList from '../components/FreeCommunityCardList';
+
+import { getData } from '../api/Functions';
+import { GET_TWO_FREEPOST, GET_TWO_INFOPOST, GET_NEAR_ACCOMPANY } from '../api/urls';
 
 
 const images = [bannerimg, bannerimg, bannerimg, bannerimg, bannerimg];
@@ -112,6 +115,9 @@ const purplecards = [
 
 function HomePage() {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [infoData, setInfoData] = useState([]);
+    const [freeData, setFreeData] = useState([]);
+    const [accompanyData, setAccompanyData] = useState([]);
 
     const handlers = useSwipeable({
       onSwipedLeft: () => setCurrentSlide((prev) => (prev + 1) % images.length),
@@ -161,6 +167,33 @@ function HomePage() {
     function goToMigration() {
       window.location.href = "https://www.gov.uk/government/organisations/uk-visas-and-immigration";
     }
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const info_data = await getData(GET_TWO_INFOPOST,{
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          }); 
+          setInfoData(info_data.data.result);
+
+          const free_data = await getData(GET_TWO_FREEPOST,{
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          }); 
+          setFreeData(free_data.data.result);
+
+          const accom_data = await getData(GET_NEAR_ACCOMPANY,{
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          }); 
+          setAccompanyData(accom_data.data.result);
+          console.log(accom_data.data.result);
+
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+  
+      fetchData(); 
+    }, []); 
 
     return (
       <>
@@ -242,7 +275,7 @@ function HomePage() {
               <RightIcon src={rightIcon}></RightIcon>
           </FlexContainer>
 
-          <InfoCommunityCardList cards={bluecards}/>
+          <InfoCommunityCardList cards={infoData}/>
 
           <Space></Space>
           <Space></Space>
@@ -252,7 +285,7 @@ function HomePage() {
               <RightIcon src={rightIcon}></RightIcon>
           </FlexContainer>
 
-          <FreeCommunityCardList cards={purplecards}/>
+          <FreeCommunityCardList cards={freeData}/>
           
 
           <Space></Space>
@@ -263,7 +296,7 @@ function HomePage() {
               <RightIcon src={rightIcon}></RightIcon>
           </FlexContainer>
 
-          <CardAccompanyList cards={accompanycards}></CardAccompanyList>
+          <CardAccompanyList cards={accompanyData}></CardAccompanyList>
 
           <BigSpace/>
 

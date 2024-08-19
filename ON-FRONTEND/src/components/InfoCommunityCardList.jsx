@@ -16,23 +16,20 @@ const InfoCommunityCardList = ({ cards }) => {
           <PaddingTop />
           <Stripe $blue={true}>
             <TextTopLeft>{card.title}</TextTopLeft>
-            <TextTopRight>{showDate(card.createdAt)}</TextTopRight>
+            <TextTopRight>{card.postTime}</TextTopRight>
           </Stripe>
           <BetweenContainer>
             <TextContainer>
               <TextMiddle>
-                {card.body}
+                {card.content}
               </TextMiddle>
               <InlineTextContainer>
-                {card.anonymous ? 
-                <TextBottomLeft>익명</TextBottomLeft> :
-                <TextBottomLeft>{card.userNickname}</TextBottomLeft>
-                }       
+                <TextBottomLeft>{card.writer}</TextBottomLeft>
                 <IconBottomLeft src={bubbleIcon} />
                 <TextBottomLeft2>{card.commentCount}</TextBottomLeft2>
               </InlineTextContainer>
             </TextContainer>
-            <ImageRight src={card.imageUrls[0]} />
+            <ImageRight src={card.postImg} />
           </BetweenContainer>
         </ImgContainer>
       ))}
@@ -109,6 +106,7 @@ const TextMiddle = styled.div`
   padding-left: 12px;
   padding-top: 5px;
   width: 200px;
+  height: 4em;
 `;
 
 const InlineTextContainer = styled.div`
