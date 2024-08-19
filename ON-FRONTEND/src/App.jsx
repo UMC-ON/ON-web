@@ -11,7 +11,7 @@ import MyPost from './pages/MyPage/MyPost.jsx';
 import Notification from './pages/Notification/NotificationPage.jsx';
 import Search from './pages/Search/SearchPage.jsx';
 import BottomTabNav from './components/BottomTabNav/BottomTabNav.jsx';
-import Chat from './pages/Chat/ChatPage.jsx';
+import Chat from './pages/Chat/Chat.jsx';
 import ChatList from './pages/ChatList/ChatList.jsx';
 import HomePage from './pages/HomePage.jsx';
 
@@ -41,6 +41,7 @@ import SignInPage from './pages/SignUp/SignInPage.jsx';
 import SignUpPage from './pages/SignUp/SignUpPage.jsx';
 import SchoolAuthPage from './pages/SignUp/SchoolAuthPage.jsx';
 import AdminPage from './pages/AdminPage/AdminPage.jsx';
+import MySchoolAuthPage from './pages/MyPage/MySchoolAuthPage.jsx';
 
 function App() {
   return (
@@ -104,8 +105,12 @@ function App() {
           element={<MyPage />}
         />
         <Route
-          path="/mypost"
+          path="/mypage/mypost"
           element={<MyPost />}
+        />
+        <Route
+          path="/mypage/schoolAuth"
+          element={<MySchoolAuthPage />}
         />
         <Route
           path="/notification"

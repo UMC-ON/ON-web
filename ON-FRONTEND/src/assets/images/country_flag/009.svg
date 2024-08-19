@@ -1,0 +1,12 @@
+<svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="23" cy="23" r="22.5" fill="#C2C7FF" stroke="#D9D9D9"/>
+<circle cx="23" cy="23" r="22.5" fill="#C2C7FF" stroke="#D9D9D9"/>
+<circle cx="23" cy="23" r="22.5" fill="#C2C7FF" stroke="#D9D9D9"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M26 7.28079V24C26 24.5523 25.5523 25 25 25H7.12379C7.04209 24.3448 7 23.6773 7 23C7 14.1634 14.1634 7 23 7C24.0254 7 25.0282 7.09646 26 7.28079Z" fill="white"/>
+<rect x="16" y="11" width="1" height="11" rx="0.5" fill="#C2C7FF"/>
+<rect x="11" y="17" width="1" height="11" rx="0.5" transform="rotate(-90 11 17)" fill="#C2C7FF"/>
+<rect x="20.0356" y="12.2573" width="1" height="11" rx="0.5" transform="rotate(45 20.0356 12.2573)" fill="#C2C7FF"/>
+<rect x="12.2573" y="12.9645" width="1" height="11" rx="0.5" transform="rotate(-45 12.2573 12.9645)" fill="#C2C7FF"/>
+<circle cx="16.5" cy="16.5" r="3.75" fill="#C2C7FF" stroke="white" stroke-width="0.5"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M41 23C41 13.0589 32.9411 5 23 5C13.0589 5 5 13.0589 5 23C5 32.9411 13.0589 41 23 41C32.9411 41 41 32.9411 41 23ZM39 23C39 14.1634 31.8366 7 23 7C14.1634 7 7 14.1634 7 23C7 31.8366 14.1634 39 23 39C31.8366 39 39 31.8366 39 23Z" fill="white"/>
+</svg>
