@@ -33,5 +33,7 @@ export const GET_TWO_FREEPOST = '/api/v1/home/free/list';
 export const GET_NEAR_ACCOMPANY = '/api/v1/home/company/list';
 export const GET_ALL_ACCOMPANY = '/api/v1/company-post';
 export const GET_FILTER_ACCOMPANY = '/api/v1/company-post/filter';
+export const GET_RECENT_ACCOMPANY = '/api/v1/company-post/recent';
+export const GET_DETAIL_ACCOMPANY = (companyPostId) => `/api/v1/company-post/${companyPostId}`;
 
 //동행 구하기 글 작성

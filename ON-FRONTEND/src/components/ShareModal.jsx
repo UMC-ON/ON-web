@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React, {useState} from 'react';
+import { useLocation } from 'react-router-dom';
 
 import planeIcon from '../assets/images/plane_icon.svg';
 import closeIcon from '../assets/images/close_button.svg';
@@ -8,8 +9,10 @@ import closeIcon from '../assets/images/close_button.svg';
     const [copySuccess, setCopySuccess] = useState('');
     const linkToCopy = 'https://oncommunity.io';
 
+    const location = useLocation();
+
     const handleCopyClick = () => {
-      navigator.clipboard.writeText(linkToCopy)
+      navigator.clipboard.writeText(window.location.href)
       .then(() => {
         setCopySuccess('링크가 복사되었습니다!');
       })
@@ -27,7 +30,7 @@ import closeIcon from '../assets/images/close_button.svg';
   
           <ModalTitle>링크 공유하기</ModalTitle>
           <RoundContainer>
-            <LinkText>https://oncommunity.io</LinkText>
+            <LinkText>{window.location.href}</LinkText>
             <PurpleButton onClick={handleCopyClick}>복사</PurpleButton>
           </RoundContainer>
           {copySuccess && <SuccessText>{copySuccess}</SuccessText>}
@@ -97,7 +100,7 @@ import closeIcon from '../assets/images/close_button.svg';
   `;
 
   const LinkText = styled.div`
-    font-size: 0.8em;
+    font-size: 0.3em;
     margin-bottom: 0.5vh;
     color: #b0b0b0;
     text-decoration: underline;
@@ -126,8 +129,8 @@ import closeIcon from '../assets/images/close_button.svg';
 
   const RoundContainer = styled.div`
     margin: 0 auto;
-    width: 80%;
-    padding: 3px;
+    width: 90%;
+    padding: 2px;
     border-radius: 10px;
     border: 1px solid #B0B0B0;
     margin-top: 20px;

@@ -27,94 +27,15 @@ import InfoCommunityCardList from '../components/InfoCommunityCardList';
 import FreeCommunityCardList from '../components/FreeCommunityCardList';
 
 import { getData } from '../api/Functions';
-import { GET_TWO_FREEPOST, GET_TWO_INFOPOST, GET_NEAR_ACCOMPANY } from '../api/urls';
+import { GET_USER_INFO, GET_TWO_FREEPOST, GET_TWO_INFOPOST, GET_NEAR_ACCOMPANY } from '../api/urls';
 
 
 const images = [bannerimg, bannerimg, bannerimg, bannerimg, bannerimg];
 
-const accompanycards = [
-  {
-    imageUrls: [marketImg],
-    title: '8/2 버로우 마켓 동행하실 분 구해요!',
-    nickname: '몽몽',
-    age: 22,
-    gender: 'FEMALE',
-    startDate: "2024-08-19",
-    endDate: "2024-08-19",
-    currentRecruitNumber: 1,
-    totalRecruitNumber: 4,
-    travelArea: ['영국 전체'],
-  },
-  {
-    imageUrls: [marketImg],
-    title: '8/2 버로우 마켓 동행하실 분 구해요!',
-    nickname: '몽몽',
-    age: 22,
-    gender: 'FEMALE',
-    startDate: "2024-08-19",
-    endDate: "2024-08-19",
-    currentRecruitNumber: 1,
-    totalRecruitNumber: 4,
-    travelArea: ['영국 전체', '영국 런던'],
-  },
-  {
-    imageUrls: [marketImg],
-    title: '8/2 버로우 마켓 동행하실 분 구해요!',
-    nickname: '몽몽',
-    age: 22,
-    gender: 'FEMALE',
-    startDate: "2024-08-19",
-    endDate: "2024-08-19",
-    currentRecruitNumber: 1,
-    totalRecruitNumber: 4,
-    travelArea: ['영국 전체', '영국 런던'],
-  },
-  
-];
-
-const bluecards = [
-  {
-    title: '[🇬🇧 킹칼] 한 학기 교환 비용 정리',
-    createdAt: "2024-08-19T06:03:25.818Z",
-    body: '따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 독일로 교환학생을 앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약!',
-    userNickname: '제로',
-    anonymous: true,
-    commentCount: 1,
-    imageUrls: [screenshotImg],
-  },
-  {
-    title: '[🇬🇧 킹칼] 한 학기 교환 비용 정리',
-    createdAt: "2024-08-19T06:03:25.818Z",
-    body: '따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 독일로 교환학생을 앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약!',
-    userNickname: '제로',
-    anonymous: false,
-    commentCount: 1,
-    imageUrls: [screenshotImg],
-  },
-];
-
-const purplecards = [
-  {
-    title: '독일 방문학생 갈 때 어학점수',
-    createdAt: "2024-08-19T06:03:25.818Z",
-    body: '독일 방문학생 갈 때 어학점수 어느 정도 나와야 할까요? 가장 가고 싶은 학교는 프푸응과대입니다. 저는 3개월 만에 학기가 끝나는 학교로 가지만, 이후 보다 편안하고 안전한(?) 유럽 여행을 위해 비자를 발급받으려 합니다!',
-    userNickname: '제로',
-    anonymous: true,
-    commentCount: 1,
-  },
-  {
-    title: '독일 방문학생 갈 때 어학점수',
-    createdAt: "2024-08-19T06:03:25.818Z",
-    body: '독일 방문학생 갈 때 어학점수 어느 정도 나와야 할까요? 가장 가고 싶은 학교는 프푸응과대입니다. 저는 3개월 만에 학기가 끝나는 학교로 가지만, 이후 보다 편안하고 안전한(?) 유럽 여행을 위해 비자를 발급받으려 합니다!',
-    userNickname: '제로',
-    anonymous: false,
-    commentCount: 1,
-  },
-];
-
 
 function HomePage() {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [userData, setUserData] = useState([]);
     const [infoData, setInfoData] = useState([]);
     const [freeData, setFreeData] = useState([]);
     const [accompanyData, setAccompanyData] = useState([]);
@@ -171,6 +92,12 @@ function HomePage() {
     useEffect(() => {
       const fetchData = async () => {
         try {
+          const user_data = await getData(GET_USER_INFO,{
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          }); 
+          setUserData(user_data.data);
+          console.log(userData);
+          
           const info_data = await getData(GET_TWO_INFOPOST,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           }); 

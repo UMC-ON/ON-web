@@ -127,7 +127,7 @@ function AccompanyPage() {
     }, []);
 
     useEffect(() => {
-      if (isGenderClicked || isDateClicked || isCountryClicked) {
+      if (isGenderClicked || isDateClicked || isCountryClicked || !isGenderClicked || !isDateClicked || !isCountryClicked) {
         filterData();
       }
     }, [gender, startDate, endDate, country, isGenderClicked, isDateClicked, isCountryClicked]);
