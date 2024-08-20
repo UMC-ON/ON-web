@@ -133,7 +133,7 @@ const Information = styled.div`
 `;
 
 const Description = styled.div`
-  padding: 1em;
+  padding: 0.6em;
   height: 60%;
 `;
 

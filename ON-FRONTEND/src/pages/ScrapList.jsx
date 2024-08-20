@@ -11,88 +11,13 @@ import nothing from "../assets/images/no_content.svg";
 
 const accessToken = import.meta.env.VITE_accessToken;
 
-// const items = [
-//     {
-//         image: item,
-//         title: '작은 냄비',
-//         time: '10분 전',
-//         how: '직거래',
-//         now: '거래가능',
-//         where: '독일 베를린',
-//         icon: icon,
-//         nickname: '루이',
-//         id: 'fndl333',
-//         price: '나눔'
-//     },
-//     {
-//         image: item,
-//         title: '작은 냄비',
-//         time: '10분 전',
-//         how: '직거래',
-//         now: '거래가능',
-//         where: '독일 베를린',
-//         icon: icon,
-//         nickname: '루이',
-//         id: 'fndl333',
-//         price: '나눔'
-//     },    
-//     {
-//         image: item,
-//         title: '작은 냄비',
-//         time: '10분 전',
-//         how: '직거래',
-//         now: '거래가능',
-//         where: '독일 베를린',
-//         icon: icon,
-//         nickname: '루이',
-//         id: 'fndl333',
-//         price: '나눔'
-//     },    
-//     {
-//         image: item,
-//         title: '작은 냄비',
-//         time: '10분 전',
-//         how: '직거래',
-//         now: '거래가능',
-//         where: '독일 베를린',
-//         icon: icon,
-//         nickname: '루이',
-//         id: 'fndl333',
-//         price: '나눔'
-//     },
-//     {
-//         image: item,
-//         title: '작은 냄비',
-//         time: '10분 전',
-//         how: '직거래',
-//         now: '거래가능',
-//         where: '독일 베를린',
-//         icon: icon,
-//         nickname: '루이',
-//         id: 'fndl333',
-//         price: '나눔'
-//     },
-//     {
-//         image: item,
-//         title: '작은 냄비',
-//         time: '10분 전',
-//         how: '직거래',
-//         now: '거래가능',
-//         where: '독일 베를린',
-//         icon: icon,
-//         nickname: '루이',
-//         id: 'fndl333',
-//         price: '나눔'
-//     },        
-// ];
-
 function ScrapList() {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
         const fetchItems = async () => {
           try {
-            const response = await axios.get(`https://13.209.255.118.nip.io/api/v1/scrap/10`, {
+            const response = await axios.get(`https://13.209.255.118.nip.io/api/v1/scrap/10`, { //사용자 아이디 넣어야 함
               headers: {
                 Authorization: `Bearer ${accessToken}`,
               },

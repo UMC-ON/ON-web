@@ -167,7 +167,7 @@ function App() {
           element={<SellPage />}
         />
         <Route
-          path="/sell/id"
+          path="/sell/:marketPostId"
           element={<ItemDetailPage />}
         />
         <Route

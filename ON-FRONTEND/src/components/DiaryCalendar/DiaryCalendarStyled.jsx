@@ -50,7 +50,7 @@ export const DiaryCalendar = styled.div`
     }
 
     .react-calendar__tile--now {
-        background: ${(props) => props.theme.lightPurple};
+        background: #cacefc;
     }
   
     .react-calendar__tile--now abbr {
@@ -68,10 +68,23 @@ export const DiaryCalendar = styled.div`
     }
 `;
 
-export const Checkbox = styled.div`
+export const EmptyCheckbox = styled.div`
     width: 14px;
     height: 14px;
     background: #D9D9D9;
     border-radius: 2px;
     margin: 5px auto;
 `;
+
+export const FullCheckbox = styled.div`
+    width: 14px;
+    height: 14px;
+    background: ${(props) => props.theme.purpleGra};
+    border-radius: 2px;
+    margin: 5px auto;
+`
+
+export const DiaryCheck = styled.img`
+    width: 10px;
+    height: 10px;
+`

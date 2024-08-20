@@ -54,7 +54,6 @@ const DateRangePicker = ({ onApply }) => {
           locale={ko}
           selected={selectedDate}  // 선택된 날짜를 DatePicker에 전달
           onChange={handleDateChange}  // 날짜 선택 핸들러
-          minDate={today}
           inline
           renderCustomHeader={renderCustomHeader}
         />

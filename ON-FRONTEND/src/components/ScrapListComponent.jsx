@@ -25,7 +25,7 @@ const ScrapList = ({ items }) => {
                 marketPostId={item.marketPost.marketPostId}
                 isFilled={item.isScrapped}
               />
-              <Description onClick={() => navigate(`./${item.marketPostId}`)}>
+              <Description onClick={() => navigate(`/sell/${item.marketPost.marketPostId}`)}>
                 <Title>{item.marketPost.title} | <Time>{item.marketPost.marketPostId}</Time></Title><br/>
                 <State how={item.marketPost.dealType} now={item.marketPost.dealStatus} isCompleted={isCompleted} />
                 <LocationAndUser>
@@ -133,7 +133,7 @@ const Information = styled.div`
 `;
 
 const Description = styled.div`
-  padding: 1em;
+  padding: 0.6em;
   height: 60%;
 `;
 
