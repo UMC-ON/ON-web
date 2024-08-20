@@ -7,34 +7,52 @@ import plusIcon from '../assets/images/plus_icon.svg';
 import placeIcon from '../assets/images/place_icon.svg';
 
 
-const CardAccompanyList = ({ cards }) => {
+const CardAccompanyList = ({ color, cards }) => {
+  function formatDateToMD(dateStr) {
+    const dateObj = new Date(dateStr);
+    
+    const month = dateObj.getMonth() + 1; 
+    const day = dateObj.getDate();
+    
+    return `${month}/${day}`;
+  }
+
   return (
     <CardListContainer>
       {cards.map((card, index) => (
         <CardContainer key={index}>
           <Card>
-            <CardImage src={card.image}/>
-            <GreyCard color={card.color}>
+            <CardImage src={card.postImg}/>
+            <GreyCard color={color}>
               <Left><CardName>{card.title}</CardName></Left>
               <Left>
                 <CardIcon src={personIcon}/>
-                <SmallGreyText>{card.id}</SmallGreyText>
+                <SmallGreyText>{card.nickname}</SmallGreyText>
                 <SmallGreyText>·</SmallGreyText>
-                <SmallGreyText>{card.age}</SmallGreyText>
+                <SmallGreyText>{card.age}세</SmallGreyText>
                 <SmallGreyText>·</SmallGreyText>
-                <SmallGreyText>{card.gender}</SmallGreyText>
+                {card.gender == 'FEMALE' ?
+                <SmallGreyText>여</SmallGreyText> :
+                <SmallGreyText>남</SmallGreyText>
+                }
               </Left>
               <Space/>
               <Left>
                 <CardIcon src={calendarIcon}/>
-                <GreyText>{card.date}</GreyText>
+                {card.startDate == card.endDate ?
+                <GreyText>{formatDateToMD(card.startDate)}</GreyText> :
+                <GreyText>{formatDateToMD(card.startDate)}~{formatDateToMD(card.endDate)}</GreyText>
+                }
                 <Padding/>
                 <CardIcon src={plusIcon}/>
-                <GreyText>{card.people}</GreyText>
+                <GreyText>{card.currentRecruitNumber}/{card.totalRecruitNumber}</GreyText>
               </Left>
               <Left>
                 <CardIcon src={placeIcon}/>
-                <GreyText>{card.place}</GreyText>
+                <GreyText>{card.travelPlace}</GreyText>
+                {/* {card.travelArea[1] ?
+                <GreyText $left="0px">, {card.travelArea[1]}</GreyText>:null
+                } */}
               </Left>
               <SmallSpace/>
             </GreyCard>
@@ -125,7 +143,7 @@ const SmallGreyText = styled.p`
 
 const GreyText = styled.p`
   font-size: 0.7em;
-  padding-left: 6px;
+  padding-left: ${props => props.$left || "6px"};
   padding-top: 2px;
   padding-bottom: 9px;
   color: #7a7a7a;

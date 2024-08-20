@@ -6,6 +6,8 @@ import freeImg from '../assets/images/free_container.svg';
 import infoStripe from '../assets/images/infoStripe.svg';
 import freeStripe from '../assets/images/freeStripe.svg';
 
+import { showDate } from '../components/Common/InfoExp';
+
 const FreeCommunityCardList = ({ cards }) => {
   return (
     <div>
@@ -14,16 +16,16 @@ const FreeCommunityCardList = ({ cards }) => {
           <PaddingTop/>
           <Stripe $blue={false}>
             <TextTopLeft>{card.title}</TextTopLeft>
-            <TextTopRight>{card.time}</TextTopRight>
+            <TextTopRight>{card.postTime}</TextTopRight>
           </Stripe>
           <TextContainer>
-            <TextMiddle2>{card.body}
+            <TextMiddle2>{card.content}
             </TextMiddle2>
             <InlineTextContainer>
               <MarginLeft/>
-              <TextBottomLeft>{card.id}</TextBottomLeft>
+              <TextBottomLeft>{card.writer}</TextBottomLeft>
               <IconBottomLeft src={bubbleIcon}></IconBottomLeft>
-              <TextBottomLeft2>{card.comment}</TextBottomLeft2>
+              <TextBottomLeft2>{card.commentCount}</TextBottomLeft2>
             </InlineTextContainer>
           </TextContainer>
       </FreeContainer>
@@ -88,6 +90,7 @@ const TextMiddle2 = styled.div`
   width: 280px;
   margin: 5px;
   margin-bottom: 0px;
+    height: 4em;
 `;
 
 

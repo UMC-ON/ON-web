@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 import AccompanyHomeComponent from '../components/AccompanyHomeComponent';
@@ -7,6 +7,9 @@ import DateRangePicker from '../components/CompanyCalendar/CompanyCalendar.jsx';
 import closeIcon from '../assets/images/close_button.svg';
 import GenderChoice from '../components/GenderChoice.jsx';
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
+
+import { getData } from '../api/Functions';
+import { GET_ALL_ACCOMPANY, GET_FILTER_ACCOMPANY } from '../api/urls';
 
 function AccompanyPage() {
     const [startDate, setStartDate] = useState(null);
@@ -21,6 +24,7 @@ function AccompanyPage() {
     const [showCountry, setShowCountry] = useState(false);
     const [country, setCountry] = useState(null);
     const [isCountryClicked, setIsCountryClicked] = useState(false);
+    const [allData, setAllData] = useState([]);
 
     const handleIsDateClickedChange = () => {
       setIsDateClicked(false);
@@ -42,6 +46,7 @@ function AccompanyPage() {
       handleIsDateClickedChange();
       resetGenderClick();
       resetCountryClick();
+      fetchData();
     };
 
     const handleApplyClick = (start, end) => {
@@ -75,9 +80,62 @@ function AccompanyPage() {
       setShowCountry(!showCountry);
     };
 
+    const filterData = async () => {
+      try {
+        console.log("filterData is pressed");
+
+        const params = {};
+    
+        if (startDate) params.startDate = startDate;
+        if (endDate) params.endDate = endDate;
+        if (gender) params.gender = gender === "여자" ? 'FEMALE' : 'MALE';
+        if (country) params.country = country;
+
+    
+        console.log('Params:', params);
+
+        const filter_data = await getData(
+          GET_FILTER_ACCOMPANY,
+          {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          },
+          params
+        );
+    
+        setAllData(filter_data.data);
+        console.log(filter_data.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    const fetchData = async () => {
+      try {
+        const all_data = await getData(GET_ALL_ACCOMPANY,{
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        }); 
+        setAllData(all_data.data);
+        // console.log(all_data.data);
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    useEffect(() => {
+      fetchData();
+    }, []);
+
+    useEffect(() => {
+      if (isGenderClicked || isDateClicked || isCountryClicked) {
+        filterData();
+      }
+    }, [gender, startDate, endDate, country, isGenderClicked, isDateClicked, isCountryClicked]);
+
     return (
       <>
         <AccompanyHomeComponent
+          allData={allData}
           startDate={startDate}
           endDate={endDate}
           isDateClicked={isDateClicked}

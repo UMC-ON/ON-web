@@ -2,10 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 import bubbleIcon from '../assets/images/bubble.svg'
-import screenshotImg from '../assets/images/screenshot.svg'
 import infoImg from '../assets/images/info_container.svg';
 import infoStripe from '../assets/images/infoStripe.svg';
 import freeStripe from '../assets/images/freeStripe.svg';
+
+import { showDate } from '../components/Common/InfoExp';
 
 const InfoCommunityCardList = ({ cards }) => {
   return (
@@ -15,20 +16,20 @@ const InfoCommunityCardList = ({ cards }) => {
           <PaddingTop />
           <Stripe $blue={true}>
             <TextTopLeft>{card.title}</TextTopLeft>
-            <TextTopRight>{card.time}</TextTopRight>
+            <TextTopRight>{card.postTime}</TextTopRight>
           </Stripe>
           <BetweenContainer>
             <TextContainer>
               <TextMiddle>
-                {card.body}
+                {card.content}
               </TextMiddle>
               <InlineTextContainer>
-                <TextBottomLeft>{card.id}</TextBottomLeft>
+                <TextBottomLeft>{card.writer}</TextBottomLeft>
                 <IconBottomLeft src={bubbleIcon} />
-                <TextBottomLeft2>{card.comment}</TextBottomLeft2>
+                <TextBottomLeft2>{card.commentCount}</TextBottomLeft2>
               </InlineTextContainer>
             </TextContainer>
-            <ImageRight src={screenshotImg} />
+            <ImageRight src={card.postImg} />
           </BetweenContainer>
         </ImgContainer>
       ))}
@@ -105,6 +106,7 @@ const TextMiddle = styled.div`
   padding-left: 12px;
   padding-top: 5px;
   width: 200px;
+  height: 4em;
 `;
 
 const InlineTextContainer = styled.div`

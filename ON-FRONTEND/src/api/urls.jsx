@@ -13,7 +13,10 @@ export const GET_REQUESTS_OF = (permitStatus) =>
 
 //커뮤니티 게시글
 export const GET_POST_OF = (boardType) => `/api/v1/post/${boardType}`;
-export const WRITE_POST_IN = (boardType) => `/api/v1/post/${boardType}`;
+export const GET_RECENT_POST_OF = (boardType) =>
+  `/api/v1/post/recent/${boardType}`;
+export const GET_TWO_INFOPOST = '/api/v1/home/info/list';
+export const GET_TWO_FREEPOST = '/api/v1/home/free/list';
 
 //댓글 작성
 
@@ -25,6 +28,9 @@ export const WRITE_POST_IN = (boardType) => `/api/v1/post/${boardType}`;
 
 //일기 작성
 
-//동행신청하기
+//동행 글 조회
+export const GET_NEAR_ACCOMPANY = '/api/v1/home/company/list';
+export const GET_ALL_ACCOMPANY = '/api/v1/company-post';
+export const GET_FILTER_ACCOMPANY = '/api/v1/company-post/filter';
 
 //동행 구하기 글 작성

@@ -16,21 +16,30 @@ function AccompanyList({datas}) {
       navigate('./detail');
     };
 
+    function formatDateToMD(dateStr) {
+      const dateObj = new Date(dateStr);
+      
+      const month = dateObj.getMonth() + 1; 
+      const day = dateObj.getDate();
+      
+      return `${month}/${day}`;
+    }
+
     return (
       <>
        {datas.map((data, index) => (
         <RoundContainer key={index} onClick={goDetail}>
-            <Image src={data.image}/>
+            <Image src={data.imageUrls[0]}/>
             <TextContainer>
                 <CardName>{data.title}</CardName>
 
                 <Left>
                     <CardIcon src={calendarIcon} $top="1px"/>
-                    <GreyText>{data.date}</GreyText>
+                    <GreyText>{formatDateToMD(data.startDate)}</GreyText>
                     <CardIcon src={plusIcon} $top="1px"/>
-                    <GreyText>{data.people}</GreyText>
+                    <GreyText>{data.currentRecruitNumber}/{data.totalRecruitNumber}</GreyText>
                     <CardIcon src={placeIcon} $top="1px"/>
-                    <GreyText>{data.place}</GreyText>
+                    <GreyText>{data.travelArea[0]}</GreyText>
                 </Left>
                 
                 <Left>
@@ -39,14 +48,17 @@ function AccompanyList({datas}) {
 
                 <Left>
                     <CardIcon src={personIcon} $top="2px"/>
-                    <SmallGreyText>{data.id}</SmallGreyText>
+                    <SmallGreyText>{data.nickname}</SmallGreyText>
                     <SmallGreyText>·</SmallGreyText>
-                    <SmallGreyText>{data.age}</SmallGreyText>
+                    <SmallGreyText>{data.age}세</SmallGreyText>
                     <SmallGreyText>·</SmallGreyText>
-                    <SmallGreyText>{data.gender}</SmallGreyText>
+                    {(data.gender == 'FEMALE') ?
+                    <SmallGreyText>여</SmallGreyText>:
+                    <SmallGreyText>남</SmallGreyText>
+                    }
               </Left>
             </TextContainer>
-            <Overlay $isClosed={data.isClosed} />
+            <Overlay $isClosed={false} />
         </RoundContainer>
         ))}
       </>
