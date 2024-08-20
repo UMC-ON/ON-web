@@ -23,6 +23,7 @@ export const showDispatchedUniv = (writerInfo, is_anonymous = false) => {
 
 export const showDate = (postDate) => {
   //string형태로 전달
+  //"2024-08-19T09:25:43.206Z"
   const createdDate = new Date(postDate);
   const today = new Date();
   const time = today.getTime() - createdDate.getTime();

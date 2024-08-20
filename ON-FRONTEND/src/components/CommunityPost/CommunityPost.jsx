@@ -33,7 +33,7 @@ const CommunityPost = ({ post }) => {
     >
       <HeaderSection>
         <Title>{post.title}</Title>
-        //<Date>{showDate(post.createdDate)}</Date>
+        //<Date>{showDate(post.createdAt)}</Date>
       </HeaderSection>
       <ContentSection>
         <ContentWrapper>
@@ -54,8 +54,8 @@ const CommunityPost = ({ post }) => {
           </PostInfoWrapper>
         </ContentWrapper>
         <ContentImg
-          src={post.imgIdList ? post.imgIdList[0] : null}
-          showimg={(post.imgIdList.length > 0).toString()}
+          src={post.imageUrls ? post.imageUrls[0] : null}
+          showimg={(post.imageUrls.length > 0).toString()}
         />
       </ContentSection>
     </s.Post>

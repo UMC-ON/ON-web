@@ -4,7 +4,7 @@ const FreePostPage = () => {
   return (
     <PostPage
       color="#CBCDE9"
-      title="FREE"
+      boardType="FREE"
     />
   );
 };
