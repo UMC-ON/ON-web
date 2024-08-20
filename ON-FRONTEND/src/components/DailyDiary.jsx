@@ -1,14 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const StoredDiary = ({items}) => {
+const StoredDiary = ({ diaries }) => {
+  console.log(diaries); // 데이터 확인용
+
   return (
     <>
-      {items && items.map((item, index) => (
+      {diaries.diaryList && diaries.diaryList.map((item, index) => (
         <DailyDiary key={index}>
           <Content>{item.content}</Content>
-          <DDay>{item.dday}</DDay>
-          <Date>{item.date}</Date>
+          <DDay>{`D${item.writtenDday}`}</DDay>
+          <Date>{item.writtenDate}</Date>
         </DailyDiary>
       ))}
     </>

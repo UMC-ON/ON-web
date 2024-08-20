@@ -1,128 +1,71 @@
 import styled from "styled-components";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 import ItemDetailPageHeader from "../components/ItemDetailPageHeader";
 import ItemList from '../components/ItemList';
 
-import keyboard from "../assets/images/keyboard.svg";
 import compas from "../assets/images/compasIcon.svg";
 import icon from "../assets/images/profileIcon.svg";
-import item from "../assets/images/item.svg";
 
-const items = [
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '5000'
-    },
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },    
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },    
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '5000'
-    },        
-];
-
-
+// 환경 변수에서 액세스 토큰을 가져옵니다.
+const accessToken = import.meta.env.VITE_accessToken;
 
 function ItemDetailPage() {
-    const detail = [
-        {
-          image: keyboard,
-          title: '블루투스 키보드',
-          how: '택배거래',
-          now: '거래가능',
-          price: '5,000',
-          info: '여기서는 학교 다닐 때 아이패드로 필기하는 것보다, 타자 치는 게 더 편한 것 같아서 구매한 키보드입니다. \n애플 제품들이랑만 호환 가능해요. 참고 부탁드려요 :) \n\n제가 당장 이번 주말부터 여행 일정이 있어서, 택배로만 거래 가능하고 쿨거시 에눌해 드립니다.',
-          place: '독일 베를린',
-          nickname: '루이',
-          id: 'fndl333',
-        },
-    ];
+    const navigate = useNavigate();
+    const { marketPostId } = useParams(); // URL에서 marketPostId를 가져옵니다.
 
-    const itemDetail = detail[0]; // 첫 번째 항목을 선택합니다.
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        const fetchItems = async () => {
+          try {
+            const response = await axios.get(`https://13.209.255.118.nip.io/api/v1/market-post/${marketPostId}`, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            });
+            setItems([response.data]); // 응답 데이터를 배열로 설정합니다.
+            if (response.data) {
+                console.log(response.data);
+            }
+          } catch (error) {
+            console.error('물품 상세 페이지 정보를 불러오는 중 오류 발생:', error);
+          }
+        };
+    
+        fetchItems();
+      }, [marketPostId]); // marketPostId가 변경될 때마다 데이터를 다시 가져옵니다.
 
     return(
         <>
             <ItemDetailPageHeader />
             <Space />
             <ContentContainer>
-                <ItemImage src={itemDetail.image} alt={itemDetail.title} />
-                <InfoContainer>
-                    <Title>{itemDetail.title}</Title>
-                    <State>{itemDetail.how} | {itemDetail.now}</State><br/>
-                    <Price>{itemDetail.price === '나눔' ? itemDetail.price : `₩ ${itemDetail.price}`}</Price>
-                    <Information>{itemDetail.info}</Information>
-                    <GrayLine /><br/>
-                    <Seller>판매자 정보</Seller><br/>
-                    <SellerInfo>
-                        <Place><Image src={compas} alt="compas" style= {{marginRight: "5px"}} />{itemDetail.place}</Place>
-                        <User><Image src={icon} alt="profile" style= {{marginRight: "5px"}} />{itemDetail.nickname}({itemDetail.id})</User>
-                    </SellerInfo>
-                    <Nearby><Blue>주변</Blue> 중고거래글</Nearby>
-                </InfoContainer>
-                <ItemList items={items}/>
+                {items && items.map((item, index) => {
+                    return (
+                        <React.Fragment key={index}>
+                            <ItemImage src={item.imageUrls[0]} alt={item.title} />
+                            <InfoContainer>
+                                <Title>{item.title}</Title>
+                                <State>{item.dealType} | {item.dealStatus}</State><br/>
+                                <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
+                                <Information>{item.content}</Information>
+                                <GrayLine /><br/>
+                                <Seller>판매자 정보</Seller><br/>
+                                <SellerInfo>
+                                <Place><Image src={compas} alt="compas" style={{ marginRight: "5px" }} />{item.currentCountry} {item.currentLocation}</Place>
+                                <User><Image src={icon} alt="profile" style={{ marginRight: "5px" }} />{item.nickname}</User>
+                                </SellerInfo>
+                                <Nearby><Blue>주변</Blue> 중고거래글</Nearby>
+                            </InfoContainer>
+                            <ItemList items={items}/>
+                        </React.Fragment>
+                        
+                    );
+                })}
+                
             </ContentContainer>
             <BottomTabLayout>
                 <ChatButton>
@@ -134,6 +77,7 @@ function ItemDetailPage() {
 }
 
 export default ItemDetailPage;
+
 
 const Space = styled.div`
   margin-top: 7vh;

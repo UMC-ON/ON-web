@@ -1,51 +1,108 @@
 import styled from "styled-components";
 import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import camera from "../assets/images/camera.svg";
 import PhotoAdd from "../assets/images/PhotoAdd.svg";
 
 import SellPostHeader from "../components/SellPostHeader";
-import SelectCity from "./SelectCity/SelectCity";
+import SellPostSelectCity from "../components/SellPostSelectCity/SellPostSelectCity";
 import SellPostCitySelect from "../components/SellPostCitySelect";
 
 
 function SellPost() {
     const [selectedOption, setSelectedOption] = useState(null);
     const [images, setImages] = useState([]);
+    const [title, setTitle] = useState('');
+    const [cost, setCost] = useState('');
+    const [content, setContent] = useState('');
+    const [share, setShare] = useState(false);
     const fileInputRef = useRef(null);
     const [showCity, setShowCity] = useState(false);
-  const [city, setCity] = useState(null);
-  const [isCityClicked, setIsCityClicked] = useState(false);
+    const [city, setCity] = useState({ country: '', city: '' });
+    const [isCityClicked, setIsCityClicked] = useState(false);
 
-  const resetCityClick = () => {
-    setIsCityClicked(false);
-    setCity(null);
-  };
+    const accessToken = import.meta.env.VITE_accessToken;
 
-  const handleGetCity = (city) => {
-    setCity(city);
-    setIsCityClicked(true);
-    setShowCity(false);
-  };
+    const resetCityClick = () => {
+        setIsCityClicked(false);
+        setCity(null);
+    };
 
-  const handleCityClick = () => {
-    setShowCity(!showCity);
-  };
+    const handleGetCity = (locationInfo) => {
+        setCity(locationInfo); 
+        setIsCityClicked(true);
+        setShowCity(false);
+    };
+    
+
+    const handleCityClick = () => {
+        setShowCity(!showCity);
+    };
 
     const handleImageUpload = (event) => {
         const files = Array.from(event.target.files);
-        setImages(prevImages => [...prevImages, ...files.map(file => URL.createObjectURL(file))]);
+        setImages(prevImages => [...prevImages, ...files]);
     };
 
     const handleCameraClick = () => {
         fileInputRef.current.click();
     };
 
+const navigate = useNavigate();
+
+const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append('userId', 10); // 고정된 userId
+    formData.append('title', title);
+    formData.append('cost', cost);
+    formData.append('dealType', selectedOption === 'directly' ? 'DIRECT' : 'DELIVERY');
+    formData.append('content', content);
+    formData.append('currentCountry', city.country || '미국'); // 사용자 입력이 없을 경우 기본값
+    formData.append('currentLocation', city.city || '애리조나'); // 사용자 입력이 없을 경우 기본값
+    formData.append('share', share);
+
+    images.forEach((image, index) => {
+        formData.append('imageFiles', image);
+    });
+
+    try {
+        const response = await fetch('http://13.209.255.118:8080/api/v1/market-post', {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+            body: formData,
+        });
+
+        // 서버 응답 로그 추가
+        const responseText = await response.text();  // 응답 텍스트 확인
+        console.log('Response Status:', response.status);
+        console.log('Response Text:', responseText);
+
+        if (!response.ok) {
+            throw new Error('Something went wrong!');
+        }
+
+        const data = JSON.parse(responseText);  // 응답 텍스트를 JSON으로 변환
+        console.log('Response Data:', data);
+
+        // 등록 완료 후 /sell 페이지로 리다이렉트
+        navigate('/sell');
+
+    } catch (error) {
+        console.error('Error:', error.message);  // 에러 메시지 로그
+    }
+};
+
+
+    
+
     return (
         <>
-            <SellPostHeader />
+            <SellPostHeader onSubmit={handleSubmit} />
             <Space />
-            <Photo isPreviewVisible={images.length > 0}> {/* isPreviewVisible prop 전달 */}
+            <Photo isPreviewVisible={images.length > 0}>
                 {images.length === 0 ? (
                     <Camera src={camera} onClick={handleCameraClick} />
                 ) : (
@@ -53,7 +110,7 @@ function SellPost() {
                         <ImagePreview>
                             <ImageContainer>
                                 {images.map((image, index) => (
-                                    <img key={index} src={image} alt={`Preview ${index + 1}`} />
+                                    <img key={index} src={URL.createObjectURL(image)} alt={`Preview ${index + 1}`} />
                                 ))}
                             </ImageContainer>
                             <AddButton onClick={handleCameraClick}>
@@ -80,22 +137,22 @@ function SellPost() {
                             city={city}
                             isCityClicked={isCityClicked}
                             updateIsCityClicked={resetCityClick}
-                            />
+                        />
                         {showCity &&
-                        <SelectCity closeModal={handleCityClick} getCity={handleGetCity} />
+                            <SellPostSelectCity closeModal={handleCityClick} getCity={handleGetCity} />
                         }
                     </Region>
                 </Location><br />
                 <Section>
                     <Label>제목</Label>
-                    <Add placeholder="제목을 입력해 주세요." />
+                    <Add placeholder="제목을 입력해 주세요." value={title} onChange={(e) => setTitle(e.target.value)} />
                 </Section><br />
                 <Section>
                     <Label>판매 금액</Label>
-                    <Add placeholder="₩ 판매 금액을 입력해 주세요." type="number" />
+                    <Add placeholder="₩ 판매 금액을 입력해 주세요." type="number" value={cost} onChange={(e) => setCost(e.target.value)} />
                 </Section>
                 <CheckboxContainer>
-                    <input type="checkbox" /><span style={{ fontSize: "11px" }}>나눔</span>
+                    <input type="checkbox" checked={share} onChange={(e) => setShare(e.target.checked)} /><span style={{ fontSize: "11px" }}>나눔</span>
                 </CheckboxContainer>
                 <Section>
                     <Label>거래 형식</Label>
@@ -114,17 +171,18 @@ function SellPost() {
                         </Delivery>
                     </Options>
                 </Section>
-                <br/>
+                <br />
                 <Section>
                     <Label>상품 설명</Label>
-                    <Description placeholder="상품에 대한 상세한 설명을 입력해 주세요. 거래 가능 기간을 작성해 주시면 더 빠르게 거래가 진행될 수 있어요." />
+                    <Description placeholder="상품에 대한 상세한 설명을 입력해 주세요. 거래 가능 기간을 작성해 주시면 더 빠르게 거래가 진행될 수 있어요." value={content} onChange={(e) => setContent(e.target.value)} />
                 </Section>
             </Information>
         </>
-    )
+    );
 }
 
 export default SellPost;
+
 
 const Space = styled.div`
   margin-top: 6.5vh;

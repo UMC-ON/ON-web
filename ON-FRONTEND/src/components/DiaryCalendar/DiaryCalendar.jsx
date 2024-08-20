@@ -1,10 +1,28 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
-import moment from "moment";
+import moment from 'moment';
 import * as s from './DiaryCalendarStyled.jsx';
 
-export default function MyApp() {
+import diaryCheck from "../../assets/images/diaryCheck.svg";
+
+export default function DiaryCalendar({ diaries }) {
   const [value, onChange] = useState(new Date());
+
+  // 일기 작성 날짜 리스트 (백엔드에서 받아온 일기 날짜 리스트)
+  const dayList = diaries.dateList || [];
+
+  // 각 날짜 타일에 컨텐츠 추가
+  const tileContent = ({ date, view }) => {
+    if (view === 'month') {
+      // 날짜가 dayList에 포함된 경우 하트를 출력, 그렇지 않으면 기본 체크박스를 출력
+      if (dayList.includes(moment(date).format('YYYY-MM-DD'))) {
+        return <s.FullCheckbox><s.DiaryCheck src = {diaryCheck} /></s.FullCheckbox>;
+      } else {
+        return <s.EmptyCheckbox />;
+      }
+    }
+    return null;
+  };
 
   return (
     <s.DiaryCalendar>
@@ -19,15 +37,7 @@ export default function MyApp() {
         formatDay={(locale, date) => moment(date).format("D")}
         formatMonthYear={(locale, date) => moment(date).format("YYYY. MM")}
         formatYear={(locale, date) => moment(date).format("YYYY")}
-        tileContent={({ date, view }) => {
-          // view가 'month'일 때만 체크박스 모양 div를 추가
-          if (view === 'month') {
-            return (
-              <s.Checkbox />
-            );
-          }
-          return null;
-        }}
+        tileContent={tileContent}
       />
     </s.DiaryCalendar>
   );

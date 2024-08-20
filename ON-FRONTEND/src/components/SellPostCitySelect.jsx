@@ -7,27 +7,28 @@ import whiteCloseIcon from '../assets/images/whiteCloseIcon.svg';
 import theme from '../styles/theme';
 
 function SellPostCitySelect({ cityClick, city, isCityClicked, updateIsCityClicked }) {
-
-    const resetCity= () => {
-        updateIsCityClicked();
-    };
+  const resetCity = () => {
+      updateIsCityClicked();
+  };
 
   return (
-    <>
-      <GreyPicker $isCityClicked={isCityClicked}>
-        <span onClick={cityClick}>
-        {city ? `${city}` : '도시'}
-        {!isCityClicked && (
-            <Icon src={postIcon} />
-        )}
-        </span>
-        {isCityClicked && (
-            <Icon src={whiteCloseIcon} onClick={resetCity}/>
-        )}
-      </GreyPicker>
-    </>
+      <>
+          <GreyPicker $isCityClicked={isCityClicked}>
+              <span onClick={cityClick}>
+                  {city && city.country && city.city ? `${city.country} ${city.city}` : '도시'}  {/* city.country와 city.city 값이 모두 있을 때만 표시 */}
+                  {!isCityClicked && (
+                      <Icon src={postIcon} />
+                  )}
+              </span>
+              {isCityClicked && (
+                  <Icon src={whiteCloseIcon} onClick={resetCity} />
+              )}
+          </GreyPicker>
+      </>
   );
 }
+
+
 
 export default SellPostCitySelect;
 

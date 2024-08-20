@@ -1,16 +1,17 @@
 import styled from 'styled-components';
 import React, {useState, useEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
 import detailImg from '../assets/images/accompany_img.svg';
 import profileImg from '../assets/images/englandIcon.svg';
 import coordinateIcon from '../assets/images/coordinate_icon.svg';
-import marketImg2 from '../assets/images/borough_market.svg';
+import marketImg2 from '../assets/images/bannerDefault.svg';
 
 import calendarIcon from '../assets/images/black_calendar_icon.svg';
 import placeIcon from '../assets/images/black_place_icon.svg';
 import plusIcon from '../assets/images/black_plus_icon.svg';
 import marketImg from '../assets/images/borough_market.svg';
+
 
 import CardAccompanyList from '../components/CardAccompanyList';
 import AccompanyHeader from '../components/AccompanyHeader';
@@ -20,7 +21,12 @@ import LoadingScreen from '../components/LoadingScreen';
 import ReportModal from '../components/ReportModal';
 import ShareModal from '../components/ShareModal';
 
+import CountryIcon from '../components/CountryIcon';
+
 import { showDate } from '../components/Common/InfoExp';
+
+import { getData, postData } from '../api/Functions';
+import { GET_DETAIL_ACCOMPANY, GET_USER_INFO, APPLY_ACCOMPANY } from '../api/urls';
 
 const accompanycards = [
   {
@@ -85,11 +91,18 @@ const infocards = [
 
 
 function AccompanyDetailPage() {
+  const location = useLocation();
+  const { postId } = useParams();
 
   const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  const [nickname, setNickName] = useState('');
+  const [userId, setUserId] = useState(0);
+
+  const [infoData, setInfoData] = useState([]);
 
   const navigate = useNavigate();
 
@@ -134,6 +147,7 @@ function AccompanyDetailPage() {
   };
 
   const handleBlueButtonClick = () => {
+    applyData();
     closeFirstModal();
     openSecondModal();
   };
@@ -141,6 +155,26 @@ function AccompanyDetailPage() {
   function replaceHyphenWithDot(dateString) {
     return dateString.replace(/-/g, '.');
   }
+
+  const applyData = async () => {
+    try {
+      const response = await postData(
+        APPLY_ACCOMPANY,
+        { companyPostId: postId, userId: userId },
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        }
+      );
+  
+      if (response) {
+        console.log('Application successful:', response.data);
+      } else {
+        console.error('Application failed');
+      }
+    } catch (error) {
+      console.error('Error applying for accompany:', error);
+    }
+  };
 
   const [loading, setLoading] = useState(true);
 
@@ -153,6 +187,34 @@ function AccompanyDetailPage() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const info_data = await getData(GET_DETAIL_ACCOMPANY(postId),{
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        }); 
+        setInfoData(info_data.data);
+        // console.log(info_data.data);
+        // 
+
+        const user_data = await getData(GET_USER_INFO,{
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        }); 
+        // console.log(user_data.data.result.id);
+        setUserId(user_data.data.result.id);
+
+        console.log(info_data.data[0].nickname);
+        setNickName(info_data.data[0].nickname);
+
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData(); 
+  }, []); 
+
 
     return (
       <>
@@ -162,16 +224,18 @@ function AccompanyDetailPage() {
         <>
         <AccompanyHeader openModal={openShareModal}/>
         <Space/>
-        {infocards.map((card, index) => (
+        {infoData.map((card, index) => (
           <div key={index}>
           <BannerContainer>
-            <BannerImg src={card.imageUrls[0]} alt="Banner" />
-            <GradientOverlay />
+            {card.imageUrls[0] ?
+            <><BannerImg src={card.imageUrls[0]} alt="Banner" /> <GradientOverlay /></>:
+            <BannerImg src={marketImg2}/>
+            }
             <ProfileTextContainer>
-              <ProfileImg src={profileImg} alt="Profile" />
+              <CountryIcon country={card.currentCountry}/>
               <TextContainer>
                 <Left>
-                  <BigText>제로</BigText>
+                  <BigText>{card.nickname}</BigText>
                   <GreyText $left="8px">(</GreyText>
                   {card.ageAnonymous ? 
                   <></> :
@@ -185,7 +249,7 @@ function AccompanyDetailPage() {
                 </Left>
                 <Left>
                   <SmallIcon src={coordinateIcon}/>
-                  <GreyText $size="0.9em">{card.country}</GreyText>
+                  <GreyText $size="0.9em">{card.currentCountry}</GreyText>
                   {card.universityAnonymous ?
                   <></> :
                   <>
@@ -253,7 +317,7 @@ function AccompanyDetailPage() {
         <Space/>
 
         <BottomTabLayout>
-          {(card.currentRecruitNumber == card.totalRecruitNumber) ?
+          {card.recruitCompletd ?
           <GreyButton $width="500px">모집이 완료된 동행 글이에요.</GreyButton> :
           <>
           <GreyButton onClick={() => navigate('/chat')}>채팅 문의</GreyButton>
@@ -265,7 +329,9 @@ function AccompanyDetailPage() {
          ))}
 
         {isFirstModalOpen && (
-        <FirstModal closeModal={closeFirstModal} openNextModal={handleBlueButtonClick} />
+        <FirstModal closeModal={closeFirstModal} openNextModal={handleBlueButtonClick} 
+          nickname={nickname}
+        />
         )}
         {isSecondModalOpen && <SecondModal closeModal={closeSecondModal} />}
         {isReportModalOpen && <ReportModal closeModal={closeReportModal} />}
@@ -370,11 +436,16 @@ const TextContainer = styled.div`
 const BigText = styled.p`
   color: black; 
   margin: 0;
-  pading-top: 0px;
+  padding-top: 0px;
   font-size: ${props => props.$size || '1.5em'};
   font-weight: bold;
   text-align: left;
   line-height: 3vh;
+  max-width: 180px;
+  
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 `;
 
 const GreyText = styled.p`

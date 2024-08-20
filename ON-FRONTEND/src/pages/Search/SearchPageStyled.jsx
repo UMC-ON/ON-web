@@ -83,6 +83,16 @@ export const SearchResultContainer = styled.section`
   width: 100%;
 `;
 
+export const LastText = styled.span`
+  color: #b8b8b8;
+  text-align: center;
+  font-family: Inter;
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+`;
+
 const ONIconSVG = styled.svg`
   margin: 1.69rem 0 0.5rem;
 `;

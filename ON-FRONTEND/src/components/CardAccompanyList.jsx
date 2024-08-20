@@ -106,12 +106,13 @@ const Card = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 22vh; 
-  height: auto; 
+  height: 32vh; 
 `;
 
 const CardImage = styled.img`
   width: 100%;
-  height: auto;
+  height: 16vh;        
+  object-fit: cover;   
 `;
 
 const CardIcon = styled.img`

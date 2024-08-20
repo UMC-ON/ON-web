@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import planeIcon from '../assets/images/plane_icon.svg';
 import closeIcon from '../assets/images/close_button.svg';
 
-function FirstModal({ closeModal, openNextModal }) {
+function FirstModal({ closeModal, openNextModal, nickname}) {
+
     return (
       <Box>
         <ModalContent>
@@ -11,7 +12,7 @@ function FirstModal({ closeModal, openNextModal }) {
           <Icon src={planeIcon} />
   
           <Left>
-            <ModalTitle $color="#84B4FF">제로</ModalTitle>
+            <ModalTitle $color="#84B4FF">{nickname}</ModalTitle>
             <ModalTitle>님께</ModalTitle>
           </Left>
           <ModalTitle>동행을 신청하시나요?</ModalTitle>

@@ -27,94 +27,15 @@ import InfoCommunityCardList from '../components/InfoCommunityCardList';
 import FreeCommunityCardList from '../components/FreeCommunityCardList';
 
 import { getData } from '../api/Functions';
-import { GET_TWO_FREEPOST, GET_TWO_INFOPOST, GET_NEAR_ACCOMPANY } from '../api/urls';
+import { GET_USER_INFO, GET_TWO_FREEPOST, GET_TWO_INFOPOST, GET_NEAR_ACCOMPANY } from '../api/urls';
 
 
 const images = [bannerimg, bannerimg, bannerimg, bannerimg, bannerimg];
 
-const accompanycards = [
-  {
-    imageUrls: [marketImg],
-    title: '8/2 버로우 마켓 동행하실 분 구해요!',
-    nickname: '몽몽',
-    age: 22,
-    gender: 'FEMALE',
-    startDate: "2024-08-19",
-    endDate: "2024-08-19",
-    currentRecruitNumber: 1,
-    totalRecruitNumber: 4,
-    travelArea: ['영국 전체'],
-  },
-  {
-    imageUrls: [marketImg],
-    title: '8/2 버로우 마켓 동행하실 분 구해요!',
-    nickname: '몽몽',
-    age: 22,
-    gender: 'FEMALE',
-    startDate: "2024-08-19",
-    endDate: "2024-08-19",
-    currentRecruitNumber: 1,
-    totalRecruitNumber: 4,
-    travelArea: ['영국 전체', '영국 런던'],
-  },
-  {
-    imageUrls: [marketImg],
-    title: '8/2 버로우 마켓 동행하실 분 구해요!',
-    nickname: '몽몽',
-    age: 22,
-    gender: 'FEMALE',
-    startDate: "2024-08-19",
-    endDate: "2024-08-19",
-    currentRecruitNumber: 1,
-    totalRecruitNumber: 4,
-    travelArea: ['영국 전체', '영국 런던'],
-  },
-  
-];
-
-const bluecards = [
-  {
-    title: '[🇬🇧 킹칼] 한 학기 교환 비용 정리',
-    createdAt: "2024-08-19T06:03:25.818Z",
-    body: '따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 독일로 교환학생을 앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약!',
-    userNickname: '제로',
-    anonymous: true,
-    commentCount: 1,
-    imageUrls: [screenshotImg],
-  },
-  {
-    title: '[🇬🇧 킹칼] 한 학기 교환 비용 정리',
-    createdAt: "2024-08-19T06:03:25.818Z",
-    body: '따끈하다 못해 뜨거운 테아민 예약 후기입니닷😉 독일로 교환학생을 앞두고 있는 사람이라면!!!! 반드시 알아야 하는 테아민 예약!',
-    userNickname: '제로',
-    anonymous: false,
-    commentCount: 1,
-    imageUrls: [screenshotImg],
-  },
-];
-
-const purplecards = [
-  {
-    title: '독일 방문학생 갈 때 어학점수',
-    createdAt: "2024-08-19T06:03:25.818Z",
-    body: '독일 방문학생 갈 때 어학점수 어느 정도 나와야 할까요? 가장 가고 싶은 학교는 프푸응과대입니다. 저는 3개월 만에 학기가 끝나는 학교로 가지만, 이후 보다 편안하고 안전한(?) 유럽 여행을 위해 비자를 발급받으려 합니다!',
-    userNickname: '제로',
-    anonymous: true,
-    commentCount: 1,
-  },
-  {
-    title: '독일 방문학생 갈 때 어학점수',
-    createdAt: "2024-08-19T06:03:25.818Z",
-    body: '독일 방문학생 갈 때 어학점수 어느 정도 나와야 할까요? 가장 가고 싶은 학교는 프푸응과대입니다. 저는 3개월 만에 학기가 끝나는 학교로 가지만, 이후 보다 편안하고 안전한(?) 유럽 여행을 위해 비자를 발급받으려 합니다!',
-    userNickname: '제로',
-    anonymous: false,
-    commentCount: 1,
-  },
-];
-
 
 function HomePage() {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [userData, setUserData] = useState([]);
     const [infoData, setInfoData] = useState([]);
     const [freeData, setFreeData] = useState([]);
     const [accompanyData, setAccompanyData] = useState([]);
@@ -171,10 +92,18 @@ function HomePage() {
     useEffect(() => {
       const fetchData = async () => {
         try {
+          const user_data = await getData(GET_USER_INFO,{
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          }); 
+          setUserData([user_data.data.result]);
+          console.log(user_data.data.result);
+          
           const info_data = await getData(GET_TWO_INFOPOST,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           }); 
           setInfoData(info_data.data.result);
+          // console.log("infoData");
+          console.log(info_data.data.result);
 
           const free_data = await getData(GET_TWO_FREEPOST,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
@@ -185,7 +114,7 @@ function HomePage() {
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           }); 
           setAccompanyData(accom_data.data.result);
-          console.log(accom_data.data.result);
+          // console.log(accom_data.data.result);
 
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -200,15 +129,20 @@ function HomePage() {
         <NavBar></NavBar>
         <Space></Space>
         <BigContainer>
-            <LeftContainer>
-                <SubText>나의 교환교</SubText>
-            </LeftContainer>
-            <LeftContainer>
-                <BigText spacing="1vh">영국,</BigText>
-                <BigText color="#3E73B2">King's College London</BigText>
-            </LeftContainer>
-
-            <Container>
+            {userData.map((card, index) => (
+              <div key={index}>
+              <LeftContainer>
+                  <SubText>나의 교환교</SubText>
+              </LeftContainer>
+              <LeftContainer>
+                  <BigText spacing="1vh">{card.country},</BigText>
+                  <BigText color="#3E73B2">{card.dispatchedUniversity}</BigText>
+              </LeftContainer>
+              </div>
+             ))}
+            
+            {userData.map((card, index) => (
+            <Container key={index}>
                 <Button onClick={goToCollege}>
                     <Icon src={schoolIcon} alt="School Icon" />
                     <SubText>교환교</SubText>
@@ -216,7 +150,7 @@ function HomePage() {
                 </Button>
                 <Button onClick={goToMigration}>
                     <Icon src={migrationIcon} alt="Migration Icon" />
-                    <SubText>영국</SubText>
+                    <SubText>{card.country}</SubText>
                     <SubText>이민국</SubText>
                 </Button>
                 <Button onClick={goToAccompany}>
@@ -225,6 +159,8 @@ function HomePage() {
                     <SubText>구하기</SubText>
                 </Button>
             </Container>
+            ))}
+
             <Container>
                 <Button onClick={goToInfoPost}>
                     <Icon src={informationIcon} alt="Information Icon" />
@@ -257,15 +193,18 @@ function HomePage() {
                 ))}
             </DotContainer>
           </BigContainer>
+          
 
           <BlueContainer>
 
-            <BigContainer>
+          {userData.map((card, index) => (
+            <BigContainer key={index}>
                 <LeftContainer>
                 <MiddleText spacing="1vh">나를 위한</MiddleText>
-                <MiddleText color="#3E73B2">런던 근교 여행지</MiddleText>
+                <MiddleText color="#3E73B2">{card.country} 근교 여행지</MiddleText>
                 </LeftContainer>
             </BigContainer>
+          ))}
 
             <CardList selectedCountry={'영국'}/>
           </BlueContainer>

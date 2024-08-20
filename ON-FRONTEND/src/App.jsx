@@ -151,9 +151,8 @@ function App() {
           path="/accompany/post"
           element={<AccompanyPostPage />}
         />
-        <Route
-          path="/accompany/detail"
-          element={<AccompanyDetailPage />}
+         <Route path="/accompany/detail/:postId" 
+          element={<AccompanyDetailPage />} 
         />
         <Route
           path="/diary"
@@ -168,7 +167,7 @@ function App() {
           element={<SellPage />}
         />
         <Route
-          path="/sell/id"
+          path="/sell/:marketPostId"
           element={<ItemDetailPage />}
         />
         <Route
