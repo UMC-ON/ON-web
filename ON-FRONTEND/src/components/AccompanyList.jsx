@@ -43,14 +43,17 @@ function AccompanyList({datas}) {
                 </Left>
                 
                 <Left>
-                    <GreyMiddleText>{data.description}</GreyMiddleText>
+                    <GreyMiddleText>{data.content}</GreyMiddleText>
                 </Left>
 
                 <Left>
                     <CardIcon src={personIcon} $top="2px"/>
                     <SmallGreyText>{data.nickname}</SmallGreyText>
-                    <SmallGreyText>·</SmallGreyText>
-                    <SmallGreyText>{data.age}세</SmallGreyText>
+                    {(data.ageAnonymous) ?
+                    <><SmallGreyText>·</SmallGreyText>
+                    <SmallGreyText>{data.age}세</SmallGreyText></>:
+                    null
+                    }
                     <SmallGreyText>·</SmallGreyText>
                     {(data.gender == 'FEMALE') ?
                     <SmallGreyText>여</SmallGreyText>:
@@ -58,7 +61,7 @@ function AccompanyList({datas}) {
                     }
               </Left>
             </TextContainer>
-            <Overlay $isClosed={false} />
+            <Overlay $isClosed={data.recruitCompletd} />
         </RoundContainer>
         ))}
       </>
@@ -92,11 +95,19 @@ const GreyText = styled.p`
 
 
 const SmallGreyText = styled.p`
-  font-size: 0.3em;
-  padding-left: 6px;
+  font-size: 0.3em;  you want */
+  padding-left: 10px;
   padding-top: 2px;
   padding-bottom: 13px;
   color: #7a7a7a;
+  margin-left: 5px;
+
+  display: inline-block; 
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.02em;
 `;
 
 const GreyMiddleText = styled.p`
@@ -112,6 +123,7 @@ const GreyMiddleText = styled.p`
   margin-top: 10px;
   margin-bottom: 10px;
   width: 99%;
+  height: 4vh;
 `;
 
 const RoundContainer = styled.div`

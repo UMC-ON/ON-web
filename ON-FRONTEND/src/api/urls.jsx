@@ -37,3 +37,4 @@ export const GET_RECENT_ACCOMPANY = '/api/v1/company-post/recent';
 export const GET_DETAIL_ACCOMPANY = (companyPostId) => `/api/v1/company-post/${companyPostId}`;
 
 //동행 구하기 글 작성
+export const WRITE_ACCOMPANY = `/api/v1/company-post`;

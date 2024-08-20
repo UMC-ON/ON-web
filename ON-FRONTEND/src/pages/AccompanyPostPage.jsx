@@ -18,11 +18,16 @@ import DateRangePicker from '../components/CompanyCalendar/CompanyCalendar.jsx';
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 import SelectCity from './SelectCity/SelectCity.jsx';
 
+import { multiFilePostData, getData } from '../api/Functions';
+import { WRITE_ACCOMPANY, GET_USER_INFO } from '../api/urls';
+
 
 function AccompanyPostPage() {
     const [ageChecked, setAgeChecked] = useState(false);
     const [schoolChecked, setSchoolChecked] = useState(false);
 
+    const [age, setAge] = useState(null);
+    const [school, setSchool] = useState('');
 
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -33,7 +38,7 @@ function AccompanyPostPage() {
     const [personValue, setPersonValue] = useState(0);
 
     const [showCountry, setShowCountry] = useState(false);
-    const [country, setCountry] = useState('독일');
+    const [country, setCountry] = useState('');
     const [isCountryClicked, setIsCountryClicked] = useState(false);
 
     const [showCity, setShowCity] = useState(false);
@@ -48,9 +53,76 @@ function AccompanyPostPage() {
     const minusSrc = (daysDifference == 0) ? greyMinusButton : minusButton;
     const plusSrc = (daysDifference == limitDays) ? greyPlusButton : plusButton;
 
+    const fileInputRef = useRef(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null);
+    const [fileSize, setFileSize] = useState(null);
+
+    const [userData, setUserData] = useState(null);
+
     useEffect(() => {
       console.log(endDate);
     }, [endDate]);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const user_data = await getData(GET_USER_INFO,{
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          }); 
+
+          const data = user_data.data.result;
+          setUserData(data);
+          // console.log(user_data.data.result);
+        
+          setAge(data.age);
+          setCountry(data.country);
+          console.log(data.country);
+          setSchool(data.dispatchedUniversity);
+
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+  
+      fetchData(); 
+    }, []); 
+
+    
+
+    const [input, setInput] = useState({
+      userId: null,
+      ageAnonymous: ageChecked,
+      currentCountry: '',
+      universityAnonymous: schoolChecked,
+      title: '',
+      content: '',
+      travelArea: [city, city2],
+      totalRecruitNumber: personValue,
+      schedulePeriodDay: daysDifference,
+      startDate: startDate,
+      endDate: endDate,
+      imageFiles: [null],
+    });
+
+    useEffect(() => {
+      if (userData) {
+        setInput((prevInput) => ({
+          ...prevInput,
+          userId: userData.id,
+          ageAnonymous: ageChecked,
+          currentCountry: userData.country,
+          universityAnonymous: schoolChecked,
+          travelArea: [city, city2],
+          totalRecruitNumber: personValue,
+          schedulePeriodDay: daysDifference,
+          startDate: startDate,
+          endDate: endDate,
+          imageFiles: [selectedFile],
+        }));
+      }
+    }, [userData, ageChecked, country, schoolChecked, city, city2, personValue, daysDifference, startDate, endDate, selectedFile]);
+  
 
     const onChangeInput = (e) => {
       let name = e.target.name;
@@ -62,10 +134,6 @@ function AccompanyPostPage() {
       });
     };
 
-    const onSubmit = () => {
-      console.log(input);
-      // alert(input);
-    };
 
     const handlePerson = (event) => {
       const newValue = event.target.value;
@@ -111,8 +179,8 @@ function AccompanyPostPage() {
     };
 
     const handleApplyClick = (start, end) => {
-      setStartDate(moment(start).format('YYYY/MM/DD'));
-      setEndDate((moment(end).format('YYYY/MM/DD')));
+      setStartDate(moment(start).format('YYYY-MM-DD'));
+      setEndDate((moment(end).format('YYYY-MM-DD')));
 
       const startMoment = moment(start);
       const endMoment = moment(end);
@@ -155,6 +223,10 @@ function AccompanyPostPage() {
       navigate(-1);
     };
 
+    // function goToAccompany() {
+    //   navigate("/accompany");
+    // }
+
     const handleCalendarClick = () => {
       setShowCalendar(!showCalendar);
     };
@@ -170,11 +242,6 @@ function AccompanyPostPage() {
     const handleCityClick2 = () => {
       setShowCity2(!showCity2);
     };
-
-    const fileInputRef = useRef(null);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [previewUrl, setPreviewUrl] = useState(null);
-    const [fileSize, setFileSize] = useState(null);
 
     const handleButtonClick = () => {
       fileInputRef.current.click();
@@ -194,33 +261,81 @@ function AccompanyPostPage() {
       }
     };
 
-    const [input, setInput] = useState({
-      userId: 1234,
-      age: 22,
-      ageAnonymous: ageChecked,
-      country: country,
-      university: 'Kings College London',
-      universityAnonymous: schoolChecked,
-      title: '',
-      content: '',
-      travelArea: [city, city2],
-      totalRecruitNumber: personValue,
-      schedulePeriodDay: daysDifference,
-      startDate: startDate,
-      endDate: endDate,
-      imageFiles: [selectedFile],
-    });
+
+    // const formData = new FormData();
+    // const json = JSON.stringify(input);
+    // const blob = new Blob([json], {type: 'application/json'});
+    // formData.append('dispatchCertifyApplyRequestDto', blob);
 
     useEffect(() => {
-      setInput((prevInput) => ({
-        ...prevInput,
+      if (userData) {
+        setInput((prevInput) => ({
+          ...prevInput,
+          userId: userData.id,
+          ageAnonymous: ageChecked,
+          currentCountry: country,  
+          universityAnonymous: schoolChecked,
+          travelArea: [city, city2],
+          totalRecruitNumber: personValue,
+          schedulePeriodDay: daysDifference,
+          startDate: startDate,
+          endDate: endDate,
+          imageFiles: [selectedFile],
+        }));
+      }
+    }, [userData, ageChecked, country, schoolChecked, city, city2, personValue, daysDifference, startDate, endDate, selectedFile]);
+
+    const postData = async () => {
+      const formData = new FormData();
+    
+      const jsonData = {
+        userId: input.userId,
+        ageAnonymous: ageChecked,
+        currentCountry: country,  
+        universityAnonymous: schoolChecked,
+        title: input.title,
+        content: input.content,
+        travelArea: [city, city2],
+        totalRecruitNumber: personValue,
+        schedulePeriodDay: daysDifference,
         startDate: startDate,
         endDate: endDate,
-        schedulePeriodDay: daysDifference,
-        travelArea: [city, city2],
-        imageFiles: [selectedFile],
-      }));
-    }, [startDate, endDate, daysDifference, city, city2, selectedFile]);
+      };
+    
+      console.log(jsonData); 
+    
+      const jsonBlob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
+      formData.append('requestDTO', jsonBlob);
+    
+      if (selectedFile) {
+        formData.append('imageFiles', selectedFile);
+      }
+    
+      try {
+        const response = await multiFilePostData(
+          WRITE_ACCOMPANY, 
+          formData, 
+          {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          }
+        );
+    
+        if (response) {
+          console.log(response.data.result);
+        }
+      } catch (error) {
+        console.error('Error posting data:', error);
+      }
+    };
+
+    const onSubmit = () => {
+      // console.log(input);
+      // postData();
+      postData().then(() => {
+        navigate('/accompany', { state: { refresh: true } });
+      });
+      // alert(input);
+    };
     
     return (
       <>
@@ -250,14 +365,14 @@ function AccompanyPostPage() {
             <BlueContainer>
                 <Left $bottom="5px">
                     <BlackText>나이 :</BlackText>
-                    <BlackText $isChecked={ageChecked}>22세</BlackText>
+                    <BlackText $isChecked={ageChecked}>{age}세</BlackText>
                     <CustomCheckbox checked={ageChecked} onChange={checkAge} />
                     <GreyText $size="0.7rem" $left="5px" $top="10px">나이 비공개</GreyText>
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>현재 국가 : </BlackText>
                     {!isCountryClicked && (
-                      <CircleContainer onClick={handleCountryClick}>독일
+                      <CircleContainer onClick={handleCountryClick}>{country}
                       <SmallIcon src={postIcon} $left="5px"/>
                       </CircleContainer>
                     )}
@@ -269,7 +384,7 @@ function AccompanyPostPage() {
                 </Left>
                 <Left $bottom="5px">
                     <BlackText>파견교 : </BlackText>
-                    <BlackText $isChecked={schoolChecked} $size="0.8rem">King's College London</BlackText>
+                    <BlackText $isChecked={schoolChecked} $size="0.8rem">{school}</BlackText>
                     <CustomCheckbox checked={schoolChecked} onChange={checkSchool} />
                     <GreyText $size="0.7rem" $left="5px" $top="10px">파견교 비공개</GreyText>
                 </Left>
