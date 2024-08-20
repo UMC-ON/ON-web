@@ -95,11 +95,6 @@ function SellPage() {
     setShowAvailable(!showAvailable);
   };
 
-  // // 필터링된 아이템 목록
-  // const filteredItems = items
-  //   .filter(item => !showAvailable || item.now !== '거래완료')
-  //   .filter(item => !selectedTransaction || item.how === selectedTransaction);
-
   const goPost = () => {
     navigate('./post');
   };

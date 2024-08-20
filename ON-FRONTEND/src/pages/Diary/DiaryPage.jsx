@@ -1,47 +1,79 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
+
 import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import DiaryCalendar from '../../components/DiaryCalendar/DiaryCalendar';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import DailyDiary from "../../components/DailyDiary";
 import DDayCalendar from '../../components/DDayCalendar.jsx';
-import ko from "date-fns/locale/ko";
-import closeIcon from '../../assets/images/close_button.svg';
 import DailyDiaryCalendar from "../../components/DailyDiaryCalendar/DailyDiaryCalendar.jsx";
 import styled from 'styled-components';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './DiaryPage.css';
+
+import ko from "date-fns/locale/ko";
+import closeIcon from '../../assets/images/close_button.svg';
 import plus_button from '../../assets/images/addButton.svg';
 
-const diaries = [
-  { 
-    content: '드디어 영국 도착했다!! 비행기 경유하느라 힘들었지만 그래도 캠퍼스를 실제로 보니깐 설렌다!! 기숙사 떨어졌지만 기숙사 배정 받았으면 맨날 학교 구경하고 좋았을 것 같다ㅜㅜ 그래도 지금 방도 학교 15분 거리라 학교 구경 많이많이 해야지 ㅎㅎ ',
-    date: '2024.07.31',
-    dday: 'D+1',
-  },
-  { 
-    content: '지금은 드디어 출국하러 인천공항으로 가고 있다! 이제 진짜 교환 생활 시작이라닛 좋은 경험 많이 쌓고, 행복하게 후회 없이 하고 싶은 거 다 하고 오자!! 우선 두바이 경유할 때 한눈 팔지 말고 정신 잘 차리기!',
-    date: '2024.07.30',
-    dday: 'D-Day',
-  },
-];
 
 const Diary = () => {
-  const [selectedDate1, setSelectedDate1] = useState(null); // DDayCalendar의 상태
-  const [selectedDate2, setSelectedDate2] = useState(null); // DailyDiaryCalendar의 상태
+  const [selectedDate1, setSelectedDate1] = useState(null);
+  const [selectedDate2, setSelectedDate2] = useState(null);
 
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [newDiaryVisible, setNewDiaryVisible] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
 
+  const [newDiaryContent, setNewDiaryContent] = useState('');
+  const [diaries, setDiaries] = useState([]);
+
+
   const datePickerRef = useRef(null);
 
-  const handleDateChange1 = (date) => {
+  const accessToken = import.meta.env.VITE_accessToken;
+  
+  useEffect(() => {
+    const fetchDiaries = async () => {
+      try {
+        const response = await axios.get(`https://13.209.255.118.nip.io/api/v1/diary/list`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        setDiaries(response.data.result);
+        console.log(response.data.result);
+      } catch (error) {
+        console.error('다이어리 목록을 가져오는 중 오류 발생:', error);
+      }
+    };
+    fetchDiaries();
+  }, [accessToken]);
+
+  const handleDateChange1 = async (date) => {
     setSelectedDate1(date);
     setCalendarOpen(false);
-  };
+
+  const formattedDate = moment(date).format('YYYY-MM-DD'); // 날짜를 서버에서 요구하는 형식으로 변환
+
+  try {
+    const response = await axios.post(
+      'https://13.209.255.118.nip.io/api/v1/diary/startdate',
+      { startDate: formattedDate },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    console.log('서버 응답:', response.data);
+  } catch (error) {
+    console.error('서버로 날짜 전달 중 오류 발생:', error);
+  }
+};
 
   const handleDateChange2 = (date) => {
     setSelectedDate2(date);
@@ -77,6 +109,32 @@ const Diary = () => {
     }
   };
 
+  const handleSaveDiary = async () => {
+  
+    const formattedDate = moment(selectedDate2).format('YYYY-MM-DD');
+  
+    try {
+      const response = await axios.post(
+        'https://13.209.255.118.nip.io/api/v1/diary',
+        { 
+          date: formattedDate, 
+          content: newDiaryContent 
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log('일기 저장 응답:', response.data);
+      setNewDiaryVisible(false);
+    } catch (error) {
+      console.error('일기 저장 중 오류 발생:', error);
+    }
+  };
+  
+
   return (
     <DiaryContainer>
       <PageHeader pageName="나의 일기" />
@@ -106,7 +164,7 @@ const Diary = () => {
           </div>
         </Information>
         <CalendarContainer>
-          <DiaryCalendar />
+          <DiaryCalendar diaries={diaries} />
         </CalendarContainer>
         <AddDiary onClick={handleAddDiaryClick}>
           <div>기록 남기기</div>
@@ -114,7 +172,7 @@ const Diary = () => {
         </AddDiary>
 
         {showDatePicker && (
-          <BottomTabLayout $height="44vh">
+          <BottomTabLayout $height="65vh">
             <TopHeader>
               날짜
             </TopHeader>
@@ -126,13 +184,15 @@ const Diary = () => {
         {newDiaryVisible && (
           <NewDiaryContainer>
             <NewDiary 
-              placeholder="교환 생활의 시작, 윤서님의 교환 1일차 하루는 어땠나요?">
-            </NewDiary>
-            <Save>저장하기</Save>
+              placeholder="교환 생활의 시작, 윤서님의 교환 1일차 하루는 어땠나요?"
+              value={newDiaryContent}
+              onChange={(e) => setNewDiaryContent(e.target.value)} // 사용자가 입력한 내용을 상태에 저장
+            />
+            <Save onClick={handleSaveDiary}>저장하기</Save>
           </NewDiaryContainer>
         )}
 
-        <DailyDiary items={diaries} />
+        <DailyDiary diaries={diaries} />
       </Content>
       <BottomTabNav />
     </DiaryContainer>
@@ -143,170 +203,6 @@ const Diary = () => {
 export default Diary;
 
 
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-// import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
-// import DiaryCalendar from '../../components/DiaryCalendar/DiaryCalendar';
-// import PageHeader from '../../components/PageHeader/PageHeader';
-// import StoredDiary from "../../components/DailyDiary";
-// import DDayCalendar from '../../components/DDayCalendar.jsx';
-// import styled from 'styled-components';
-// import moment from 'moment';
-// import plus_button from '../../assets/images/addButton.svg';
-// import closeIcon from '../../assets/images/close_button.svg';
-
-// const Diary = () => {
-//   const [selectedDate1, setSelectedDate1] = useState(null);
-//   const [selectedDate2, setSelectedDate2] = useState(null);
-//   const [diaryContent, setDiaryContent] = useState('');
-//   const [calendarOpen, setCalendarOpen] = useState(false);
-//   const [newDiaryVisible, setNewDiaryVisible] = useState(false);
-//   const [showDatePicker, setShowDatePicker] = useState(false);
-//   const [diaries, setDiaries] = useState([]); // 일기 리스트 상태
-
-//   useEffect(() => {
-//     // 컴포넌트가 마운트될 때 일기 목록을 가져오는 함수 호출
-//     fetchDiaries();
-//   }, []);
-
-//   const fetchDiaries = async () => {
-//     try {
-//       const response = await axios.get('/api/v1/diary/list');
-//       setDiaries(response.data); // 일기 목록을 상태에 저장
-//     } catch (error) {
-//       console.error('일기 목록을 불러오는 중 오류 발생:', error);
-//     }
-//   };
-
-//   const handleDateChange1 = (date) => {
-//     setSelectedDate1(date);
-//     setCalendarOpen(false);
-//   };
-
-//   const handleDateChange2 = (date) => {
-//     setSelectedDate2(date);
-//     setShowDatePicker(false);
-//     setNewDiaryVisible(true);
-//     setDiaryContent('');
-//   };
-
-//   const handleAddDiaryClick = () => {
-//     setShowDatePicker(true);
-//     setNewDiaryVisible(false);
-//   };
-
-//   const handleCalendarClick = () => {
-//     setShowDatePicker(false);
-//   };
-
-//   const handleDiaryContentChange = (e) => {
-//     setDiaryContent(e.target.value);
-//   };
-
-//   const handleSaveDiary = async () => {
-//     if (!selectedDate2 || !diaryContent) {
-//       alert('날짜와 내용을 입력해주세요.');
-//       return;
-//     }
-
-//     const diaryData = {
-//       date: moment(selectedDate2).format('YYYY-MM-DD'),
-//       content: diaryContent,
-//     };
-
-//     try {
-//       const response = await axios.post('/api/v1/diary', diaryData);
-//       console.log('일기 저장 성공:', response.data);
-//       alert('일기가 저장되었습니다.');
-//       setNewDiaryVisible(false);
-//       fetchDiaries(); // 새로운 일기 저장 후 목록을 다시 가져옴
-//     } catch (error) {
-//       console.error('일기 저장 중 오류 발생:', error);
-//       alert('일기 저장에 실패했습니다.');
-//     }
-//   };
-
-//   const todayDate = moment().format('YYYY.MM.DD');
-
-//   const calculateDDay = (date) => {
-//     if (!date) return '';
-
-//     const startOfDay = moment().startOf('day');
-//     const selectedDay = moment(date).startOf('day');
-
-//     const diffDays = selectedDay.diff(startOfDay, 'days');
-
-//     if (diffDays === 0) {
-//       return '오늘';
-//     } else if (diffDays > 0) {
-//       return `D-${diffDays}`;
-//     } else {
-//       return `D+${Math.abs(diffDays)}`;
-//     }
-//   };
-
-//   return (
-//     <DiaryContainer>
-//       <PageHeader pageName="나의 일기" />
-//       <Content>
-//         <Information>
-//           <DDay>
-//             {selectedDate1 ? (
-//               <DDayText>{calculateDDay(selectedDate1)}</DDayText>
-//             ) : (
-//               <DDayCalendar
-//                 selectedDate={selectedDate1}
-//                 handleDateChange={handleDateChange1}
-//                 setCalendarOpen={setCalendarOpen}
-//               />
-//             )}
-//           </DDay>
-//           <div>
-//             <RightContainer>
-//               <Today>{todayDate}</Today>
-//               <SubText>나의 교환교</SubText>
-//               <SchoolContainer>
-//                 <BigText>영국,</BigText>
-//                 <BigText style={{ color: "#3E73B2", marginLeft: "0.5em" }}>King’s College London</BigText>
-//               </SchoolContainer>
-//             </RightContainer>
-//           </div>
-//         </Information>
-//         <CalendarContainer>
-//           <DiaryCalendar />
-//         </CalendarContainer>
-//         <AddDiary onClick={handleAddDiaryClick}>
-//           <div>기록 남기기</div>
-//           <AddButton src={plus_button} />
-//         </AddDiary>
-
-//         {showDatePicker && (
-//           <BottomTabLayout $height="44vh">
-//             <TopHeader>날짜</TopHeader>
-//             <Close src={closeIcon} onClick={handleCalendarClick} />
-//             <DailyDiaryCalendar onApply={handleDateChange2} />
-//           </BottomTabLayout>
-//         )}
-
-//         {newDiaryVisible && (
-//           <NewDiaryContainer>
-//             <NewDiary 
-//               placeholder="교환 생활의 시작, 윤서님의 교환 1일차 하루는 어땠나요?"
-//               value={diaryContent}
-//               onChange={handleDiaryContentChange}
-//             />
-//             <Save onClick={handleSaveDiary}>저장하기</Save>
-//           </NewDiaryContainer>
-//         )}
-
-//         <DailyDiary items={diaries} /> {/* 받아온 일기 목록을 렌더링 */}
-//       </Content>
-//       <BottomTabNav />
-//     </DiaryContainer>
-//   );
-// };
-
-// export default Diary;
 
 const DiaryContainer = styled.div`
   display: flex;
