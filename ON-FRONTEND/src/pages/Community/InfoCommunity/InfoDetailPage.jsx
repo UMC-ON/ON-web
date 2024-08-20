@@ -5,7 +5,7 @@ const InfoDetailPage = () => {
     <DetailPage
       color1="#C2C7FF"
       color2="#AD99FF"
-      titleColor="#BFD8E5"
+      boardType="INFO"
     />
   );
 };

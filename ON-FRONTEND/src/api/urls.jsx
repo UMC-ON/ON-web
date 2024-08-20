@@ -18,8 +18,14 @@ export const GET_RECENT_POST_OF = (boardType) =>
 export const WRITE_POST_IN = (boardType) => `/api/v1/post/${boardType}`;
 export const GET_TWO_INFOPOST = '/api/v1/home/info/list';
 export const GET_TWO_FREEPOST = '/api/v1/home/free/list';
+export const GET_POST_DETAIL = (boardType, postId) =>
+  `/api/v1/post/${boardType}/${postId}`;
+///국가필터링///
+export const GET_FILTERED_POST_IN = (boardType) =>
+  `/api/v1/post/filter/${boardType}`;
 
 //댓글 작성
+export const GET_COMMENT_OF = (postId) => `/api/v1/comment/${postId}`;
 
 //채팅
 

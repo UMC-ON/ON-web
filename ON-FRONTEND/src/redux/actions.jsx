@@ -2,6 +2,7 @@
 import { GET_USER_INFO } from '../api/urls';
 import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT, LOAD_USER } from './actionTypes';
 import { getData } from '../api/Functions';
+import { useNavigate } from 'react-router-dom';
 
 // 로그인 성공 액션
 export const loginSuccess = (user, accessToken, refreshToken) => {
@@ -22,8 +23,11 @@ export const loginFailure = (error) => ({
 
 // 로그아웃 액션
 export const logout = () => {
+  const nav = useNavigate();
   localStorage.removeItem('AToken'); // 로그아웃 시 토큰을 localStorage에서 제거
   localStorage.removeItem('RToken');
+  alert('로그아웃 되었습니다.');
+  nav('/signIn');
   return {
     type: LOGOUT,
   };
@@ -35,17 +39,21 @@ export const loadUser = () => {
     const accessToken = localStorage.getItem('AToken');
     if (accessToken) {
       try {
-        const user = await getData(GET_USER_INFO, {
+        const res = await getData(GET_USER_INFO, {
           Authorization: `Bearer ${accessToken}`,
         }); // 토큰을 사용해 유저 정보를 가져옴
-        dispatch({
-          type: LOAD_USER,
-          payload: { user, accessToken },
-        });
+        if (res) {
+          const user = res.data.result;
+          console.log(`로드유저실행: ${user}`);
+          dispatch({
+            type: LOAD_USER,
+            payload: { user, accessToken },
+          });
+        }
       } catch (error) {
         console.log(error);
         dispatch(loginFailure('Failed to fetch user info'));
-        //dispatch(logout()); // 에러 발생 시 로그아웃 처리
+        dispatch(logout()); // 에러 발생 시 로그아웃 처리
       }
     } else {
       dispatch(logout()); // 토큰이 없으면 로그아웃 상태로 설정

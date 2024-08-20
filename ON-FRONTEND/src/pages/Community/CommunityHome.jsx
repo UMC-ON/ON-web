@@ -18,7 +18,7 @@ import { PostList } from '../../components/Common/TempDummyData/PostList.jsx';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { getData } from '../../api/Functions.jsx';
-import { GET_POST_OF } from '../../api/urls.jsx';
+import { GET_FILTERED_POST_IN, GET_POST_OF } from '../../api/urls.jsx';
 
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 
@@ -50,10 +50,7 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
     navigate('./post');
   };
   const currentBoardType = boardType;
-  const currentPostList = PostList.filter(
-    (post) => post.boardType === currentBoardType,
-  );
-
+  //let response;
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -61,13 +58,33 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
         Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
       });
       if (response) {
-        console.log(response.data);
+        //console.log(response.data.imageUrls);
+        setPostList(response.data);
+      }
+      return response;
+    };
+    const fetchFilteredData = async () => {
+      setIsLoading(true);
+      const response = await getData(
+        GET_FILTERED_POST_IN(currentBoardType),
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+        { country },
+      );
+      if (response) {
         setPostList(response.data);
       }
     };
-    fetchData();
-    setIsLoading(false);
-  }, []);
+    if (country === null) {
+      fetchData();
+      setIsLoading(false);
+    } else {
+      fetchFilteredData();
+      setIsLoading(false);
+    }
+  }, [country]);
+
   if (isLoading) {
     return <Loading />;
   }
@@ -103,12 +120,16 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
         </s.FilterSection>
         <s.PostListSection>
           {postList && postList.length > 0 ? (
-            postList.map((post) => (
-              <CommunityPost
-                key={post.postId}
-                post={post}
-              />
-            ))
+            postList.map((post) => {
+              console.log(post);
+              return (
+                <CommunityPost
+                  key={post.postId}
+                  post={post}
+                  postImg={post.imageUrls[0]}
+                />
+              );
+            })
           ) : (
             <div style={{ padding: '5rem 0' }}>아직 글이 없습니다.</div>
           )}

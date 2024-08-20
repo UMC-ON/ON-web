@@ -3,7 +3,7 @@ import DetailPage from '../DetailPage';
 const FreeDetailPage = () => {
   return (
     <DetailPage
-      titleColor="#CBCDE9"
+      boardType="FREE"
       color1="#C2C7FF"
       color2="#AD99FF"
     />
