@@ -8,39 +8,51 @@ import profile from "../assets/images/profileIcon.svg";
 import empty_star from "../assets/images/empty_star.svg";
 import filled_star from "../assets/images/filled_star.svg";
 
+import {showDate} from "../components/Common/InfoExp";
+
 const accessToken = import.meta.env.VITE_accessToken;
 
-const ScrapList = ({ items }) => {
-  const navigate = useNavigate();
-
-  return (
-    <>
-      {items && items.map((item, index) => {
-        const isCompleted = item.marketPost.dealStatus === "COMPLETE";
-        return (
-          <ItemDiv key={index} isCompleted={isCompleted}>
-            <Photo src={item.marketPost.imageUrls[0]} />
-            <Information>
-              <StarContainer
-                marketPostId={item.marketPost.marketPostId}
-                isFilled={item.isScrapped}
-              />
-              <Description onClick={() => navigate(`/sell/${item.marketPost.marketPostId}`)}>
-                <Title>{item.marketPost.title} | <Time>{item.marketPost.marketPostId}</Time></Title><br/>
-                <State how={item.marketPost.dealType == 'DIRECT'? '직거래' : '택배거래'} now={item.marketPost.dealStatus == 'COMPLETE' ? '거래 완료' : '거래 가능'} isCompleted={isCompleted} />
-                <LocationAndUser>
-                  <Place><Compas src={compas} />{item.marketPost.currentCountry} {item.marketPost.currentLocation}</Place>
-                  <User><Profile src={profile} />{item.marketPost.nickname}</User>
-                </LocationAndUser>
-                <Price>{item.share ? '나눔' : `₩ ${item.marketPost.cost}`}</Price>
-              </Description>
-            </Information>
-          </ItemDiv>
-        );
-      })}
-    </>
-  );
-};
+const NearItemList = ({ nearitems }) => {
+    const navigate = useNavigate();
+  
+    return (
+      <>
+        {nearitems && nearitems.length > 0 && nearitems.map((item, index) => {
+          const isCompleted = item.dealStatus === "COMPLETE";
+          // Check if imageUrls and other properties exist
+          const imageUrl = item.imageUrls && item.imageUrls[0] ? item.imageUrls[0] : '';
+          const isScrapped = item.isScrapped || false;
+          const dealType = item.dealType === 'DIRECT' ? '직거래' : '택배거래';
+          const dealStatus = item.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능';
+  
+          return (
+            <ItemDiv key={index} isCompleted={isCompleted}>
+              {imageUrl && <Photo src={imageUrl} />} {/* Ensure imageUrl is valid */}
+              <Information>
+                <StarContainer
+                  marketPostId={item.marketPostId}
+                  isFilled={isScrapped}
+                />
+                <Description onClick={() => navigate(`./${item.marketPostId}`)}>
+                  <TitleTimeContainer>
+                    <Title>{item.title}</Title>
+                    <Time>{showDate(item.createdAt)}</Time>
+                  </TitleTimeContainer><br/>
+                  <State how={dealType} now={dealStatus} isCompleted={isCompleted} />
+                  <LocationAndUser>
+                    <Place><Compas src={compas} />{item.currentCountry} {item.currentLocation}</Place>
+                    <User><Profile src={profile} />{item.nickname}</User>
+                  </LocationAndUser>
+                  <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
+                </Description>
+              </Information>
+            </ItemDiv>
+          );
+        })}
+      </>
+    );
+  };
+  
 
 const StarContainer = ({ marketPostId, isFilled }) => {
   const [isStarFilled, setIsStarFilled] = React.useState(isFilled);
@@ -86,7 +98,7 @@ const StarContainer = ({ marketPostId, isFilled }) => {
 
 
 
-export default ScrapList;
+export default NearItemList;
 
 
 
@@ -141,11 +153,21 @@ const Title = styled.p`
   font-size: 18px;
   font-weight: 600;
   color: #363636;
+  white-space: nowrap; /* 줄 바꿈 없이 한 줄로 표시 */
+  overflow: hidden; /* 넘치는 텍스트를 숨깁니다 */
+  text-overflow: ellipsis; /* 넘치는 텍스트를 '...'으로 표시 */
 `;
 
 const Time = styled.span`
   color: #7A7A7A;
   font-size: 0.6em;
+  margin-left: 8px;
+`;
+
+const TitleTimeContainer = styled.div`
+  width: 190px;
+  display: flex; /* Flexbox를 사용하여 수평 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
 `;
 
 const StateWrapper = styled.p`
@@ -170,21 +192,25 @@ const Price = styled.p`
   color: #3E73B2;
 `;
 
-const Compas = styled.img`
+
+const Profile = styled.img`
   width: 1.2em;
   height: 1.2em;
   margin-right: 2px;
 `;
 
 const Place = styled.p`
+  width: 100px;
   font-size: 0.7em;
-  display: flex;
   align-items: center;
   margin-right: 10px;
   color: #838383;
+  white-space: nowrap; /* 줄 바꿈 없이 한 줄로 표시 */
+  overflow: hidden; /* 넘치는 텍스트를 숨깁니다 */
+  text-overflow: ellipsis; /* 넘치는 텍스트를 '...'으로 표시 */
 `;
 
-const Profile = styled.img`
+const Compas = styled.img`
   width: 1.2em;
   height: 1.2em;
   margin-right: 2px;
@@ -195,14 +221,16 @@ const User = styled.p`
   display: flex;
   align-items: center;
   color: #838383;
+  padding-top: 5px;
 `;
 
 const LocationAndUser = styled.div`
   display: flex;
   align-items: center;
   width: 11em;
-  margin-bottom: 1.5vh;
+  margin-bottom: 1vh;
 `;
+
 
 const Space = styled.div`
   height: 3em;
