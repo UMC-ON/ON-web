@@ -9,7 +9,6 @@ import SellPostHeader from "../components/SellPostHeader";
 import SellPostSelectCity from "../components/SellPostSelectCity/SellPostSelectCity";
 import SellPostCitySelect from "../components/SellPostCitySelect";
 
-
 function SellPost() {
     const [selectedOption, setSelectedOption] = useState(null);
     const [images, setImages] = useState([]);
@@ -30,11 +29,10 @@ function SellPost() {
     };
 
     const handleGetCity = (locationInfo) => {
-        setCity(locationInfo); 
+        setCity(locationInfo);
         setIsCityClicked(true);
         setShowCity(false);
     };
-    
 
     const handleCityClick = () => {
         setShowCity(!showCity);
@@ -49,53 +47,55 @@ function SellPost() {
         fileInputRef.current.click();
     };
 
-const navigate = useNavigate();
+    const navigate = useNavigate();
 
-const handleSubmit = async () => {
-    const formData = new FormData();
-    formData.append('userId', 10); // 고정된 userId
-    formData.append('title', title);
-    formData.append('cost', cost);
-    formData.append('dealType', selectedOption === 'directly' ? 'DIRECT' : 'DELIVERY');
-    formData.append('content', content);
-    formData.append('currentCountry', city.country || '미국'); // 사용자 입력이 없을 경우 기본값
-    formData.append('currentLocation', city.city || '애리조나'); // 사용자 입력이 없을 경우 기본값
-    formData.append('share', share);
-
-    images.forEach((image, index) => {
-        formData.append('imageFiles', image);
-    });
-
-    try {
-        const response = await fetch('http://13.209.255.118:8080/api/v1/market-post', {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-            body: formData,
+    const handleSubmit = async () => {
+        const postData = {
+            userId: 10,  // 고정된 userId
+            title,
+            cost,
+            dealType: selectedOption === 'directly' ? 'DIRECT' : 'DELIVERY',
+            content,
+            currentCountry: city.country,
+            currentLocation: city.city,
+            share,
+        };
+    
+        const formData = new FormData();
+    
+        // requestDTO 필드를 Blob으로 추가
+        formData.append('requestDTO', new Blob([JSON.stringify(postData)], { type: 'application/json' }));
+    
+        images.forEach((image) => {
+            formData.append('imageFiles', image);
         });
-
-        // 서버 응답 로그 추가
-        const responseText = await response.text();  // 응답 텍스트 확인
-        console.log('Response Status:', response.status);
-        console.log('Response Text:', responseText);
-
-        if (!response.ok) {
-            throw new Error('Something went wrong!');
+    
+        try {
+            const response = await fetch('https://13.209.255.118.nip.io/api/v1/market-post', {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: formData,
+            });
+    
+            const responseText = await response.text();
+            console.log('Response Status:', response.status);
+            console.log('Response Text:', responseText);
+    
+            if (!response.ok) {
+                throw new Error('Something went wrong!');
+            }
+    
+            const data = JSON.parse(responseText);
+            console.log('Response Data:', data);
+    
+            navigate('/sell');
+    
+        } catch (error) {
+            console.error('Error:', error.message);
         }
-
-        const data = JSON.parse(responseText);  // 응답 텍스트를 JSON으로 변환
-        console.log('Response Data:', data);
-
-        // 등록 완료 후 /sell 페이지로 리다이렉트
-        navigate('/sell');
-
-    } catch (error) {
-        console.error('Error:', error.message);  // 에러 메시지 로그
-    }
-};
-
-
+    };
     
 
     return (
@@ -182,6 +182,8 @@ const handleSubmit = async () => {
 }
 
 export default SellPost;
+
+
 
 
 const Space = styled.div`
