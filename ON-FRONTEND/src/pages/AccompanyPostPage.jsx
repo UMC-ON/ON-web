@@ -329,11 +329,32 @@ function AccompanyPostPage() {
     };
 
     const onSubmit = () => {
-      // console.log(input);
-      // postData();
-      postData().then(() => {
-        navigate('/accompany', { state: { refresh: true } });
-      });
+      if (personValue == 0)
+      {
+          alert('모집 인원을 입력해주세요.');
+      }
+      else if (city == null)
+      {
+          alert('여행 지역을 입력해주세요.');
+      }
+      else if (startDate == null)
+      {
+        alert('예상 일정을 입력해주세요.');
+      }
+      else if (input.title =='')
+      {
+        alert('제목을 입력해주세요.');
+      }
+      else if (input.content == '')
+      {
+        alert('요청사항을 입력해주세요.');
+      }
+      // else
+      // {
+      //   postData().then(() => {
+      //     navigate('/accompany', { state: { refresh: true } });
+      //   });
+      // }
       // alert(input);
     };
     

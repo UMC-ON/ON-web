@@ -25,8 +25,8 @@ import CountryIcon from '../components/CountryIcon';
 
 import { showDate } from '../components/Common/InfoExp';
 
-import { getData } from '../api/Functions';
-import { GET_DETAIL_ACCOMPANY } from '../api/urls';
+import { getData, postData } from '../api/Functions';
+import { GET_DETAIL_ACCOMPANY, GET_USER_INFO, APPLY_ACCOMPANY } from '../api/urls';
 
 const accompanycards = [
   {
@@ -99,6 +99,9 @@ function AccompanyDetailPage() {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
+  const [nickname, setNickName] = useState('');
+  const [userId, setUserId] = useState(0);
+
   const [infoData, setInfoData] = useState([]);
 
   const navigate = useNavigate();
@@ -144,6 +147,7 @@ function AccompanyDetailPage() {
   };
 
   const handleBlueButtonClick = () => {
+    applyData();
     closeFirstModal();
     openSecondModal();
   };
@@ -152,7 +156,25 @@ function AccompanyDetailPage() {
     return dateString.replace(/-/g, '.');
   }
 
-
+  const applyData = async () => {
+    try {
+      const response = await postData(
+        APPLY_ACCOMPANY,
+        { companyPostId: postId, userId: userId },
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        }
+      );
+  
+      if (response) {
+        console.log('Application successful:', response.data);
+      } else {
+        console.error('Application failed');
+      }
+    } catch (error) {
+      console.error('Error applying for accompany:', error);
+    }
+  };
 
   const [loading, setLoading] = useState(true);
 
@@ -172,8 +194,17 @@ function AccompanyDetailPage() {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         }); 
         setInfoData(info_data.data);
+        // console.log(info_data.data);
         // 
-        console.log(info_data.data);
+
+        const user_data = await getData(GET_USER_INFO,{
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        }); 
+        // console.log(user_data.data.result.id);
+        setUserId(user_data.data.result.id);
+
+        console.log(info_data.data[0].nickname);
+        setNickName(info_data.data[0].nickname);
 
 
       } catch (error) {
@@ -298,7 +329,9 @@ function AccompanyDetailPage() {
          ))}
 
         {isFirstModalOpen && (
-        <FirstModal closeModal={closeFirstModal} openNextModal={handleBlueButtonClick} />
+        <FirstModal closeModal={closeFirstModal} openNextModal={handleBlueButtonClick} 
+          nickname={nickname}
+        />
         )}
         {isSecondModalOpen && <SecondModal closeModal={closeSecondModal} />}
         {isReportModalOpen && <ReportModal closeModal={closeReportModal} />}
@@ -408,7 +441,7 @@ const BigText = styled.p`
   font-weight: bold;
   text-align: left;
   line-height: 3vh;
-  width: 180px;
+  max-width: 180px;
   
   word-wrap: break-word;
   overflow-wrap: break-word;
