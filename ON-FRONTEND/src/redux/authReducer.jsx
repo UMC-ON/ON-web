@@ -12,6 +12,14 @@ const initialState = {
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_SUCCESS:
+      return {
+        ...state,
+        isAuthenticated: true,
+        user: action.payload.user,
+        accessToken: action.payload.accessToken,
+        refreshToken: action.payload.refreshToken,
+        error: null,
+      };
     case LOAD_USER: // 로그인 성공과 유저 로드 시 동일한 로직을 사용
       return {
         ...state,

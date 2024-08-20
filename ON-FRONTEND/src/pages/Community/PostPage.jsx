@@ -3,24 +3,22 @@ import * as s from './PostPageStyled.jsx';
 import camera from '../../assets/images/camera.svg';
 import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox.jsx';
 import { useState, useRef, useEffect } from 'react';
-import { PostList } from '../../components/Common/TempDummyData/PostList.jsx';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Loading from '../../components/Loading/Loading.jsx';
-import { getData, multiFilePostData, postData } from '../../api/Functions.jsx';
-import { GET_USER_INFO, WRITE_POST_IN } from '../../api/urls.jsx';
+import { multiFilePostData } from '../../api/Functions.jsx';
+import { WRITE_POST_IN } from '../../api/urls.jsx';
 
 const PostPage = ({ color, boardType }) => {
   const navigate = useNavigate();
   const previewImages = useRef([]);
-  const sendingImages = useRef({});
+  const sendingImages = useRef([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [isLoading, setLoading] = useState(false);
-  const userInfo = useSelector((state) => state.user);
-  //const [userInfo, setUserInfo] = useState(null);
+  let userInfo = useSelector((state) => state.user.user);
+
   const [input, setInput] = useState({
     boardType: `${boardType}`,
     createdDate: new Date(),
-    id: userInfo.id,
     anonymous: null,
     anonymousUniv: null,
     title: '',
@@ -28,29 +26,20 @@ const PostPage = ({ color, boardType }) => {
   });
 
   const BETest = true;
-  const nav = useNavigate();
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
-  if (!isAuthenticated) {
-    nav('/signIn');
-  }
+
   useEffect(() => {
-    if (BETest) {
-      // const fetchData = async () => {
-      //   setLoading(true);
-
-      //   const response = await getData(GET_USER_INFO, {
-      //     Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-      //   });
-      //   if (response) {
-      //     console.log(response.data.result);
-      //   }
-
-      //   setLoading(false);
-      // };
-      // fetchData();
+    if (userInfo) {
+      console.log(`유저:${userInfo}`);
       console.log('useEffect 실행');
     }
-  }, []);
+    if (userInfo && userInfo.id) {
+      setInput({ ...userInfo, id: userInfo.id });
+    }
+  }, [userInfo]);
+  useEffect(() => {
+    setImageFiles(sendingImages.current);
+    console.log(imageFiles);
+  }, [imageFiles]);
 
   if (isLoading) {
     return <Loading />;
@@ -72,15 +61,16 @@ const PostPage = ({ color, boardType }) => {
   const onChangeImgFile = (fileList) => {
     if (fileList) {
       const imgList = Array.from(fileList);
-      const selectedFiles = imgList.map((file) => {
+      console.log(imgList);
+      const previewURLs = imgList.map((file) => {
         return URL.createObjectURL(file);
       });
       sendingImages.current = sendingImages.current.concat(imgList);
-      previewImages.current = previewImages.current.concat(selectedFiles);
+      previewImages.current = previewImages.current.concat(previewURLs);
       setImageFiles(sendingImages.current);
     }
   };
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!input.title) {
       alert('제목을 입력하세요');
       return;
@@ -91,12 +81,14 @@ const PostPage = ({ color, boardType }) => {
     }
 
     const formData = new FormData();
-    formData.append('imageFiles', imageFiles);
-    for (let key in input) {
-      formData.append(key, input[key]);
-    }
 
+    const json = JSON.stringify(input);
     const blob = new Blob([json], { type: 'application/json' });
+    formData.append('postRequestDTO', blob);
+    imageFiles.map((img) => {
+      //const blobImg = new Blob([img], { type: 'multipart/form-data' });
+      formData.append('imageFiles', img);
+    });
     const sendData = async () => {
       setLoading(true);
 
@@ -114,6 +106,12 @@ const PostPage = ({ color, boardType }) => {
       setLoading(false);
     };
     sendData();
+    // const request = await axios.post(WRITE_POST_IN(boardType), formData, {
+    //   headers: {
+    //     Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+    //     'Content-Type': `multipart/form-data`,
+    //   },
+    // });
 
     navigate(-1, { replace: true });
   };

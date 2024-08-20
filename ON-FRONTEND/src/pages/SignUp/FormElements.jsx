@@ -97,6 +97,9 @@ export const UserInfoForm1 = ({
     email: false,
   });
   useEffect(() => {
+    console.log(
+      `이메일: ${dupCheck.email}, isAllValid:${isAllValid.current.password}, pwCheck:${pwCheck},닉네임:${dupCheck.nickname}`,
+    );
     if (
       dupCheck.email === 1 &&
       isAllValid.current.password &&
@@ -107,7 +110,7 @@ export const UserInfoForm1 = ({
     } else {
       setActive(false);
     }
-  }, [state, pwCheck, isAllValid.current]); //이럴거면 머하러 ref쓰냐고,.
+  }, [state, pwCheck, isAllValid.current, dupCheck]); //이럴거면 머하러 ref쓰냐고,.
 
   return (
     <>

@@ -6,8 +6,10 @@ import verifiedBadge from '../../assets/images/verifiedBadge.svg';
 import { useNavigate } from 'react-router-dom';
 import { showDate } from '../Common/InfoExp';
 import { CommentList } from '../Common/TempDummyData/PostList';
+import { useEffect } from 'react';
 
 const CommunityPost = ({ post }) => {
+  const photoURL = post.imageUrls.toString();
   const navigate = useNavigate();
 
   const getNumOfComment = () => {
@@ -33,7 +35,7 @@ const CommunityPost = ({ post }) => {
     >
       <HeaderSection>
         <Title>{post.title}</Title>
-        //<Date>{showDate(post.createdAt)}</Date>
+        <Date>{showDate(post.createdAt)}</Date>
       </HeaderSection>
       <ContentSection>
         <ContentWrapper>

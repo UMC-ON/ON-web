@@ -35,6 +35,7 @@ export const getData = async (url, headers = {}, params = {}) => {
   const response = await apiClient
     .get(url, { headers: { ...headers }, params: { ...params } })
     .then((response) => {
+      console.log(response);
       return response;
     })
     .catch((error) => {
@@ -68,6 +69,7 @@ export const multiFilePostData = async (
   const response = await multipartApiClient
     .post(url, formData, { headers: { ...headers }, params: { ...params } })
     .then((response) => {
+      console.log(response);
       return response;
     })
     .catch((error) => {

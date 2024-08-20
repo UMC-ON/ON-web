@@ -21,9 +21,16 @@ export const GET_RECENT_POST_OF = (boardType) =>
 export const WRITE_POST_IN = (boardType) => `/api/v1/post/${boardType}`;
 export const GET_TWO_INFOPOST = '/api/v1/home/info/list';
 export const GET_TWO_FREEPOST = '/api/v1/home/free/list';
+export const GET_POST_DETAIL = (boardType, postId) =>
+  `/api/v1/post/${boardType}/${postId}`;
+///국가필터링///
+export const GET_FILTERED_POST_IN = (boardType) =>
+  `/api/v1/post/filter/${boardType}`;
+
 export const GET_SEARCH_RESULT = '/api/v1/post/search';
 
 //댓글 작성
+export const GET_COMMENT_OF = (postId) => `/api/v1/comment/${postId}`;
 
 //채팅
 export const GET_TRADE_LIST = '/api/v1/chat/market/list';
@@ -42,7 +49,8 @@ export const GET_NEAR_ACCOMPANY = '/api/v1/home/company/list';
 export const GET_ALL_ACCOMPANY = '/api/v1/company-post';
 export const GET_FILTER_ACCOMPANY = '/api/v1/company-post/filter';
 export const GET_RECENT_ACCOMPANY = '/api/v1/company-post/recent';
-export const GET_DETAIL_ACCOMPANY = (companyPostId) =>`/api/v1/company-post/${companyPostId}`;
+export const GET_DETAIL_ACCOMPANY = (companyPostId) =>
+  `/api/v1/company-post/${companyPostId}`;
 export const APPLY_ACCOMPANY = '/api/v1/company-participant/apply';
 
 //동행 구하기 글 작성
