@@ -42,11 +42,26 @@ import SignUpPage from './pages/SignUp/SignUpPage.jsx';
 import SchoolAuthPage from './pages/SignUp/SchoolAuthPage.jsx';
 import AdminPage from './pages/AdminPage/AdminPage.jsx';
 import MySchoolAuthPage from './pages/MyPage/MySchoolAuthPage.jsx';
+import LandingPage from './pages/LandingPage/LandingPage.jsx';
+
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { loadUser } from './redux/actions.jsx';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadUser()); // 앱이 시작될 때 토큰을 로드하고 유저 정보를 가져옴
+  }, [dispatch]);
+
   return (
     <ThemeProvider theme={theme}>
       <Routes>
+        <Route
+          path="/landing"
+          element={<LandingPage />}
+        />
         <Route
           path="/admin"
           element={<AdminPage />}
