@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import React from 'react';
+import React, { useState, useEffect} from 'react';
+import axios from 'axios';
 
 import PageHeader from '../components/PageHeader/PageHeader';
 import ItemList from '../components/ItemList';
@@ -8,89 +9,108 @@ import item from "../assets/images/item.svg";
 import icon from "../assets/images/item_icon.svg";
 import nothing from "../assets/images/no_content.svg";
 
-const items = [
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },    
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },    
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },        
-];
+const accessToken = import.meta.env.VITE_accessToken;
+
+// const items = [
+//     {
+//         image: item,
+//         title: '작은 냄비',
+//         time: '10분 전',
+//         how: '직거래',
+//         now: '거래가능',
+//         where: '독일 베를린',
+//         icon: icon,
+//         nickname: '루이',
+//         id: 'fndl333',
+//         price: '나눔'
+//     },
+//     {
+//         image: item,
+//         title: '작은 냄비',
+//         time: '10분 전',
+//         how: '직거래',
+//         now: '거래가능',
+//         where: '독일 베를린',
+//         icon: icon,
+//         nickname: '루이',
+//         id: 'fndl333',
+//         price: '나눔'
+//     },    
+//     {
+//         image: item,
+//         title: '작은 냄비',
+//         time: '10분 전',
+//         how: '직거래',
+//         now: '거래가능',
+//         where: '독일 베를린',
+//         icon: icon,
+//         nickname: '루이',
+//         id: 'fndl333',
+//         price: '나눔'
+//     },    
+//     {
+//         image: item,
+//         title: '작은 냄비',
+//         time: '10분 전',
+//         how: '직거래',
+//         now: '거래가능',
+//         where: '독일 베를린',
+//         icon: icon,
+//         nickname: '루이',
+//         id: 'fndl333',
+//         price: '나눔'
+//     },
+//     {
+//         image: item,
+//         title: '작은 냄비',
+//         time: '10분 전',
+//         how: '직거래',
+//         now: '거래가능',
+//         where: '독일 베를린',
+//         icon: icon,
+//         nickname: '루이',
+//         id: 'fndl333',
+//         price: '나눔'
+//     },
+//     {
+//         image: item,
+//         title: '작은 냄비',
+//         time: '10분 전',
+//         how: '직거래',
+//         now: '거래가능',
+//         where: '독일 베를린',
+//         icon: icon,
+//         nickname: '루이',
+//         id: 'fndl333',
+//         price: '나눔'
+//     },        
+// ];
 
 function ScrapList() {
-    const noItems = items.length === 0;
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        const fetchItems = async () => {
+          try {
+            const response = await axios.get(`https://13.209.255.118.nip.io/api/v1/scrap/10`, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            });
+            setItems(response.data);
+          } catch (error) {
+            console.error('스크랩 물품 목록을 불러오는 중 오류 발생:', error);
+          }
+        };
+    
+        fetchItems();
+      }, []);
 
     return (
         <>
             <PageHeader pageName={'스크랩한 물품'}></PageHeader>
             <Space /><br/><br/>
-            {noItems ? (
+            {items.length === 0 ? (
                 <NoContentWrapper>
                     <NoContentContainer>
                         <NoContentImage src={nothing} alt="No content" />
@@ -108,6 +128,7 @@ function ScrapList() {
 }
 
 export default ScrapList;
+
 
 const Space = styled.div`
   margin-top: 7vh;

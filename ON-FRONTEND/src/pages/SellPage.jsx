@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -16,6 +16,8 @@ import TransactionPicker from "../components/TransactionPicker";
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 import SellPageCountrySelect from '../components/SellPageCountrySelect.jsx';
 
+const accessToken = import.meta.env.VITE_accessToken;
+
 function SellPage() {
   const [showAvailable, setShowAvailable] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState('');
@@ -24,8 +26,29 @@ function SellPage() {
   const [showCountry, setShowCountry] = useState(false);
   const [country, setCountry] = useState(null);
   const [isCountryClicked, setIsCountryClicked] = useState(false);
+  const [items, setItems] = useState([]);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const url = showAvailable
+          ? 'https://13.209.255.118.nip.io/api/v1/market-post/available'
+          : 'https://13.209.255.118.nip.io/api/v1/market-post';
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        setItems(response.data);
+      } catch (error) {
+        console.error('판매 물품 목록을 불러오는 중 오류 발생:', error);
+      }
+    };
+
+    fetchItems();
+  }, [showAvailable]);
 
   const resetCountryClick = () => {
     setIsCountryClicked(false);
@@ -81,6 +104,8 @@ function SellPage() {
     navigate('./post');
   };
 
+  
+
   return (
     <>
       <SellPageHeader pageName={'거래하기'} />
@@ -121,7 +146,7 @@ function SellPage() {
           </Available>
         </Span>
       </FlexContainer><br />
-      <ItemList />
+      <ItemList items={items} />
       <WriteButton onClick={goPost}>
         <img src={pencilImg} alt="pencil icon" />
         글쓰기
