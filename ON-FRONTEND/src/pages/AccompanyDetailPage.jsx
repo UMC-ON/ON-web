@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import React, {useState, useEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
 import detailImg from '../assets/images/accompany_img.svg';
 import profileImg from '../assets/images/englandIcon.svg';
 import coordinateIcon from '../assets/images/coordinate_icon.svg';
-import marketImg2 from '../assets/images/borough_market.svg';
+import marketImg2 from '../assets/images/bannerDefault.svg';
 
 import calendarIcon from '../assets/images/black_calendar_icon.svg';
 import placeIcon from '../assets/images/black_place_icon.svg';
@@ -21,6 +21,9 @@ import ReportModal from '../components/ReportModal';
 import ShareModal from '../components/ShareModal';
 
 import { showDate } from '../components/Common/InfoExp';
+
+import { getData } from '../api/Functions';
+import { GET_DETAIL_ACCOMPANY } from '../api/urls';
 
 const accompanycards = [
   {
@@ -85,11 +88,15 @@ const infocards = [
 
 
 function AccompanyDetailPage() {
+  const location = useLocation();
+  const { postId } = useParams();
 
   const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  const [infoData, setInfoData] = useState([]);
 
   const navigate = useNavigate();
 
@@ -142,6 +149,8 @@ function AccompanyDetailPage() {
     return dateString.replace(/-/g, '.');
   }
 
+
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -153,6 +162,25 @@ function AccompanyDetailPage() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const info_data = await getData(GET_DETAIL_ACCOMPANY(postId),{
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        }); 
+        setInfoData(info_data.data);
+        // 
+        
+
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData(); 
+  }, []); 
+
 
     return (
       <>
@@ -162,10 +190,13 @@ function AccompanyDetailPage() {
         <>
         <AccompanyHeader openModal={openShareModal}/>
         <Space/>
-        {infocards.map((card, index) => (
+        {infoData.map((card, index) => (
           <div key={index}>
           <BannerContainer>
-            <BannerImg src={card.imageUrls[0]} alt="Banner" />
+            {card.imageUrls[0] ?
+            <BannerImg src={card.imageUrls[0]} alt="Banner" />:
+            <BannerImg src={marketImg2}/>
+            }
             <GradientOverlay />
             <ProfileTextContainer>
               <ProfileImg src={profileImg} alt="Profile" />

@@ -12,8 +12,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 function AccompanyList({datas}) {
 
     const navigate = useNavigate();
-    const goDetail = () => {
-      navigate('./detail');
+    const goDetail = (postId) => {
+      navigate(`./detail/${postId}`);
     };
 
     function formatDateToMD(dateStr) {
@@ -28,7 +28,7 @@ function AccompanyList({datas}) {
     return (
       <>
        {datas.map((data, index) => (
-        <RoundContainer key={index} onClick={goDetail}>
+        <RoundContainer key={index} onClick={() => goDetail(data.companyPostId)}>
             <Image src={data.imageUrls[0]}/>
             <TextContainer>
                 <CardName>{data.title}</CardName>
