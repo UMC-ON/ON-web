@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import item from "../assets/images/item.svg";
 import icon from "../assets/images/item_icon.svg";
@@ -15,80 +16,7 @@ import TransactionPicker from "../components/TransactionPicker";
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 import SellPageCountrySelect from '../components/SellPageCountrySelect.jsx';
 
-const items = [
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },    
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '택배거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },    
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '택배거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },
-    {
-        image: item,
-        title: '작은 냄비',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래가능',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '나눔'
-    },
-    {
-        image: item,
-        title: '체크하면 안나와야됨',
-        time: '10분 전',
-        how: '직거래',
-        now: '거래완료',
-        where: '독일 베를린',
-        icon: icon,
-        nickname: '루이',
-        id: 'fndl333',
-        price: '5000'
-    },        
-];
+const accessToken = import.meta.env.VITE_accessToken;
 
 function SellPage() {
   const [showAvailable, setShowAvailable] = useState(false);
@@ -98,6 +26,29 @@ function SellPage() {
   const [showCountry, setShowCountry] = useState(false);
   const [country, setCountry] = useState(null);
   const [isCountryClicked, setIsCountryClicked] = useState(false);
+  const [items, setItems] = useState([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const url = showAvailable
+          ? 'https://13.209.255.118.nip.io/api/v1/market-post/available'
+          : 'https://13.209.255.118.nip.io/api/v1/market-post';
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        setItems(response.data);
+      } catch (error) {
+        console.error('판매 물품 목록을 불러오는 중 오류 발생:', error);
+      }
+    };
+
+    fetchItems();
+  }, [showAvailable]);
 
   const resetCountryClick = () => {
     setIsCountryClicked(false);
@@ -113,8 +64,6 @@ function SellPage() {
   const handleCountryClick = () => {
     setShowCountry(!showCountry);
   };
-
-  const navigate = useNavigate();
 
   const handleResetTransaction = () => {
     setSelectedTransaction(''); // 거래방식 초기화
@@ -142,19 +91,20 @@ function SellPage() {
     setIsPickerVisible(false);
   };
 
-
   const handleCheckClick = () => {
     setShowAvailable(!showAvailable);
   };
 
-
-  const filteredItems = items
-    .filter(item => !showAvailable || item.now !== '거래완료')
-    .filter(item => !selectedTransaction || item.how === selectedTransaction);
+  // // 필터링된 아이템 목록
+  // const filteredItems = items
+  //   .filter(item => !showAvailable || item.now !== '거래완료')
+  //   .filter(item => !selectedTransaction || item.how === selectedTransaction);
 
   const goPost = () => {
     navigate('./post');
   };
+
+  
 
   return (
     <>
@@ -168,14 +118,14 @@ function SellPage() {
       <FlexContainer>
         <Span>
           <SellPageCountrySelect
-          countryClick={handleCountryClick}
-          country={country}
-          isCountryClicked={isCountryClicked}
-          updateIsCountryClicked={resetCountryClick}
-           />
-        {showCountry &&
-          <SelectCountry closeModal={handleCountryClick} getCountry={handleGetCountry}/>
-        }
+            countryClick={handleCountryClick}
+            country={country}
+            isCountryClicked={isCountryClicked}
+            updateIsCountryClicked={resetCountryClick}
+          />
+          {showCountry &&
+            <SelectCountry closeModal={handleCountryClick} getCountry={handleGetCountry} />
+          }
           <GreyPicker onClick={togglePickerVisibility} selected={!!selectedTransaction}>
             {selectedTransaction || '거래방식'}
             <Icon
@@ -189,14 +139,14 @@ function SellPage() {
                 }
               }}
             />
-        </GreyPicker>
+          </GreyPicker>
           <Available>
             <Check onClick={handleCheckClick} checked={showAvailable} />
             <span>거래 가능 물품만 보기</span>
           </Available>
         </Span>
       </FlexContainer><br />
-      <ItemList items={filteredItems} />
+      <ItemList items={items} />
       <WriteButton onClick={goPost}>
         <img src={pencilImg} alt="pencil icon" />
         글쓰기
@@ -214,6 +164,7 @@ function SellPage() {
 }
 
 export default SellPage;
+
 
 const Space = styled.div`
   margin-top: 7vh;

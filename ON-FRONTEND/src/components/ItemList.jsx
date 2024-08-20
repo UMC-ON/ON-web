@@ -1,35 +1,36 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import compas from "../assets/images/compasIcon.svg";
 import profile from "../assets/images/profileIcon.svg";
 import empty_star from "../assets/images/empty_star.svg";
 import filled_star from "../assets/images/filled_star.svg";
 
-const Item = ({ items }) => {
+const ItemList = ({ items }) => {
   const navigate = useNavigate();
-  const goDetail = () => {
-    navigate('./id');
-  };
 
   return (
     <>
       {items && items.map((item, index) => {
-        const isCompleted = item.now === "거래완료";
+        const isCompleted = item.dealStatus === "COMPLETE";
         return (
           <ItemDiv key={index} isCompleted={isCompleted}>
-            <Photo src={item.image} />
+            <Photo src={item.imageUrls[0]} />
             <Information>
-              <StarContainer />
-              <Description onClick={goDetail}>
-                <Title>{item.title} | <Time>{item.time}</Time></Title><br/>
-                <State how={item.how} now={item.now} isCompleted={isCompleted} />
+              <StarContainer
+                marketPostId={item.marketPostId}
+                isFilled={item.isScrapped}
+              />
+              <Description onClick={() => navigate(`./${item.marketPostId}`)}>
+                <Title>{item.title} | <Time>{item.marketPostId}</Time></Title><br/>
+                <State how={item.dealType} now={item.dealStatus} isCompleted={isCompleted} />
                 <LocationAndUser>
-                  <Place><Compas src={compas} />독일 베를린</Place>
-                  <User><Profile src={profile} />루이(fndl333)</User>
+                  <Place><Compas src={compas} />{item.currentCountry} {item.currentLocation}</Place>
+                  <User><Profile src={profile} />{item.nickname}</User>
                 </LocationAndUser>
-                <Price>{item.price === '나눔' ? item.price : `₩ ${item.price}`}</Price>
+                <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
               </Description>
             </Information>
           </ItemDiv>
@@ -39,22 +40,38 @@ const Item = ({ items }) => {
   );
 };
 
-const StarContainer = () => {
-  const [isFilled, setIsFilled] = useState(false);
+const StarContainer = ({ marketPostId, isFilled }) => {
+  const [isStarFilled, setIsStarFilled] = React.useState(isFilled);
 
-  const toggleStar = () => {
-    setIsFilled(!isFilled);
+  const toggleStar = async () => {
+    try {
+      if (isStarFilled) {
+        await axios.delete(`/scraps/10/${marketPostId}`);
+      } else {
+        await axios.post('/scraps', {
+          marketPostId,
+          userId: 10
+        });
+      }
+      setIsStarFilled(!isStarFilled);
+    } catch (error) {
+      console.error('스크랩 처리 중 오류 발생:', error);
+    }
   };
 
   return (
     <Star
-      src={isFilled ? filled_star : empty_star}
+      src={isStarFilled ? filled_star : empty_star}
       onClick={toggleStar}
     />
   );
 };
 
-export default Item;
+
+
+export default ItemList;
+
+
 
 const ItemDiv = styled.div`
   margin: 0 auto;
@@ -139,6 +156,7 @@ const Price = styled.p`
 const Compas = styled.img`
   width: 1.2em;
   height: 1.2em;
+  margin-right: 2px;
 `;
 
 const Place = styled.p`
@@ -152,6 +170,7 @@ const Place = styled.p`
 const Profile = styled.img`
   width: 1.2em;
   height: 1.2em;
+  margin-right: 2px;
 `;
 
 const User = styled.p`

@@ -5,8 +5,7 @@ import theme from '../styles/theme';
 
 import X from '../assets/images/dismiss.svg';
 
-
-const SellPostHeader = () => {
+const SellPostHeader = ({ onSubmit }) => {
 
   const navigate = useNavigate();
 
@@ -16,20 +15,17 @@ const SellPostHeader = () => {
 
   return (
     <>
-    <PageHeaderLayout>
-
-    <ExitButton src = {X}onClick={onClickBackButton} />
-
-      <PostButton>등록</PostButton>
-
-    </PageHeaderLayout>
+      <PageHeaderLayout>
+        <ExitButton src={X} onClick={onClickBackButton} />
+        <PostButton onClick={onSubmit}>등록</PostButton> {/* 등록 버튼 클릭 시 onSubmit 호출 */}
+      </PageHeaderLayout>
     </>
   );
 };
 
 export default SellPostHeader;
 
-
+// 스타일드 컴포넌트
 export const PageHeaderLayout = styled.div`
   width: 100%;
   max-width: 480px;
