@@ -3,12 +3,11 @@ import styled from 'styled-components';
 import groupLogo from '../../assets/images/groupLogo.svg';
 import { useNavigate } from 'react-router-dom';
 import { UserList } from '../../components/Common/TempDummyData/PostList';
-import { setUser, signInUser } from '../../redux/actions';
-import { useDispatch, useSelector } from 'react-redux';
-import { useRef, useState, useEffect } from 'react';
-import axios from 'axios';
-import { current } from '@reduxjs/toolkit';
-import { GET_USER_INFO, GET_USER_STATUS, SIGN_IN_URL } from '../../api/urls';
+import { loginSuccess, loginFailure } from '../../redux/actions';
+import { useDispatch } from 'react-redux';
+import { useRef, useState } from 'react';
+
+import { GET_USER_INFO, SIGN_IN_URL } from '../../api/urls';
 import { postData, getData } from '../../api/Functions';
 
 const SignInPage = () => {
@@ -16,8 +15,6 @@ const SignInPage = () => {
   //지금 편의를 위해 userInitialState가 너구리로 돼있어서 첫 렌더링시에 자꾸 useEffect 작동해서 막으려고 ㅠ
   const nav = useNavigate();
   const inputValue = useRef({ email: '', password: '' });
-
-  const currentUser = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
@@ -58,36 +55,39 @@ const SignInPage = () => {
 
   const handleSubmitBE = async (e) => {
     e.preventDefault();
-    const formData = JSON.stringify(inputValue.current);
-    const response = await postData(SIGN_IN_URL, formData, {});
-    if (response) {
-      console.log('실행');
-      console.log(response.data);
-      localStorage.setItem('grantType', response.data.result.grantType);
-      localStorage.setItem('AToken', response.data.result.accessToken);
-      localStorage.setItem('RToken', response.data.result.refreshToken);
-      const res = await getData(
-        GET_USER_STATUS,
-        {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        },
-        {},
-      );
-      console.log(res.data); //지우기.... USERSTATE 확인, 조건부 네비게이트
-      if (res.data.result === 'TEMPORARY') {
-        nav('/signUp/credentials');
-      } else {
-        const userInfo = await getData(GET_USER_INFO, {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+    try {
+      const formData = JSON.stringify(inputValue.current);
+      //서버에 로그인 요청
+      const response = await postData(SIGN_IN_URL, formData, {});
+
+      //로그인 성공
+      if (response.data.inSuccess) {
+        console.log('실행');
+        console.log(response.data);
+        //응답으로부터 토큰 받아오기
+        const { grantType, accessToken, refreshToken } = response.data.result;
+        console.log(`${grantType},${accessToken},${refreshToken}`);
+        //현 사용자 정보 api호출
+        const user = await getData(GET_USER_INFO, {
+          Authorization: `Bearer ${accessToken}`,
         });
-        if (userInfo) {
-          console.log(userInfo);
+        console.log(user.data.result);
+        //현 사용자와 로그인 상태 redux에 저장
+        dispatch(loginSuccess(user.data.result, accessToken, refreshToken));
+
+        //유저 상태에 따른 조건부 네비게이팅
+        if (user.data.result.userStatus === 'TEMPORARY') {
+          nav('/signUp/credentials');
+        } else {
+          nav('/');
         }
-        console.log('디스패치');
-        dispatch(setUser(userInfo.data.result));
-        nav('/');
+      } else {
+        //로그인 실패
+        dispatch(loginFailure('Login failed. Please check your credentials.'));
       }
-    } //로그인 성공/실패 확인 함수
+    } catch (error) {
+      dispatch(loginFailure('Invalid email or password'));
+    }
 
     //const request = fetchData();
   };

@@ -4,7 +4,7 @@ const InfoPostPage = () => {
   return (
     <PostPage
       color="#BFD8E5"
-      title="INFO"
+      boardType="INFO"
     />
   );
 };

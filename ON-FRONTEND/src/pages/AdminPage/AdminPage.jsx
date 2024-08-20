@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
-import { AuthRequests } from '../../components/Common/TempDummyData/PostList';
 import RequestItem from './RequestItem';
 import * as s from './AdminPageStyled';
-import { getData, postData } from '../../api/Functions';
+import { postData } from '../../api/Functions';
 import { GET_REQUESTS_OF } from '../../api/urls';
-import axios from 'axios';
 import Loading from '../../components/Loading/Loading';
 
 const AdminPage = () => {

@@ -6,36 +6,40 @@ import { useState, useRef, useEffect } from 'react';
 import { PostList } from '../../components/Common/TempDummyData/PostList.jsx';
 import { useSelector } from 'react-redux';
 import Loading from '../../components/Loading/Loading.jsx';
-import { getData } from '../../api/Functions.jsx';
-import { GET_USER_INFO } from '../../api/urls.jsx';
+import { getData, multiFilePostData, postData } from '../../api/Functions.jsx';
+import { GET_USER_INFO, WRITE_POST_IN } from '../../api/urls.jsx';
 
-const PostPage = ({ color, title }) => {
+const PostPage = ({ color, boardType }) => {
   const navigate = useNavigate();
-  const images = useRef([]);
+  const previewImages = useRef([]);
+  const sendingImages = useRef({});
+  const [imageFiles, setImageFiles] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const userInfo = useSelector((state) => state.user);
   //const [userInfo, setUserInfo] = useState(null);
   const [input, setInput] = useState({
-    boardType: `${title}`,
+    boardType: `${boardType}`,
     createdDate: new Date(),
     id: userInfo.id,
     anonymous: null,
     anonymousUniv: null,
     title: '',
     content: '',
-    commentList: [],
-    imgIdList: [],
   });
 
   const BETest = true;
-
+  const nav = useNavigate();
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  if (!isAuthenticated) {
+    nav('/signIn');
+  }
   useEffect(() => {
     if (BETest) {
       const fetchData = async () => {
         setLoading(true);
 
         const response = await getData(GET_USER_INFO, {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
         });
         if (response) {
           console.log(response.data.result);
@@ -71,12 +75,9 @@ const PostPage = ({ color, title }) => {
       const selectedFiles = imgList.map((file) => {
         return URL.createObjectURL(file);
       });
-
-      images.current = images.current.concat(selectedFiles);
-      setInput({
-        ...input,
-        imgIdList: images.current,
-      });
+      sendingImages.current = sendingImages.current.concat(imgList);
+      previewImages.current = previewImages.current.concat(selectedFiles);
+      setImageFiles(sendingImages.current);
     }
   };
   const onSubmit = () => {
@@ -88,7 +89,31 @@ const PostPage = ({ color, title }) => {
       alert('내용을 입력하세요');
       return;
     }
-    PostList.unshift(input); //DB에 저장
+
+    const formData = new FormData();
+    formData.append('imageFiles', imageFiles);
+    for (let key in input) {
+      formData.append(key, input[key]);
+    }
+
+    const blob = new Blob([json], { type: 'application/json' });
+    const sendData = async () => {
+      setLoading(true);
+
+      const response = await multiFilePostData(
+        WRITE_POST_IN(boardType),
+        formData,
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        },
+      );
+      if (response) {
+        console.log(response.data.result);
+      }
+
+      setLoading(false);
+    };
+    sendData();
 
     navigate(-1, { replace: true });
   };
@@ -113,7 +138,7 @@ const PostPage = ({ color, title }) => {
       </s.ConfirmHeader>
       <s.BigContainer>
         <s.HeadingTitle style={{ fontSize: '25px', color: `${color}` }}>
-          {title === 'INFO' ? '정보' : '자유'}글 작성
+          {boardType === 'INFO' ? '정보' : '자유'}글 작성
         </s.HeadingTitle>
         <s.PostInfoSection>
           <s.InfoLabel>
@@ -163,7 +188,7 @@ const PostPage = ({ color, title }) => {
               onChange={onChangeInput}
             />
             <s.ImgSection>
-              {images.current.map((url, i) => (
+              {previewImages.current.map((url, i) => (
                 <s.PreviewImg
                   src={url}
                   width="160"

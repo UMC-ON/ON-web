@@ -1,4 +1,4 @@
-// src/redux/actionTypes.js
-export const SET_USER = 'SET_USER';
-export const CLEAR_USER = 'CLEAR_USER';
-export const SIGN_IN_USER = 'SIGN_IN_USER';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const LOGOUT = 'LOGOUT';
+export const LOAD_USER = 'LOAD_USER';

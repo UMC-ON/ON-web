@@ -13,6 +13,7 @@ export const GET_REQUESTS_OF = (permitStatus) =>
 
 //커뮤니티 게시글
 export const GET_POST_OF = (boardType) => `/api/v1/post/${boardType}`;
+export const WRITE_POST_IN = (boardType) => `/api/v1/post/${boardType}`;
 
 //댓글 작성
 

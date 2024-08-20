@@ -1,44 +1,53 @@
-// src/redux/actions.js
-import { SET_USER, CLEAR_USER, SIGN_IN_USER } from './actionTypes';
-import axios from 'axios';
+// redux/actions/authActions.js
+import { GET_USER_INFO } from '../api/urls';
+import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT, LOAD_USER } from './actionTypes';
+import { getData } from '../api/Functions';
 
-export const signInUser = (user) => {
-  const options = {
-    method: 'POST',
-    url: 'http://13.209.255.118:8080/api/v1/user/sign-in',
-    headers: {
-      'Content-Type': `application/json`, // application/json 타입 선언
-    },
-    data: user,
-  };
-  const fetchData = async () => {
-    return await axios
-      .request(options)
-      .then(function (response) {
-        console.log(response.data);
-        localStorage.setItem('grantType', response.data.result.grantType);
-        localStorage.setItem('AToken', response.data.result.accessToken);
-        localStorage.setItem('RToken', response.data.result.refreshToken);
-        return response.data;
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  };
-
-  const request = fetchData();
-
+// 로그인 성공 액션
+export const loginSuccess = (user, accessToken, refreshToken) => {
+  localStorage.setItem('AToken', accessToken); // accessToken을 localStorage에 저장
+  localStorage.setItem('RToken', refreshToken); // refreshToken을 localStorage에 저장
   return {
-    type: SIGN_IN_USER,
-    payload: request,
+    type: LOGIN_SUCCESS,
+    payload: { user, accessToken, refreshToken },
   };
 };
 
-export const setUser = (user) => ({
-  type: SET_USER,
-  payload: user,
+// 로그인 실패 액션
+export const loginFailure = (error) => ({
+  type: LOGIN_FAILURE,
+  payload: error,
 });
 
-export const clearUser = () => ({
-  type: CLEAR_USER,
-});
+// 로그아웃 액션
+export const logout = () => {
+  localStorage.removeItem('AToken'); // 로그아웃 시 토큰을 localStorage에서 제거
+  localStorage.removeItem('RToken');
+  return {
+    type: LOGOUT,
+  };
+};
+
+// 새로고침 시 토큰을 로드하고 유저 정보를 가져오는 액션
+export const loadUser = () => {
+  return async (dispatch) => {
+    const accessToken = localStorage.getItem('AToken');
+    if (accessToken) {
+      try {
+        const user = await getData(GET_USER_INFO, {
+          Authorization: `Bearer ${accessToken}`,
+        }); // 토큰을 사용해 유저 정보를 가져옴
+        dispatch({
+          type: LOAD_USER,
+          payload: { user, accessToken },
+        });
+      } catch (error) {
+        console.log(error);
+        dispatch(loginFailure('Failed to fetch user info'));
+        dispatch(logout()); // 에러 발생 시 로그아웃 처리
+      }
+    } else {
+      dispatch(logout()); // 토큰이 없으면 로그아웃 상태로 설정
+    }
+  };
+};

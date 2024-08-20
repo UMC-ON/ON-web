@@ -18,6 +18,7 @@ import { PostList } from '../../components/Common/TempDummyData/PostList.jsx';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { getData } from '../../api/Functions.jsx';
+import { GET_POST_OF } from '../../api/urls.jsx';
 
 const images = [communityBannerImg, communityBannerImg, communityBannerImg];
 
@@ -53,11 +54,10 @@ const CommunityHome = ({ boardType, color1, color2 }) => {
     (post) => post.boardType === currentBoardType,
   );
 
-  const url = `http://13.209.255.118:8080/api/v1/post/${currentBoardType}`;
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const response = await getData(url, {
+      const response = await getData(GET_POST_OF(currentBoardType), {
         Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
       });
       if (response) {

@@ -4,7 +4,6 @@ import * as s from './SignUpStyled';
 import groupLogo from '../../assets/images/groupLogo.svg';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../../redux/actions';
 import { useNavigate } from 'react-router-dom';
 import {
   AuthRequests,
@@ -45,31 +44,6 @@ const SchoolAuthPage = () => {
 
     setUserInfo({ ...userInfo, [name]: value });
     console.log(userInfo);
-  };
-  const handleSubmitFE = (e) => {
-    e.preventDefault();
-
-    if (isFirstStep) {
-      dispatch(setUser(userInfo));
-      UserList.filter((user) => {
-        if (user.userId === userInfo.userId) {
-          user = { ...userInfo };
-        }
-      }); //지금 사용자 정보 불러와서 현재 사용자 id랑 매칭되는 사용자를 DB에서 검색한 후 유저 정보를 저장하는 방식인데
-      //실제로 백 연결시 헤더에 현사용자 토큰 + 바디에 파견타입, 국가, 홈페이지, 파견교 담아서 API 호출
-      //현재 체크 상태 파악해서 파견교 미정 true면 따로 API 호출
-
-      next();
-    } else {
-      //마지막 단계
-      //인증 요청 제출
-      AuthRequests.unshift({
-        user: currentUser,
-        //photoURL: photoPreview,
-        requestDate: new Date(),
-      });
-      setLastModalOpen(true);
-    }
   };
 
   const handleSubmitBE = async (e) => {
