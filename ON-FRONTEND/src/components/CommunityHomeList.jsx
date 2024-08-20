@@ -5,11 +5,26 @@ import bubbleIcon from '../assets/images/greybubble.svg';
 
 import { showDate } from '../components/Common/InfoExp';
 
-function CommunityHomeList({ bgcolor, datas }) {
+import { useLocation, useNavigate } from 'react-router-dom';
+
+function CommunityHomeList({ bgcolor, datas, type }) {
 
   const defaultRadius = '0 0 0 0';
   const topRadius = '15px 15px 0 0';
   const bottomRadius = '0 0 15px 15px';
+
+  const navigate = useNavigate();
+  const goDetail = (postId, companyId) => {
+    if (type === 'info') {
+      navigate(`community/info/detail/${postId}`);  
+    } 
+    else if (type === 'free') {
+      navigate(`community/free/detail/${postId}`);  
+    } 
+    else if (type === 'accom') {
+      navigate(`/accompany/detail/${companyId}`);
+    }
+  };
 
   return (
     <>
@@ -18,17 +33,19 @@ function CommunityHomeList({ bgcolor, datas }) {
         const color = bgcolor;
 
         return (
-          <Container key={index} radius={radius} color={color}>
+          <Container key={index} radius={radius} color={color} onClick={() => goDetail(data.postId, data.companyPostId)}>
             <FlexContainer>
               <TextTopLeft>{data.title}</TextTopLeft>
               <Span>
                 <SmallGreyText>{showDate(data.createdAt)}</SmallGreyText>
-                {data.postId && (
+                {((type == 'info') || (type == 'free')) ? 
                   <>
                     <IconTopLeft src={bubbleIcon} />
-                    <SmallGreyText>{data.postId}</SmallGreyText>
+                    <SmallGreyText>{data.commentCount}</SmallGreyText>
                   </>
-                )}
+                  :
+                  null
+                }
               </Span>
             </FlexContainer>
             <TextMiddle2>{data.content}</TextMiddle2>

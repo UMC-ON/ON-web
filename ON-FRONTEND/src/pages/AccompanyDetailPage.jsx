@@ -12,6 +12,7 @@ import placeIcon from '../assets/images/black_place_icon.svg';
 import plusIcon from '../assets/images/black_plus_icon.svg';
 import marketImg from '../assets/images/borough_market.svg';
 
+
 import CardAccompanyList from '../components/CardAccompanyList';
 import AccompanyHeader from '../components/AccompanyHeader';
 import FirstModal from '../components/FirstModal';
@@ -19,6 +20,8 @@ import SecondModal from '../components/SecondModal';
 import LoadingScreen from '../components/LoadingScreen';
 import ReportModal from '../components/ReportModal';
 import ShareModal from '../components/ShareModal';
+
+import CountryIcon from '../components/CountryIcon';
 
 import { showDate } from '../components/Common/InfoExp';
 
@@ -170,7 +173,7 @@ function AccompanyDetailPage() {
         }); 
         setInfoData(info_data.data);
         // 
-        
+        console.log(info_data.data);
 
 
       } catch (error) {
@@ -194,15 +197,14 @@ function AccompanyDetailPage() {
           <div key={index}>
           <BannerContainer>
             {card.imageUrls[0] ?
-            <BannerImg src={card.imageUrls[0]} alt="Banner" />:
+            <><BannerImg src={card.imageUrls[0]} alt="Banner" /> <GradientOverlay /></>:
             <BannerImg src={marketImg2}/>
             }
-            <GradientOverlay />
             <ProfileTextContainer>
-              <ProfileImg src={profileImg} alt="Profile" />
+              <CountryIcon country={card.currentCountry}/>
               <TextContainer>
                 <Left>
-                  <BigText>제로</BigText>
+                  <BigText>{card.nickname}</BigText>
                   <GreyText $left="8px">(</GreyText>
                   {card.ageAnonymous ? 
                   <></> :
@@ -216,7 +218,7 @@ function AccompanyDetailPage() {
                 </Left>
                 <Left>
                   <SmallIcon src={coordinateIcon}/>
-                  <GreyText $size="0.9em">{card.country}</GreyText>
+                  <GreyText $size="0.9em">{card.currentCountry}</GreyText>
                   {card.universityAnonymous ?
                   <></> :
                   <>
@@ -284,7 +286,7 @@ function AccompanyDetailPage() {
         <Space/>
 
         <BottomTabLayout>
-          {(card.currentRecruitNumber == card.totalRecruitNumber) ?
+          {card.recruitCompletd ?
           <GreyButton $width="500px">모집이 완료된 동행 글이에요.</GreyButton> :
           <>
           <GreyButton onClick={() => navigate('/chat')}>채팅 문의</GreyButton>
@@ -401,11 +403,16 @@ const TextContainer = styled.div`
 const BigText = styled.p`
   color: black; 
   margin: 0;
-  pading-top: 0px;
+  padding-top: 0px;
   font-size: ${props => props.$size || '1.5em'};
   font-weight: bold;
   text-align: left;
   line-height: 3vh;
+  width: 180px;
+  
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 `;
 
 const GreyText = styled.p`

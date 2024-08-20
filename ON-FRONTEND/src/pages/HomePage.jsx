@@ -95,13 +95,15 @@ function HomePage() {
           const user_data = await getData(GET_USER_INFO,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           }); 
-          setUserData(user_data.data);
-          console.log(userData);
+          setUserData([user_data.data.result]);
+          console.log(user_data.data.result);
           
           const info_data = await getData(GET_TWO_INFOPOST,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           }); 
           setInfoData(info_data.data.result);
+          // console.log("infoData");
+          // console.log(info_data.data.result);
 
           const free_data = await getData(GET_TWO_FREEPOST,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
@@ -112,7 +114,7 @@ function HomePage() {
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           }); 
           setAccompanyData(accom_data.data.result);
-          console.log(accom_data.data.result);
+          // console.log(accom_data.data.result);
 
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -127,15 +129,20 @@ function HomePage() {
         <NavBar></NavBar>
         <Space></Space>
         <BigContainer>
-            <LeftContainer>
-                <SubText>나의 교환교</SubText>
-            </LeftContainer>
-            <LeftContainer>
-                <BigText spacing="1vh">영국,</BigText>
-                <BigText color="#3E73B2">King's College London</BigText>
-            </LeftContainer>
-
-            <Container>
+            {userData.map((card, index) => (
+              <div key={index}>
+              <LeftContainer>
+                  <SubText>나의 교환교</SubText>
+              </LeftContainer>
+              <LeftContainer>
+                  <BigText spacing="1vh">{card.country},</BigText>
+                  <BigText color="#3E73B2">{card.dispatchedUniversity}</BigText>
+              </LeftContainer>
+              </div>
+             ))}
+            
+            {userData.map((card, index) => (
+            <Container key={index}>
                 <Button onClick={goToCollege}>
                     <Icon src={schoolIcon} alt="School Icon" />
                     <SubText>교환교</SubText>
@@ -143,7 +150,7 @@ function HomePage() {
                 </Button>
                 <Button onClick={goToMigration}>
                     <Icon src={migrationIcon} alt="Migration Icon" />
-                    <SubText>영국</SubText>
+                    <SubText>{card.country}</SubText>
                     <SubText>이민국</SubText>
                 </Button>
                 <Button onClick={goToAccompany}>
@@ -152,6 +159,8 @@ function HomePage() {
                     <SubText>구하기</SubText>
                 </Button>
             </Container>
+            ))}
+
             <Container>
                 <Button onClick={goToInfoPost}>
                     <Icon src={informationIcon} alt="Information Icon" />
@@ -184,15 +193,18 @@ function HomePage() {
                 ))}
             </DotContainer>
           </BigContainer>
+          
 
           <BlueContainer>
 
-            <BigContainer>
+          {userData.map((card, index) => (
+            <BigContainer key={index}>
                 <LeftContainer>
                 <MiddleText spacing="1vh">나를 위한</MiddleText>
-                <MiddleText color="#3E73B2">런던 근교 여행지</MiddleText>
+                <MiddleText color="#3E73B2">{card.country} 근교 여행지</MiddleText>
                 </LeftContainer>
             </BigContainer>
+          ))}
 
             <CardList selectedCountry={'영국'}/>
           </BlueContainer>

@@ -141,13 +141,13 @@ function CommunityHomePage() {
         }); 
 
         setFreeData(free_data.data);
-        // console.log(free_data.data);
+        console.log(free_data.data);
 
-        const accom_data = await getData(GET_RECENT_POST_OF('FREE'),{
+        const accom_data = await getData(GET_RECENT_ACCOMPANY,{
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         }); 
         setAccompanyData(accom_data.data);
-        console.log(accom_data.data);
+        // console.log(accom_data.data);
 
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -201,7 +201,7 @@ function CommunityHomePage() {
         <RightIcon src={rightIcon} />
       </FlexContainer>
       <Shadow>
-        <CommunityHomeList bgcolor='rgba(191, 216, 229, 0.6)' datas={infoData} />
+        <CommunityHomeList bgcolor='rgba(191, 216, 229, 0.6)' datas={infoData} type={'info'}/>
       </Shadow>
 
       <SmallSpace />
@@ -214,7 +214,7 @@ function CommunityHomePage() {
         <RightIcon src={rightIcon} />
       </FlexContainer>
       <Shadow>
-        <CommunityHomeList bgcolor='rgba(203, 205, 233, 0.6)' datas={freeData} />
+        <CommunityHomeList bgcolor='rgba(203, 205, 233, 0.6)' datas={freeData} type={'free'}/>
       </Shadow>
 
       <SmallSpace />
@@ -227,7 +227,7 @@ function CommunityHomePage() {
         <RightIcon src={rightIcon} />
       </FlexContainer>
       <Shadow>
-        <CommunityHomeList bgcolor='rgba(208, 214, 218, 0.6)' datas={accompanyData} />
+        <CommunityHomeList bgcolor='rgba(208, 214, 218, 0.6)' datas={accompanyData} type={'accom'}/>
       </Shadow>
 
       <Space />
