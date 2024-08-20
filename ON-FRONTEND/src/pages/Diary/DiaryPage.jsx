@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-
 import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import DiaryCalendar from '../../components/DiaryCalendar/DiaryCalendar';
 import PageHeader from '../../components/PageHeader/PageHeader';
@@ -12,29 +11,22 @@ import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './DiaryPage.css';
-
 import ko from "date-fns/locale/ko";
 import closeIcon from '../../assets/images/close_button.svg';
 import plus_button from '../../assets/images/addButton.svg';
 
-
 const Diary = () => {
   const [selectedDate1, setSelectedDate1] = useState(null);
   const [selectedDate2, setSelectedDate2] = useState(null);
-
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [newDiaryVisible, setNewDiaryVisible] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
-
   const [newDiaryContent, setNewDiaryContent] = useState('');
   const [diaries, setDiaries] = useState([]);
-
-
   const datePickerRef = useRef(null);
-
   const accessToken = import.meta.env.VITE_accessToken;
-  
+
   useEffect(() => {
     const fetchDiaries = async () => {
       try {
@@ -52,28 +44,38 @@ const Diary = () => {
     fetchDiaries();
   }, [accessToken]);
 
+  useEffect(() => {
+    const storedDate = localStorage.getItem('selectedDate1');
+    if (storedDate) {
+      setSelectedDate1(moment(storedDate, 'YYYY-MM-DD').toDate());
+    }
+  }, []);
+
   const handleDateChange1 = async (date) => {
     setSelectedDate1(date);
     setCalendarOpen(false);
 
-  const formattedDate = moment(date).format('YYYY-MM-DD'); // 날짜를 서버에서 요구하는 형식으로 변환
+    const formattedDate = moment(date).format('YYYY-MM-DD'); // 날짜를 서버에서 요구하는 형식으로 변환
 
-  try {
-    const response = await axios.post(
-      'https://13.209.255.118.nip.io/api/v1/diary/startdate',
-      { startDate: formattedDate },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    console.log('서버 응답:', response.data);
-  } catch (error) {
-    console.error('서버로 날짜 전달 중 오류 발생:', error);
-  }
-};
+    // 로컬 스토리지에 날짜 저장
+    localStorage.setItem('selectedDate1', formattedDate);
+
+    try {
+      const response = await axios.post(
+        'https://13.209.255.118.nip.io/api/v1/diary/startdate',
+        { startDate: formattedDate },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log('서버 응답:', response.data);
+    } catch (error) {
+      console.error('서버로 날짜 전달 중 오류 발생:', error);
+    }
+  };
 
   const handleDateChange2 = (date) => {
     setSelectedDate2(date);
@@ -110,7 +112,6 @@ const Diary = () => {
   };
 
   const handleSaveDiary = async () => {
-  
     const formattedDate = moment(selectedDate2).format('YYYY-MM-DD');
   
     try {
@@ -128,7 +129,9 @@ const Diary = () => {
         }
       );
       console.log('일기 저장 응답:', response.data);
-      setNewDiaryVisible(false);
+  
+      // 저장 성공 후 페이지 새로 고침
+      window.location.reload();
     } catch (error) {
       console.error('일기 저장 중 오류 발생:', error);
     }
@@ -146,7 +149,7 @@ const Diary = () => {
             ) : (
               <DDayCalendar
                 selectedDate={selectedDate1}
-                handleDateChange={handleDateChange1} // DDayCalendar에만 적용되는 상태
+                handleDateChange={handleDateChange1}
                 setCalendarOpen={setCalendarOpen}
                 datePickerRef={datePickerRef}
               />
@@ -184,7 +187,7 @@ const Diary = () => {
         {newDiaryVisible && (
           <NewDiaryContainer>
             <NewDiary 
-              placeholder="교환 생활의 시작, 윤서님의 교환 1일차 하루는 어땠나요?"
+              placeholder="오늘 하루는 어땠나요?"
               value={newDiaryContent}
               onChange={(e) => setNewDiaryContent(e.target.value)} // 사용자가 입력한 내용을 상태에 저장
             />
@@ -199,8 +202,8 @@ const Diary = () => {
   );
 };
 
-
 export default Diary;
+
 
 
 
@@ -385,6 +388,7 @@ const NewDiary = styled.textarea`
     font-size: 13px;
   }
   outline: none;
+  resize: none;
 `;
 
 const Save = styled.div`
