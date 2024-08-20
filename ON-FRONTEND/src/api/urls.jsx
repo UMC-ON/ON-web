@@ -15,6 +15,7 @@ export const GET_REQUESTS_OF = (permitStatus) =>
 export const GET_POST_OF = (boardType) => `/api/v1/post/${boardType}`;
 export const GET_RECENT_POST_OF = (boardType) =>
   `/api/v1/post/recent/${boardType}`;
+export const WRITE_POST_IN = (boardType) => `/api/v1/post/${boardType}`;
 export const GET_TWO_INFOPOST = '/api/v1/home/info/list';
 export const GET_TWO_FREEPOST = '/api/v1/home/free/list';
 

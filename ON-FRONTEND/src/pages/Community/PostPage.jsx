@@ -35,19 +35,19 @@ const PostPage = ({ color, boardType }) => {
   }
   useEffect(() => {
     if (BETest) {
-      const fetchData = async () => {
-        setLoading(true);
+      // const fetchData = async () => {
+      //   setLoading(true);
 
-        const response = await getData(GET_USER_INFO, {
-          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-        });
-        if (response) {
-          console.log(response.data.result);
-        }
+      //   const response = await getData(GET_USER_INFO, {
+      //     Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+      //   });
+      //   if (response) {
+      //     console.log(response.data.result);
+      //   }
 
-        setLoading(false);
-      };
-      fetchData();
+      //   setLoading(false);
+      // };
+      // fetchData();
       console.log('useEffect 실행');
     }
   }, []);

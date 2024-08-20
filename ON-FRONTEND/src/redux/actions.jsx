@@ -7,6 +7,7 @@ import { getData } from '../api/Functions';
 export const loginSuccess = (user, accessToken, refreshToken) => {
   localStorage.setItem('AToken', accessToken); // accessToken을 localStorage에 저장
   localStorage.setItem('RToken', refreshToken); // refreshToken을 localStorage에 저장
+  console.log(user);
   return {
     type: LOGIN_SUCCESS,
     payload: { user, accessToken, refreshToken },
@@ -44,7 +45,7 @@ export const loadUser = () => {
       } catch (error) {
         console.log(error);
         dispatch(loginFailure('Failed to fetch user info'));
-        dispatch(logout()); // 에러 발생 시 로그아웃 처리
+        //dispatch(logout()); // 에러 발생 시 로그아웃 처리
       }
     } else {
       dispatch(logout()); // 토큰이 없으면 로그아웃 상태로 설정
