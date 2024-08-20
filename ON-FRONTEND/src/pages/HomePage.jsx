@@ -103,7 +103,7 @@ function HomePage() {
           }); 
           setInfoData(info_data.data.result);
           // console.log("infoData");
-          // console.log(info_data.data.result);
+          console.log(info_data.data.result);
 
           const free_data = await getData(GET_TWO_FREEPOST,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,

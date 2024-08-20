@@ -5,6 +5,7 @@ import personIcon from '../assets/images/grey_person_icon.svg';
 import calendarIcon from '../assets/images/grey_calendar_icon.svg';
 import plusIcon from '../assets/images/grey_plus_icon.svg';
 import placeIcon from '../assets/images/grey_place_icon.svg';
+import defaultImg from '../assets/images/bannerDefault.svg';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -29,7 +30,11 @@ function AccompanyList({datas}) {
       <>
        {datas.map((data, index) => (
         <RoundContainer key={index} onClick={() => goDetail(data.companyPostId)}>
-            <Image src={data.imageUrls[0]}/>
+
+            {data.imageUrls[0] ?
+            <Image src={data.imageUrls[0]}/>:
+            <Image src={defaultImg}/>
+            }             
             <TextContainer>
                 <CardName>{data.title}</CardName>
 
