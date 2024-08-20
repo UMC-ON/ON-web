@@ -10,29 +10,29 @@ import filled_star from "../assets/images/filled_star.svg";
 
 const accessToken = import.meta.env.VITE_accessToken;
 
-const ItemList = ({ items }) => {
+const ScrapList = ({ items }) => {
   const navigate = useNavigate();
 
   return (
     <>
       {items && items.map((item, index) => {
-        const isCompleted = item.dealStatus === "COMPLETE";
+        const isCompleted = item.marketPost.dealStatus === "COMPLETE";
         return (
           <ItemDiv key={index} isCompleted={isCompleted}>
-            <Photo src={item.imageUrls[0]} />
+            <Photo src={item.marketPost.imageUrls[0]} />
             <Information>
               <StarContainer
-                marketPostId={item.marketPostId}
+                marketPostId={item.marketPost.marketPostId}
                 isFilled={item.isScrapped}
               />
               <Description onClick={() => navigate(`./${item.marketPostId}`)}>
-                <Title>{item.title} | <Time>{item.marketPostId}</Time></Title><br/>
-                <State how={item.dealType} now={item.dealStatus} isCompleted={isCompleted} />
+                <Title>{item.marketPost.title} | <Time>{item.marketPost.marketPostId}</Time></Title><br/>
+                <State how={item.marketPost.dealType} now={item.marketPost.dealStatus} isCompleted={isCompleted} />
                 <LocationAndUser>
-                  <Place><Compas src={compas} />{item.currentCountry} {item.currentLocation}</Place>
-                  <User><Profile src={profile} />{item.nickname}</User>
+                  <Place><Compas src={compas} />{item.marketPost.currentCountry} {item.marketPost.currentLocation}</Place>
+                  <User><Profile src={profile} />{item.marketPost.nickname}</User>
                 </LocationAndUser>
-                <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
+                <Price>{item.share ? '나눔' : `₩ ${item.marketPost.cost}`}</Price>
               </Description>
             </Information>
           </ItemDiv>
@@ -86,7 +86,7 @@ const StarContainer = ({ marketPostId, isFilled }) => {
 
 
 
-export default ItemList;
+export default ScrapList;
 
 
 
