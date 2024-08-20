@@ -3,7 +3,7 @@ import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 
 import PageHeader from '../components/PageHeader/PageHeader';
-import ItemList from '../components/ItemList';
+import ScrapListComponent from '../components/ScrapListComponent';
 
 import item from "../assets/images/item.svg";
 import icon from "../assets/images/item_icon.svg";
@@ -98,6 +98,9 @@ function ScrapList() {
               },
             });
             setItems(response.data);
+            if (response.data) {
+                console.log(response.data);
+            }
           } catch (error) {
             console.error('스크랩 물품 목록을 불러오는 중 오류 발생:', error);
           }
@@ -119,7 +122,7 @@ function ScrapList() {
                 </NoContentWrapper>
             ) : (
                 <>
-                    <ItemList items={items} />
+                    <ScrapListComponent items={items} />
                     <LastItemMessage>마지막 물품입니다.</LastItemMessage>
                 </>
             )}
