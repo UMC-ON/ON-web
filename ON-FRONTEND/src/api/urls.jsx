@@ -21,7 +21,6 @@ export const GET_RECENT_POST_OF = (boardType) =>
 export const WRITE_POST_IN = (boardType) => `/api/v1/post/${boardType}`;
 export const GET_TWO_INFOPOST = '/api/v1/home/info/list';
 export const GET_TWO_FREEPOST = '/api/v1/home/free/list';
-
 export const GET_POST_DETAIL = (boardType, postId) =>
   `/api/v1/post/${boardType}/${postId}`;
 ///국가필터링///
