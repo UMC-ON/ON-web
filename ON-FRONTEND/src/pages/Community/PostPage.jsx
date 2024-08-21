@@ -113,7 +113,7 @@ const PostPage = ({ color, boardType }) => {
     //   },
     // });
 
-    navigate(`/community/${boardType}`, { replace: true });
+    navigate(-1, { replace: true });
   };
 
   return (
@@ -122,7 +122,7 @@ const PostPage = ({ color, boardType }) => {
         <s.ColorButton
           color="#E4E4E4"
           onClick={() => {
-            navigate(`/community/${boardType}`);
+            navigate(-1);
           }}
         >
           취소
