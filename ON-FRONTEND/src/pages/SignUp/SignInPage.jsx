@@ -58,7 +58,7 @@ const SignInPage = () => {
     try {
       const formData = JSON.stringify(inputValue.current);
       //서버에 로그인 요청
-      const response = await postData(SIGN_IN_URL, formData, {});
+      const response = await postData(SIGN_IN_URL, formData);
 
       //로그인 성공
       if (response.data.inSuccess) {
@@ -73,7 +73,9 @@ const SignInPage = () => {
         });
         console.log(user.data.result);
         //현 사용자와 로그인 상태 redux에 저장
-        dispatch(loginSuccess(user.data.result, accessToken, refreshToken));
+        dispatch(
+          loginSuccess(user.data.result, grantType, accessToken, refreshToken),
+        );
 
         //유저 상태에 따른 조건부 네비게이팅
         if (user.data.result.userStatus === 'TEMPORARY') {

@@ -77,6 +77,7 @@ export const DispatchedInfo = styled.div`
   padding-top: 0.31rem;
 `;
 export const DetailPageLayout = styled.div`
+  position: relative;
   background: white;
   box-sizing: border-box;
   width: 100%;
@@ -302,13 +303,24 @@ export const ImgSection = styled.section`
   gap: 1rem;
   padding-top: 1rem;
   overflow-x: scroll;
+  &:hover::-webkit-scrollbar {
+    display: inside;
+    height: 0.5rem;
+  }
   &::-webkit-scrollbar {
     display: none;
+  }
+  &::-webkit-scrollbar-thumb {
+    width: 0.5rem;
+    background: gray; /* 스크롤바 막대 색상 */
+    /* 스크롤바 막대 테두리 설정  */
+    border-radius: 12px;
   }
 `;
 
 export const ContentImg = styled.img`
   width: 112px;
+  min-width: 112px;
   height: 112px;
   object-fit: cover;
   flex-shrink: 0;

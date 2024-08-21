@@ -5,7 +5,8 @@ import { getData } from '../api/Functions';
 import { useNavigate } from 'react-router-dom';
 
 // 로그인 성공 액션
-export const loginSuccess = (user, accessToken, refreshToken) => {
+export const loginSuccess = (user, grantType, accessToken, refreshToken) => {
+  localStorage.setItem('grantType', grantType);
   localStorage.setItem('AToken', accessToken); // accessToken을 localStorage에 저장
   localStorage.setItem('RToken', refreshToken); // refreshToken을 localStorage에 저장
   console.log(user);
@@ -43,8 +44,8 @@ export const loadUser = () => {
           Authorization: `Bearer ${accessToken}`,
         }); // 토큰을 사용해 유저 정보를 가져옴
         if (res) {
-          const user = res.data.result;
-          console.log(`로드유저실행: ${user}`);
+          let user = res.data.result;
+          console.log(user);
           dispatch({
             type: LOAD_USER,
             payload: { user, accessToken },
@@ -52,6 +53,7 @@ export const loadUser = () => {
         }
       } catch (error) {
         console.log(error);
+        console.log('로드유저에러');
         dispatch(loginFailure('Failed to fetch user info'));
         dispatch(logout()); // 에러 발생 시 로그아웃 처리
       }
