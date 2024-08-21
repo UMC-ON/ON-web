@@ -187,7 +187,7 @@ const SchoolAuthPage = () => {
             setLastModalOpen(false);
           }}
           onExitModal={() => {
-            nav('/admin');
+            nav('/');
           }}
         />
       )}
