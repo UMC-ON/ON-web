@@ -1,43 +1,76 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import compas from "../assets/images/compasIcon.svg";
 import profile from "../assets/images/profileIcon.svg";
 import empty_star from "../assets/images/empty_star.svg";
 import filled_star from "../assets/images/filled_star.svg";
+import noImage from "../assets/images/noImage.jpg";
 
-import {showDate} from "../components/Common/InfoExp";
-
-const accessToken = import.meta.env.VITE_accessToken;
+import { showDate } from "../components/Common/InfoExp";
+const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
 const ScrapList = ({ items }) => {
+  let userInfo = useSelector((state) => state.user.user);
+  const [scrappedMarketPostIds, setScrappedMarketPostIds] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchScrappedPosts = async () => {
+      try {
+        const response = await axios.get(`${serverAddress}/api/v1/scrap/${userInfo?.id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+        });
+
+        if (Array.isArray(response.data)) {
+          const scrappedIds = response.data.map(post => post.marketPost.marketPostId);
+          setScrappedMarketPostIds(scrappedIds);
+          console.log('스크랩 페이지', scrappedIds);
+        } else {
+          console.error('Unexpected response structure:', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching scrapped posts:', error);
+      }
+    };
+
+    if (userInfo.id) {
+      fetchScrappedPosts();
+    }
+  }, [userInfo]);
 
   return (
     <>
       {items && items.map((item, index) => {
         const isCompleted = item.marketPost.dealStatus === "COMPLETE";
+        const isScrapped = scrappedMarketPostIds.includes(item.marketPost.marketPostId);
+
         return (
           <ItemDiv key={index} isCompleted={isCompleted}>
-            <Photo src={item.marketPost.imageUrls[0]} />
+            <Photo src={item.marketPost.imageUrls[0] ? item.marketPost.imageUrls[0] : noImage} />
             <Information>
               <StarContainer
                 marketPostId={item.marketPost.marketPostId}
-                isFilled={item.isScrapped}
+                isFilled={isScrapped} // Pass isScrapped as isFilled prop
+                scrappedMarketPostIds={scrappedMarketPostIds} // Pass the whole array
+                setScrappedMarketPostIds={setScrappedMarketPostIds} // Pass the state updater function
               />
-              <Description onClick={() => navigate(`/sell/${item.marketPost.marketPostId}`)}>
-              <TitleTimeContainer>
+              <Description onClick={() => navigate(`../sell/${item.marketPost.marketPostId}`)}>
+                <TitleTimeContainer>
                   <Title>{item.marketPost.title}</Title>
                   <Time>{showDate(item.marketPost.createdAt)}</Time>
-                </TitleTimeContainer><br/>
-                <State how={item.marketPost.dealType == 'DIRECT'? '직거래' : '택배거래'} now={item.marketPost.dealStatus == 'COMPLETE' ? '거래 완료' : '거래 가능'} isCompleted={isCompleted} />
+                </TitleTimeContainer><br />
+                <State how={item.marketPost.dealType === 'DIRECT' ? '직거래' : '택배거래'} now={item.marketPost.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능'} isCompleted={isCompleted} />
                 <LocationAndUser>
                   <Place><Compas src={compas} />{item.marketPost.currentCountry} {item.marketPost.currentLocation}</Place>
                   <User><Profile src={profile} />{item.marketPost.nickname}</User>
                 </LocationAndUser>
-                <Price>{item.share ? '나눔' : `₩ ${item.marketPost.cost}`}</Price>
+                <Price>{item.marketPost.share ? '나눔' : `₩ ${item.marketPost.cost}`}</Price>
               </Description>
             </Information>
           </ItemDiv>
@@ -47,35 +80,46 @@ const ScrapList = ({ items }) => {
   );
 };
 
-const StarContainer = ({ marketPostId, isFilled = true }) => {
-  const [isStarFilled, setIsStarFilled] = React.useState(isFilled);
+
+
+const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrappedMarketPostIds }) => {
+  const [isStarFilled, setIsStarFilled] = useState(!isFilled);
+  let userInfo = useSelector((state) => state.user.user);
 
   const toggleStar = async () => {
     try {
       if (isStarFilled) {
         // 스크랩 취소 요청
-        await axios.delete(`https://13.209.255.118.nip.io/api/v1/scrap/10/${marketPostId}`, {
+        await axios.delete(`${serverAddress}/api/v1/scrap/${userInfo?.id}/${marketPostId}`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
         });
+
+        // Remove marketPostId from scrappedMarketPostIds array
+        setScrappedMarketPostIds(prevIds => prevIds.filter(id => id !== marketPostId));
       } else {
         // 스크랩 등록 요청
         await axios.post(
-          `https://13.209.255.118.nip.io/api/v1/scrap`, 
+          `${serverAddress}/api/v1/scrap`,
           {
-            marketPostId: marketPostId, // 실제로 스크랩하려는 `marketPostId`를 사용
-            userId: 10
+            marketPostId: marketPostId,
+            userId: userInfo?.id,
           },
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${localStorage.getItem('AToken')}`,
             },
           }
         );
+
+        // Add marketPostId to scrappedMarketPostIds array
+        setScrappedMarketPostIds(prevIds => [...prevIds, marketPostId]);
       }
+
+      // Toggle the star state
       setIsStarFilled(!isStarFilled);
-      console.log({marketPostId});
+
     } catch (error) {
       console.error('스크랩 처리 중 오류 발생:', error);
     }
@@ -90,9 +134,8 @@ const StarContainer = ({ marketPostId, isFilled = true }) => {
 };
 
 
-
-
 export default ScrapList;
+
 
 
 
@@ -143,21 +186,26 @@ const Description = styled.div`
   height: 60%;
 `;
 
-const TitleTimeContainer = styled.div`
-  width: 190px;
-  display: flex; /* Flexbox를 사용하여 수평 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
-`;
-
 const Title = styled.p`
   font-size: 18px;
   font-weight: 600;
   color: #363636;
+  white-space: nowrap; /* 줄 바꿈 없이 한 줄로 표시 */
+  overflow: hidden; /* 넘치는 텍스트를 숨깁니다 */
+  text-overflow: ellipsis; /* 넘치는 텍스트를 '...'으로 표시 */
 `;
 
 const Time = styled.span`
   color: #7A7A7A;
   font-size: 0.6em;
+  margin-left: 8px;
+  margin-top: 5px;
+`;
+
+const TitleTimeContainer = styled.div`
+  width: 190px;
+  display: flex; /* Flexbox를 사용하여 수평 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
 `;
 
 const StateWrapper = styled.p`
@@ -182,21 +230,25 @@ const Price = styled.p`
   color: #3E73B2;
 `;
 
-const Compas = styled.img`
+
+const Profile = styled.img`
   width: 1.2em;
   height: 1.2em;
   margin-right: 2px;
 `;
 
 const Place = styled.p`
+  width: 100px;
   font-size: 0.7em;
-  display: flex;
   align-items: center;
   margin-right: 10px;
   color: #838383;
+  white-space: nowrap; /* 줄 바꿈 없이 한 줄로 표시 */
+  overflow: hidden; /* 넘치는 텍스트를 숨깁니다 */
+  text-overflow: ellipsis; /* 넘치는 텍스트를 '...'으로 표시 */
 `;
 
-const Profile = styled.img`
+const Compas = styled.img`
   width: 1.2em;
   height: 1.2em;
   margin-right: 2px;
@@ -207,14 +259,16 @@ const User = styled.p`
   display: flex;
   align-items: center;
   color: #838383;
+  padding-top: 5px;
 `;
 
 const LocationAndUser = styled.div`
   display: flex;
   align-items: center;
   width: 11em;
-  margin-bottom: 1.5vh;
+  margin-bottom: 1vh;
 `;
+
 
 const Space = styled.div`
   height: 3em;

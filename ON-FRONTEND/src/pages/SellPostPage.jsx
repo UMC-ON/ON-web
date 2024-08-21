@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import camera from "../assets/images/camera.svg";
 import PhotoAdd from "../assets/images/PhotoAdd.svg";
@@ -8,6 +9,8 @@ import PhotoAdd from "../assets/images/PhotoAdd.svg";
 import SellPostHeader from "../components/SellPostHeader";
 import SellPostSelectCity from "../components/SellPostSelectCity/SellPostSelectCity";
 import SellPostCitySelect from "../components/SellPostCitySelect";
+
+const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
 function SellPost() {
     const [selectedOption, setSelectedOption] = useState(null);
@@ -20,8 +23,8 @@ function SellPost() {
     const [showCity, setShowCity] = useState(false);
     const [city, setCity] = useState({ country: '', city: '' });
     const [isCityClicked, setIsCityClicked] = useState(false);
+    let userInfo = useSelector((state) => state.user.user);
 
-    const accessToken = import.meta.env.VITE_accessToken;
 
     const resetCityClick = () => {
         setIsCityClicked(false);
@@ -51,7 +54,7 @@ function SellPost() {
 
     const handleSubmit = async () => {
         const postData = {
-            userId: 10,  // 고정된 userId
+            userId: userInfo.id,
             title,
             cost,
             dealType: selectedOption === 'directly' ? 'DIRECT' : 'DELIVERY',
@@ -71,10 +74,10 @@ function SellPost() {
         });
     
         try {
-            const response = await fetch('https://13.209.255.118.nip.io/api/v1/market-post', {
+            const response = await fetch(`${serverAddress}/api/v1/market-post`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${accessToken}`,
+                    Authorization: `Bearer ${localStorage.getItem('AToken')}`,
                 },
                 body: formData,
             });

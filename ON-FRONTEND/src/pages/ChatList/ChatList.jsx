@@ -45,7 +45,7 @@ const ChatList = () => {
         const response = await getData(
           GET_ACCOMPANY_LIST,
           {
-            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
           {},
         );
@@ -73,7 +73,7 @@ const ChatList = () => {
         const response = await getData(
           GET_TRADE_LIST,
           {
-            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
           {},
         );

@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import item from "../assets/images/item.svg";
-import icon from "../assets/images/item_icon.svg";
 import arrowIcon from '../assets/images/bottomArrow.svg';
 import search_icon from '../assets/images/search_icon.svg';
 import pencilImg from '../assets/images/pencilIcon.svg';
@@ -16,7 +14,6 @@ import TransactionPicker from "../components/TransactionPicker";
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 import SellPageCountrySelect from '../components/SellPageCountrySelect.jsx';
 
-const accessToken = import.meta.env.VITE_accessToken;
 
 function SellPage() {
   const [showAvailable, setShowAvailable] = useState(false);
@@ -30,10 +27,11 @@ function SellPage() {
   const [searchKeyword, setSearchKeyword] = useState(''); // 검색어 상태 추가
 
   const navigate = useNavigate();
+  const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
   const fetchItems = async (dealType = '', currentCountry = '') => {
     try {
-      const url = 'https://13.209.255.118.nip.io/api/v1/market-post/filter';
+      const url = `${serverAddress}/api/v1/market-post/filter`;
       const params = {};
 
       if (dealType) params.dealType = dealType === '직거래' ? 'DIRECT' : 'DELIVERY';
@@ -41,7 +39,7 @@ function SellPage() {
 
       const response = await axios.get(url, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
         },
         params,
       });
@@ -54,14 +52,14 @@ function SellPage() {
 
   const fetchSearchResults = async () => {
     try {
-      const url = 'https://13.209.255.118.nip.io/api/v1/market-post/search';
+      const url = `${serverAddress}/api/v1/market-post/search`;
       const params = {
         keyword: searchKeyword, // 검색어를 쿼리 스트링으로 전달
       };
 
       const response = await axios.get(url, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
         },
         params,
       });
@@ -77,16 +75,16 @@ function SellPage() {
     const fetchItems = async () => {
       try {
         const url = showAvailable
-          ? 'https://13.209.255.118.nip.io/api/v1/market-post/available'
-          : 'https://13.209.255.118.nip.io/api/v1/market-post';
+          ? `${serverAddress}/api/v1/market-post/available`
+          : `${serverAddress}/api/v1/market-post`;
         const response = await axios.get(url, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
         });
         setItems(response.data);
       } catch (error) {
-        console.error('판매 물품 목록을 불러오는 중 오류 발생:', error);
+        console.error('거래 목록을 불러오는 중 오류 발생:', error);
       }
     };
 

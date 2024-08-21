@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+
 import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import DiaryCalendar from '../../components/DiaryCalendar/DiaryCalendar';
 import PageHeader from '../../components/PageHeader/PageHeader';
 import DailyDiary from "../../components/DailyDiary";
 import DDayCalendar from '../../components/DDayCalendar.jsx';
 import DailyDiaryCalendar from "../../components/DailyDiaryCalendar/DailyDiaryCalendar.jsx";
+
 import styled from 'styled-components';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
@@ -14,6 +16,8 @@ import './DiaryPage.css';
 import ko from "date-fns/locale/ko";
 import closeIcon from '../../assets/images/close_button.svg';
 import plus_button from '../../assets/images/addButton.svg';
+
+const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
 const Diary = () => {
   const [selectedDate1, setSelectedDate1] = useState(null);
@@ -25,14 +29,13 @@ const Diary = () => {
   const [newDiaryContent, setNewDiaryContent] = useState('');
   const [diaries, setDiaries] = useState([]);
   const datePickerRef = useRef(null);
-  const accessToken = import.meta.env.VITE_accessToken;
 
   useEffect(() => {
     const fetchDiaries = async () => {
       try {
-        const response = await axios.get(`https://13.209.255.118.nip.io/api/v1/diary/list`, {
+        const response = await axios.get(`${serverAddress}/api/v1/diary/list`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
         });
         setDiaries(response.data.result);
@@ -42,7 +45,7 @@ const Diary = () => {
       }
     };
     fetchDiaries();
-  }, [accessToken]);
+  }, []);
 
   useEffect(() => {
     const storedDate = localStorage.getItem('selectedDate1');
@@ -62,11 +65,11 @@ const Diary = () => {
 
     try {
       const response = await axios.post(
-        'https://13.209.255.118.nip.io/api/v1/diary/startdate',
+        `${serverAddress}/api/v1/diary/startdate`,
         { startDate: formattedDate },
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
             'Content-Type': 'application/json',
           },
         }
@@ -116,14 +119,14 @@ const Diary = () => {
   
     try {
       const response = await axios.post(
-        'https://13.209.255.118.nip.io/api/v1/diary',
+        `${serverAddress}/api/v1/diary`,
         { 
           date: formattedDate, 
           content: newDiaryContent 
         },
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
             'Content-Type': 'application/json',
           },
         }

@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import ko from 'date-fns/locale/ko';
 
-const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen, datePickerRef }) => {
+const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen, datePickerRef, userId }) => {
+  const [storedDate, setStoredDate] = useState(() => {
+    const savedDate = localStorage.getItem(`dday-date-${userId}`);
+    return savedDate ? new Date(JSON.parse(savedDate)) : null;
+  });
+
+  useEffect(() => {
+    if (storedDate) {
+      handleDateChange(storedDate);
+    }
+  }, [storedDate, handleDateChange]);
+
+  const handleDateSelect = (date) => {
+    localStorage.setItem(`dday-date-${userId}`, JSON.stringify(date));
+    handleDateChange(date);
+  };
+
   return (
     <DDayCalendar>
       <DatePickerWrapper>
@@ -14,8 +30,8 @@ const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen
           className='inputDate'
           placeholderText={'날짜 설정'}
           ref={datePickerRef}
-          selected={selectedDate}
-          onChange={handleDateChange}
+          selected={storedDate || selectedDate}
+          onChange={handleDateSelect}
           dateFormat="yyyy-MM-dd"
           renderCustomHeader={({
             date,
