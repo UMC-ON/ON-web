@@ -1,4 +1,5 @@
 import * as s from './DetailPageStyled.jsx';
+import styled from 'styled-components';
 import commentImg from '../../assets/images/commentImg.svg';
 import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox.jsx';
 
@@ -18,15 +19,14 @@ import {
   WRITE_REPLY_ON,
 } from '../../api/urls.jsx';
 import Loading from '../../components/Loading/Loading.jsx';
-import { current } from '@reduxjs/toolkit';
-import { renderToStaticNodeStream } from 'react-dom/server';
+
 import Reply from '../../components/Comment/Reply.jsx';
 
 const DetailPage = ({ color1, color2, boardType }) => {
-  const titleColor = boardType === 'INFO' ? '#BFD8E5' : '#CBCDE9';
+  const titleColor = boardType === 'INFO' ? 'rgb(191, 216, 229)' : '#CBCDE9';
   let logInInfo = useSelector((state) => state.user);
   let userInfo = logInInfo.user;
-  console.log(logInInfo);
+  //let userInfo = userInfo.user;
   const currentPost_id = useLocation().state.value; //post_id 정보만 받아오기
   //useLocation으로 post_id만 받아 온 뒤, postListDB에서 현재 포스트 찾아와 불러옴.
   //그 뒤에는 선택사항: commentList DB를 따로 사용하느냐,
@@ -38,40 +38,46 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const [currentPost, setCurrentPost] = useState();
   const [commentList, setCommentList] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const [isImageModalOpen, setImageModalOpen] = useState(false);
+  const openedImg = useRef(null);
   useEffect(() => {
-    const fetchPostData = async () => {
-      setLoading(true);
+    console.log(userInfo);
+    if (userInfo) {
+      const fetchPostData = async () => {
+        setLoading(true);
 
-      const response = await getData(
-        GET_POST_DETAIL(boardType, currentPost_id),
-        {
-          //'Content-Type': `application/json`,
+        const response = await getData(
+          GET_POST_DETAIL(boardType, currentPost_id),
+          {
+            //'Content-Type': `application/json`,
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+        );
+        if (response) {
+          console.log(response);
+          setCurrentPost(response.data);
+          return response;
+        }
+      };
+
+      const fetchCommentData = async () => {
+        const response = await getData(GET_COMMENT_OF(currentPost_id), {
           Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-        },
-      );
-      if (response) {
-        console.log(response);
-        setCurrentPost(response.data);
-        return response;
-      }
-    };
-
-    const fetchCommentData = async () => {
-      const response = await getData(GET_COMMENT_OF(currentPost_id), {
-        Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-      });
-      if (response) {
-        console.log('댓글');
-        console.log(response.data);
-        setCommentList(response.data);
-      }
-    };
-    const res = fetchPostData();
-    fetchCommentData();
-    console.log(res);
-  }, []);
+        });
+        if (response) {
+          console.log('댓글');
+          console.log(response.data);
+          setCommentList(response.data);
+        }
+        setLoading(false);
+      };
+      let res = fetchPostData();
+      fetchCommentData();
+      console.log(res);
+    }
+  }, [userInfo]);
   useEffect(() => {
-    if (userInfo && currentPost && commentList) {
+    if (currentPost && commentList && userInfo) {
       setLoading(false);
       console.log(currentPost);
     }
@@ -138,7 +144,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
       if (logInInfo.isAuthenticated) {
         addComment(WRITE_COMMENT_ON(currentPost_id));
       } else {
-        console.log(logInInfo.isAuthenticated);
+        console.log(userInfo);
         return alert('로그인이 필요합니다.');
       }
     } else {
@@ -190,12 +196,14 @@ const DetailPage = ({ color1, color2, boardType }) => {
     //scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
     //자식에게 ref전달 알아보기
   };
+
   if (isLoading) {
     return <Loading />;
   }
+
   //const currentVisualViewHeight = window.visualViewport.height;
   //replyToText.current = currentVisualViewHeight;
-  if (currentPost && commentList) {
+  if (userInfo && currentPost && commentList) {
     //return <div>{currentPost.postId}</div>;
 
     return (
@@ -245,8 +253,9 @@ const DetailPage = ({ color1, color2, boardType }) => {
                     <s.ContentImg
                       src={img}
                       key={index}
-                      onClick={() => {
-                        //window.open(this.src);
+                      onClick={(e) => {
+                        openedImg.current = e.target.src;
+                        setImageModalOpen(true);
                       }}
                     />
                   ))
@@ -260,7 +269,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
           <s.CommentSection ref={scrollRef}>
             {commentList.map((comment, index) => {
               let commentElement;
-              let replyElement;
               if (comment.replyId === null) {
                 //map 돌 때 comment만 돌고있음
                 commentElement = (
@@ -278,7 +286,8 @@ const DetailPage = ({ color1, color2, boardType }) => {
                 } else {
                   //답글이 있으면
                   let replyList = commentList.filter(
-                    (reply) => reply.commentId === comment.commentId,
+                    (reply) =>
+                      reply.commentId === comment.commentId && reply.replyId,
                   );
                   console.log(replyList);
 
@@ -301,6 +310,15 @@ const DetailPage = ({ color1, color2, boardType }) => {
               }
             })}
           </s.CommentSection>
+          {isImageModalOpen && (
+            <ImgModal
+              onClick={() => {
+                setImageModalOpen(false);
+              }}
+            >
+              <Img src={openedImg.current} />
+            </ImgModal>
+          )}
         </s.DetailPageLayout>
         <s.CommentWritingDiv id="commentDiv">
           <DefaultCheckBox
@@ -321,7 +339,9 @@ const DetailPage = ({ color1, color2, boardType }) => {
             <s.CommentEditor
               className="commentEditor"
               placeholder={
-                userInfo ? '댓글을 작성해주세요.' : '로그인이 필요합니다.'
+                logInInfo.isAuthenticated
+                  ? '댓글을 작성해주세요.'
+                  : '로그인이 필요합니다.'
               }
               onInput={handleResizeHeight}
               rows={1}
@@ -338,7 +358,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
               }}
               value={content}
               ref={commentEditor}
-              disabled={!userInfo}
+              disabled={!logInInfo.isAuthenticated}
             />
           </s.EditorWrapper>
 
@@ -388,3 +408,24 @@ const DetailPage = ({ color1, color2, boardType }) => {
 };
 
 export default DetailPage;
+
+const ImgModal = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  // max-width: 24.375rem;
+  width: 100%;
+  height: 100vh;
+  background: black;
+  z-index: 3;
+`;
+const Img = styled.div`
+  width: 100%;
+  height: 100%;
+  background: ${(props) => `url(${props.src})`} no-repeat center;
+  background-size: contain;
+`;

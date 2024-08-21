@@ -40,6 +40,7 @@ export const getData = async (url, headers = {}, params = {}) => {
     })
     .catch((error) => {
       console.log(error);
+      return null;
     });
 
   return response;

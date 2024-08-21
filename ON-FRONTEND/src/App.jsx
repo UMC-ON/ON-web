@@ -1,7 +1,13 @@
 import { useState } from 'react';
 import './App.css';
 import { ThemeProvider } from 'styled-components';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import theme from './styles/theme.js';
 
 // 페이지, 컴포넌트 import
@@ -46,155 +52,203 @@ import MySchoolAuthPage from './pages/MyPage/MySchoolAuthPage.jsx';
 import LandingPage from './pages/LandingPage/LandingPage.jsx';
 
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from './redux/actions.jsx';
+import Loading from './components/Loading/Loading.jsx';
 
 function App() {
   const dispatch = useDispatch();
+  let user = useSelector((state) => state.user);
+  const location = useLocation();
+  const nav = useNavigate();
+  let res;
+  const excludepaths = ['/signIn', '/signUp', '/landing'];
+  const [isLoading, setIsLoading] = useState(false);
+  let fetchFirst = false;
+
+  //console.log(location.pathname);
 
   useEffect(() => {
-    dispatch(loadUser()); // 앱이 시작될 때 토큰을 로드하고 유저 정보를 가져옴
+    if (!excludepaths.includes(location.pathname)) {
+      const loadUserData = async () => {
+        setIsLoading(true);
+        await dispatch(loadUser());
+        // 비동기 작업이 완료될 때까지 기다림
+      };
+      loadUserData();
+      if (user) {
+        console.log('로그인 완료인데..');
+        console.log(user);
+        setIsLoading(false);
+        // fetchFirst = true;
+      }
+    }
   }, [dispatch]);
+  if (isLoading) {
+    return <Loading />;
+  }
+  useEffect(() => {
+    if (!isLoading && fetchFirst) {
+      console.log(user);
+      if (!user.isAuthenticated && !excludepaths.includes(location.pathname)) {
+        console.log(user.isAuthenticated);
+        res = confirm('로그인이 필요합니다.');
 
-  return (
-    <ThemeProvider theme={theme}>
-      <Routes>
-        <Route
-          path="/landing"
-          element={<LandingPage />}
-        />
-        <Route
-          path="/admin"
-          element={<AdminPage />}
-        />
-        <Route
-          path="/signUp"
-          element={<SignUpPage />}
-        />
-        <Route
-          path="/signUp/complete"
-          element={<SignUpCompletePage />}
-        />
-        <Route
-          path="/signIn"
-          element={<SignInPage />}
-        />
-        <Route
-          path="/signUp/credentials"
-          element={<SchoolAuthPage />}
-        />
-        <Route
-          path="/"
-          element={<HomePage />}
-        />
+        if (res) {
+          nav('/signIn');
+        } else {
+          nav('/landing');
+        }
+      }
+    }
+  }, [user, location.pathname, dispatch]);
+  // useEffect(() => {
+  //   if (excludepaths.includes(location.pathname)) {
+  //     setIsLoading(false);
+  //   }
+  // }, []);
 
-        <Route
-          path="/community"
-          element={<CommunityHomePage />}
-        />
-        <Route
-          path="/community/general"
-          element={<FreeCommunityHome />}
-        />
-        <Route
-          path="/community/general/detail/:id"
-          element={<FreeDetailPage />}
-        />
-        <Route
-          path="/community/general/post"
-          element={<FreePostPage />}
-        />
-        <Route
-          path="/community/info"
-          element={<InfoCommunityHome />}
-        />
-        <Route
-          path="/community/info/detail/:id"
-          element={<InfoDetailPage />}
-        />
-        <Route
-          path="/community/info/post"
-          element={<InfoPostPage />}
-        />
-        <Route
-          path="/mypage"
-          element={<MyPage />}
-        />
-        <Route
-          path="/mypage/mypost"
-          element={<MyPost />}
-        />
-        <Route
-          path="/mypage/schoolAuth"
-          element={<MySchoolAuthPage />}
-        />
-        <Route
-          path="/notification"
-          element={<Notification />}
-        />
-        <Route
-          path="/search"
-          element={<Search />}
-        />
-        <Route
-          path="/chat/accompany/:roomId"
-          element={<AccompanyChat />}
-        />
-        <Route
-          path="/chat/trade/:roomId"
-          element={<TradeChat />}
-        />
-        <Route
-          path="/chatlist"
-          element={<ChatList />}
-        />
-        <Route
-          path="/accompany"
-          element={<AccompanyPage />}
-        />
-        <Route
-          path="/accompany/post"
-          element={<AccompanyPostPage />}
-        />
-        <Route
-          path="/accompany/detail/:postId"
-          element={<AccompanyDetailPage />}
-        />
-        <Route
-          path="/diary"
-          element={<DiaryPage />}
-        />
-        <Route
-          path="/company"
-          element={<CompanyCalendar />}
-        />
-        <Route
-          path="/sell"
-          element={<SellPage />}
-        />
-        <Route
-          path="/sell/:marketPostId"
-          element={<ItemDetailPage />}
-        />
-        <Route
-          path="/sell/post"
-          element={<SellPost />}
-        />
-        <Route
-          path="/scrap"
-          element={<ScrapList />}
-        />
-        <Route
-          path="/selectCity"
-          element={<SelectCity />}
-        />
-        <Route
-          path="/selectCountry"
-          element={<SelectCountry />}
-        />
-      </Routes>
-    </ThemeProvider>
-  );
+  if (user.isAuthenticated || excludepaths.includes(location.pathname)) {
+    return (
+      <ThemeProvider theme={theme}>
+        <Routes>
+          <Route
+            path="/landing"
+            element={<LandingPage />}
+          />
+          <Route
+            path="/admin"
+            element={<AdminPage />}
+          />
+          <Route
+            path="/signUp"
+            element={<SignUpPage />}
+          />
+          <Route
+            path="/signUp/complete"
+            element={<SignUpCompletePage />}
+          />
+          <Route
+            path="/signIn"
+            element={<SignInPage />}
+          />
+          <Route
+            path="/signUp/credentials"
+            element={<SchoolAuthPage />}
+          />
+          <Route
+            path="/"
+            element={<HomePage />}
+          />
+
+          <Route
+            path="/community"
+            element={<CommunityHomePage />}
+          />
+          <Route
+            path="/community/general"
+            element={<FreeCommunityHome />}
+          />
+          <Route
+            path="/community/general/detail/:id"
+            element={<FreeDetailPage />}
+          />
+          <Route
+            path="/community/general/post"
+            element={<FreePostPage />}
+          />
+          <Route
+            path="/community/info"
+            element={<InfoCommunityHome />}
+          />
+          <Route
+            path="/community/info/detail/:id"
+            element={<InfoDetailPage />}
+          />
+          <Route
+            path="/community/info/post"
+            element={<InfoPostPage />}
+          />
+          <Route
+            path="/mypage"
+            element={<MyPage />}
+          />
+          <Route
+            path="/mypage/mypost"
+            element={<MyPost />}
+          />
+          <Route
+            path="/mypage/schoolAuth"
+            element={<MySchoolAuthPage />}
+          />
+          <Route
+            path="/notification"
+            element={<Notification />}
+          />
+          <Route
+            path="/search"
+            element={<Search />}
+          />
+          <Route
+            path="/chat/accompany/:roomId"
+            element={<AccompanyChat />}
+          />
+          <Route
+            path="/chat/trade/:roomId"
+            element={<TradeChat />}
+          />
+          <Route
+            path="/chatlist"
+            element={<ChatList />}
+          />
+          <Route
+            path="/accompany"
+            element={<AccompanyPage />}
+          />
+          <Route
+            path="/accompany/post"
+            element={<AccompanyPostPage />}
+          />
+          <Route
+            path="/accompany/detail/:postId"
+            element={<AccompanyDetailPage />}
+          />
+          <Route
+            path="/diary"
+            element={<DiaryPage />}
+          />
+          <Route
+            path="/company"
+            element={<CompanyCalendar />}
+          />
+          <Route
+            path="/sell"
+            element={<SellPage />}
+          />
+          <Route
+            path="/sell/:marketPostId"
+            element={<ItemDetailPage />}
+          />
+          <Route
+            path="/sell/post"
+            element={<SellPost />}
+          />
+          <Route
+            path="/scrap"
+            element={<ScrapList />}
+          />
+          <Route
+            path="/selectCity"
+            element={<SelectCity />}
+          />
+          <Route
+            path="/selectCountry"
+            element={<SelectCountry />}
+          />
+        </Routes>
+      </ThemeProvider>
+    );
+  }
 }
 
 export default App;
