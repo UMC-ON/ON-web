@@ -24,11 +24,8 @@ export const loginFailure = (error) => ({
 
 // 로그아웃 액션
 export const logout = () => {
-  const nav = useNavigate();
   localStorage.removeItem('AToken'); // 로그아웃 시 토큰을 localStorage에서 제거
   localStorage.removeItem('RToken');
-  alert('로그아웃 되었습니다.');
-  nav('/signIn');
   return {
     type: LOGOUT,
   };
