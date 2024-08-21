@@ -100,7 +100,7 @@ import closeIcon from '../assets/images/close_button.svg';
   `;
 
   const LinkText = styled.div`
-    font-size: 0.3em;
+    font-size: 9px;
     margin-bottom: 0.5vh;
     color: #b0b0b0;
     text-decoration: underline;
