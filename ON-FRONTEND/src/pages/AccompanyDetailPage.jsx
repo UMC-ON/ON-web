@@ -98,11 +98,11 @@ function AccompanyDetailPage() {
     console.log("Share modal closed");
     setIsShareModalOpen(false);
   };
-
+ 
   const handleBlueButtonClick = () => {
-    applyData();
     closeFirstModal();
-    alert('start chat');
+    applyData();
+    // alert('start chat');
     // Start Chat
   };
 

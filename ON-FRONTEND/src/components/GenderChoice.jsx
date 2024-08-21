@@ -66,6 +66,10 @@ const Button = styled.button`
   margin: 5px;
   width: 90%;
   background-color: ${(props) => (props.$isActive ? '#C2C7FF' : 'white')};
+  outline: none;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const ButtonWrapper = styled.div` 
