@@ -3,10 +3,18 @@ import * as s from './ChatInputStyled';
 import { POST_CHAT } from '../../api/urls';
 import axios from 'axios';
 import Loading from '../Loading/Loading';
+const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
 const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const apiClient = axios.create({
+    baseURL: serverAddress + '/',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
   const messageInputChange = (e) => {
     setMessage(e.target.value);
@@ -19,7 +27,7 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
     setIsLoading(true);
     try {
       const apiClient = axios.create({
-        baseURL: 'http://13.209.255.118:8080/',
+        baseURL: serverAddress + '/',
         headers: {
           'Content-Type': 'text/plain',
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
