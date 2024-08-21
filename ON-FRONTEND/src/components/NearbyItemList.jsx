@@ -12,7 +12,7 @@ import noImage from "../assets/images/noImage.jpg";
 
 import { showDate } from "../components/Common/InfoExp";
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
-import { GET_CURRENT_INFO } from '../api/urls';
+import { GET_SCRAP } from '../api/urls';
 import { getData, postData, putData } from '../api/Functions';
 
 const NearItemList = ({ nearitems }) => {

@@ -13,6 +13,9 @@ import noImage from "../assets/images/noImage.jpg";
 import { showDate } from "../components/Common/InfoExp";
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
+import { getData, postData, putData } from '../api/Functions';
+import { GET_SCRAP, POST_SCRAP } from '../api/urls';
+
 const ScrapList = ({ items }) => {
   let userInfo = useSelector((state) => state.user.user);
   const [scrappedMarketPostIds, setScrappedMarketPostIds] = useState([]);
@@ -21,7 +24,8 @@ const ScrapList = ({ items }) => {
   useEffect(() => {
     const fetchScrappedPosts = async () => {
       try {
-        const response = await axios.get(`${serverAddress}/api/v1/scrap/${userInfo?.id}`, {
+        const response = await getData(
+          GET_SCRAP(userInfo.id), {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
@@ -99,22 +103,35 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
         // Remove marketPostId from scrappedMarketPostIds array
         setScrappedMarketPostIds(prevIds => prevIds.filter(id => id !== marketPostId));
       } else {
-        // 스크랩 등록 요청
-        await axios.post(
-          `${serverAddress}/api/v1/scrap`,
-          {
-            marketPostId: marketPostId,
-            userId: userInfo?.id,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-            },
-          }
-        );
+        const formData = new FormData();
 
-        // Add marketPostId to scrappedMarketPostIds array
-        setScrappedMarketPostIds(prevIds => [...prevIds, marketPostId]);
+        const jsonData = {
+          marketPostId: marketPostId,
+          userId: userInfo?.id,
+        };
+
+        console.log(jsonData);
+
+        const jsonBlob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
+        formData.append('requestDTO', jsonBlob);
+
+        try {
+          const response = await postData(
+            POST_SCRAP,
+            formData,
+            {
+              Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+            }
+          );
+          if (response) {
+            console.log(response.data.result);
+
+            // Add marketPostId to scrappedMarketPostIds array
+            setScrappedMarketPostIds(prevIds => [...prevIds, marketPostId]);
+          }
+        } catch (error) {
+          console.error('Error Scrap Item', error);
+        }
       }
 
       // Toggle the star state
@@ -132,6 +149,7 @@ const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrap
     />
   );
 };
+
 
 
 export default ScrapList;

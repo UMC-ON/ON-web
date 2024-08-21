@@ -21,36 +21,36 @@ const ItemList = ({ items }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchScrappedPosts = async () => {
-      try {
-        // Check if userInfo is available
-        if (!userInfo || !userInfo.id) {
-          console.error('User info is not available');
-          return;
-        }
-  
-        const response = await axios.get(`${serverAddress}/api/v1/scrap/${userInfo.id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
-        });
-  
-        // Extract marketPostId from each marketPost object
-        if (Array.isArray(response.data)) {
-          const scrappedIds = response.data.map(post => post.marketPost.marketPostId);
-          setScrappedMarketPostIds(scrappedIds);
-          console.log(scrappedIds);
-        } else {
-          console.error('Unexpected response structure:', response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching scrapped posts:', error);
+  const fetchScrappedPosts = async () => {
+    try {
+      // Check if userInfo is available
+      if (!userInfo || !userInfo.id) {
+        console.error('User info is not available');
+        return;
       }
-    };
-  
-    fetchScrappedPosts();
-  }, [userInfo]); // Ensure userInfo is available before making the request
-  
+
+      const response = await axios.get(`${serverAddress}/api/v1/scrap/${userInfo.id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+        },
+      });
+
+      // Extract marketPostId from each marketPost object
+      if (Array.isArray(response.data)) {
+        const scrappedIds = response.data.map(post => post.marketPost.marketPostId);
+        setScrappedMarketPostIds(scrappedIds);
+        console.log(scrappedIds);
+      } else {
+        console.error('Unexpected response structure:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching scrapped posts:', error);
+    }
+  };
+
+  fetchScrappedPosts();
+}, [userInfo]); // Ensure userInfo is available before making the request
+
 
   return (
     <>

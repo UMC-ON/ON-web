@@ -194,7 +194,7 @@ function App() {
             element={<AccompanyChat />}
           />
           <Route
-            path="/chat/trade/:roomId"
+            path="/chat/market/:roomId"
             element={<TradeChat />}
           />
           <Route
