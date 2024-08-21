@@ -389,7 +389,6 @@ const ImgModal = styled.div`
   left: 0;
   bottom: 0;
   top: 0;
-  // max-width: 24.375rem;
   width: 100%;
   max-width: 480px;
   height: 100%;
