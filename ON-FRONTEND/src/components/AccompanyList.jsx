@@ -108,7 +108,7 @@ const SmallGreyText = styled.p`
   margin-left: 5px;
 
   display: inline-block; 
-  max-width: 100px;
+  max-width: 88px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -172,7 +172,7 @@ const CardName = styled.p`
   color: #363636;
 
   display: inline-block; 
-  max-width: 99%;
+  max-width: 81%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

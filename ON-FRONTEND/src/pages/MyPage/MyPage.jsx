@@ -29,6 +29,7 @@ const MyPage = () => {
   const spanRef = useRef(null);
   const [inputWidth, setInputWidth] = useState('auto');
 
+  const navigate = useNavigate();
   //axios 연결 GET
   useEffect(() => {
     const fetchData = async () => {
@@ -58,35 +59,6 @@ const MyPage = () => {
 
     fetchData();
   }, []);
-
-  // //axios put 닉네임 수정
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setIsLoading(true);
-  //     try {
-  //       const response = await putData(
-  //         PUT_NICKNAME,
-  //         { nickname },
-  //         {
-  //           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-  //         },
-  //         {},
-  //       );
-
-  //       if (response) {
-  //         console.log(response.data.result);
-  //         setNickname(response.data.result.nickname);
-  //         setOriginalNickname(response.data.result.nickname);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   // 추가: 상태가 업데이트된 후에 값이 제대로 설정되었는지 확인
   useEffect(() => {
@@ -160,16 +132,21 @@ const MyPage = () => {
           name="info"
         >
           <s.InfoContainer>
+            <s.Title>파견교 정보를 수정하세요!</s.Title>
+            <s.EditBtn
+              onClick={() => navigate('./schoolAuth')}
+              color={theme.lightGray}
+            >
+              수정
+            </s.EditBtn>
+          </s.InfoContainer>
+          <s.InfoContainer>
             {/* -------------------------- 파견교 -------------------------- */}
             <s.Title>나의 파견교</s.Title>
-            <s.EditBtn
-              onClick={clickEditSchoolName}
-              color={editSchoolName ? theme.blueGra : theme.lightGray}
-            >
-              {editSchoolName ? '완료' : '수정'}
-            </s.EditBtn>
-            {userInfo?.userStatus === 'TEMPORARY' ? (
-              // NON_CERTIFIED 상태일 때 렌더링할 내용
+
+            {userInfo?.userStatus === 'TEMPORARY' ||
+            userInfo?.userStatus === 'NON_CERTIFIED' ||
+            userInfo?.userStatus === 'DENIED' ? (
               <s.SchoolNameBox>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <s.SchoolNameInput
@@ -200,46 +177,7 @@ const MyPage = () => {
                   <s.TypeLabel htmlFor="visit">방문</s.TypeLabel>
                 </s.RadioBox>
               </s.SchoolNameBox>
-            ) : userInfo?.userStatus === 'NON_CERTIFIED' ||
-              userInfo?.userStatus === 'DENIED' ? (
-              <s.SchoolNameBox>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <s.SchoolNameSpan ref={spanRef}>
-                    {schoolName || '파견교를 입력하세요'}
-                  </s.SchoolNameSpan>
-                  <s.SchoolNameInput
-                    ref={inputRef}
-                    disabled={!editSchoolName}
-                    value={schoolName}
-                    onChange={(e) => setSchoolName(e.target.value)}
-                    placeholder={schoolName}
-                    style={{
-                      width: inputWidth,
-                    }}
-                  />
-                  <NavLink to="/mypage/schoolAuth">
-                    <s.VerifyButton>인증하기</s.VerifyButton>
-                  </NavLink>
-                </div>
-                <s.RadioBox>
-                  <s.TypeRadio
-                    type="radio"
-                    disabled={!editSchoolName}
-                    id="exchange"
-                    name="type"
-                  />
-                  <s.TypeLabel htmlFor="exchange">교환</s.TypeLabel>
-                  <s.TypeRadio
-                    type="radio"
-                    disabled={!editSchoolName}
-                    id="visit"
-                    name="type"
-                  />
-                  <s.TypeLabel htmlFor="visit">방문</s.TypeLabel>
-                </s.RadioBox>
-              </s.SchoolNameBox>
             ) : userInfo?.userStatus === 'AWAIT' ? (
-              // DISPATCHED 상태이면서 파견이 확인된 경우 렌더링할 내용
               <s.SchoolNameBox>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <s.SchoolNameSpan ref={spanRef}>
@@ -274,7 +212,6 @@ const MyPage = () => {
                 </s.RadioBox>
               </s.SchoolNameBox>
             ) : userInfo?.userStatus === 'ACTIVE' ? (
-              // DISPATCHED 상태이지만 파견이 확인되지 않은 경우 렌더링할 내용
               <s.SchoolNameBox>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <s.SchoolNameSpan ref={spanRef}>
@@ -313,12 +250,7 @@ const MyPage = () => {
           {/* -------------------------- 파견교 홈페이지 링크 -------------------------- */}
           <s.InfoContainer>
             <s.Title>파견교 홈페이지 링크</s.Title>
-            <s.EditBtn
-              onClick={clickEditLink}
-              color={editLink ? theme.blueGra : theme.lightGray}
-            >
-              {editLink ? '완료' : '수정'}
-            </s.EditBtn>
+
             <s.TextInput
               disabled={!editLink}
               value={
@@ -326,7 +258,6 @@ const MyPage = () => {
                   ? { link }
                   : '파견교 홈페이지 링크를 등록하세요'
               }
-              onChange={(e) => setLink(e.target.value)}
               placeholder={link}
             />
           </s.InfoContainer>

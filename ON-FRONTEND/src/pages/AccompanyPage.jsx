@@ -25,7 +25,7 @@ function AccompanyPage() {
     const [country, setCountry] = useState(null);
     const [isCountryClicked, setIsCountryClicked] = useState(false);
     const [allData, setAllData] = useState([]);
-    const [isValidated, setIsValidated] = useState(false);
+    const [isValidated, setIsValidated] = useState(null);
 
     const handleIsDateClickedChange = () => {
       setIsDateClicked(false);
@@ -121,8 +121,8 @@ function AccompanyPage() {
         const user_data = await getData(GET_USER_INFO,{
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         }); 
-        setIsValidated(user_data.data.result.isDispatchConfirmed);
-        // console.log(user_data.data.result.isDispatchConfirmed);
+        setIsValidated(user_data.data.result.country);
+        console.log(user_data.data.result.country);
 
       } catch (error) {
         console.error('Error fetching data:', error);

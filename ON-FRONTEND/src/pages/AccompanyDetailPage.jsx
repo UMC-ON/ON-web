@@ -25,91 +25,43 @@ import CountryIcon from '../components/CountryIcon';
 
 import { showDate } from '../components/Common/InfoExp';
 
-import { getData } from '../api/Functions';
-import { GET_DETAIL_ACCOMPANY, GET_SIMILAR_ACCOMPANY } from '../api/urls';
-
-const accompanycards = [
-  {
-    imageUrls: [marketImg],
-    title: '8/2 버로우 마켓 동행하실 분 구해요!',
-    nickname: '몽몽',
-    age: 22,
-    gender: 'FEMALE',
-    startDate: "2024-08-19",
-    endDate: "2024-08-19",
-    currentRecruitNumber: 1,
-    totalRecruitNumber: 4,
-    travelArea: ['영국 전체', '영국 런던'],
-  },
-  {
-    imageUrls: [marketImg],
-    title: '8/2 버로우 마켓 동행하실 분 구해요!',
-    nickname: '몽몽',
-    age: 22,
-    gender: 'FEMALE',
-    startDate: "2024-08-19",
-    endDate: "2024-08-19",
-    currentRecruitNumber: 1,
-    totalRecruitNumber: 4,
-    travelArea: ['영국 전체', '영국 런던'],
-  },
-  {
-    imageUrls: [marketImg],
-    title: '8/2 버로우 마켓 동행하실 분 구해요!',
-    nickname: '몽몽',
-    age: 22,
-    gender: 'FEMALE',
-    startDate: "2024-08-19",
-    endDate: "2024-08-19",
-    currentRecruitNumber: 1,
-    totalRecruitNumber: 4,
-    travelArea: ['영국 전체', '영국 런던'],
-  },
-];
-
-const infocards = [
-  {
-    age: 22,
-    ageAnonymous: false,
-    dispatchedUniversity: 'Kings College London',
-    nickName: '제로',
-    gender: 'FEMALE',
-    universityAnonymous: false,
-    country: '영국',
-    title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!!🔥🔥',
-    content: '같이 시장 구경하면서 사진 찍으며 좋은 추억 남기고 싶으신 분들을 찾습니다!! 구경은 하고 싶은데, 그동안 혼자라서 고민하셨던 분들 대환영입니다!😄',
-    travelArea: ['영국 런던', '영국 전체'],
-    currentRecruitNumber: 1,
-    totalRecruitNumber: 4,
-    schedulePeriodDay: 1,
-    startDate: '2024-08-19',
-    endDate: '2024-08-19',
-    imageUrls: [marketImg],
-    createdAt: '2024-08-19T04:23:33.451Z',
-  },
-];
-
+import { useSelector } from 'react-redux';
+import { getData, postData } from '../api/Functions';
+import { GET_DETAIL_ACCOMPANY, GET_SIMILAR_ACCOMPANY, GET_USER_INFO, GET_ROOM_ID } from '../api/urls';
 
 function AccompanyDetailPage() {
   const location = useLocation();
   const { postId } = useParams();
+  
 
   const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
-  // const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
+  const [isValidated, setIsValidated] = useState(null);
+
   const [nickname, setNickName] = useState('');
-  // const [userId, setUserId] = useState(0);
+  const [userId, setUserId] = useState(0);
 
   const [infoData, setInfoData] = useState([]);
   const [accompanyData, setAccompanyData] = useState([]);
 
+  const userInfo = useSelector((state) => state.user.user);
+  
+
   const navigate = useNavigate();
 
   const openFirstModal = () => {
+    if (userInfo.country != null)
+    {
     console.log("First modal opened");
     setIsFirstModalOpen(true);
+    }
+    else
+    {
+      setIsSecondModalOpen(true);
+    }
   };
 
   const closeFirstModal = () => {
@@ -117,15 +69,15 @@ function AccompanyDetailPage() {
     setIsFirstModalOpen(false);
   };
 
-  // const openSecondModal = () => {
-  //   console.log("Second modal opened");
-  //   setIsSecondModalOpen(true);
-  // };
+  const openSecondModal = () => {
+    console.log("Second modal opened");
+    setIsSecondModalOpen(true);
+  };
 
-  // const closeSecondModal = () => {
-  //   console.log("Second modal closed");
-  //   setIsSecondModalOpen(false);
-  // };
+  const closeSecondModal = () => {
+    console.log("Second modal closed");
+    setIsSecondModalOpen(false);
+  };
 
   const openReportModal = () => {
     console.log("Report modal opened");
@@ -148,35 +100,49 @@ function AccompanyDetailPage() {
   };
 
   const handleBlueButtonClick = () => {
-    // applyData();
+    applyData();
     closeFirstModal();
     alert('start chat');
     // Start Chat
+  };
+
+  const openNextModal = () => {
+    setIsSecondModalOpen(false);
+    navigate('/mypage/schoolAuth');
   };
 
   function replaceHyphenWithDot(dateString) {
     return dateString.replace(/-/g, '.');
   }
 
-  // const applyData = async () => {
-  //   try {
-  //     const response = await postData(
-  //       APPLY_ACCOMPANY,
-  //       { companyPostId: postId, userId: userId },
-  //       {
-  //         Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-  //       }
-  //     );
+  const applyData = async () => {
+    try {
+      // console.log("userId: ");
+      // console.log(typeof infoData[0].userId);
+      // console.log(typeof infoData[0].userId);
+      // console.log("postId: ");
+      // console.log(typeof postId);
+      
+      const response = await postData(
+        GET_ROOM_ID,
+        { chatType: "COMPANY", receiverId: infoData[0].userId, postId: postId},
+        {
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        }
+      );
   
-  //     if (response) {
-  //       console.log('Application successful:', response.data);
-  //     } else {
-  //       console.error('Application failed');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error applying for accompany:', error);
-  //   }
-  // };
+      if (response) {
+        const roomId = response.data.result.roomId;
+        const senderName = infoData[0].nickname;
+        console.log('Application successful:', roomId);
+        navigate(`/chat/accompany/${roomId}`, { state: { roomId, senderName } });
+      } else {
+        console.error('Application failed');
+      }
+    } catch (error) {
+      console.error('Error applying for accompany:', error);
+    }
+  };
 
   const [loading, setLoading] = useState(true);
 
@@ -198,14 +164,14 @@ function AccompanyDetailPage() {
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         }); 
         setInfoData(info_data.data);
-        // console.log(info_data.data);
+        console.log(info_data.data);
         // 
 
-        // const user_data = await getData(GET_USER_INFO,{
-        //   Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        // }); 
-        // // console.log(user_data.data.result.id);
-        // setUserId(user_data.data.result.id);
+        const user_data = await getData(GET_USER_INFO,{
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        }); 
+        // console.log(user_data.data.result.id);
+        setUserId(user_data.data.result.id);
 
         // console.log(info_data.data[0].nickname);
         setNickName(info_data.data[0].nickname);
@@ -342,7 +308,7 @@ function AccompanyDetailPage() {
           nickname={nickname}
         />
         )}
-        {/* {isSecondModalOpen && <SecondModal closeModal={closeSecondModal} />} */}
+        {isSecondModalOpen && <SecondModal closeModal={closeSecondModal} openNextModal={openNextModal} />}
         {isReportModalOpen && <ReportModal closeModal={closeReportModal} />}
         {isShareModalOpen && <ShareModal closeModal={closeShareModal} />}
       </>

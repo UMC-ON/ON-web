@@ -70,8 +70,9 @@ export const GET_ALL_ACCOMPANY = '/api/v1/company-post';
 export const GET_FILTER_ACCOMPANY = '/api/v1/company-post/filter';
 export const GET_RECENT_ACCOMPANY = '/api/v1/company-post/recent';
 export const GET_DETAIL_ACCOMPANY = (companyPostId) => `/api/v1/company-post/${companyPostId}`;
-export const APPLY_ACCOMPANY = '/api/v1/company-participant/apply';
+// export const APPLY_ACCOMPANY = '/api/v1/company-participant/apply';
 export const GET_SIMILAR_ACCOMPANY = (companyPostId) => `/api/v1/company-post/${companyPostId}/nearby`;
+export const GET_ROOM_ID = '/api/v1/chat/request';
 
 //동행 구하기 글 작성
 export const WRITE_ACCOMPANY = `/api/v1/company-post`;
