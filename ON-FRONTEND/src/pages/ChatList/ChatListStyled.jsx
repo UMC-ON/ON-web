@@ -49,7 +49,7 @@ export const ModeButton = styled.div`
 export const ChatListWrapper = styled.section`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 90%;
 `;
 
 export const Line = styled.div`

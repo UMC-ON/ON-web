@@ -4,47 +4,106 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 import * as s from './MyPageStyled';
 import theme from '../../styles/theme';
 
+import { GET_CURRENT_INFO, PUT_NICKNAME, PUT_UNIV } from '../../api/urls';
+import { getData, postData, putData } from '../../api/Functions';
+import Loading from '../../components/Loading/Loading';
+
 const MyPage = () => {
+  const [userInfo, setUserInfo] = useState(null);
+  const [error, setError] = useState(null); // 에러를 저장할 상태
+  const [isLoading, setIsLoading] = useState(false);
+
   const [editSchoolName, setEditSchoolName] = useState(false);
-  const [schoolName, setSchoolName] = useState("King's College");
+  const [schoolName, setSchoolName] = useState('');
   const [originalSchoolName, setOriginalSchoolName] = useState('');
 
   const [editLink, setEditLink] = useState(false);
-  const [link, setLink] = useState('https://www.kcl.ac.uk/');
+  const [link, setLink] = useState('');
   const [originalLink, setOriginalLink] = useState('');
 
   const [editNickname, setEditNickname] = useState(false);
-  const [nickname, setNickname] = useState('ON');
+  const [nickname, setNickname] = useState('');
   const [originalNickname, setOriginalNickname] = useState('');
 
   const inputRef = useRef(null);
   const spanRef = useRef(null);
   const [inputWidth, setInputWidth] = useState('auto');
+
+  //axios 연결 GET
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getData(
+          GET_CURRENT_INFO,
+          {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          },
+          {},
+        );
+
+        if (response) {
+          console.log(response.data.result);
+          setUserInfo(response.data.result);
+          setSchoolName(response.data.result.dispatchedUniversity);
+          setLink(response.data.result.universityUrl);
+          setNickname(response.data.result.nickname);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // //axios put 닉네임 수정
   // useEffect(() => {
-  //   // Fetch the data from the backend when the component mounts
-  //   const fetchSchoolName = async () => {
-  //     // Replace with your actual fetch call
-  //     const response = await fetch('/api/school-name'); // example endpoint
-  //     const data = await response.json();
-  //     setSchoolName(data.schoolName);
-  //     setOriginalSchoolName(data.schoolName);
+  //   const fetchData = async () => {
+  //     setIsLoading(true);
+  //     try {
+  //       const response = await putData(
+  //         PUT_NICKNAME,
+  //         { nickname },
+  //         {
+  //           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+  //         },
+  //         {},
+  //       );
+
+  //       if (response) {
+  //         console.log(response.data.result);
+  //         setNickname(response.data.result.nickname);
+  //         setOriginalNickname(response.data.result.nickname);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
   //   };
-  //   fetchSchoolName();
+
+  //   fetchData();
   // }, []);
 
+  // 추가: 상태가 업데이트된 후에 값이 제대로 설정되었는지 확인
+  useEffect(() => {
+    console.log('school name:', schoolName);
+    console.log('link:', link);
+    console.log('userInfo:', userInfo);
+    console.log('nick:', nickname);
+  }, [schoolName, link, userInfo, nickname]);
+
+  //수정하기
   const clickEditSchoolName = () => {
     setEditSchoolName(!editSchoolName);
     if (!editSchoolName) {
+      //수정중이 아닐 때
       setSchoolName(originalSchoolName);
     }
   };
-
-  useEffect(() => {
-    if (spanRef.current) {
-      setInputWidth(`${spanRef.current.offsetWidth}px`);
-    }
-  }, [schoolName]);
-
   const clickEditLink = () => {
     setEditLink(!editLink);
     if (!editLink) {
@@ -58,6 +117,16 @@ const MyPage = () => {
       setNickname(originalNickname);
     }
   };
+  //입력에 따라 인풋 길이 바꾸기
+  useEffect(() => {
+    if (spanRef.current) {
+      setInputWidth(`${spanRef.current.offsetWidth}px`);
+    }
+  }, [schoolName]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <s.MyPageLayout>
@@ -91,6 +160,7 @@ const MyPage = () => {
           name="info"
         >
           <s.InfoContainer>
+            {/* -------------------------- 파견교 -------------------------- */}
             <s.Title>나의 파견교</s.Title>
             <s.EditBtn
               onClick={clickEditSchoolName}
@@ -98,44 +168,149 @@ const MyPage = () => {
             >
               {editSchoolName ? '완료' : '수정'}
             </s.EditBtn>
-            <s.SchoolNameBox>
-              <div style={{ display: 'flex', alignItems: ' center' }}>
-                <s.SchoolNameSpan ref={spanRef}>
-                  {schoolName || '파견교를 입력하세요'}
-                </s.SchoolNameSpan>
-                <s.SchoolNameInput
-                  ref={inputRef}
-                  disabled={!editSchoolName}
-                  value={schoolName}
-                  onChange={(e) => setSchoolName(e.target.value)}
-                  placeholder={schoolName}
-                  style={{
-                    width: inputWidth,
-                  }}
-                />
-                <NavLink to="/mypage/schoolAuth">
-                  <s.VerifyButton>인증하기</s.VerifyButton>
-                </NavLink>
-              </div>
-              <s.RadioBox>
-                <s.TypeRadio
-                  type="radio"
-                  disabled={!editSchoolName}
-                  id="exchange"
-                  name="type"
-                />
-                <s.TypeLabel id="exchange">교환</s.TypeLabel>
-                <s.TypeRadio
-                  type="radio"
-                  disabled={!editSchoolName}
-                  id="visit"
-                  name="type"
-                />
-                <s.TypeLabel id="visit">방문</s.TypeLabel>
-              </s.RadioBox>
-            </s.SchoolNameBox>
+            {userInfo?.userStatus === 'TEMPORARY' ? (
+              // NON_CERTIFIED 상태일 때 렌더링할 내용
+              <s.SchoolNameBox>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <s.SchoolNameInput
+                    ref={inputRef}
+                    disabled={!editSchoolName}
+                    value={schoolName}
+                    onChange={(e) => setSchoolName(e.target.value)}
+                    placeholder="파견교를 입력하세요"
+                    style={{
+                      width: inputWidth,
+                    }}
+                  />
+                </div>
+                <s.RadioBox>
+                  <s.TypeRadio
+                    type="radio"
+                    disabled={!editSchoolName}
+                    id="exchange"
+                    name="type"
+                  />
+                  <s.TypeLabel htmlFor="exchange">교환</s.TypeLabel>
+                  <s.TypeRadio
+                    type="radio"
+                    disabled={!editSchoolName}
+                    id="visit"
+                    name="type"
+                  />
+                  <s.TypeLabel htmlFor="visit">방문</s.TypeLabel>
+                </s.RadioBox>
+              </s.SchoolNameBox>
+            ) : userInfo?.userStatus === 'NON_CERTIFIED' ||
+              userInfo?.userStatus === 'DENIED' ? (
+              <s.SchoolNameBox>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <s.SchoolNameSpan ref={spanRef}>
+                    {schoolName || '파견교를 입력하세요'}
+                  </s.SchoolNameSpan>
+                  <s.SchoolNameInput
+                    ref={inputRef}
+                    disabled={!editSchoolName}
+                    value={schoolName}
+                    onChange={(e) => setSchoolName(e.target.value)}
+                    placeholder={schoolName}
+                    style={{
+                      width: inputWidth,
+                    }}
+                  />
+                  <NavLink to="/mypage/schoolAuth">
+                    <s.VerifyButton>인증하기</s.VerifyButton>
+                  </NavLink>
+                </div>
+                <s.RadioBox>
+                  <s.TypeRadio
+                    type="radio"
+                    disabled={!editSchoolName}
+                    id="exchange"
+                    name="type"
+                  />
+                  <s.TypeLabel htmlFor="exchange">교환</s.TypeLabel>
+                  <s.TypeRadio
+                    type="radio"
+                    disabled={!editSchoolName}
+                    id="visit"
+                    name="type"
+                  />
+                  <s.TypeLabel htmlFor="visit">방문</s.TypeLabel>
+                </s.RadioBox>
+              </s.SchoolNameBox>
+            ) : userInfo?.userStatus === 'AWAIT' ? (
+              // DISPATCHED 상태이면서 파견이 확인된 경우 렌더링할 내용
+              <s.SchoolNameBox>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <s.SchoolNameSpan ref={spanRef}>
+                    {schoolName || '파견교를 입력하세요'}
+                  </s.SchoolNameSpan>
+                  <s.SchoolNameInput
+                    ref={inputRef}
+                    disabled={!editSchoolName}
+                    value={schoolName}
+                    placeholder={schoolName}
+                    style={{
+                      width: inputWidth,
+                    }}
+                  />
+                  <s.VerifyButton>인증 대기중</s.VerifyButton>
+                </div>
+                <s.RadioBox>
+                  <s.TypeRadio
+                    type="radio"
+                    disabled={!editSchoolName}
+                    id="exchange"
+                    name="type"
+                  />
+                  <s.TypeLabel htmlFor="exchange">교환</s.TypeLabel>
+                  <s.TypeRadio
+                    type="radio"
+                    disabled={!editSchoolName}
+                    id="visit"
+                    name="type"
+                  />
+                  <s.TypeLabel htmlFor="visit">방문</s.TypeLabel>
+                </s.RadioBox>
+              </s.SchoolNameBox>
+            ) : userInfo?.userStatus === 'ACTIVE' ? (
+              // DISPATCHED 상태이지만 파견이 확인되지 않은 경우 렌더링할 내용
+              <s.SchoolNameBox>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <s.SchoolNameSpan ref={spanRef}>
+                    {schoolName || '파견교를 입력하세요'}
+                  </s.SchoolNameSpan>
+                  <s.SchoolNameInput
+                    ref={inputRef}
+                    disabled={!editSchoolName}
+                    value={schoolName}
+                    onChange={(e) => setSchoolName(e.target.value)}
+                    placeholder={schoolName}
+                    style={{
+                      width: inputWidth,
+                    }}
+                  />
+                </div>
+                <s.RadioBox>
+                  <s.TypeRadio
+                    type="radio"
+                    disabled={!editSchoolName}
+                    id="exchange"
+                    name="type"
+                  />
+                  <s.TypeLabel htmlFor="exchange">교환</s.TypeLabel>
+                  <s.TypeRadio
+                    type="radio"
+                    disabled={!editSchoolName}
+                    id="visit"
+                    name="type"
+                  />
+                  <s.TypeLabel htmlFor="visit">방문</s.TypeLabel>
+                </s.RadioBox>
+              </s.SchoolNameBox>
+            ) : null}
           </s.InfoContainer>
-
+          {/* -------------------------- 파견교 홈페이지 링크 -------------------------- */}
           <s.InfoContainer>
             <s.Title>파견교 홈페이지 링크</s.Title>
             <s.EditBtn
@@ -146,7 +321,11 @@ const MyPage = () => {
             </s.EditBtn>
             <s.TextInput
               disabled={!editLink}
-              value={link}
+              value={
+                link && link.length > 0
+                  ? { link }
+                  : '파견교 홈페이지 링크를 등록하세요'
+              }
               onChange={(e) => setLink(e.target.value)}
               placeholder={link}
             />
@@ -154,26 +333,28 @@ const MyPage = () => {
 
           <div style={{ display: 'flex', margin: '2rem 0' }}>
             <s.Title>파견교 소재 국가</s.Title>
-            <s.Country>영국</s.Country>
+            <s.Country>
+              {userInfo?.country ? userInfo.country : '없음'}
+            </s.Country>
           </div>
           <s.InfoContainer>
             <s.Title>Email</s.Title>
             <s.InfoBox>
-              <span>on@gmail.com</span> {/* 추후에 값 불러와서 넣어주기 */}
+              <span>{userInfo?.email ? userInfo.email : '없음'}</span>
             </s.InfoBox>
           </s.InfoContainer>
 
           <s.InfoContainer>
             <s.Title>이름</s.Title>
             <s.InfoBox>
-              <span>김온</span> {/* 추후에 값 불러와서 넣어주기 */}
+              <span>김온</span>
             </s.InfoBox>
           </s.InfoContainer>
 
           <s.InfoContainer>
             <s.Title>전화번호</s.Title>
             <s.InfoBox>
-              <span>010-1111-1111</span> {/* 추후에 값 불러와서 넣어주기 */}
+              <span>{userInfo?.phone ? userInfo.phone : '없음'}</span>
             </s.InfoBox>
           </s.InfoContainer>
 

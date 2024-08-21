@@ -9,28 +9,98 @@ import NoContent from '../../components/NoContent/NoContent';
 import Loading from '../../components/Loading/Loading';
 import img from '../../assets/images/country_flag/000.svg';
 
+import { GET_TRADE_LIST, GET_ACCOMPANY_LIST } from '../../api/urls';
+import { getData } from '../../api/Functions';
+
 const ChatList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentMode, setCurrentMode] = useState('accompany');
-  const [isAccompanyChat, setIsAccompanyChat] = useState(['내용']);
-  const [isTradeChat, setIsTradeChat] = useState(['임시내용']);
+  const [accompanyChatResult, setAccompanyChatResult] = useState([]);
+  const [tradeChatResult, setTradeChatResult] = useState([]);
 
+  //채팅 모드 바꾸는 함수
   const handleModeChange = (mode) => () => {
     if (currentMode !== mode) {
       setCurrentMode(mode);
     }
   };
 
-  const isAccompanyChatEmpty = isAccompanyChat.length === 0;
-  const isTradeChatEmpty = isTradeChat.length === 0;
-
   useEffect(() => {
     console.log('Current Mode:', currentMode);
   }, [currentMode]);
 
   useEffect(() => {
-    console.log('Current ac:', isAccompanyChat);
+    console.log('Current ac:', accompanyChatResult);
   }, [currentMode]);
+
+  //채팅 존재 여부 확인 변수
+  const isAccompanyChatEmpty = accompanyChatResult.length === 0;
+  const isTradeChatEmpty = tradeChatResult.length === 0;
+
+  //axios 동행 구하기
+  useEffect(() => {
+    const fetchAccompanyChat = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getData(
+          GET_ACCOMPANY_LIST,
+          {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          },
+          {},
+        );
+
+        if (response) {
+          console.log(response.data.result);
+          console.log(response.data.result.roomList);
+          setAccompanyChatResult(response.data.result.roomList);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAccompanyChat();
+  }, [currentMode === 'accompany']);
+
+  //axios 물품 거래
+  useEffect(() => {
+    const fetchTradeChat = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getData(
+          GET_TRADE_LIST,
+          {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          },
+          {},
+        );
+
+        if (response) {
+          console.log(response.data.result);
+          console.log(response.data.result.roomList);
+          setTradeChatResult(response.data.result.roomList);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTradeChat();
+  }, [currentMode === 'trade']);
+
+  //콘솔 출력 함수들
+  useEffect(() => {
+    console.log('trade chat: ', tradeChatResult);
+  }, [tradeChatResult]);
+
+  useEffect(() => {
+    console.log('acc chat: ', accompanyChatResult);
+  }, [accompanyChatResult]);
 
   return (
     <s.ChatListLayout>
@@ -54,38 +124,62 @@ const ChatList = () => {
       {isLoading ? (
         <Loading />
       ) : currentMode === 'accompany' ? ( //동행 구하기
-        isAccompanyChatEmpty ? (
-          <NoContent
-            content="채팅 내역"
-            style={{ paddingBottom: '10rem' }}
-          />
-        ) : (
-          <NavLink to="/chat">
-            <s.ChatListWrapper>
-              <SingleAccompanyChat
-                img={img} //컨트리 넘겨줘야 함.
-                nickName="동행"
-                time="2023"
-                message="혹시 8월 중 며칠 정도에 출발하실 예정이신가요?"
-              />
-              <s.Line />
-            </s.ChatListWrapper>
-          </NavLink>
-        )
-      ) : isTradeChatEmpty ? ( //물품거래
-        <NoContent content="채팅 내역" />
-      ) : (
-        <NavLink to="/chat">
-          <s.ChatListWrapper>
-            <SingleTradeChat
-              img={img}
-              nickName="물품거래"
-              time="2023"
-              message="혹시 8월 중 며칠 정도에 출발하실 예정이신가요?"
+        <>
+          {accompanyChatResult && accompanyChatResult.length > 0 ? (
+            accompanyChatResult.map((data) => (
+              <s.ChatListWrapper>
+                <SingleAccompanyChat
+                  key={data.roomId}
+                  roomId={data.roomId}
+                  img={data.location}
+                  nickName={data.senderName}
+                  time={data.lastChatTime !== null ? data.lastChatTime : ''}
+                  message={
+                    data.lastMessage !== null
+                      ? data.lastMessage
+                      : '채팅을 시작해보새요!'
+                  }
+                  senderName={data.senderName}
+                />
+                <s.Line />
+              </s.ChatListWrapper>
+            ))
+          ) : (
+            <NoContent
+              content="채팅 내역"
+              style={{ paddingBottom: '10rem' }}
             />
-            <s.Line />
-          </s.ChatListWrapper>
-        </NavLink>
+          )}
+        </>
+      ) : (
+        //물품거래
+        <>
+          {tradeChatResult && tradeChatResult.length > 0 ? (
+            tradeChatResult.map((data) => (
+              <s.ChatListWrapper>
+                <SingleTradeChat
+                  key={data.roomId}
+                  roomId={data.roomId}
+                  img={data.profileImg}
+                  nickName={data.senderName}
+                  time={data.lastChatTime !== null ? data.lastChatTime : ''}
+                  message={
+                    data.lastMessage !== null
+                      ? data.lastMessage
+                      : '새로운 채팅을 시작해보새요!'
+                  }
+                  senderName={data.senderName}
+                />
+                <s.Line />
+              </s.ChatListWrapper>
+            ))
+          ) : (
+            <NoContent
+              content="채팅 내역"
+              style={{ paddingBottom: '10rem' }}
+            />
+          )}
+        </>
       )}
 
       <BottomTabNav />
