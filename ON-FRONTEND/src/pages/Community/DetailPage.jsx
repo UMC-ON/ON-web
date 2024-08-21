@@ -382,7 +382,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
 export default DetailPage;
 
 const ImgModal = styled.div`
-  position: absolute;
+  position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -391,7 +391,8 @@ const ImgModal = styled.div`
   top: 0;
   // max-width: 24.375rem;
   width: 100%;
-  height: 100vh;
+  max-width: 480px;
+  height: 100%;
   background: black;
   z-index: 3;
 `;
