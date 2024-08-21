@@ -33,14 +33,14 @@ export const StyledBtn = styled.button`
 export const WrapDiv = styled.div`
   word-break: break-all;
   //border: 1px solid black;
-  //width: ${(props) => (props.width ? props.width : 'auto')};
+  width: ${(props) => (props.width ? props.width : 'auto')};
   //max-width: calc(100vw / 8);
   text-align: center;
 `;
 
 export const KeepAllDiv = styled.div`
   word-break: keep-all;
-  //width: ${(props) => (props.width ? props.width : 'auto')};
+  width: ${(props) => (props.width ? props.width : 'auto')};
   text-align: center;
 `;
 export const Image = styled.img`

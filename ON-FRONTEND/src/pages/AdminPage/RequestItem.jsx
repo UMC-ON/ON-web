@@ -38,11 +38,12 @@ const RequestItem = ({ userInfo, photoURL, requestDate }) => {
         {/* <s.WrapDiv width="2rem">
           {requestDate.getMonth() + 1}/{requestDate.getDate()}
         </s.WrapDiv> */}
-        <s.WrapDiv width="3rem">{userInfo.id}</s.WrapDiv>
-        <s.WrapDiv width="3rem">{userInfo.userId}</s.WrapDiv>
-        <s.WrapDiv width="2rem">{userInfo.permitStatus}</s.WrapDiv>
-        <s.WrapDiv width="2rem">{userInfo.country}</s.WrapDiv>
-        <s.KeepAllDiv width="4.5rem">
+        <s.WrapDiv width="1rem">{userInfo.id}</s.WrapDiv>
+        {/* <s.WrapDiv width="2rem">{userInfo.userId}</s.WrapDiv> */}
+        <s.WrapDiv width="3rem">{userInfo.userName}</s.WrapDiv>
+        <s.WrapDiv width="2.5rem">{userInfo.permitStatus}</s.WrapDiv>
+        <s.WrapDiv width="3rem">{userInfo.country}</s.WrapDiv>
+        <s.KeepAllDiv width="4rem">
           {userInfo.dispatchedUniversity}
         </s.KeepAllDiv>
         <s.StyledBtn

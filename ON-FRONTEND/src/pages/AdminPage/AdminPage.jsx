@@ -4,13 +4,19 @@ import * as s from './AdminPageStyled';
 import { postData } from '../../api/Functions';
 import { GET_REQUESTS_OF } from '../../api/urls';
 import Loading from '../../components/Loading/Loading';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const AdminPage = () => {
+  const nav = useNavigate();
+  let user = useSelector((state) => state.user.user);
+
   const [imgURL, setImgUrl] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [requestList, setRequestList] = useState(null);
   const [permitStatus, setPermitStatus] = useState('AWAIT');
   const [isModalOpen, setModalOpen] = useState(false);
+
   useEffect(() => {
     if (isModalOpen) {
       setModalOpen(true);
@@ -36,24 +42,30 @@ const AdminPage = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    if (user.userStatus !== 'ADMIN') {
       setIsLoading(true);
-      const response = await postData(
-        GET_REQUESTS_OF(permitStatus),
-        {},
-        {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        },
-        { page: 0, size: 20, sort: 'DESC' },
-      );
-      if (response) {
-        console.log(response.data.result.content);
-        setRequestList(response.data.result.content);
-        return response.data.result.content;
-      }
-    };
-    fetchData();
-    setIsLoading(false);
+      alert('관리자만 열람할 수 있습니다.');
+      nav('/');
+    } else {
+      const fetchData = async () => {
+        setIsLoading(true);
+        const response = await postData(
+          GET_REQUESTS_OF(permitStatus),
+          {},
+          {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          },
+          { page: 0, size: 20, sort: 'DESC' },
+        );
+        if (response) {
+          console.log(response.data.result.content);
+          setRequestList(response.data.result.content);
+          return response.data.result.content;
+        }
+      };
+      fetchData();
+      setIsLoading(false);
+    }
   }, [permitStatus]);
   if (isLoading) {
     return <Loading />;
@@ -90,11 +102,11 @@ const AdminPage = () => {
         </select>
       </div>
       <s.GridContainer style={{ padding: '1rem 0 ' }}>
-        <s.KeepAllDiv width="2rem">요청 일자</s.KeepAllDiv>
+        <s.KeepAllDiv width="1rem">#</s.KeepAllDiv>
         <s.WrapDiv width="3rem">이름</s.WrapDiv>
-        <s.WrapDiv width="2rem">상태</s.WrapDiv>
-        <s.KeepAllDiv width="2rem">파견 국가</s.KeepAllDiv>
-        <s.WrapDiv width="4.5rem">파견교</s.WrapDiv>
+        <s.WrapDiv width="2.5rem">상태</s.WrapDiv>
+        <s.KeepAllDiv width="3rem">파견 국가</s.KeepAllDiv>
+        <s.WrapDiv width="4rem">파견교</s.WrapDiv>
         <s.WrapDiv width="3.4rem">이미지</s.WrapDiv>
         <s.WrapDiv width="2rem">승인</s.WrapDiv>
         <s.WrapDiv width="2rem">거절</s.WrapDiv>
