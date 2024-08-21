@@ -49,18 +49,22 @@ export const POST_CHAT = (roomId) => `/api/v1/chat/${roomId}/send`;
 
 //물품거래글
 export const GET_ITEM_LIST = `/api/v1/market-post`;
-export const GET_SPECIFIC_ITEM = (marketPostId) => `/api/v1/market-post/${marketPostId}`;
-export const GET_NEARBY_ITEM = (marketPostId) => `/api/v1/market-post/${marketPostId}/nearby`;
+export const GET_SPECIFIC_ITEM = (marketPostId) =>
+  `/api/v1/market-post/${marketPostId}`;
+export const GET_NEARBY_ITEM = (marketPostId) =>
+  `/api/v1/market-post/${marketPostId}/nearby`;
 export const GET_ITEM_SEARCH = `/api/v1/market-post/search`;
 export const GET_FILTER_ITEM = `/api/v1/market-post/filter`;
 export const POST_ITEM = `/api/v1/market-post`;
 export const GET_MARKET_ROOMID = `/api/v1/chat/request`;
-
+export const GET_MY_MARKET_POST = (userId) =>
+  `/api/v1/market-post/user/${userId}`;
 
 //스크랩
 export const POST_SCRAP = `/api/v1/scrap`;
 export const GET_SCRAP = (userId) => `/api/v1/scrap/${userId}`;
-export const DELETE_SCRAP = (userId, marketPostId) => `/api/v1/scrap/${userId}/${marketPostId}`;
+export const DELETE_SCRAP = (userId, marketPostId) =>
+  `/api/v1/scrap/${userId}/${marketPostId}`;
 
 //일기 작성
 export const GET_DIARY = `/api/v1/diary/list`;
@@ -72,10 +76,14 @@ export const GET_NEAR_ACCOMPANY = '/api/v1/home/company/list';
 export const GET_ALL_ACCOMPANY = '/api/v1/company-post';
 export const GET_FILTER_ACCOMPANY = '/api/v1/company-post/filter';
 export const GET_RECENT_ACCOMPANY = '/api/v1/company-post/recent';
-export const GET_DETAIL_ACCOMPANY = (companyPostId) => `/api/v1/company-post/${companyPostId}`;
+export const GET_DETAIL_ACCOMPANY = (companyPostId) =>
+  `/api/v1/company-post/${companyPostId}`;
 // export const APPLY_ACCOMPANY = '/api/v1/company-participant/apply';
-export const GET_SIMILAR_ACCOMPANY = (companyPostId) => `/api/v1/company-post/${companyPostId}/nearby`;
+export const GET_SIMILAR_ACCOMPANY = (companyPostId) =>
+  `/api/v1/company-post/${companyPostId}/nearby`;
 export const GET_ROOM_ID = '/api/v1/chat/request';
+export const GET_MY_ACCOMPANY_POST = (userId) =>
+  `/api/v1/company-post/user/${userId}`;
 
 //동행 구하기 글 작성
 export const WRITE_ACCOMPANY = `/api/v1/company-post`;

@@ -23,7 +23,7 @@ const MyPage = () => {
 
   const [editNickname, setEditNickname] = useState(false);
   const [nickname, setNickname] = useState('');
-  const [originalNickname, setOriginalNickname] = useState('');
+  const [nicknameInput, setNicknameInput] = useState('');
 
   const inputRef = useRef(null);
   const spanRef = useRef(null);
@@ -68,33 +68,38 @@ const MyPage = () => {
     console.log('nick:', nickname);
   }, [schoolName, link, userInfo, nickname]);
 
-  //수정하기
-  const clickEditSchoolName = () => {
-    setEditSchoolName(!editSchoolName);
-    if (!editSchoolName) {
-      //수정중이 아닐 때
-      setSchoolName(originalSchoolName);
+  const clickEditNickname = () => {
+    if (!editNickname) {
+      console.log('닉네임 수정 중');
     }
-  };
-  const clickEditLink = () => {
-    setEditLink(!editLink);
-    if (!editLink) {
-      setLink(originalLink);
-    }
+    setEditNickname(!editNickname);
   };
 
-  const clickEditNickname = () => {
-    setEditNickname(!editNickname);
-    if (!editNickname) {
-      setNickname(originalNickname);
-    }
-  };
-  //입력에 따라 인풋 길이 바꾸기
   useEffect(() => {
-    if (spanRef.current) {
-      setInputWidth(`${spanRef.current.offsetWidth}px`);
-    }
-  }, [schoolName]);
+    console.log('수정 상태', editNickname);
+  }, []);
+
+  //   //수정하기
+  // const clickEditSchoolName = () => {
+  //   setEditSchoolName(!editSchoolName);
+  //   if (!editSchoolName) {
+  //     //수정중이 아닐 때
+  //     setSchoolName(originalSchoolName);
+  //   }
+  // };
+
+  // const clickEditLink = () => {
+  //   setEditLink(!editLink);
+  //   if (!editLink) {
+  //     setLink(originalLink);
+  //   }
+  // };
+  // //입력에 따라 인풋 길이 바꾸기
+  // useEffect(() => {
+  //   if (spanRef.current) {
+  //     setInputWidth(`${spanRef.current.offsetWidth}px`);
+  //   }
+  // }, [schoolName]);
 
   if (isLoading) {
     return <Loading />;
@@ -291,16 +296,16 @@ const MyPage = () => {
 
           <s.InfoContainer style={{ paddingBottom: '2rem' }}>
             <s.Title>닉네임</s.Title>
-            <s.EditBtn
-              onClick={clickEditNickname}
+            {/* <s.EditBtn
+              onClick={() => clickEditNickname}
               color={editNickname ? theme.blueGra : theme.lightGray}
             >
               {editNickname ? '완료' : '수정'}
-            </s.EditBtn>
+            </s.EditBtn> */}
             <s.TextInput
               disabled={!editNickname}
               value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
+              onChange={(e) => setNicknameInput(e.target.value)}
               placeholder={nickname}
             />
           </s.InfoContainer>

@@ -2,6 +2,8 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 import * as s from './MyPostStyled';
 import { useState, useEffect } from 'react';
 import { getData } from '../../api/Functions';
+import { GET_MY_ACCOMPANY_POST, GET_MY_MARKET_POST } from '../../api/urls';
+import { useSelector } from 'react-redux';
 
 import Loading from '../../components/Loading/Loading';
 import NoContent from '../../components/NoContent/NoContent';
@@ -12,14 +14,148 @@ import Img from '../../assets/images/postImgExample.svg';
 
 const MyPost = () => {
   const [currentMode, setCurrentMode] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   //정보글: 0, 자유글: 1, 동행 구하기: 2, 물품거래: 3
-  const [infoPostResult, setInfoPostResult] = useState(['dud', 'asf']); //삭제하기
-  const [freePostResult, setFreePostResult] = useState(['dud', 'asf']);
-  const [accompanyPostResult, setAccompanyPostResult] = useState([
-    'dud',
-    'asf',
-  ]);
-  const [tradePostResult, setTradePostResult] = useState(['dud', 'asf']);
+  const [infoPostResult, setInfoPostResult] = useState([]); //삭제하기
+  const [freePostResult, setFreePostResult] = useState([]);
+  const [accompanyPostResult, setAccompanyPostResult] = useState([]);
+  const [tradePostResult, setTradePostResult] = useState([]);
+
+  let userInfo = useSelector((state) => state.user.user);
+
+  //동행 구하기
+  useEffect(() => {
+    const fetchAccPost = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getData(
+          GET_MY_ACCOMPANY_POST,
+          {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+          { userId: userInfo.id },
+        );
+
+        if (response) {
+          console.log('accompany: ', response.data);
+          setAccompanyPostResult(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAccPost();
+  }, []);
+
+  //거래
+  useEffect(() => {
+    const fetchTradePost = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getData(
+          GET_MY_MARKET_POST,
+          {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+          { userId: userInfo.id },
+        );
+
+        if (response) {
+          console.log('MARKET: ', response.data);
+          setTradePostResult(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTradePost();
+  }, []);
+
+  //내 정보글 보기
+  useEffect(() => {
+    const fetchMyInfoPost = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getData(
+          GET_MY_ACCOMPANY_POST,
+          {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+          { userId: userInfo.id, boardType: 'INFO' },
+        );
+
+        if (response) {
+          console.log('accompany: ', response.data);
+          setAccompanyPostResult(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMyInfoPost();
+  }, []);
+
+  //내 정보글 보기
+  useEffect(() => {
+    const fetchMyInfoPost = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getData(
+          GET_MY_ACCOMPANY_POST,
+          {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+          { userId: userInfo.id, boardType: 'INFO' },
+        );
+
+        if (response) {
+          console.log('accompany: ', response.data);
+          setAccompanyPostResult(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMyInfoPost();
+  }, []);
+
+  useEffect(() => {
+    const fetchMyFreePost = async () => {
+      setIsLoading(true);
+      try {
+        const response = await getData(
+          GET_MY_ACCOMPANY_POST,
+          {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+          { userId: userInfo.id },
+        );
+
+        if (response) {
+          console.log('accompany: ', response.data);
+          setAccompanyPostResult(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMyFreePost();
+  }, []);
 
   const handleModeChange = (mode) => {
     if (currentMode !== mode) {
