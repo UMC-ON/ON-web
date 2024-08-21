@@ -98,7 +98,7 @@ function AccompanyDetailPage() {
     console.log("Share modal closed");
     setIsShareModalOpen(false);
   };
-
+ 
   const handleBlueButtonClick = () => {
     closeFirstModal();
     applyData();
