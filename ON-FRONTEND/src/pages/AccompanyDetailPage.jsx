@@ -48,8 +48,8 @@ function AccompanyDetailPage() {
   const [accompanyData, setAccompanyData] = useState([]);
 
   const userInfo = useSelector((state) => state.user.user);
-  
-
+   
+ 
   const navigate = useNavigate();
 
   const openFirstModal = () => {
