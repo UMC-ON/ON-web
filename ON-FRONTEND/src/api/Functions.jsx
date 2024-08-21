@@ -1,14 +1,15 @@
 import axios from 'axios';
+const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
 const apiClient = axios.create({
-  baseURL: 'http://13.209.255.118:8080/',
+  baseURL: serverAddress + '/',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
 const multipartApiClient = axios.create({
-  baseURL: 'http://13.209.255.118:8080/',
+  baseURL: serverAddress + '/',
   headers: {
     'Content-Type': 'multipart/form-data;',
   },
