@@ -195,19 +195,20 @@ function HomePage() {
           </BigContainer>
           
 
-          <BlueContainer>
-
           {userData.map((card, index) => (
-            <BigContainer key={index}>
+          <BlueContainer key = {index}>
+
+            <BigContainer>
                 <LeftContainer>
                 <MiddleText spacing="1vh">나를 위한</MiddleText>
                 <MiddleText color="#3E73B2">{card.country} 근교 여행지</MiddleText>
                 </LeftContainer>
             </BigContainer>
-          ))}
 
-            <CardList selectedCountry={'영국'}/>
+            <CardList selectedCountry={card.country}/>
           </BlueContainer>
+          ))}
+     
 
           <FlexContainer onClick={goToInfoCommunity}>
               <MiddleText spacing="1vh">최신 정보글</MiddleText>

@@ -23,7 +23,7 @@ export const SubmitForm = styled.form`
 
 export const TextInputContainer = styled.div`
   height: 2rem;
-  width: 100%;
+  width: 90%;
   border: 0;
   position: relative;
   box-sizing: border-box;
@@ -50,11 +50,3 @@ export const SendButton = styled.div`
   background: ${theme.blueGra};
   right: 0;
 `;
-
-// export const TextInputContainer = styled.div`
-//   width: 90%;
-//   height: 2rem;
-//   position: relative;  /* Set position relative for absolute positioning inside */
-//   display: flex;
-//   align-items: center;
-// `;

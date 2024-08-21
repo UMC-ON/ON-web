@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -22,13 +22,56 @@ function SellPage() {
   const [showAvailable, setShowAvailable] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState('');
   const [isPickerVisible, setIsPickerVisible] = useState(false);
-  const [tempTransaction, setTempTransaction] = useState('');  // 임시 선택 상태 추가
+  const [tempTransaction, setTempTransaction] = useState(''); 
   const [showCountry, setShowCountry] = useState(false);
   const [country, setCountry] = useState(null);
   const [isCountryClicked, setIsCountryClicked] = useState(false);
   const [items, setItems] = useState([]);
+  const [searchKeyword, setSearchKeyword] = useState(''); // 검색어 상태 추가
 
   const navigate = useNavigate();
+
+  const fetchItems = async (dealType = '', currentCountry = '') => {
+    try {
+      const url = 'https://13.209.255.118.nip.io/api/v1/market-post/filter';
+      const params = {};
+
+      if (dealType) params.dealType = dealType === '직거래' ? 'DIRECT' : 'DELIVERY';
+      if (currentCountry) params.currentCountry = currentCountry;
+
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params,
+      });
+
+      setItems(response.data);
+    } catch (error) {
+      console.error('필터링 중 오류 발생:', error);
+    }
+  };
+
+  const fetchSearchResults = async () => {
+    try {
+      const url = 'https://13.209.255.118.nip.io/api/v1/market-post/search';
+      const params = {
+        keyword: searchKeyword, // 검색어를 쿼리 스트링으로 전달
+      };
+
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params,
+      });
+
+      setItems(response.data);
+      console.log(params);
+    } catch (error) {
+      console.error('검색 중 오류 발생:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -50,6 +93,10 @@ function SellPage() {
     fetchItems();
   }, [showAvailable]);
 
+  useEffect(() => {
+    fetchItems(selectedTransaction, country);
+  }, [selectedTransaction, country]);
+
   const resetCountryClick = () => {
     setIsCountryClicked(false);
     setCountry(null);
@@ -66,9 +113,9 @@ function SellPage() {
   };
 
   const handleResetTransaction = () => {
-    setSelectedTransaction(''); // 거래방식 초기화
-    setTempTransaction(''); // 임시 상태도 초기화
-    setIsPickerVisible(false); // Picker 창 닫기
+    setSelectedTransaction('');
+    setTempTransaction('');
+    setIsPickerVisible(false);
   };
   
   const togglePickerVisibility = () => {
@@ -77,17 +124,17 @@ function SellPage() {
     } else {
       setIsPickerVisible(!isPickerVisible);
       if (!isPickerVisible) {
-        setTempTransaction(selectedTransaction);  // 초기 열기 시 임시 상태를 현재 선택된 값으로 설정
+        setTempTransaction(selectedTransaction);
       }
     }
   };
 
   const handleTransactionChange = (transaction) => {
-    setTempTransaction(transaction);  // 임시 상태에만 반영
+    setTempTransaction(transaction);
   };
 
   const handleApply = () => {
-    setSelectedTransaction(tempTransaction);  // 적용 시 선택된 거래 방식을 업데이트
+    setSelectedTransaction(tempTransaction);
     setIsPickerVisible(false);
   };
 
@@ -99,15 +146,18 @@ function SellPage() {
     navigate('./post');
   };
 
-  
-
   return (
     <>
       <SellPageHeader pageName={'거래하기'} />
       <Space /><br />
       <SearchContainer>
-        <Search placeholder='국가 / 물품으로 검색해 보세요.' />
-        <SearchIcon src={search_icon} />
+        <Search
+          placeholder='국가 / 물품으로 검색해 보세요.'
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+          onKeyPress={(e) => { if (e.key === 'Enter') e.preventDefault(); }} // 엔터키 동작 막기
+        />
+        <SearchIcon src={search_icon} onClick={fetchSearchResults} /> {/* 검색 아이콘 클릭 시 검색 요청 */}
       </SearchContainer>
       <br /><br />
       <FlexContainer>
@@ -127,10 +177,10 @@ function SellPage() {
               src={selectedTransaction ? whiteCloseIcon : arrowIcon}
               onClick={(e) => {
                 if (selectedTransaction) {
-                  e.stopPropagation(); // 이벤트 버블링 방지
-                  handleResetTransaction(); // 거래방식 초기화
+                  e.stopPropagation();
+                  handleResetTransaction();
                 } else {
-                  togglePickerVisibility(); // Picker 열기/닫기
+                  togglePickerVisibility();
                 }
               }}
             />
@@ -150,7 +200,7 @@ function SellPage() {
       <TransactionPicker
         isVisible={isPickerVisible}
         tempTransaction={tempTransaction}
-        onTempTransactionChange={handleTransactionChange} // 이 함수가 onTempTransactionChange로 전달됩니다.
+        onTempTransactionChange={handleTransactionChange}
         onApply={handleApply}
         onClose={() => setIsPickerVisible(false)}
       />
@@ -159,6 +209,8 @@ function SellPage() {
 }
 
 export default SellPage;
+
+
 
 
 const Space = styled.div`
@@ -184,11 +236,12 @@ const Search = styled.textarea`
   box-shadow: 0 4px 8px rgba(134, 142, 232, 0.3);
   border: 0.1px rgba(255, 255, 255, 0.1);
   outline: none;
+  resize: none;
 `;
 
 const SearchIcon = styled.img`
   position: absolute;
-  right: 20px;
+  right: 30px;
   top: 50%;
   transform: translateY(-50%);
 `;

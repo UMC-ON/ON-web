@@ -40,9 +40,12 @@ export const GET_REPLIES_OF = (commentId) =>
 
 //채팅
 export const GET_TRADE_LIST = '/api/v1/chat/market/list';
-export const GET_ACCOMPANY_LIST = '/api/v1/chat/market/list';
+export const GET_ACCOMPANY_LIST = '/api/v1/chat/company/list';
 export const GET_TRADE_INFO = (roomId) => `/api/v1/chat/market/${roomId}`;
 export const GET_ACCOMPANY_INFO = (roomId) => `/api/v1/chat/company/${roomId}`;
+export const GET_ACCOMPANY_CHAT = (roomId) => `/api/v1/chat/${roomId}/message`;
+export const GET_TRADE_CHAT = (roomId) => `/api/v1/chat/${roomId}/message`;
+export const POST_CHAT = (roomId) => `/api/v1/chat/${roomId}/send`;
 
 //물품거래글
 
@@ -55,9 +58,9 @@ export const GET_NEAR_ACCOMPANY = '/api/v1/home/company/list';
 export const GET_ALL_ACCOMPANY = '/api/v1/company-post';
 export const GET_FILTER_ACCOMPANY = '/api/v1/company-post/filter';
 export const GET_RECENT_ACCOMPANY = '/api/v1/company-post/recent';
-export const GET_DETAIL_ACCOMPANY = (companyPostId) =>
-  `/api/v1/company-post/${companyPostId}`;
+export const GET_DETAIL_ACCOMPANY = (companyPostId) => `/api/v1/company-post/${companyPostId}`;
 export const APPLY_ACCOMPANY = '/api/v1/company-participant/apply';
+export const GET_SIMILAR_ACCOMPANY = (companyPostId) => `/api/v1/company-post/${companyPostId}/nearby`;
 
 //동행 구하기 글 작성
 export const WRITE_ACCOMPANY = `/api/v1/company-post`;

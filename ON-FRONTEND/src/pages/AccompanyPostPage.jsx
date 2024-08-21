@@ -60,6 +60,10 @@ function AccompanyPostPage() {
 
     const [userData, setUserData] = useState(null);
 
+    const formatDate = (dateString) => {
+      return dateString.replace(/-/g, '/');
+    };
+
     useEffect(() => {
       console.log(endDate);
     }, [endDate]);
@@ -442,9 +446,9 @@ function AccompanyPostPage() {
                     )}
                     {isDateClicked && (
                       <>
-                        <CircleContainer onClick={handleCalendarClick}>{`${startDate}`}</CircleContainer>
+                        <CircleContainer onClick={handleCalendarClick}>{`${formatDate(startDate)}`}</CircleContainer>
                         <GreyText $left="6px">~</GreyText>
-                        <CircleContainer onClick={handleCalendarClick}>{`${endDate}`}</CircleContainer>
+                        <CircleContainer onClick={handleCalendarClick}>{`${formatDate(endDate)}`}</CircleContainer>
                         <GreyText $left="6px">사이</GreyText>
                       </>
                     )}

@@ -1,6 +1,8 @@
 import PageHeader from '../../components/PageHeader/PageHeader';
 import * as s from './MyPostStyled';
 import { useState, useEffect } from 'react';
+import { getData } from '../../api/Functions';
+
 import Loading from '../../components/Loading/Loading';
 import NoContent from '../../components/NoContent/NoContent';
 import SingleMyPost from '../../components/SingleMyPost/SingleMyPost';

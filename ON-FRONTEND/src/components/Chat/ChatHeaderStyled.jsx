@@ -28,7 +28,6 @@ export const PageName = styled.p`
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  color: white;
 `;
 
 export const CompleteBtn = styled.div`

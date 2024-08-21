@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import * as s from './ChatHeaderStyled.jsx';
 import theme from '../../styles/theme';
 
-const ChatHeader = ({ user, receiver, pointColor }) => {
+const ChatHeader = ({ user, receiver, pointColor, isAccompany }) => {
   const navigate = useNavigate();
 
   const onClickBackButton = () => {
@@ -28,17 +28,21 @@ const ChatHeader = ({ user, receiver, pointColor }) => {
         >
           <path
             d="M8 2L1.8858 7.24074C1.42019 7.63984 1.42019 8.36016 1.8858 8.75926L8 14"
-            stroke="#ffffff"
+            stroke={isAccompany ? '#fff' : '#7A7A7A'}
             strokeWidth="3"
             strokeLinecap="round"
           />
         </svg>
       </s.BackButton>
-      <s.PageName>{receiver}</s.PageName>
-      {user === 2 ? (
-        <s.CompleteBtn onClick={handleComplete}>모집 완료</s.CompleteBtn>
-      ) : (
-        ''
+
+      <s.PageName style={{ color: isAccompany ? '#ffffff' : '#ABB4FF' }}>
+        {receiver}
+      </s.PageName>
+
+      {user === 2 && (
+        <s.CompleteBtn onClick={handleComplete}>
+          {isAccompany ? '모집 완료' : '거래 완료'}
+        </s.CompleteBtn>
       )}
     </s.ChatHeaderLayout>
   );

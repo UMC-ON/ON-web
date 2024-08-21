@@ -48,7 +48,9 @@ const ItemList = ({ items }) => {
 };
 
 const StarContainer = ({ marketPostId, isFilled }) => {
-  const [isStarFilled, setIsStarFilled] = React.useState(isFilled);
+  const [isStarFilled, setIsStarFilled] = React.useState(
+    JSON.parse(localStorage.getItem(`scrap_${marketPostId}`)) || isFilled
+  );
 
   const toggleStar = async () => {
     try {
@@ -59,6 +61,7 @@ const StarContainer = ({ marketPostId, isFilled }) => {
             Authorization: `Bearer ${accessToken}`,
           },
         });
+        localStorage.setItem(`scrap_${marketPostId}`, false);
       } else {
         // 스크랩 등록 요청
         await axios.post(
@@ -73,6 +76,7 @@ const StarContainer = ({ marketPostId, isFilled }) => {
             },
           }
         );
+        localStorage.setItem(`scrap_${marketPostId}`, true);
       }
       setIsStarFilled(!isStarFilled);
       console.log({marketPostId});
@@ -88,6 +92,7 @@ const StarContainer = ({ marketPostId, isFilled }) => {
     />
   );
 };
+
 
 
 

@@ -25,8 +25,8 @@ import CountryIcon from '../components/CountryIcon';
 
 import { showDate } from '../components/Common/InfoExp';
 
-import { getData, postData } from '../api/Functions';
-import { GET_DETAIL_ACCOMPANY, GET_USER_INFO, APPLY_ACCOMPANY } from '../api/urls';
+import { getData } from '../api/Functions';
+import { GET_DETAIL_ACCOMPANY, GET_SIMILAR_ACCOMPANY } from '../api/urls';
 
 const accompanycards = [
   {
@@ -100,9 +100,10 @@ function AccompanyDetailPage() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const [nickname, setNickName] = useState('');
-  const [userId, setUserId] = useState(0);
+  // const [userId, setUserId] = useState(0);
 
   const [infoData, setInfoData] = useState([]);
+  const [accompanyData, setAccompanyData] = useState([]);
 
   const navigate = useNavigate();
 
@@ -147,7 +148,7 @@ function AccompanyDetailPage() {
   };
 
   const handleBlueButtonClick = () => {
-    applyData();
+    // applyData();
     closeFirstModal();
     openSecondModal();
   };
@@ -156,29 +157,31 @@ function AccompanyDetailPage() {
     return dateString.replace(/-/g, '.');
   }
 
-  const applyData = async () => {
-    try {
-      const response = await postData(
-        APPLY_ACCOMPANY,
-        { companyPostId: postId, userId: userId },
-        {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        }
-      );
+  // const applyData = async () => {
+  //   try {
+  //     const response = await postData(
+  //       APPLY_ACCOMPANY,
+  //       { companyPostId: postId, userId: userId },
+  //       {
+  //         Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+  //       }
+  //     );
   
-      if (response) {
-        console.log('Application successful:', response.data);
-      } else {
-        console.error('Application failed');
-      }
-    } catch (error) {
-      console.error('Error applying for accompany:', error);
-    }
-  };
+  //     if (response) {
+  //       console.log('Application successful:', response.data);
+  //     } else {
+  //       console.error('Application failed');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error applying for accompany:', error);
+  //   }
+  // };
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const timer = setTimeout(() => {
       setLoading(false);
     }, 2000); 
@@ -197,14 +200,20 @@ function AccompanyDetailPage() {
         // console.log(info_data.data);
         // 
 
-        const user_data = await getData(GET_USER_INFO,{
+        // const user_data = await getData(GET_USER_INFO,{
+        //   Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        // }); 
+        // // console.log(user_data.data.result.id);
+        // setUserId(user_data.data.result.id);
+
+        // console.log(info_data.data[0].nickname);
+        setNickName(info_data.data[0].nickname);
+
+        const accompany_data = await getData(GET_SIMILAR_ACCOMPANY(postId),{
           Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
         }); 
-        // console.log(user_data.data.result.id);
-        setUserId(user_data.data.result.id);
-
-        console.log(info_data.data[0].nickname);
-        setNickName(info_data.data[0].nickname);
+        setAccompanyData(accompany_data.data);
+        console.log(accompanyData);
 
 
       } catch (error) {
@@ -213,7 +222,7 @@ function AccompanyDetailPage() {
     };
 
     fetchData(); 
-  }, []); 
+  }, [postId]); 
 
 
     return (
@@ -313,7 +322,7 @@ function AccompanyDetailPage() {
             </LeftContainer>
         </BigContainer>
 
-        <CardAccompanyList color="#c5d3e0" cards={accompanycards}></CardAccompanyList>
+        <CardAccompanyList color="#c5d3e0" cards={accompanyData}></CardAccompanyList>
         <Space/>
 
         <BottomTabLayout>

@@ -16,10 +16,10 @@ function CommunityHomeList({ bgcolor, datas, type }) {
   const navigate = useNavigate();
   const goDetail = (postId, companyId) => {
     if (type === 'info') {
-      navigate(`community/info/detail/${postId}`);  
+      navigate(`./info/detail/${postId}`, {state: { value: postId },});  
     } 
     else if (type === 'free') {
-      navigate(`community/free/detail/${postId}`);  
+      navigate(`./general/detail/${postId}`, {state: { value: postId },});  
     } 
     else if (type === 'accom') {
       navigate(`/accompany/detail/${companyId}`);
@@ -76,6 +76,8 @@ const TextTopLeft = styled.p`
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  width: 80%;
+  text-align: left;
 `;
 
 const TextMiddle2 = styled.p`

@@ -11,8 +11,9 @@ import MyPost from './pages/MyPage/MyPost.jsx';
 import Notification from './pages/Notification/NotificationPage.jsx';
 import Search from './pages/Search/SearchPage.jsx';
 import BottomTabNav from './components/BottomTabNav/BottomTabNav.jsx';
-import Chat from './pages/Chat/Chat.jsx';
+import AccompanyChat from './pages/Chat/AccompanyChat.jsx';
 import ChatList from './pages/ChatList/ChatList.jsx';
+import TradeChat from './pages/Chat/TradeChat.jsx';
 import HomePage from './pages/HomePage.jsx';
 
 import DiaryCalendar from './components/DiaryCalendar/DiaryCalendar.jsx';
@@ -136,8 +137,12 @@ function App() {
           element={<Search />}
         />
         <Route
-          path="/chat"
-          element={<Chat />}
+          path="/chat/accompany/:roomId"
+          element={<AccompanyChat />}
+        />
+        <Route
+          path="/chat/trade/:roomId"
+          element={<TradeChat />}
         />
         <Route
           path="/chatlist"
@@ -151,8 +156,9 @@ function App() {
           path="/accompany/post"
           element={<AccompanyPostPage />}
         />
-         <Route path="/accompany/detail/:postId" 
-          element={<AccompanyDetailPage />} 
+        <Route
+          path="/accompany/detail/:postId"
+          element={<AccompanyDetailPage />}
         />
         <Route
           path="/diary"

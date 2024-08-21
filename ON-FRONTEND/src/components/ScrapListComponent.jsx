@@ -8,6 +8,8 @@ import profile from "../assets/images/profileIcon.svg";
 import empty_star from "../assets/images/empty_star.svg";
 import filled_star from "../assets/images/filled_star.svg";
 
+import {showDate} from "../components/Common/InfoExp";
+
 const accessToken = import.meta.env.VITE_accessToken;
 
 const ScrapList = ({ items }) => {
@@ -26,7 +28,10 @@ const ScrapList = ({ items }) => {
                 isFilled={item.isScrapped}
               />
               <Description onClick={() => navigate(`/sell/${item.marketPost.marketPostId}`)}>
-                <Title>{item.marketPost.title} | <Time>{item.marketPost.marketPostId}</Time></Title><br/>
+              <TitleTimeContainer>
+                  <Title>{item.marketPost.title}</Title>
+                  <Time>{showDate(item.marketPost.createdAt)}</Time>
+                </TitleTimeContainer><br/>
                 <State how={item.marketPost.dealType == 'DIRECT'? '직거래' : '택배거래'} now={item.marketPost.dealStatus == 'COMPLETE' ? '거래 완료' : '거래 가능'} isCompleted={isCompleted} />
                 <LocationAndUser>
                   <Place><Compas src={compas} />{item.marketPost.currentCountry} {item.marketPost.currentLocation}</Place>
@@ -42,7 +47,7 @@ const ScrapList = ({ items }) => {
   );
 };
 
-const StarContainer = ({ marketPostId, isFilled }) => {
+const StarContainer = ({ marketPostId, isFilled = true }) => {
   const [isStarFilled, setIsStarFilled] = React.useState(isFilled);
 
   const toggleStar = async () => {
@@ -83,6 +88,7 @@ const StarContainer = ({ marketPostId, isFilled }) => {
     />
   );
 };
+
 
 
 
@@ -135,6 +141,12 @@ const Information = styled.div`
 const Description = styled.div`
   padding: 0.6em;
   height: 60%;
+`;
+
+const TitleTimeContainer = styled.div`
+  width: 190px;
+  display: flex; /* Flexbox를 사용하여 수평 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
 `;
 
 const Title = styled.p`
