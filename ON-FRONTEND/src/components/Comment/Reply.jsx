@@ -7,10 +7,10 @@ const Reply = ({ reply, postWriter_id }) => {
     <ReplyDiv>
       <ReplyImg src={replyImg} />
       <div>
-        <Writer writer={`${reply.writerInfo.userId === postWriter_id}`}>
+        <Writer writer={`${reply.writerInfo.id === postWriter_id}`}>
           {showWriter(reply, postWriter_id)}
         </Writer>
-        {reply.content}
+        {reply.contents}
       </div>
     </ReplyDiv>
   );

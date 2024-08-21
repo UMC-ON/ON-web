@@ -5,16 +5,12 @@ import groupLogo from '../../assets/images/groupLogo.svg';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {
-  AuthRequests,
-  UserList,
-} from '../../components/Common/TempDummyData/PostList';
 import Modal from '../../components/Modal/Modal';
 import { multiFilePostData, postData } from '../../api/Functions';
-import { DISPATCH_CERTIFY_REQUEST } from '../../api/urls';
+import { DISPATCH_CERTIFY_REQUEST, NOT_SURE } from '../../api/urls';
 
 const SchoolAuthPage = () => {
-  const currentUser = useSelector((state) => state.user);
+  //const currentUser = useSelector((state) => state.user);
   const [isActive, setActive] = useState(false);
   const [userInfo, setUserInfo] = useState({
     dispatchedUniversity: '',
@@ -28,7 +24,7 @@ const SchoolAuthPage = () => {
   const [file, setFile] = useState(null);
 
   const nav = useNavigate();
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
 
   useEffect(() => {
     //마지막 단계에 인증 사진 있으면 활성화
@@ -50,30 +46,44 @@ const SchoolAuthPage = () => {
     e.preventDefault();
 
     if (isLastStep) {
-      if (!userInfo.isDispatchConfirmed) {
+      if (userInfo.isDispatchConfirmed) {
+        //파견 확정 시
         // const request = postData()
-      }
-      const formData = new FormData();
-      formData.append('fileList', file);
-      const request = {
-        dispatchedUniversity: userInfo.dispatchedUniversity,
-        country: userInfo.country,
-        universityUrl: userInfo.universityUrl,
-        dispatchType: userInfo.dispatchType,
-      };
-      const json = JSON.stringify(request);
-      const blob = new Blob([json], { type: 'application/json' });
-      formData.append('dispatchCertifyApplyRequestDto', blob);
-      const response = await multiFilePostData(
-        DISPATCH_CERTIFY_REQUEST,
-        formData,
-        {
-          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
-        },
-      );
-      if (response) {
-        console.log(response);
-        setLastModalOpen(true);
+        const formData = new FormData();
+        formData.append('fileList', file);
+        const request = {
+          dispatchedUniversity: userInfo.dispatchedUniversity,
+          country: userInfo.country,
+          universityUrl: userInfo.universityUrl,
+          dispatchType: userInfo.dispatchType,
+        };
+        const json = JSON.stringify(request);
+        const blob = new Blob([json], { type: 'application/json' });
+        formData.append('dispatchCertifyApplyRequestDto', blob);
+        const response = await multiFilePostData(
+          DISPATCH_CERTIFY_REQUEST,
+          formData,
+          {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          },
+        );
+        if (response) {
+          console.log(response);
+          setLastModalOpen(true);
+        }
+      } else {
+        //파견 미정 시
+        const response = await postData(
+          NOT_SURE,
+          {},
+          {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          },
+        );
+        if (response) {
+          console.log(response);
+          nav('/');
+        }
       }
     } else {
       next();
@@ -138,12 +148,19 @@ const SchoolAuthPage = () => {
                     flexShrink: '1',
                     width: '15%',
                   }}
+                  onClick={() => {
+                    setUserInfo({ ...userInfo, isDispatchConfirmed: false });
+                  }}
                 >
                   건너뛰기
                 </s.PurpleButton>
               ) : null}
               <s.PurpleButton disabled={!isActive}>
-                {isLastStep ? '인증 요청하기' : '다음 단계'}
+                {isLastStep
+                  ? userInfo.isDispatchConfirmed
+                    ? '인증 요청하기'
+                    : '파견 미정으로 인증 마치기'
+                  : '다음 단계'}
               </s.PurpleButton>
             </s.TwoColumnWrapper>
           </s.ButtonSection>

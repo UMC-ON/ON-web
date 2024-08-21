@@ -12,9 +12,7 @@ import communityBannerImg from '../../assets/images/communityBannerImg.svg';
 import pencilImg from '../../assets/images/pencil.svg';
 import gradientRec from '../../assets/images/gradientRec.svg';
 import { useNavigate } from 'react-router-dom';
-import { countries } from '../../assets/cityDatabase.js';
 
-import { PostList } from '../../components/Common/TempDummyData/PostList.jsx';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { getData } from '../../api/Functions.jsx';

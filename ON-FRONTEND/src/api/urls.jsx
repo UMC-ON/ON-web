@@ -13,6 +13,7 @@ export const PUT_NICKNAME = '/api/v1/user/current/update/nickname';
 export const DISPATCH_CERTIFY_REQUEST = 'api/v1/dispatch-certify/apply';
 export const GET_REQUESTS_OF = (permitStatus) =>
   `api/v1/dispatch-certify/info/${permitStatus}`;
+export const NOT_SURE = `/api/v1/dispatch-certify/non_certified`;
 
 //커뮤니티 게시글
 export const GET_POST_OF = (boardType) => `/api/v1/post/${boardType}`;
@@ -31,6 +32,11 @@ export const GET_SEARCH_RESULT = '/api/v1/post/search';
 
 //댓글 작성
 export const GET_COMMENT_OF = (postId) => `/api/v1/comment/${postId}`;
+export const WRITE_COMMENT_ON = (postId) => `/api/v1/comment/${postId}`;
+export const WRITE_REPLY_ON = (commentId) =>
+  `/api/v1/comment/${commentId}/reply`;
+export const GET_REPLIES_OF = (commentId) =>
+  `/api/v1/comment/${commentId}/reply`;
 
 //채팅
 export const GET_TRADE_LIST = '/api/v1/chat/market/list';
