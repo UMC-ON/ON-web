@@ -23,12 +23,18 @@ const ItemList = ({ items }) => {
   useEffect(() => {
     const fetchScrappedPosts = async () => {
       try {
-        const response = await axios.get(`${serverAddress}/api/v1/scrap/${userInfo?.id}`, {
+        // Check if userInfo is available
+        if (!userInfo || !userInfo.id) {
+          console.error('User info is not available');
+          return;
+        }
+  
+        const response = await axios.get(`${serverAddress}/api/v1/scrap/${userInfo.id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
         });
-
+  
         // Extract marketPostId from each marketPost object
         if (Array.isArray(response.data)) {
           const scrappedIds = response.data.map(post => post.marketPost.marketPostId);
@@ -41,11 +47,10 @@ const ItemList = ({ items }) => {
         console.error('Error fetching scrapped posts:', error);
       }
     };
-
-    if (userInfo.id) {
-      fetchScrappedPosts();
-    }
-  }, [userInfo]);
+  
+    fetchScrappedPosts();
+  }, [userInfo]); // Ensure userInfo is available before making the request
+  
 
   return (
     <>

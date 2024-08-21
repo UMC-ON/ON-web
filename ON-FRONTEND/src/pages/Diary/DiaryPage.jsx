@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
-
 import BottomTabNav from '../../components/BottomTabNav/BottomTabNav';
 import DiaryCalendar from '../../components/DiaryCalendar/DiaryCalendar';
 import PageHeader from '../../components/PageHeader/PageHeader';
@@ -16,8 +16,9 @@ import './DiaryPage.css';
 import ko from "date-fns/locale/ko";
 import closeIcon from '../../assets/images/close_button.svg';
 import plus_button from '../../assets/images/addButton.svg';
+import { getData, postData } from '../../api/Functions';
+import { GET_DIARY, POST_DDAY, POST_DIARY } from '../../api/urls';
 
-const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
 const Diary = () => {
   const [selectedDate1, setSelectedDate1] = useState(null);
@@ -25,21 +26,25 @@ const Diary = () => {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [newDiaryVisible, setNewDiaryVisible] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showCalendar, setShowCalendar] = useState(false);
   const [newDiaryContent, setNewDiaryContent] = useState('');
   const [diaries, setDiaries] = useState([]);
+  const [dday, setDday] = useState(null); // state to hold the dday value
+
   const datePickerRef = useRef(null);
+  const userInfo = useSelector((state) => state.user.user);
 
   useEffect(() => {
     const fetchDiaries = async () => {
       try {
-        const response = await axios.get(`${serverAddress}/api/v1/diary/list`, {
-          headers: {
+        const response = await getData(
+          GET_DIARY,
+          {
             Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
-        });
-        setDiaries(response.data.result);
-        console.log(response.data.result);
+          }
+        );
+        setDiaries(response?.data?.result?.diaryList || []);
+        setDday(response?.data?.result?.dday || null); // extract dday from response
+        console.log(response?.data?.result);
       } catch (error) {
         console.error('다이어리 목록을 가져오는 중 오류 발생:', error);
       }
@@ -47,38 +52,42 @@ const Diary = () => {
     fetchDiaries();
   }, []);
 
-  useEffect(() => {
-    const storedDate = localStorage.getItem('selectedDate1');
-    if (storedDate) {
-      setSelectedDate1(moment(storedDate, 'YYYY-MM-DD').toDate());
-    }
-  }, []);
-
   const handleDateChange1 = async (date) => {
     setSelectedDate1(date);
     setCalendarOpen(false);
 
-    const formattedDate = moment(date).format('YYYY-MM-DD'); // 날짜를 서버에서 요구하는 형식으로 변환
-
-    // 로컬 스토리지에 날짜 저장
-    localStorage.setItem('selectedDate1', formattedDate);
+    const dday = await getDdayFromServer(); // dday 값을 가져오는 함수 호출
 
     try {
-      const response = await axios.post(
-        `${serverAddress}/api/v1/diary/startdate`,
-        { startDate: formattedDate },
+      const response = await postData(
+        POST_DDAY,
+        { dday: dday }, // dday를 서버로 전송
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-            'Content-Type': 'application/json',
-          },
+          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          'Content-Type': 'application/json',
         }
       );
-      console.log('서버 응답:', response.data);
+      console.log('서버 응답:', response?.data);
     } catch (error) {
-      console.error('서버로 날짜 전달 중 오류 발생:', error);
+      console.error('서버로 dday 전달 중 오류 발생:', error);
     }
   };
+
+  const getDdayFromServer = async () => {
+    try {
+      const response = await getData(
+        GET_DIARY,
+        {
+          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+        }
+      );
+      return response?.data?.result?.dday || null; // 서버에서 dday 값을 반환
+    } catch (error) {
+      console.error('서버에서 dday 가져오는 중 오류 발생:', error);
+      return null;
+    }
+  };
+  
 
   const handleDateChange2 = (date) => {
     setSelectedDate2(date);
@@ -97,64 +106,50 @@ const Diary = () => {
 
   const todayDate = moment().format('YYYY.MM.DD');
 
-  const calculateDDay = (date) => {
-    if (!date) return '';
-
-    const startOfDay = moment().startOf('day');
-    const selectedDay = moment(date).startOf('day');
-
-    const diffDays = selectedDay.diff(startOfDay, 'days');
-
-    if (diffDays === 0) {
-      return '오늘';
-    } else if (diffDays > 0) {
-      return `D-${diffDays}`;
-    } else {
-      return `D+${Math.abs(diffDays)}`;
-    }
-  };
-
   const handleSaveDiary = async () => {
     const formattedDate = moment(selectedDate2).format('YYYY-MM-DD');
   
     try {
-      const response = await axios.post(
-        `${serverAddress}/api/v1/diary`,
+      const response = await postData(
+        POST_DIARY,
         { 
           date: formattedDate, 
           content: newDiaryContent 
         },
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-            'Content-Type': 'application/json',
-          },
+          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          'Content-Type': 'application/json',
         }
       );
-      console.log('일기 저장 응답:', response.data);
-  
-      // 저장 성공 후 페이지 새로 고침
-      window.location.reload();
+      
+      if (response) {
+        console.log('일기 저장 응답:', response.data);
+        window.location.reload();
+      } else {
+        console.error('일기 저장 중 오류 발생: 응답이 없습니다.');
+      }
+      
     } catch (error) {
       console.error('일기 저장 중 오류 발생:', error);
     }
   };
   
-
+  
   return (
     <DiaryContainer>
       <PageHeader pageName="나의 일기" />
       <Content>
         <Information>
           <DDay>
-            {selectedDate1 ? (
-              <DDayText>{calculateDDay(selectedDate1)}</DDayText>
+            {dday !== null ? (
+              <DDayText>{`D${dday}`}</DDayText> // Display the dday value
             ) : (
               <DDayCalendar
                 selectedDate={selectedDate1}
                 handleDateChange={handleDateChange1}
                 setCalendarOpen={setCalendarOpen}
                 datePickerRef={datePickerRef}
+                userId= {userInfo?.id}
               />
             )}
           </DDay>
@@ -206,6 +201,7 @@ const Diary = () => {
 };
 
 export default Diary;
+
 
 
 

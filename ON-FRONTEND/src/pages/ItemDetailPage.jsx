@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from "react-redux";
 import axios from 'axios';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
@@ -13,26 +14,37 @@ import compas from "../assets/images/compasIcon.svg";
 import icon from "../assets/images/profileIcon.svg";
 import noImage from "../assets/images/noImage.jpg";
 
+import {GET_SPECIFIC_ITEM, GET_NEARBY_ITEM, GET_MARKET_ROOMID} from '../api/urls'
+import { getData, postData} from '../api/Functions';
+
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
 
 function ItemDetailPage() {
   const navigate = useNavigate();
+  const userInfo = useSelector((state) => state.user.user);
   const { marketPostId } = useParams();
 
   const [items, setItems] = useState([]);
   const [nearitems, setNearitems] = useState([]);
+  const [receiverId, setReceiverId] = useState(null);
+  const [roomId, setRoomId] = useState(null);
+
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get(`${serverAddress}/api/v1/market-post/${marketPostId}`, {
-          headers: {
+        const response = await getData(
+          GET_SPECIFIC_ITEM(marketPostId),
+          {
             Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
-        });
-        setItems([response.data]); 
-        console.log(response.data);
+          }
+        );
+        if (response) {
+          setItems([response.data]);
+          setReceiverId(response.data.userId); // Extract and set receiverId
+          console.log(response.data);
+        }
       } catch (error) {
         console.error('물품 상세 페이지 정보를 불러오는 중 오류 발생:', error);
       }
@@ -40,22 +52,26 @@ function ItemDetailPage() {
 
     fetchItems();
   }, [marketPostId]);
+  
 
   useEffect(() => {
     const fetchNearitems = async () => {
       try {
-        const response = await axios.get(`${serverAddress}/api/v1/market-post/${marketPostId}/nearby`, {
-          headers: {
+        const response = await getData(
+          GET_NEARBY_ITEM(marketPostId),
+          {
             Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
-        });
-        setNearitems(response.data);
-        console.log(response.data);
+          }
+        );
+        if (response) {
+          setNearitems(response.data);
+          console.log(response.data);
+        }
       } catch (error) {
         console.error('근처 물품 정보를 불러오는 중 오류 발생:', error);
       }
     };
-  
+
     fetchNearitems();
   }, [marketPostId]);
 
@@ -67,6 +83,40 @@ function ItemDetailPage() {
     slidesToScroll: 1,
     arrows: false,
   };
+
+  const handleChatButtonClick = async () => {
+    if (!receiverId || !marketPostId) {
+      console.error('Receiver ID or Market Post ID is missing.');
+      return;
+    }
+  
+    try {
+      const response = await axios.post(
+        `${serverAddress}/api/v1/chat/request`,
+        {
+          chatType: 'MARKET',
+          receiverId: receiverId,
+          postId: marketPostId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+        }
+      );
+  
+      if (response.data.inSuccess) {
+        const roomId = response.data.result.roomId;
+        setRoomId(roomId);
+        navigate(`/chat/trade/${roomId}`); // Redirect to chat room
+      } else {
+        console.error('Failed to create chat room:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Error sending chat request:', error);
+    }
+  };
+  
 
   return (
     <>
@@ -110,7 +160,7 @@ function ItemDetailPage() {
         })}
       </ContentContainer>
       <BottomTabLayout>
-        <ChatButton>
+        <ChatButton onClick={handleChatButtonClick}>
           채팅으로 거래하기
         </ChatButton>
       </BottomTabLayout>
