@@ -91,31 +91,32 @@ function ItemDetailPage() {
     }
   
     try {
-      const response = await axios.post(
-        `${serverAddress}/api/v1/chat/request`,
+      const response = await postData(
+        GET_MARKET_ROOMID,
         {
-          chatType: 'MARKET',
+          chatType: "MARKET",
           receiverId: receiverId,
           postId: marketPostId,
         },
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
+          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          'Content-Type': 'application/json',
         }
       );
   
-      if (response.data.inSuccess) {
+      if (response?.data?.inSuccess) {
         const roomId = response.data.result.roomId;
+        const nickname = userInfo?.nickname || 'Unknown User';
         setRoomId(roomId);
-        navigate(`/chat/trade/${roomId}`); // Redirect to chat room
+        navigate(`/chat/market/${roomId}`, { state: { roomId, nickname } }); // Redirect to chat room
       } else {
-        console.error('Failed to create chat room:', response.data.message);
+        console.error('Failed to create chat room:', response?.data?.message);
       }
     } catch (error) {
       console.error('Error sending chat request:', error);
     }
   };
+  
   
 
   return (

@@ -10,31 +10,36 @@ import nothing from "../assets/images/no_content.svg";
 
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
+import { getData } from '../api/Functions';
+import { GET_SCRAP } from '../api/urls';
+
 function ScrapList() {
     const [items, setItems] = useState([]);
     let userInfo = useSelector((state) => state.user.user);
 
     useEffect(() => {
         if (userInfo) {
-            const fetchItems = async () => {
-                try {
-                    const response = await axios.get(`${serverAddress}/api/v1/scrap/${userInfo.id}`, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-                        },
-                    });
-                    setItems(response.data);
-                    if (response.data) {
-                        console.log(response.data);
-                    }
-                } catch (error) {
-                    console.error('스크랩 물품 목록을 불러오는 중 오류 발생:', error);
+          const fetchItems = async () => {
+            try {
+              const response = await getData(
+                GET_SCRAP(userInfo.id), 
+                {
+                  Authorization: `Bearer ${localStorage.getItem('AToken')}`,
                 }
-            };
-
-            fetchItems();
+              );
+    
+              if (response?.data) {
+                setItems(response.data);
+                console.log(response.data);
+              }
+            } catch (error) {
+              console.error('스크랩 물품 목록을 불러오는 중 오류 발생:', error);
+            }
+          };
+    
+          fetchItems();
         }
-    }, [userInfo]); // userInfo가 변경될 때마다 호출
+      }, [userInfo]);
 
     return (
         <>
