@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import PageHeader from '../components/PageHeader/PageHeader';
@@ -8,35 +9,10 @@ import ScrapListComponent from '../components/ScrapListComponent';
 import nothing from "../assets/images/no_content.svg";
 
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
-import { GET_CURRENT_INFO } from '../api/urls';
-import { getData, postData, putData } from '../api/Functions';
 
 function ScrapList() {
     const [items, setItems] = useState([]);
-    const [userInfo, setUserInfo] = useState(null);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await getData(
-                    GET_CURRENT_INFO,
-                    {
-                        Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-                    },
-                    {},
-                );
-
-                if (response) {
-                    setUserInfo(response.data.result);
-                    console.log('userinfo: ', response.data.result.id); // 확인용 로그
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
+    let userInfo = useSelector((state) => state.user.user);
 
     useEffect(() => {
         if (userInfo) {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import compas from "../assets/images/compasIcon.svg";
@@ -15,19 +16,52 @@ import { getData, postData, putData } from '../api/Functions';
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
 const ItemList = ({ items }) => {
+  let userInfo = useSelector((state) => state.user.user);
+  const [scrappedMarketPostIds, setScrappedMarketPostIds] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchScrappedPosts = async () => {
+      try {
+        const response = await axios.get(`${serverAddress}/api/v1/scrap/${userInfo?.id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+        });
+
+        // Extract marketPostId from each marketPost object
+        if (Array.isArray(response.data)) {
+          const scrappedIds = response.data.map(post => post.marketPost.marketPostId);
+          setScrappedMarketPostIds(scrappedIds);
+          console.log(scrappedIds);
+        } else {
+          console.error('Unexpected response structure:', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching scrapped posts:', error);
+      }
+    };
+
+    if (userInfo.id) {
+      fetchScrappedPosts();
+    }
+  }, [userInfo]);
 
   return (
     <>
       {items && items.map((item, index) => {
         const isCompleted = item.dealStatus === "COMPLETE";
+        const isScrapped = scrappedMarketPostIds.includes(item.marketPostId);
+
         return (
           <ItemDiv key={index} isCompleted={isCompleted}>
             <Photo src={item.imageUrls[0] ? item.imageUrls[0] : noImage} />
             <Information>
               <StarContainer
                 marketPostId={item.marketPostId}
-                isScrapped={item.isScrapped} // changed prop name for clarity
+                isFilled={isScrapped} // Pass isScrapped as isFilled prop
+                scrappedMarketPostIds={scrappedMarketPostIds} // Pass the whole array
+                setScrappedMarketPostIds={setScrappedMarketPostIds} // Pass the state updater function
               />
               <Description onClick={() => navigate(`./${item.marketPostId}`)}>
                 <TitleTimeContainer>
@@ -49,40 +83,10 @@ const ItemList = ({ items }) => {
   );
 };
 
-const StarContainer = ({ marketPostId, isScrapped }) => {
-  const [isStarFilled, setIsStarFilled] = useState(isScrapped);
-  const [userInfo, setUserInfo] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getData(
-          GET_CURRENT_INFO,
-          {
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
-          {},
-        );
-
-        if (response) {
-          setUserInfo(response.data.result);
-          console.log('userinfo: ', response.data.result.id);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    // 로컬스토리지에서 스크랩 상태 불러오기
-    const savedStarState = localStorage.getItem(`starState_${marketPostId}`);
-    if (savedStarState) {
-      setIsStarFilled(JSON.parse(savedStarState));
-    }
-  }, [marketPostId]);
+const StarContainer = ({ marketPostId, isFilled, scrappedMarketPostIds, setScrappedMarketPostIds }) => {
+  const [isStarFilled, setIsStarFilled] = useState(isFilled);
+  let userInfo = useSelector((state) => state.user.user);
 
   const toggleStar = async () => {
     try {
@@ -93,6 +97,9 @@ const StarContainer = ({ marketPostId, isScrapped }) => {
             Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
         });
+
+        // Remove marketPostId from scrappedMarketPostIds array
+        setScrappedMarketPostIds(prevIds => prevIds.filter(id => id !== marketPostId));
       } else {
         // 스크랩 등록 요청
         await axios.post(
@@ -107,11 +114,13 @@ const StarContainer = ({ marketPostId, isScrapped }) => {
             },
           }
         );
-      }
-      setIsStarFilled(!isStarFilled);
 
-      // 로컬스토리지에 스크랩 상태 저장
-      localStorage.setItem(`starState_${marketPostId}`, JSON.stringify(!isStarFilled));
+        // Add marketPostId to scrappedMarketPostIds array
+        setScrappedMarketPostIds(prevIds => [...prevIds, marketPostId]);
+      }
+
+      // Toggle the star state
+      setIsStarFilled(!isStarFilled);
 
       console.log({ marketPostId });
     } catch (error) {
@@ -126,6 +135,7 @@ const StarContainer = ({ marketPostId, isScrapped }) => {
     />
   );
 };
+
 
 export default ItemList;
 

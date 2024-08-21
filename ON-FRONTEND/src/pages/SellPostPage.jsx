@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import camera from "../assets/images/camera.svg";
 import PhotoAdd from "../assets/images/PhotoAdd.svg";
@@ -22,6 +23,7 @@ function SellPost() {
     const [showCity, setShowCity] = useState(false);
     const [city, setCity] = useState({ country: '', city: '' });
     const [isCityClicked, setIsCityClicked] = useState(false);
+    let userInfo = useSelector((state) => state.user.user);
 
 
     const resetCityClick = () => {
@@ -52,7 +54,7 @@ function SellPost() {
 
     const handleSubmit = async () => {
         const postData = {
-            userId: 10,  // 고정된 userId
+            userId: userInfo.id,
             title,
             cost,
             dealType: selectedOption === 'directly' ? 'DIRECT' : 'DELIVERY',

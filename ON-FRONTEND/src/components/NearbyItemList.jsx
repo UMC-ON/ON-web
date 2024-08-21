@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import compas from "../assets/images/compasIcon.svg";
@@ -56,30 +57,7 @@ const NearItemList = ({ nearitems }) => {
 
 const StarContainer = ({ marketPostId, isFilled }) => {
   const [isStarFilled, setIsStarFilled] = useState(isFilled);
-  const [userInfo, setUserInfo] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getData(
-          GET_CURRENT_INFO,
-          {
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
-          {},
-        );
-
-        if (response) {
-          setUserInfo(response.data.result);
-          console.log('userinfo: ', response.data.result.id); // 수정된 부분
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  let userInfo = useSelector((state) => state.user.user);
 
   useEffect(() => {
     // 로컬스토리지에서 스크랩 상태 불러오기

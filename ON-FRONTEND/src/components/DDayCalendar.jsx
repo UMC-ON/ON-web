@@ -4,9 +4,9 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import ko from 'date-fns/locale/ko';
 
-const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen, datePickerRef }) => {
+const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen, datePickerRef, userId }) => {
   const [storedDate, setStoredDate] = useState(() => {
-    const savedDate = localStorage.getItem('dday-date');
+    const savedDate = localStorage.getItem(`dday-date-${userId}`);
     return savedDate ? new Date(JSON.parse(savedDate)) : null;
   });
 
@@ -17,7 +17,7 @@ const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen
   }, [storedDate, handleDateChange]);
 
   const handleDateSelect = (date) => {
-    localStorage.setItem('dday-date', JSON.stringify(date));
+    localStorage.setItem(`dday-date-${userId}`, JSON.stringify(date));
     handleDateChange(date);
   };
 
