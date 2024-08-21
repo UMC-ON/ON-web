@@ -29,6 +29,7 @@ const Diary = () => {
   const [newDiaryContent, setNewDiaryContent] = useState('');
   const [diaries, setDiaries] = useState([]);
   const [dday, setDday] = useState(null); // state to hold the dday value
+  const [dateList, setDateList] = useState([]);
 
   const datePickerRef = useRef(null);
   const userInfo = useSelector((state) => state.user.user);
@@ -44,6 +45,7 @@ const Diary = () => {
         );
         setDiaries(response?.data?.result?.diaryList || []);
         setDday(response?.data?.result?.dday || null); // extract dday from response
+        setDateList(response?.data?.result?.dateList || []);
         console.log(response?.data?.result);
       } catch (error) {
         console.error('다이어리 목록을 가져오는 중 오류 발생:', error);
@@ -81,7 +83,7 @@ const Diary = () => {
           Authorization: `Bearer ${localStorage.getItem('AToken')}`,
         }
       );
-      return response?.data?.result?.dday || null; // 서버에서 dday 값을 반환
+      return response?.data?.result.date || null; // 서버에서 dday 값을 반환
     } catch (error) {
       console.error('서버에서 dday 가져오는 중 오류 발생:', error);
       return null;
@@ -165,7 +167,7 @@ const Diary = () => {
           </div>
         </Information>
         <CalendarContainer>
-          <DiaryCalendar diaries={diaries} />
+          <DiaryCalendar diaries={diaries} dateList={dateList} />
         </CalendarContainer>
         <AddDiary onClick={handleAddDiaryClick}>
           <div>기록 남기기</div>

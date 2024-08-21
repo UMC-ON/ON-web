@@ -59,33 +59,52 @@ const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen
 export default DDayCalendarComponent;
 
 const DDayCalendar = styled.div`
-  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  z-index: 2;
+  
+  
 `;
 
 const DatePickerWrapper = styled.div`
-  .inputDate {
-    width: 100%;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  z-index: 2;
+  .react-datepicker__day--outside-month {
+  visibility: hidden;
   }
+  
+
+  .react-datepicker__header {
+  background: white;
+  border: none;
+  };
+
+  
+  
 `;
 
 const HeaderContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 0.5em;
+  background: white;
 `;
 
-const Arrow = styled.button`
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-`;
-
-const HeaderDate = styled.span`
+const HeaderDate = styled.div`
   font-size: 16px;
   font-weight: bold;
+  color: #3E73B2;
+  margin: 0 4rem;
+  
+`;
+
+const Arrow = styled.div`
+  cursor: pointer;
+  font-size: 18px;
 `;
