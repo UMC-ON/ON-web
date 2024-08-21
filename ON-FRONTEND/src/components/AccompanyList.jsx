@@ -54,7 +54,7 @@ function AccompanyList({datas}) {
                 <Left>
                     <CardIcon src={personIcon} $top="2px"/>
                     <SmallGreyText>{data.nickname}</SmallGreyText>
-                    {(data.ageAnonymous) ?
+                    {(!data.ageAnonymous) ?
                     <><SmallGreyText>·</SmallGreyText>
                     <SmallGreyText>{data.age}세</SmallGreyText></>:
                     null
