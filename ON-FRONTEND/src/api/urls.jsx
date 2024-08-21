@@ -53,8 +53,8 @@ export const GET_SPECIFIC_ITEM = (marketPostId) => `/api/v1/market-post/${market
 export const GET_NEARBY_ITEM = (marketPostId) => `/api/v1/market-post/${marketPostId}/nearby`;
 export const GET_ITEM_SEARCH = `/api/v1/market-post/search`;
 export const GET_FILTER_ITEM = `/api/v1/market-post/filter`;
-export const GET_AVAILABLE_ITEM = `/api/v1/market-post/available`;
 export const POST_ITEM = `/api/v1/market-post`;
+export const GET_MARKET_ROOMID = `/api/v1/chat/request`;
 
 
 //스크랩
@@ -63,6 +63,9 @@ export const GET_SCRAP = (userId) => `/api/v1/scrap/${userId}`;
 export const DELETE_SCRAP = (userId, marketPostId) => `/api/v1/scrap/${userId}/${marketPostId}`;
 
 //일기 작성
+export const GET_DIARY = `/api/v1/diary/list`;
+export const POST_DDAY = `/api/v1/diary/startdate`;
+export const POST_DIARY = `/api/v1/diary`;
 
 //동행 글 조회
 export const GET_NEAR_ACCOMPANY = '/api/v1/home/company/list';

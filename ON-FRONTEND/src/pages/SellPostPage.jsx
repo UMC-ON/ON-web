@@ -1,7 +1,7 @@
-import styled from "styled-components";
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 
 import camera from "../assets/images/camera.svg";
 import PhotoAdd from "../assets/images/PhotoAdd.svg";
@@ -9,8 +9,9 @@ import PhotoAdd from "../assets/images/PhotoAdd.svg";
 import SellPostHeader from "../components/SellPostHeader";
 import SellPostSelectCity from "../components/SellPostSelectCity/SellPostSelectCity";
 import SellPostCitySelect from "../components/SellPostCitySelect";
-
-const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
+import { postData, multiFilePostData} from '../api/Functions';
+import { POST_ITEM } from '../api/urls';
+ 
 
 function SellPost() {
     const [selectedOption, setSelectedOption] = useState(null);
@@ -23,12 +24,11 @@ function SellPost() {
     const [showCity, setShowCity] = useState(false);
     const [city, setCity] = useState({ country: '', city: '' });
     const [isCityClicked, setIsCityClicked] = useState(false);
-    let userInfo = useSelector((state) => state.user.user);
-
+    const userInfo = useSelector((state) => state.user.user);
 
     const resetCityClick = () => {
         setIsCityClicked(false);
-        setCity(null);
+        setCity({ country: '', city: '' }); // 초기 상태로 설정
     };
 
     const handleGetCity = (locationInfo) => {
@@ -53,52 +53,47 @@ function SellPost() {
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
-        const postData = {
+        const formData = new FormData();
+
+        const jsonData = {
             userId: userInfo.id,
-            title,
-            cost,
+            title: title,
+            cost: cost,
             dealType: selectedOption === 'directly' ? 'DIRECT' : 'DELIVERY',
-            content,
+            content: content,
             currentCountry: city.country,
             currentLocation: city.city,
-            share,
-        };
-    
-        const formData = new FormData();
-    
-        // requestDTO 필드를 Blob으로 추가
-        formData.append('requestDTO', new Blob([JSON.stringify(postData)], { type: 'application/json' }));
-    
-        images.forEach((image) => {
-            formData.append('imageFiles', image);
-        });
+            share: share,
+        }
+        console.log(jsonData);
+
+        const jsonBlob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
+        formData.append('requestDTO', jsonBlob);
+
+        if (images) {
+            formData.append('imageFiles', images);
+        }
     
         try {
-            const response = await fetch(`${serverAddress}/api/v1/market-post`, {
-                method: 'POST',
-                headers: {
+            const response = await multiFilePostData(
+                POST_ITEM,
+                formData,
+                {
                     Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-                },
-                body: formData,
-            });
-    
-            const responseText = await response.text();
-            console.log('Response Status:', response.status);
-            console.log('Response Text:', responseText);
-    
-            if (!response.ok) {
-                throw new Error('Something went wrong!');
+                }
+            );
+
+            if (response) {
+                console.log(response.data.result);
+                navigate('/sell');
             }
-    
-            const data = JSON.parse(responseText);
-            console.log('Response Data:', data);
-    
-            navigate('/sell');
-    
+
         } catch (error) {
-            console.error('Error:', error.message);
+            console.error('ITEM POST Error:', error.message);
         }
     };
+    
+    
     
 
     return (
@@ -185,6 +180,7 @@ function SellPost() {
 }
 
 export default SellPost;
+
 
 
 

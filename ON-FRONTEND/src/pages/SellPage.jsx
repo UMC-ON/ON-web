@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 import arrowIcon from '../assets/images/bottomArrow.svg';
 import search_icon from '../assets/images/search_icon.svg';
@@ -13,7 +13,8 @@ import ItemList from '../components/ItemList';
 import TransactionPicker from "../components/TransactionPicker";
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 import SellPageCountrySelect from '../components/SellPageCountrySelect.jsx';
-
+import { getData } from '../api/Functions';
+import { GET_FILTER_ITEM, GET_ITEM_SEARCH } from '../api/urls';
 
 function SellPage() {
   const [showAvailable, setShowAvailable] = useState(false);
@@ -28,72 +29,54 @@ function SellPage() {
 
   const navigate = useNavigate();
   const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
+  
 
+  // Fetch items based on filters
   const fetchItems = async (dealType = '', currentCountry = '') => {
     try {
-      const url = `${serverAddress}/api/v1/market-post/filter`;
       const params = {};
 
       if (dealType) params.dealType = dealType === '직거래' ? 'DIRECT' : 'DELIVERY';
       if (currentCountry) params.currentCountry = currentCountry;
+      params.dealStatus = showAvailable ? 'AWAIT' : '';
 
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-        },
-        params,
-      });
+      const response = await getData(
+        GET_FILTER_ITEM, {
+        Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+      }, params);
 
-      setItems(response.data);
+      if (response) {
+        setItems(response.data);
+      }
     } catch (error) {
       console.error('필터링 중 오류 발생:', error);
     }
   };
 
+  // Fetch search results
   const fetchSearchResults = async () => {
     try {
-      const url = `${serverAddress}/api/v1/market-post/search`;
       const params = {
         keyword: searchKeyword, // 검색어를 쿼리 스트링으로 전달
       };
 
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-        },
-        params,
-      });
+      const response = await getData(
+        GET_ITEM_SEARCH, {
+        Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+      }, params);
 
-      setItems(response.data);
-      console.log(params);
+      if (response) {
+        setItems(response.data);
+      }
     } catch (error) {
       console.error('검색 중 오류 발생:', error);
     }
   };
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const url = showAvailable
-          ? `${serverAddress}/api/v1/market-post/available`
-          : `${serverAddress}/api/v1/market-post`;
-        const response = await axios.get(url, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
-        });
-        setItems(response.data);
-      } catch (error) {
-        console.error('거래 목록을 불러오는 중 오류 발생:', error);
-      }
-    };
-
-    fetchItems();
-  }, [showAvailable]);
-
+  // UseEffect to fetch items when filters change
   useEffect(() => {
     fetchItems(selectedTransaction, country);
-  }, [selectedTransaction, country]);
+  }, [selectedTransaction, country, showAvailable]);
 
   const resetCountryClick = () => {
     setIsCountryClicked(false);
@@ -115,7 +98,7 @@ function SellPage() {
     setTempTransaction('');
     setIsPickerVisible(false);
   };
-  
+
   const togglePickerVisibility = () => {
     if (selectedTransaction) {
       handleResetTransaction();
@@ -207,7 +190,6 @@ function SellPage() {
 }
 
 export default SellPage;
-
 
 
 

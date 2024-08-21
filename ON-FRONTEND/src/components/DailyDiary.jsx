@@ -6,7 +6,7 @@ const StoredDiary = ({ diaries }) => {
 
   return (
     <>
-      {diaries.diaryList && diaries.diaryList.map((item, index) => (
+      {diaries && diaries.map((item, index) => (
         <DailyDiary key={index}>
           <Content>{item.content}</Content>
           <DDay>{`D${item.writtenDday}`}</DDay>
@@ -18,6 +18,7 @@ const StoredDiary = ({ diaries }) => {
 }
 
 export default StoredDiary;
+
 
 const DailyDiary = styled.div`
   width: 90%;

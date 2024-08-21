@@ -5,20 +5,30 @@ import moment from 'moment';
 import ko from 'date-fns/locale/ko';
 
 const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen, datePickerRef, userId }) => {
-  const [storedDate, setStoredDate] = useState(() => {
-    const savedDate = localStorage.getItem(`dday-date-${userId}`);
-    return savedDate ? new Date(JSON.parse(savedDate)) : null;
-  });
+  // 상태를 로컬 스토리지 대신 컴포넌트의 상태로 관리
+  const [storedDate, setStoredDate] = useState(null);
 
   useEffect(() => {
+    // 컴포넌트가 렌더링될 때 로컬 스토리지에서 날짜를 불러와 상태를 설정
+    const savedDate = localStorage.getItem(`dday-date-${userId}`);
+    if (savedDate) {
+      setStoredDate(new Date(JSON.parse(savedDate)));
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    // 저장된 날짜가 있을 때 dateChange 핸들러를 호출
     if (storedDate) {
       handleDateChange(storedDate);
     }
   }, [storedDate, handleDateChange]);
 
   const handleDateSelect = (date) => {
-    localStorage.setItem(`dday-date-${userId}`, JSON.stringify(date));
+    setStoredDate(date);
     handleDateChange(date);
+
+    // 선택된 날짜를 로컬 스토리지에 저장
+    localStorage.setItem(`dday-date-${userId}`, JSON.stringify(date));
   };
 
   return (
@@ -59,56 +69,35 @@ const DDayCalendarComponent = ({ selectedDate, handleDateChange, setCalendarOpen
 
 export default DDayCalendarComponent;
 
-
-
-
+// Styled-components for DDayCalendar
 const DDayCalendar = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  z-index: 2;
-  
-  
+  position: relative;
 `;
 
 const DatePickerWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  z-index: 2;
-  .react-datepicker__day--outside-month {
-  visibility: hidden;
+  .inputDate {
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
   }
-  
-
-  .react-datepicker__header {
-  background: white;
-  border: none;
-  };
-
-  
-  
 `;
 
 const HeaderContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  padding: 0.5em;
-  background: white;
+  padding: 10px;
 `;
 
-const HeaderDate = styled.div`
+const Arrow = styled.button`
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+`;
+
+const HeaderDate = styled.span`
   font-size: 16px;
   font-weight: bold;
-  color: #3E73B2;
-  margin: 0 4rem;
-  
-`;
-
-const Arrow = styled.div`
-  cursor: pointer;
-  font-size: 18px;
 `;
