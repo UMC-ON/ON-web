@@ -19,59 +19,14 @@ import resetIcon from '../assets/images/resetIcon.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BottomTabNav from '../components/BottomTabNav/BottomTabNav';
 
+import Modal from "../components/Modal/Modal.jsx";
+import SecondModal from './SecondModal.jsx';
+
 const images = [bannerImg, bannerImg, bannerImg, bannerImg, bannerImg];
 
 const accompanyCards = [
   {
     isClosed: true,
-    image: marketImg,
-    title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!🔥🔥',
-    date: '8/2',
-    people: '(1/4)',
-    place: '런던 버로우 마켓',
-    description: '같이 시장 구경하면서 사진 찍으며 좋은 추억 남기고 싶으신 분들을 찾습니다!! 많은 관심 부탁드립니다',
-    id: 'wjdscl',
-    age: '20대',
-    gender: '여',
-  },
-  {
-    isClosed: false,
-    image: detailImg,
-    title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!🔥🔥',
-    date: '8/2',
-    people: '(1/4)',
-    place: '런던 버로우 마켓',
-    description: '같이 시장 구경하면서 사진 찍으며 좋은 추억 남기고 싶으신 분들을 찾습니다!! 많은 관심 부탁드립니다',
-    id: 'wjdscl',
-    age: '20대',
-    gender: '여',
-  },
-  {
-    isClosed: false,
-    image: marketImg,
-    title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!🔥🔥',
-    date: '8/2',
-    people: '(1/4)',
-    place: '런던 버로우 마켓',
-    description: '같이 시장 구경하면서 사진 찍으며 좋은 추억 남기고 싶으신 분들을 찾습니다!! 많은 관심 부탁드립니다',
-    id: 'wjdscl',
-    age: '20대',
-    gender: '여',
-  },
-  {
-    isClosed: false,
-    image: marketImg,
-    title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!🔥🔥',
-    date: '8/2',
-    people: '(1/4)',
-    place: '런던 버로우 마켓',
-    description: '같이 시장 구경하면서 사진 찍으며 좋은 추억 남기고 싶으신 분들을 찾습니다!! 많은 관심 부탁드립니다',
-    id: 'wjdscl',
-    age: '20대',
-    gender: '여',
-  },
-  {
-    isClosed: false,
     image: marketImg,
     title: '🔥🔥8/2 버로우 마켓 동행하실 분 구해요!🔥🔥',
     date: '8/2',
@@ -89,12 +44,20 @@ const AccompanyHomeComponent =
   startDate, endDate, isDateClicked, calendarClick, updateIsDateClicked, 
     genderClick, gender, isGenderClicked, updateIsGenderClicked,
     countryClick, country, isCountryClicked, updateIsCountryClicked,
-    updateEverything
+    updateEverything, isValidated
     }) => {
 
     const navigate = useNavigate();
     const goPost = () => {
+      if (!isValidated)
+      {
+        // alert('not validated');
+        setModalOpen(true);
+      }
+      else
+      {
       navigate('./post');
+      }
     };
 
     const resetDate = () => {
@@ -116,6 +79,17 @@ const AccompanyHomeComponent =
     const formatDate = (dateString) => {
       const date = new Date(dateString);
       return date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' }); 
+    };
+
+    const [isModalOpen, setModalOpen] = useState(false);
+
+    const closeModal = () => {
+      setModalOpen(false);
+    };
+
+    const openNextModal = () => {
+      setModalOpen(false);
+      navigate('/mypage/schoolAuth');
     };
 
     return (
@@ -185,6 +159,8 @@ const AccompanyHomeComponent =
             <LeftPadding />
             글 쓰기
           </WriteButton>
+
+          {isModalOpen && <SecondModal closeModal={closeModal} openNextModal={openNextModal} />}
         </>
       );
     };

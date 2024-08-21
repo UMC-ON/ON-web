@@ -23,7 +23,7 @@ const InfoCommunityCardList = ({ cards }) => {
           <PaddingTop />
           <Stripe $blue={true}>
             <TextTopLeft>{card.title}</TextTopLeft>
-            <TextTopRight>{card.postTime}</TextTopRight>
+            <TextTopRight>{showDate(card.postTime)}</TextTopRight>
           </Stripe>
           <BetweenContainer>
             <TextContainer>

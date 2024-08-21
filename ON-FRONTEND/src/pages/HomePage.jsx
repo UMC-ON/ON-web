@@ -113,8 +113,15 @@ function HomePage() {
           const accom_data = await getData(GET_NEAR_ACCOMPANY,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           }); 
-          setAccompanyData(accom_data.data.result);
-          // console.log(accom_data.data.result);
+          if (accom_data)
+          {
+            setAccompanyData(accom_data.data.result);
+            // console.log(accom_data.data.result);
+          }
+          else
+          {
+            setAccompanyData([]);
+          }
 
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -123,6 +130,28 @@ function HomePage() {
   
       fetchData(); 
     }, []); 
+
+    useEffect(() => {
+      const fetchAccomData = async () => {
+        try {
+          const accom_data = await getData(GET_NEAR_ACCOMPANY, {
+            Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+          });
+    
+
+          if (accom_data && accom_data.data && accom_data.data.result) {
+            setAccompanyData(accom_data.data.result);
+          } else {
+            setAccompanyData([]); 
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          setAccompanyData([]); 
+        }
+      };
+    
+      fetchAccomData();
+    }, []);
 
     return (
       <>
