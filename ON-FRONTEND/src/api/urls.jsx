@@ -34,9 +34,12 @@ export const GET_COMMENT_OF = (postId) => `/api/v1/comment/${postId}`;
 
 //채팅
 export const GET_TRADE_LIST = '/api/v1/chat/market/list';
-export const GET_ACCOMPANY_LIST = '/api/v1/chat/market/list';
+export const GET_ACCOMPANY_LIST = '/api/v1/chat/company/list';
 export const GET_TRADE_INFO = (roomId) => `/api/v1/chat/market/${roomId}`;
 export const GET_ACCOMPANY_INFO = (roomId) => `/api/v1/chat/company/${roomId}`;
+export const GET_ACCOMPANY_CHAT = (roomId) => `/api/v1/chat/${roomId}/message`;
+export const GET_TRADE_CHAT = (roomId) => `/api/v1/chat/${roomId}/message`;
+export const POST_CHAT = (roomId) => `/api/v1/chat/${roomId}/send`;
 
 //물품거래글
 

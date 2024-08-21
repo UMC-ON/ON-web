@@ -202,10 +202,10 @@ export const RadioBox = styled.div`
 
 export const Country = styled.div`
   margin-left: 0.44rem;
-  width: 2.6875rem;
   height: 1.5rem;
   flex-shrink: 0;
   border-radius: 0.625rem;
+  padding: 0 0.5rem;
   background: ${theme.blueGra};
   color: #fff;
   font-family: Inter;
