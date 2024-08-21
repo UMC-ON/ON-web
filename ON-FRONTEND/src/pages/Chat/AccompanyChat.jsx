@@ -13,6 +13,8 @@ import Loading from '../../components/Loading/Loading';
 import { GET_ACCOMPANY_CHAT } from '../../api/urls';
 import { getData } from '../../api/Functions';
 
+// import { useParams } from 'react-router-dom';
+
 const AccompanyChat = () => {
   //채팅을 시작한 사람 1 -> 보라색 배경
   const [user, setUser] = useState();
@@ -34,6 +36,8 @@ const AccompanyChat = () => {
   const chatWrapperRef = useRef(null); // 채팅 메시지 영역에 대한 참조 생성
   const chatListRef = useRef(chatList); // 최신 chatList를 관리하는 ref
   const pollingRef = useRef(true); // 롱 폴링 상태를 관리하는 ref
+
+  // const { roomId } = useParams();
 
   // chatList 상태가 변경될 때마다 chatListRef도 업데이트
   useEffect(() => {
