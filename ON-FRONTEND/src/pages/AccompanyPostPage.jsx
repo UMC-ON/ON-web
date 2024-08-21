@@ -375,7 +375,12 @@ function AccompanyPostPage() {
             </Title>
             <Left>
                 <GreyText>
-                    정보를 수정하려면 편집 버튼(
+                정보를 수정하려면
+                </GreyText>
+            </Left>
+            <Left>
+                <GreyText>
+                    편집 버튼(
                 </GreyText>
                 <SmallIcon src={postIcon} $top="10px"/>
                 <GreyText>

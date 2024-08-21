@@ -49,7 +49,7 @@ const AccompanyHomeComponent =
 
     const navigate = useNavigate();
     const goPost = () => {
-      if (!isValidated)
+      if (isValidated == null)
       {
         // alert('not validated');
         setModalOpen(true);
