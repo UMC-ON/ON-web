@@ -28,7 +28,7 @@ const LandingPage = () => {
           <Button onClick={() => nav('/signUp')}>회원가입</Button>
         </ButtonSection>
 
-        <GradientImg src={gradientRec} />
+        <GradientImg />
       </LandingPageContainer>
     </>
   );
@@ -105,13 +105,20 @@ const ImgImg = styled.div`
   //animation: ${changeImg} 2.5s 0s infinite;
 `;
 
-const GradientImg = styled.img`
+const GradientImg = styled.div`
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
+  height: 20%;
   max-width: '480px';
+  max-height: 40%;
   pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(187, 222, 255, 0) 0%,
+    rgba(187, 222, 255, 0.6) 100%
+  );
 `;
 const ButtonSection = styled.div`
   width: 100%;
