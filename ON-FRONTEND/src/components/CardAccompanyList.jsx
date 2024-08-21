@@ -155,11 +155,16 @@ const CardName = styled.p`
   padding-top: 12px;
   padding-bottom: 7px;
   color: #363636;
+
   width: 80%;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   text-align: left;
   line-height: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 `;
 
 const SmallGreyText = styled.p`
