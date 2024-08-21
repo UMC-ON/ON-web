@@ -9,6 +9,7 @@ import Slider from "react-slick";
 
 import ItemDetailPageHeader from "../components/ItemDetailPageHeader";
 import NearItemList from '../components/NearbyItemList';
+import LoadingScreen from '../components/LoadingScreen';
 
 import compas from "../assets/images/compasIcon.svg";
 import icon from "../assets/images/profileIcon.svg";
@@ -29,6 +30,18 @@ function ItemDetailPage() {
   const [nearitems, setNearitems] = useState([]);
   const [receiverId, setReceiverId] = useState(null);
   const [roomId, setRoomId] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); 
+    // 2 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
 
 
   useEffect(() => {
@@ -108,7 +121,7 @@ function ItemDetailPage() {
         const roomId = response.data.result.roomId;
         const nickname = userInfo?.nickname || 'Unknown User';
         setRoomId(roomId);
-        navigate(`/chat/market/${roomId}`, { state: { roomId: roomId, senderName: nickname } }); // Redirect to chat room
+        navigate(`/chat/trade/${roomId}`, { state: { roomId: roomId, senderName: nickname } }); // Redirect to chat room
       } else {
         console.error('Failed to create chat room:', response?.data?.message);
       }
@@ -121,7 +134,11 @@ function ItemDetailPage() {
 
   return (
     <>
-      <ItemDetailPageHeader />
+    {loading ? (
+      <LoadingScreen />
+    ) : (
+      <>
+        <ItemDetailPageHeader />
       <Space />
       <ContentContainer>
         {items && items.map((item, index) => {
@@ -165,6 +182,9 @@ function ItemDetailPage() {
           채팅으로 거래하기
         </ChatButton>
       </BottomTabLayout>
+      </>
+    )}
+      
     </>
   );
 }
