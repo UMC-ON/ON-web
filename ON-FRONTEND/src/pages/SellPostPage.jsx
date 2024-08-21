@@ -9,6 +9,8 @@ import SellPostHeader from "../components/SellPostHeader";
 import SellPostSelectCity from "../components/SellPostSelectCity/SellPostSelectCity";
 import SellPostCitySelect from "../components/SellPostCitySelect";
 
+const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
+
 function SellPost() {
     const [selectedOption, setSelectedOption] = useState(null);
     const [images, setImages] = useState([]);
@@ -21,7 +23,6 @@ function SellPost() {
     const [city, setCity] = useState({ country: '', city: '' });
     const [isCityClicked, setIsCityClicked] = useState(false);
 
-    const accessToken = import.meta.env.VITE_accessToken;
 
     const resetCityClick = () => {
         setIsCityClicked(false);
@@ -71,10 +72,10 @@ function SellPost() {
         });
     
         try {
-            const response = await fetch('https://13.209.255.118.nip.io/api/v1/market-post', {
+            const response = await fetch(`${serverAddress}/api/v1/market-post`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${accessToken}`,
+                    Authorization: `Bearer ${localStorage.getItem('AToken')}`,
                 },
                 body: formData,
             });

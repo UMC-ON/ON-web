@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -7,10 +7,12 @@ import compas from "../assets/images/compasIcon.svg";
 import profile from "../assets/images/profileIcon.svg";
 import empty_star from "../assets/images/empty_star.svg";
 import filled_star from "../assets/images/filled_star.svg";
+import noImage from "../assets/images/noImage.jpg";
 
 import {showDate} from "../components/Common/InfoExp";
-
-const accessToken = import.meta.env.VITE_accessToken;
+import { GET_CURRENT_INFO } from '../api/urls';
+import { getData, postData, putData } from '../api/Functions';
+const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
 const ItemList = ({ items }) => {
   const navigate = useNavigate();
@@ -21,18 +23,18 @@ const ItemList = ({ items }) => {
         const isCompleted = item.dealStatus === "COMPLETE";
         return (
           <ItemDiv key={index} isCompleted={isCompleted}>
-            <Photo src={item.imageUrls[0]} />
+            <Photo src={item.imageUrls[0] ? item.imageUrls[0] : noImage} />
             <Information>
               <StarContainer
                 marketPostId={item.marketPostId}
-                isFilled={item.isScrapped}
+                isScrapped={item.isScrapped} // changed prop name for clarity
               />
               <Description onClick={() => navigate(`./${item.marketPostId}`)}>
                 <TitleTimeContainer>
                   <Title>{item.title}</Title>
                   <Time>{showDate(item.createdAt)}</Time>
                 </TitleTimeContainer><br/>
-                <State how={item.dealType == 'DIRECT'? '직거래' : '택배거래'} now={item.dealStatus == 'COMPLETE' ? '거래 완료' : '거래 가능'} isCompleted={isCompleted} />
+                <State how={item.dealType === 'DIRECT' ? '직거래' : '택배거래'} now={item.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능'} isCompleted={isCompleted} />
                 <LocationAndUser>
                   <Place><Compas src={compas} />{item.currentCountry} {item.currentLocation}</Place>
                   <User><Profile src={profile} />{item.nickname}</User>
@@ -47,39 +49,71 @@ const ItemList = ({ items }) => {
   );
 };
 
-const StarContainer = ({ marketPostId, isFilled }) => {
-  const [isStarFilled, setIsStarFilled] = React.useState(
-    JSON.parse(localStorage.getItem(`scrap_${marketPostId}`)) || isFilled
-  );
+const StarContainer = ({ marketPostId, isScrapped }) => {
+  const [isStarFilled, setIsStarFilled] = useState(isScrapped);
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getData(
+          GET_CURRENT_INFO,
+          {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+          {},
+        );
+
+        if (response) {
+          setUserInfo(response.data.result);
+          console.log('userinfo: ', response.data.result.id);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    // 로컬스토리지에서 스크랩 상태 불러오기
+    const savedStarState = localStorage.getItem(`starState_${marketPostId}`);
+    if (savedStarState) {
+      setIsStarFilled(JSON.parse(savedStarState));
+    }
+  }, [marketPostId]);
 
   const toggleStar = async () => {
     try {
       if (isStarFilled) {
         // 스크랩 취소 요청
-        await axios.delete(`https://13.209.255.118.nip.io/api/v1/scrap/10/${marketPostId}`, {
+        await axios.delete(`${serverAddress}/api/v1/scrap/${userInfo?.id}/${marketPostId}`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
         });
-        localStorage.setItem(`scrap_${marketPostId}`, false);
       } else {
         // 스크랩 등록 요청
         await axios.post(
-          `https://13.209.255.118.nip.io/api/v1/scrap`, 
+          `${serverAddress}/api/v1/scrap`,
           {
-            marketPostId: marketPostId, // 실제로 스크랩하려는 `marketPostId`를 사용
-            userId: 10
+            marketPostId: marketPostId,
+            userId: userInfo?.id,
           },
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${localStorage.getItem('AToken')}`,
             },
           }
         );
-        localStorage.setItem(`scrap_${marketPostId}`, true);
       }
       setIsStarFilled(!isStarFilled);
-      console.log({marketPostId});
+
+      // 로컬스토리지에 스크랩 상태 저장
+      localStorage.setItem(`starState_${marketPostId}`, JSON.stringify(!isStarFilled));
+
+      console.log({ marketPostId });
     } catch (error) {
       console.error('스크랩 처리 중 오류 발생:', error);
     }
@@ -93,10 +127,8 @@ const StarContainer = ({ marketPostId, isFilled }) => {
   );
 };
 
-
-
-
 export default ItemList;
+
 
 
 
@@ -160,6 +192,7 @@ const Time = styled.span`
   color: #7A7A7A;
   font-size: 0.6em;
   margin-left: 8px;
+  margin-top: 5px;
 `;
 
 const TitleTimeContainer = styled.div`

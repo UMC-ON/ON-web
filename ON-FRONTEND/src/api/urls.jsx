@@ -42,8 +42,19 @@ export const GET_TRADE_CHAT = (roomId) => `/api/v1/chat/${roomId}/message`;
 export const POST_CHAT = (roomId) => `/api/v1/chat/${roomId}/send`;
 
 //물품거래글
+export const GET_ITEM_LIST = `/api/v1/market-post`;
+export const GET_SPECIFIC_ITEM = (marketPostId) => `/api/v1/market-post/${marketPostId}`;
+export const GET_NEARBY_ITEM = (marketPostId) => `/api/v1/market-post/${marketPostId}/nearby`;
+export const GET_ITEM_SEARCH = `/api/v1/market-post/search`;
+export const GET_FILTER_ITEM = `/api/v1/market-post/filter`;
+export const GET_AVAILABLE_ITEM = `/api/v1/market-post/available`;
+export const POST_ITEM = `/api/v1/market-post`;
+
 
 //스크랩
+export const POST_SCRAP = `/api/v1/scrap`;
+export const GET_SCRAP = (userId) => `/api/v1/scrap/${userId}`;
+export const DELETE_SCRAP = (userId, marketPostId) => `/api/v1/scrap/${userId}/${marketPostId}`;
 
 //일기 작성
 

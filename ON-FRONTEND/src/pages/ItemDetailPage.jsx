@@ -11,8 +11,10 @@ import NearItemList from '../components/NearbyItemList';
 
 import compas from "../assets/images/compasIcon.svg";
 import icon from "../assets/images/profileIcon.svg";
+import noImage from "../assets/images/noImage.jpg";
 
-const accessToken = import.meta.env.VITE_accessToken;
+const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
+
 
 function ItemDetailPage() {
   const navigate = useNavigate();
@@ -24,9 +26,9 @@ function ItemDetailPage() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get(`https://13.209.255.118.nip.io/api/v1/market-post/${marketPostId}`, {
+        const response = await axios.get(`${serverAddress}/api/v1/market-post/${marketPostId}`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
         });
         setItems([response.data]); 
@@ -42,12 +44,12 @@ function ItemDetailPage() {
   useEffect(() => {
     const fetchNearitems = async () => {
       try {
-        const response = await axios.get(`https://13.209.255.118.nip.io/api/v1/market-post/${marketPostId}/nearby`, {
+        const response = await axios.get(`${serverAddress}/api/v1/market-post/${marketPostId}/nearby`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
         });
-        setNearitems(response.data); // 배열로 설정된 경우 직접 할당
+        setNearitems(response.data);
         console.log(response.data);
       } catch (error) {
         console.error('근처 물품 정보를 불러오는 중 오류 발생:', error);
@@ -56,7 +58,6 @@ function ItemDetailPage() {
   
     fetchNearitems();
   }, [marketPostId]);
-  
 
   const settings = {
     dots: false,
@@ -64,42 +65,46 @@ function ItemDetailPage() {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: false, // 화살표 숨기기
+    arrows: false,
   };
 
-  return(
+  return (
     <>
       <ItemDetailPageHeader />
       <Space />
       <ContentContainer>
         {items && items.map((item, index) => {
-          const isSingleImage = item.imageUrls.length === 1;
+          const imageUrls = item.imageUrls && item.imageUrls.length > 0 
+            ? item.imageUrls 
+            : [noImage];
+          
+          const isSingleImage = imageUrls.length === 1;
 
           return (
             <React.Fragment key={index}>
               {isSingleImage ? (
-                <SingleImage src={item.imageUrls[0]} alt={`Image ${index + 1}`} />
+                <SingleImage src={imageUrls[0]} alt={`Image ${index + 1}`} />
               ) : (
                 <Slider {...settings}>
-                  {item.imageUrls.map((url, idx) => (
+                  {imageUrls.map((url, idx) => (
                     <ItemImage key={idx} src={url} alt={`Slide ${idx + 1}`} />
                   ))}
                 </Slider>
               )}
               <InfoContainer>
                 <Title>{item.title}</Title>
-                <State>{item.dealType == 'DIRECT' ? '직거래' : '택배거래'} | {item.dealStatus == 'AWAIT' ? '거래 가능' : '거래 완료'}</State><br/>
+                <State>{item.dealType === 'DIRECT' ? '직거래' : '택배거래'} | {item.dealStatus === 'AWAIT' ? '거래 가능' : '거래 완료'}</State><br />
                 <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
                 <Information>{item.content}</Information>
-                <GrayLine /><br/>
-                <Seller>판매자 정보</Seller><br/>
+                <GrayLine /><br />
+                <Seller>판매자 정보</Seller><br />
                 <SellerInfo>
                   <Place><Image src={compas} alt="compas" style={{ marginRight: "5px" }} />{item.currentCountry} {item.currentLocation}</Place>
                   <User><Image src={icon} alt="profile" style={{ marginRight: "5px" }} />{item.nickname}</User>
                 </SellerInfo>
                 <Nearby><Blue>주변</Blue> 중고거래글</Nearby>
               </InfoContainer>
-              <NearItemList nearitems = {nearitems} />
+              <NearItemList nearitems={nearitems} />
             </React.Fragment>
           );
         })}
@@ -114,6 +119,7 @@ function ItemDetailPage() {
 }
 
 export default ItemDetailPage;
+
 
 const Space = styled.div`
   margin-top: 7vh;

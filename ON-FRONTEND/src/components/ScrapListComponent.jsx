@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -10,7 +10,10 @@ import filled_star from "../assets/images/filled_star.svg";
 
 import {showDate} from "../components/Common/InfoExp";
 
-const accessToken = import.meta.env.VITE_accessToken;
+import { GET_CURRENT_INFO } from '../api/urls';
+import { getData, postData, putData } from '../api/Functions';
+const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
+
 
 const ScrapList = ({ items }) => {
   const navigate = useNavigate();
@@ -48,33 +51,65 @@ const ScrapList = ({ items }) => {
 };
 
 const StarContainer = ({ marketPostId, isFilled = true }) => {
+  const [userInfo, setUserInfo] = useState(null);
   const [isStarFilled, setIsStarFilled] = React.useState(isFilled);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getData(
+          GET_CURRENT_INFO,
+          {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+          {},
+        );
+
+        if (response) {
+          setUserInfo(response.data.result);
+          console.log('userinfo: ', response.data.result.id); // 수정된 부분
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    // 로컬스토리지에서 스크랩 상태 불러오기
+    const savedStarState = localStorage.getItem(`starState_${marketPostId}`);
+    if (savedStarState) {
+      setIsStarFilled(JSON.parse(savedStarState));
+    }
+  }, [marketPostId]);
 
   const toggleStar = async () => {
     try {
       if (isStarFilled) {
         // 스크랩 취소 요청
-        await axios.delete(`https://13.209.255.118.nip.io/api/v1/scrap/10/${marketPostId}`, {
+        await axios.delete(`${serverAddress}/api/v1/scrap/${userInfo?.id}/${marketPostId}`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
         });
       } else {
         // 스크랩 등록 요청
         await axios.post(
-          `https://13.209.255.118.nip.io/api/v1/scrap`, 
+          `${serverAddress}/api/v1/scrap`, 
           {
             marketPostId: marketPostId, // 실제로 스크랩하려는 `marketPostId`를 사용
-            userId: 10
+            userId: userInfo?.id
           },
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${localStorage.getItem('AToken')}`,
             },
           }
         );
       }
       setIsStarFilled(!isStarFilled);
+      localStorage.setItem(`starState_${marketPostId}`, JSON.stringify(!isStarFilled));
       console.log({marketPostId});
     } catch (error) {
       console.error('스크랩 처리 중 오류 발생:', error);
@@ -158,6 +193,7 @@ const Title = styled.p`
 const Time = styled.span`
   color: #7A7A7A;
   font-size: 0.6em;
+  margin-left: 8px;
 `;
 
 const StateWrapper = styled.p`

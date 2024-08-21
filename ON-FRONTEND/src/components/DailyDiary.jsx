@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StoredDiary = ({ diaries }) => {
-  console.log(diaries); // 데이터 확인용
+  console.log(diaries);
 
   return (
     <>

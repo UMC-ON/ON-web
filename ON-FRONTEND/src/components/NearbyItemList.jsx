@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -7,82 +7,118 @@ import compas from "../assets/images/compasIcon.svg";
 import profile from "../assets/images/profileIcon.svg";
 import empty_star from "../assets/images/empty_star.svg";
 import filled_star from "../assets/images/filled_star.svg";
+import noImage from "../assets/images/noImage.jpg";
 
-import {showDate} from "../components/Common/InfoExp";
-
-const accessToken = import.meta.env.VITE_accessToken;
+import { showDate } from "../components/Common/InfoExp";
+const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
+import { GET_CURRENT_INFO } from '../api/urls';
+import { getData, postData, putData } from '../api/Functions';
 
 const NearItemList = ({ nearitems }) => {
-    const navigate = useNavigate();
-  
-    return (
-      <>
-        {nearitems && nearitems.length > 0 && nearitems.map((item, index) => {
-          const isCompleted = item.dealStatus === "COMPLETE";
-          // Check if imageUrls and other properties exist
-          const imageUrl = item.imageUrls && item.imageUrls[0] ? item.imageUrls[0] : '';
-          const isScrapped = item.isScrapped || false;
-          const dealType = item.dealType === 'DIRECT' ? '직거래' : '택배거래';
-          const dealStatus = item.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능';
-  
-          return (
-            <ItemDiv key={index} isCompleted={isCompleted}>
-              {imageUrl && <Photo src={imageUrl} />} {/* Ensure imageUrl is valid */}
-              <Information>
-                <StarContainer
-                  marketPostId={item.marketPostId}
-                  isFilled={isScrapped}
-                />
-                <Description onClick={() => navigate(`./${item.marketPostId}`)}>
-                  <TitleTimeContainer>
-                    <Title>{item.title}</Title>
-                    <Time>{showDate(item.createdAt)}</Time>
-                  </TitleTimeContainer><br/>
-                  <State how={dealType} now={dealStatus} isCompleted={isCompleted} />
-                  <LocationAndUser>
-                    <Place><Compas src={compas} />{item.currentCountry} {item.currentLocation}</Place>
-                    <User><Profile src={profile} />{item.nickname}</User>
-                  </LocationAndUser>
-                  <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
-                </Description>
-              </Information>
-            </ItemDiv>
-          );
-        })}
-      </>
-    );
-  };
-  
+  const navigate = useNavigate();
+
+  return (
+    <>
+      {nearitems && nearitems.length > 0 && nearitems.map((item, index) => {
+        const isCompleted = item.dealStatus === "COMPLETE";
+        const imageUrl = item.imageUrls && item.imageUrls[0] ? item.imageUrls[0] : noImage;
+        const isScrapped = item.isScrapped || false;
+        const dealType = item.dealType === 'DIRECT' ? '직거래' : '택배거래';
+        const dealStatus = item.dealStatus === 'COMPLETE' ? '거래 완료' : '거래 가능';
+
+        return (
+          <ItemDiv key={index} isCompleted={isCompleted}>
+            <Photo src={imageUrl} />
+            <Information>
+              <StarContainer
+                marketPostId={item.marketPostId}
+                isFilled={isScrapped}
+              />
+              <Description onClick={() => navigate(`../sell/${item.marketPostId}`)}>
+                <TitleTimeContainer>
+                  <Title>{item.title}</Title>
+                  <Time>{showDate(item.createdAt)}</Time>
+                </TitleTimeContainer><br />
+                <State how={dealType} now={dealStatus} isCompleted={isCompleted} />
+                <LocationAndUser>
+                  <Place><Compas src={compas} />{item.currentCountry} {item.currentLocation}</Place>
+                  <User><Profile src={profile} />{item.nickname}</User>
+                </LocationAndUser>
+                <Price>{item.share ? '나눔' : `₩ ${item.cost}`}</Price>
+              </Description>
+            </Information>
+          </ItemDiv>
+        );
+      })}
+    </>
+  );
+};
 
 const StarContainer = ({ marketPostId, isFilled }) => {
-  const [isStarFilled, setIsStarFilled] = React.useState(isFilled);
+  const [isStarFilled, setIsStarFilled] = useState(isFilled);
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getData(
+          GET_CURRENT_INFO,
+          {
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+          },
+          {},
+        );
+
+        if (response) {
+          setUserInfo(response.data.result);
+          console.log('userinfo: ', response.data.result.id); // 수정된 부분
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    // 로컬스토리지에서 스크랩 상태 불러오기
+    const savedStarState = localStorage.getItem(`starState_${marketPostId}`);
+    if (savedStarState) {
+      setIsStarFilled(JSON.parse(savedStarState));
+    }
+  }, [marketPostId]);
 
   const toggleStar = async () => {
     try {
       if (isStarFilled) {
         // 스크랩 취소 요청
-        await axios.delete(`https://13.209.255.118.nip.io/api/v1/scrap/10/${marketPostId}`, {
+        await axios.delete(`${serverAddress}/api/v1/scrap/${userInfo?.id}/${marketPostId}`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
         });
       } else {
         // 스크랩 등록 요청
         await axios.post(
-          `https://13.209.255.118.nip.io/api/v1/scrap`, 
+          `${serverAddress}/api/v1/scrap`,
           {
-            marketPostId: marketPostId, // 실제로 스크랩하려는 `marketPostId`를 사용
-            userId: 10
+            marketPostId: marketPostId,
+            userId: userInfo?.id,
           },
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${localStorage.getItem('AToken')}`,
             },
           }
         );
       }
       setIsStarFilled(!isStarFilled);
-      console.log({marketPostId});
+
+      // 로컬스토리지에 스크랩 상태 저장
+      localStorage.setItem(`starState_${marketPostId}`, JSON.stringify(!isStarFilled));
+
+      console.log({ marketPostId });
     } catch (error) {
       console.error('스크랩 처리 중 오류 발생:', error);
     }
@@ -95,8 +131,6 @@ const StarContainer = ({ marketPostId, isFilled }) => {
     />
   );
 };
-
-
 
 export default NearItemList;
 
