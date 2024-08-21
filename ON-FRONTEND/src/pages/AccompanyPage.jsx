@@ -50,8 +50,8 @@ function AccompanyPage() {
     };
 
     const handleApplyClick = (start, end) => {
-      setStartDate(moment(start).format('MM/DD'));
-      setEndDate(moment(end).format('MM/DD'));
+      setStartDate(moment(start).format('YYYY-MM-DD'));
+      setEndDate(moment(end).format('YYYY-MM-DD'));
       setIsDateClicked(true);
       setShowCalendar(false);
     };

@@ -36,7 +36,10 @@ const InfoCommunityCardList = ({ cards }) => {
                 <TextBottomLeft2>{card.commentCount}</TextBottomLeft2>
               </InlineTextContainer>
             </TextContainer>
-            <ImageRight src={card.postImg} />
+            {card.postImg ?
+            <ImageRight src={card.postImg} />:
+            null
+            }
           </BetweenContainer>
         </ImgContainer>
       ))}

@@ -5,6 +5,9 @@ import personIcon from '../assets/images/person_icon.svg';
 import calendarIcon from '../assets/images/calendar_icon.svg';
 import plusIcon from '../assets/images/plus_icon.svg';
 import placeIcon from '../assets/images/place_icon.svg';
+import defaultImg from '../assets/images/bannerDefault.svg';
+
+import { useNavigate } from 'react-router-dom';
 
 
 const CardAccompanyList = ({ color, cards }) => {
@@ -17,12 +20,22 @@ const CardAccompanyList = ({ color, cards }) => {
     return `${month}/${day}`;
   }
 
+  const navigate = useNavigate();
+
   return (
     <CardListContainer>
       {cards.map((card, index) => (
-        <CardContainer key={index}>
+        <CardContainer key={index} onClick={() => {
+          const id = card.postId ?? card.companyPostId;
+          if (id) {
+            window.location.href = `/accompany/detail/${id}`;
+          }
+        }}>
           <Card>
-            <CardImage src={card.postImg}/>
+            {card.postImg?
+            <CardImage src={card.postImg}/>:
+            <CardImage src={defaultImg}/>
+            }
             <GreyCard color={color}>
               <Left><CardName>{card.title}</CardName></Left>
               <Left>
@@ -104,15 +117,19 @@ const Card = styled.div`
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 22vh; 
   height: 32vh; 
 `;
 
 const CardImage = styled.img`
   width: 100%;
-  height: 16vh;        
+  height: 18vh;        
   object-fit: cover;   
+  aspect-ratio: 16/9;
+  margin: 0;
+  padding: 0;
+  display: block;
 `;
 
 const CardIcon = styled.img`
@@ -122,7 +139,8 @@ const CardIcon = styled.img`
 
 const CardName = styled.p`
   font-size: 1em;
-  padding: 0px;
+  padding: 12px 0 7px 0;
+  margin: 0;
   font-weight: bold;
   padding-top: 12px;
   padding-bottom: 7px;
@@ -152,6 +170,8 @@ const GreyText = styled.p`
 
 const GreyCard = styled.div`
   background-color: ${props => props.color || '#D0D6DA'};
+  margin-top: 0;
+  flex-grow: 1;
 `;
 
 const Left = styled.div`
