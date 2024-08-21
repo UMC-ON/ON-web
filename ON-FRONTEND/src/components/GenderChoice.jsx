@@ -61,6 +61,7 @@ const Center = styled.div`
 
 const Button = styled.button`
   padding: 10px;
+  color: ${(props) => (props.$isActive ? '#FFFFFF' : '#363636')};
   border: 1px solid #C2C7FF;
   margin: 5px;
   width: 90%;
