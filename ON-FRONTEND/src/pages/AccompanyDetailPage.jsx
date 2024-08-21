@@ -100,9 +100,9 @@ function AccompanyDetailPage() {
   };
 
   const handleBlueButtonClick = () => {
-    applyData();
     closeFirstModal();
-    alert('start chat');
+    applyData();
+    // alert('start chat');
     // Start Chat
   };
 
