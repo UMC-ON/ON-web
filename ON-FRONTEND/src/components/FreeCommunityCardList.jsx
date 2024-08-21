@@ -5,14 +5,20 @@ import bubbleIcon from '../assets/images/bubble.svg'
 import freeImg from '../assets/images/free_container.svg';
 import infoStripe from '../assets/images/infoStripe.svg';
 import freeStripe from '../assets/images/freeStripe.svg';
+import { useNavigate } from 'react-router-dom';
 
 import { showDate } from '../components/Common/InfoExp';
 
 const FreeCommunityCardList = ({ cards }) => {
+  const navigate = useNavigate();
   return (
     <div>
       {cards.map((card, index) => (
-        <FreeContainer key={index}>
+        <FreeContainer key={index}onClick={() =>
+          navigate(`./community/general/detail/${card.postId}`, {
+            state: { value: card.postId },
+          })
+          }>
           <PaddingTop/>
           <Stripe $blue={false}>
             <TextTopLeft>{card.title}</TextTopLeft>
