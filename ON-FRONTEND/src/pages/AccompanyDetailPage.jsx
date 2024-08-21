@@ -95,7 +95,7 @@ function AccompanyDetailPage() {
   const { postId } = useParams();
 
   const [isFirstModalOpen, setIsFirstModalOpen] = useState(false);
-  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  // const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
@@ -117,15 +117,15 @@ function AccompanyDetailPage() {
     setIsFirstModalOpen(false);
   };
 
-  const openSecondModal = () => {
-    console.log("Second modal opened");
-    setIsSecondModalOpen(true);
-  };
+  // const openSecondModal = () => {
+  //   console.log("Second modal opened");
+  //   setIsSecondModalOpen(true);
+  // };
 
-  const closeSecondModal = () => {
-    console.log("Second modal closed");
-    setIsSecondModalOpen(false);
-  };
+  // const closeSecondModal = () => {
+  //   console.log("Second modal closed");
+  //   setIsSecondModalOpen(false);
+  // };
 
   const openReportModal = () => {
     console.log("Report modal opened");
@@ -150,7 +150,8 @@ function AccompanyDetailPage() {
   const handleBlueButtonClick = () => {
     // applyData();
     closeFirstModal();
-    openSecondModal();
+    alert('start chat');
+    // Start Chat
   };
 
   function replaceHyphenWithDot(dateString) {
@@ -273,7 +274,7 @@ function AccompanyDetailPage() {
        
 
         <BlueContainer>
-          <BigText $size="1.3em">{card.title}</BigText>
+          <TitleText $size="1.3em">{card.title}</TitleText>
           <Left><GreyText>{showDate(card.createdAt)}</GreyText></Left>
         </BlueContainer>
 
@@ -329,8 +330,7 @@ function AccompanyDetailPage() {
           {card.recruitCompletd ?
           <GreyButton $width="500px">모집이 완료된 동행 글이에요.</GreyButton> :
           <>
-          <GreyButton onClick={() => navigate('/chat')}>채팅 문의</GreyButton>
-          <BlueButton onClick={openFirstModal}>동행 신청</BlueButton>
+          <BlueButton onClick={openFirstModal} $width="500px">동행 신청 및 문의하기</BlueButton>
           </>
           }
         </BottomTabLayout>
@@ -342,7 +342,7 @@ function AccompanyDetailPage() {
           nickname={nickname}
         />
         )}
-        {isSecondModalOpen && <SecondModal closeModal={closeSecondModal} />}
+        {/* {isSecondModalOpen && <SecondModal closeModal={closeSecondModal} />} */}
         {isReportModalOpen && <ReportModal closeModal={closeReportModal} />}
         {isShareModalOpen && <ShareModal closeModal={closeShareModal} />}
       </>
@@ -455,6 +455,16 @@ const BigText = styled.p`
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: normal;
+`;
+
+const TitleText = styled.p`
+  color: black; 
+  margin: 0;
+  padding-top: 0px;
+  font-size: ${props => props.$size || '1.5em'};
+  font-weight: bold;
+  text-align: left;
+  line-height: 3vh;
 `;
 
 const GreyText = styled.p`
@@ -583,7 +593,7 @@ const BlueButton = styled.button`
   right: 0;
   margin: 0 auto; 
   border-radius: 10px;
-  width: 148px;
+  width: ${props => props.$width || '148px'};
   height: 50px;
   padding: 15px 26px;
   background: linear-gradient(135deg, #D6EBFF, #C2C7FF);

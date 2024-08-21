@@ -353,12 +353,12 @@ function AccompanyPostPage() {
       {
         alert('요청사항을 입력해주세요.');
       }
-      // else
-      // {
-      //   postData().then(() => {
-      //     navigate('/accompany', { state: { refresh: true } });
-      //   });
-      // }
+      else
+      {
+        postData().then(() => {
+          navigate('/accompany', { state: { refresh: true } });
+        });
+      }
       // alert(input);
     };
     

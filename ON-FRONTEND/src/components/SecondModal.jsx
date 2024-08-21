@@ -1,24 +1,24 @@
 import styled from 'styled-components';
 
-import planeIcon from '../assets/images/plane_icon.svg';
+import planeIcon from '../assets/images/warning_icon.svg';
 import closeIcon from '../assets/images/close_button.svg';
 
-  function SecondModal({ closeModal }) {
+  function SecondModal({ closeModal, openNextModal }) {
     return (
       <Box>
         <ModalContent>
           <Close src={closeIcon} onClick={closeModal} />
+          <Space />
           <Icon src={planeIcon} />
   
-          <ModalTitle>동행신청이</ModalTitle>
-          <ModalTitle>완료되었습니다.</ModalTitle>
+          
+          <ModalTitle>파견교 인증 후에</ModalTitle>
+          <ModalTitle>작성하실 수 있습니다.</ModalTitle>
   
           <Space />
-  
-          <ModalText>채팅창이 만들어져</ModalText>
-          <ModalText>제로님과 자유롭게 소통할 수 있습니다.</ModalText>
-  
           <Space />
+  
+          <BlueButton onClick={openNextModal}>파견교 인증 바로가기</BlueButton>
         </ModalContent>
       </Box>
     );
@@ -89,7 +89,7 @@ import closeIcon from '../assets/images/close_button.svg';
     align-items: center;
     justify-content: center;
     margin: 0 auto;
-    border-radius: 10px;
+    border-radius: 40px;
     width: 200px;
     height: 50px;
     padding: 15px 26px;

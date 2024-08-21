@@ -16,7 +16,7 @@ const FreeCommunityCardList = ({ cards }) => {
           <PaddingTop/>
           <Stripe $blue={false}>
             <TextTopLeft>{card.title}</TextTopLeft>
-            <TextTopRight>{card.postTime}</TextTopRight>
+            <TextTopRight>{showDate(card.postTime)}</TextTopRight>
           </Stripe>
           <TextContainer>
             <TextMiddle2>{card.content}
