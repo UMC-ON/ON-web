@@ -28,6 +28,10 @@ export const PageName = styled.p`
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+  max-width: 70%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const CompleteBtn = styled.div`
