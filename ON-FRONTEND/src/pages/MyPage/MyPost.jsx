@@ -166,6 +166,13 @@ const MyPost = () => {
     console.log('Current Mode:', currentMode);
   }, [currentMode]);
 
+  useEffect(() => {
+    console.log('trade: ', tradePostResult);
+    console.log('acc: ', accompanyPostResult);
+    console.log('free: ', freePostResult);
+    console.log('info: ', infoPostResult);
+  }, [tradePostResult, accompanyPostResult, freePostResult, infoPostResult]);
+
   return (
     <s.PageLayout>
       <PageHeader pageName={'내 글'} />
