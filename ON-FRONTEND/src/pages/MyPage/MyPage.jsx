@@ -296,12 +296,6 @@ const MyPage = () => {
 
           <s.InfoContainer style={{ paddingBottom: '2rem' }}>
             <s.Title>닉네임</s.Title>
-            {/* <s.EditBtn
-              onClick={() => clickEditNickname}
-              color={editNickname ? theme.blueGra : theme.lightGray}
-            >
-              {editNickname ? '완료' : '수정'}
-            </s.EditBtn> */}
             <s.TextInput
               disabled={!editNickname}
               value={nickname}
