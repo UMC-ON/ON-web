@@ -108,7 +108,7 @@ function ItemDetailPage() {
         const roomId = response.data.result.roomId;
         const nickname = userInfo?.nickname || 'Unknown User';
         setRoomId(roomId);
-        navigate(`/chat/market/${roomId}`, { state: { roomId, nickname } }); // Redirect to chat room
+        navigate(`/chat/market/${roomId}`, { state: { roomId: roomId, senderName: nickname } }); // Redirect to chat room
       } else {
         console.error('Failed to create chat room:', response?.data?.message);
       }

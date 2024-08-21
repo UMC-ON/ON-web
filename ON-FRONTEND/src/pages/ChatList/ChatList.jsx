@@ -68,27 +68,28 @@ const ChatList = () => {
   //axios 물품 거래
   useEffect(() => {
     const fetchTradeChat = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getData(
-          GET_TRADE_LIST,
-          {
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
-          {},
-        );
+  setIsLoading(true);
+  try {
+    const response = await getData(
+      GET_TRADE_LIST,
+      {
+        Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+      },
+      {},
+    );
 
-        if (response) {
-          console.log(response.data.result);
-          console.log(response.data.result.roomList);
-          setTradeChatResult(response.data.result.roomList);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (response) {
+      console.log(response.data); // 응답 데이터 확인
+      console.log(response.data.result.roomList); // 응답 데이터 확인
+      setTradeChatResult(response.data.result.roomList); // 상태 업데이트
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
     fetchTradeChat();
   }, [currentMode === 'trade']);
