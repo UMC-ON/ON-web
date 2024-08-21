@@ -13,7 +13,7 @@ import closeIcon from '../assets/images/close_button.svg';
   
           
           <ModalTitle>파견교 인증 후에</ModalTitle>
-          <ModalTitle>작성하실 수 있습니다.</ModalTitle>
+          <ModalTitle>하실 수 있습니다.</ModalTitle>
   
           <Space />
           <Space />

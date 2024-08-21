@@ -25,12 +25,14 @@ import screenshotImg from '../assets/images/screenshot.svg'
 import CardAccompanyList from '../components/CardAccompanyList';
 import InfoCommunityCardList from '../components/InfoCommunityCardList';
 import FreeCommunityCardList from '../components/FreeCommunityCardList';
+import { immigration } from '../assets/immigrationDatabase';
 
 import { getData } from '../api/Functions';
 import { GET_USER_INFO, GET_TWO_FREEPOST, GET_TWO_INFOPOST, GET_NEAR_ACCOMPANY } from '../api/urls';
 
 
 const images = [bannerimg, bannerimg, bannerimg, bannerimg, bannerimg];
+import { cities } from '../assets/cityDatabase';
 
 
 function HomePage() {
@@ -39,6 +41,12 @@ function HomePage() {
     const [infoData, setInfoData] = useState([]);
     const [freeData, setFreeData] = useState([]);
     const [accompanyData, setAccompanyData] = useState([]);
+    const [univLink, setUnivLink] = useState("");
+    const [immigrationLink, setImmigrationLink] = useState('');
+
+    const navigate = useNavigate();
+
+
 
     const handlers = useSwipeable({
       onSwipedLeft: () => setCurrentSlide((prev) => (prev + 1) % images.length),
@@ -51,7 +59,6 @@ function HomePage() {
       setCurrentSlide(index);
     };
 
-    const navigate = useNavigate();
 
     function goToAccompany() {
       navigate("/accompany");
@@ -82,12 +89,41 @@ function HomePage() {
     }
 
     function goToCollege() {
-      window.location.href = "https://www.kcl.ac.uk/";
+      if (univLink != "")
+      {
+        window.location.href = univLink;
+      }
     }
 
     function goToMigration() {
-      window.location.href = "https://www.gov.uk/government/organisations/uk-visas-and-immigration";
+      if (immigrationLink != "")
+      {
+      window.location.href = immigrationLink;
+      }
     }
+
+
+    function getSiteByCountry(countryName) {
+      const countryData = immigration.find(item => item.country === countryName);
+      if(countryData)
+      {
+        // console.log(countryData.site);
+        setImmigrationLink(countryData.site);
+      }
+      else
+      {
+        console.log("not found");
+      }
+    }
+
+    const getContinentForCountry = (countryName) => {
+      const country = cities.find(c => c.country === countryName);
+      return country.continent;
+    };
+
+    useEffect(() => {
+      // console.log(immigrationLink); 
+    }, [immigrationLink]);
 
     useEffect(() => {
       const fetchData = async () => {
@@ -96,14 +132,19 @@ function HomePage() {
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           }); 
           setUserData([user_data.data.result]);
-          console.log(user_data.data.result);
+          // console.log(user_data.data.result);
+          if (user_data.data.result.universityUrl)
+          {
+          setUnivLink(user_data.data.result.universityUrl);
+          }
+          getSiteByCountry(user_data.data.result.country);
           
           const info_data = await getData(GET_TWO_INFOPOST,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
           }); 
           setInfoData(info_data.data.result);
           // console.log("infoData");
-          console.log(info_data.data.result);
+          // console.log(info_data.data.result);
 
           const free_data = await getData(GET_TWO_FREEPOST,{
             Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
@@ -132,6 +173,9 @@ function HomePage() {
     }, []); 
 
     useEffect(() => {
+      const token = localStorage.getItem('AToken');
+      console.log('AToken:', token);
+
       const fetchAccomData = async () => {
         try {
           const accom_data = await getData(GET_NEAR_ACCOMPANY, {
@@ -150,8 +194,12 @@ function HomePage() {
         }
       };
     
-      fetchAccomData();
-    }, []);
+      if (userData.country)
+      {
+        // console.log(userData);
+        fetchAccomData();
+      }
+    }, [userData.country]);
 
     return (
       <>
@@ -163,10 +211,16 @@ function HomePage() {
               <LeftContainer>
                   <SubText>나의 교환교</SubText>
               </LeftContainer>
+              {card.country?
               <LeftContainer>
                   <BigText spacing="1vh">{card.country},</BigText>
                   <BigText color="#3E73B2">{card.dispatchedUniversity}</BigText>
               </LeftContainer>
+              :
+              <LeftContainer>
+                  <BigText spacing="1vh">교환교를 등록해주세요</BigText>
+              </LeftContainer>
+              }
               </div>
              ))}
             
@@ -177,11 +231,19 @@ function HomePage() {
                     <SubText>교환교</SubText>
                     <SubText>홈페이지</SubText>
                 </Button>
+                {card.country?
                 <Button onClick={goToMigration}>
                     <Icon src={migrationIcon} alt="Migration Icon" />
                     <SubText>{card.country}</SubText>
                     <SubText>이민국</SubText>
                 </Button>
+                :
+                <Button onClick={() => window.location.href = "https://www.mofa.go.kr/www/index.do"}>
+                    <Icon src={migrationIcon} alt="Migration Icon" />
+                    <SubText>한국</SubText>
+                    <SubText>외교부</SubText>
+                </Button>
+                }
                 <Button onClick={goToAccompany}>
                     <Icon src={companyIcon} alt="Company Icon" />
                     <SubText>동행</SubText>
@@ -224,18 +286,22 @@ function HomePage() {
           </BigContainer>
           
 
+          
           {userData.map((card, index) => (
-          <BlueContainer key = {index}>
+            <div key={index}>
+              {card.country?
+              <BlueContainer key = {index}>
+                <BigContainer>
+                    <LeftContainer>
+                    <MiddleText spacing="1vh">나를 위한</MiddleText>
+                    <MiddleText color="#3E73B2">{getContinentForCountry(card.country)} 인기 여행지</MiddleText>
+                    </LeftContainer>
+                </BigContainer>
 
-            <BigContainer>
-                <LeftContainer>
-                <MiddleText spacing="1vh">나를 위한</MiddleText>
-                <MiddleText color="#3E73B2">{card.country} 근교 여행지</MiddleText>
-                </LeftContainer>
-            </BigContainer>
-
-            <CardList selectedCountry={card.country}/>
-          </BlueContainer>
+                <CardList selectedCountry={card.country}/>
+              </BlueContainer>
+          :null}
+          </div>
           ))}
      
 
@@ -260,10 +326,14 @@ function HomePage() {
           <Space></Space>
           <Space></Space>
 
-          <FlexContainer onClick={goToAccompany}>
-              <MiddleText spacing="1vh">내 주변 동행글</MiddleText>
-              <RightIcon src={rightIcon}></RightIcon>
-          </FlexContainer>
+          {userData.map((card, index) => (
+            card.country ? (
+              <FlexContainer onClick={goToAccompany} key={index}>
+                <MiddleText spacing="1vh">내 주변 동행글</MiddleText>
+                <RightIcon src={rightIcon} />
+              </FlexContainer>
+            ) : null
+          ))}
 
           <CardAccompanyList cards={accompanyData}></CardAccompanyList>
 
