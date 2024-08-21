@@ -113,6 +113,11 @@ const AccompanyHomeComponent =
         updateEverything();
     };
 
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' }); 
+    };
+
     return (
         <>
           <PageHeader pageName={'동행 구하기'} />
@@ -130,7 +135,7 @@ const AccompanyHomeComponent =
 
                 <GreyPicker $isDateClicked={isDateClicked}>
                   <span onClick={calendarClick}>
-                  {startDate && endDate ? `${startDate} - ${endDate}` : '날짜'}
+                  {startDate && endDate ? `${formatDate(startDate)} - ${formatDate(endDate)}` : '날짜'}
                   {!isDateClicked && (
                         <Icon src={arrowIcon} />
                    )}
