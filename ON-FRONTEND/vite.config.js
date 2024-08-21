@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   server: {
-    port: process.env.PORT,
+    port: 443,
   },
   plugins: [react(), vercel()],
 });
