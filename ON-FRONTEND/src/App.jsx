@@ -58,42 +58,33 @@ import Loading from './components/Loading/Loading.jsx';
 
 function App() {
   const dispatch = useDispatch();
-  let user = useSelector((state) => state.user);
+  let loginInfo = useSelector((state) => state.user);
   const location = useLocation();
   const nav = useNavigate();
   let res;
   const excludepaths = ['/signIn', '/signUp', '/landing'];
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   let fetchFirst = false;
 
   //console.log(location.pathname);
 
   useEffect(() => {
-    if (!excludepaths.includes(location.pathname)) {
-      const loadUserData = async () => {
-        setIsLoading(true);
+    const loadUserData = async () => {
+      if (!excludepaths.includes(location.pathname)) {
+        setIsLoading(true); // 로딩 시작
         await dispatch(loadUser());
-        // 비동기 작업이 완료될 때까지 기다림
-      };
-      loadUserData();
-      if (user) {
-        console.log('로그인 완료인데..');
-        console.log(user);
-        setIsLoading(false);
-        // fetchFirst = true;
+        setIsLoading(false); // 로딩 끝
+      } else {
+        setIsLoading(false); // 제외된 경로에서는 로딩 끝
       }
-    }
-  }, [dispatch]);
-  if (isLoading) {
-    return <Loading />;
-  }
-  useEffect(() => {
-    if (!isLoading && fetchFirst) {
-      console.log(user);
-      if (!user.isAuthenticated && !excludepaths.includes(location.pathname)) {
-        console.log(user.isAuthenticated);
-        res = confirm('로그인이 필요합니다.');
+    };
+    loadUserData();
+  }, [dispatch, location.pathname]);
 
+  useEffect(() => {
+    if (!isLoading && !excludepaths.includes(location.pathname)) {
+      if (!loginInfo.isAuthenticated) {
+        const res = confirm('로그인이 필요합니다.');
         if (res) {
           nav('/signIn');
         } else {
@@ -101,14 +92,11 @@ function App() {
         }
       }
     }
-  }, [user, location.pathname, dispatch]);
-  // useEffect(() => {
-  //   if (excludepaths.includes(location.pathname)) {
-  //     setIsLoading(false);
-  //   }
-  // }, []);
-
-  if (user.isAuthenticated || excludepaths.includes(location.pathname)) {
+  }, [isLoading, loginInfo.isAuthenticated, location.pathname, nav]);
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (loginInfo.isAuthenticated || excludepaths.includes(location.pathname)) {
     return (
       <ThemeProvider theme={theme}>
         <Routes>
