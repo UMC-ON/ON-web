@@ -2,10 +2,7 @@ import * as s from './DetailPageStyled.jsx';
 import commentImg from '../../assets/images/commentImg.svg';
 import DefaultCheckBox from '../../components/DefaultCheckBox/DefaultCheckBox.jsx';
 
-import {
-  CommentList,
-  PostList,
-} from '../../components/Common/TempDummyData/PostList.jsx';
+import { CommentList } from '../../components/Common/TempDummyData/PostList.jsx';
 import { showDispatchedUniv } from '../../components/Common/InfoExp.jsx';
 
 import Comment from '../../components/Comment/Comment.jsx';
@@ -13,14 +10,23 @@ import Comment from '../../components/Comment/Comment.jsx';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getData } from '../../api/Functions.jsx';
-import { GET_COMMENT_OF, GET_POST_DETAIL } from '../../api/urls.jsx';
+import { getData, postData } from '../../api/Functions.jsx';
+import {
+  GET_COMMENT_OF,
+  GET_POST_DETAIL,
+  WRITE_COMMENT_ON,
+  WRITE_REPLY_ON,
+} from '../../api/urls.jsx';
 import Loading from '../../components/Loading/Loading.jsx';
+import { current } from '@reduxjs/toolkit';
+import { renderToStaticNodeStream } from 'react-dom/server';
+import Reply from '../../components/Comment/Reply.jsx';
 
 const DetailPage = ({ color1, color2, boardType }) => {
   const titleColor = boardType === 'INFO' ? '#BFD8E5' : '#CBCDE9';
-  let userInfo = useSelector((state) => state.user.user);
-  console.log(userInfo);
+  let logInInfo = useSelector((state) => state.user);
+  let userInfo = logInInfo.user;
+  console.log(logInInfo);
   const currentPost_id = useLocation().state.value; //post_id 정보만 받아오기
   //useLocation으로 post_id만 받아 온 뒤, postListDB에서 현재 포스트 찾아와 불러옴.
   //그 뒤에는 선택사항: commentList DB를 따로 사용하느냐,
@@ -28,10 +34,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
   //선택할 수 있게 짜놓음
 
   ///선택 가능하게 하기 위한 변수들///
-  const commentListDB = CommentList;
-  const filteredCommentListDB = CommentList.filter(
-    (comment) => comment.post_id === currentPost_id,
-  );
 
   const [currentPost, setCurrentPost] = useState();
   const [commentList, setCommentList] = useState(null);
@@ -61,6 +63,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
       if (response) {
         console.log('댓글');
         console.log(response.data);
+        setCommentList(response.data);
       }
     };
     const res = fetchPostData();
@@ -68,17 +71,15 @@ const DetailPage = ({ color1, color2, boardType }) => {
     console.log(res);
   }, []);
   useEffect(() => {
-    if (userInfo && currentPost) {
+    if (userInfo && currentPost && commentList) {
       setLoading(false);
       console.log(currentPost);
     }
-  }, [currentPost, userInfo]);
+  }, [currentPost, userInfo, commentList]);
+
   //console.log(currentPost);
 
   //return <div>{userInfo.id}</div>;
-
-  const currentCommentList = commentListDB; //or currentPost.commentList
-  const currentFilteredCommentList = filteredCommentListDB; //or filteredCommentListDB
 
   /// 여기서부터 메인 변수들 ///
   const [content, setContent] = useState('');
@@ -111,35 +112,43 @@ const DetailPage = ({ color1, color2, boardType }) => {
 
   const onCommentSelection = (e) => {
     if (selectedComment === null) {
+      //아무것도 선택하지 않은 상태에서 댓글 선택
       setSelectedComment(e.target.comment);
       replyToText.current = `${e.target.writer}에게 답장`;
+      commentEditor.current.focus();
     } else if (selectedComment === e.target.comment) {
+      //선택한 댓글 다시 선택 시 댓글 선택 취소
       setSelectedComment(null);
       replyToText.current = null;
+      commentEditor.current.focus();
     } else {
+      //댓글 하나 선택한 상태에서 다른 댓글 선택
       setSelectedComment(e.target.comment);
       replyToText.current = `${e.target.writer}에게 답장`;
+      commentEditor.current.focus();
     }
   };
-  const onCommentSubmit = () => {
+  const onCommentSubmit = async () => {
     if (content == '') {
       commentEditor.current.focus();
       return;
     }
-    let key, value, pushList;
-    if (selectedComment !== null) {
-      key = ['comment_id', 'reply_id'];
-      value = [
-        selectedComment.comment_id,
-        selectedComment.replyList.length + 1,
-      ];
-      pushList = selectedComment.replyList;
+    if (selectedComment === null) {
+      //댓글일 경우
+      if (logInInfo.isAuthenticated) {
+        addComment(WRITE_COMMENT_ON(currentPost_id));
+      } else {
+        console.log(logInInfo.isAuthenticated);
+        return alert('로그인이 필요합니다.');
+      }
     } else {
-      key = ['post_id', 'comment_id', 'replyList'];
-      value = [currentPost_id, currentCommentList.length + 1, []];
-      pushList = currentCommentList;
+      //답글일 경우
+      if (logInInfo.isAuthenticated) {
+        addComment(WRITE_REPLY_ON(selectedComment.commentId));
+      } else {
+        return alert('로그인이 필요합니다.');
+      }
     }
-    addComment(key, value, pushList);
     setContent('');
     setSelectedComment(null);
     replyToText.current = null;
@@ -147,29 +156,46 @@ const DetailPage = ({ color1, color2, boardType }) => {
     textarea.style.height = 'auto';
   };
 
-  const addComment = (key, value, pushList) => {
+  const addComment = async (url) => {
     const comment = {
-      writerInfo: { ...userInfo },
-      content: content,
-      is_anonymous: isAnonymous.current,
+      id: userInfo.id,
+      contents: content,
+      anonymous: isAnonymous.current,
     };
-    if (key.length > 0) {
-      for (let i = 0; i < key.length; i++) {
-        comment[key[i]] = value[i];
-      }
+    const jsonData = JSON.stringify(comment);
+    console.log(comment);
+    const res = await postData(url, jsonData, {
+      Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+    });
+    if (res) {
+      console.log(res);
     }
+
+    const commentFE = {
+      writerInfo: {
+        nickname: userInfo.nickname,
+        id: userInfo.id,
+      },
+      commentId: selectedComment
+        ? selectedComment.commentId
+        : commentList.length + 1,
+      replyId: selectedComment ? selectedComment.replyCount + 1 : null,
+      replyCount: 0,
+      anonymous: isAnonymous.current,
+      contents: content,
+    };
+    setCommentList([...commentList, commentFE]);
+    //등록시 바로 보일 수 있도록
 
     //scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
     //자식에게 ref전달 알아보기
-
-    pushList.push(comment);
   };
   if (isLoading) {
     return <Loading />;
   }
   //const currentVisualViewHeight = window.visualViewport.height;
   //replyToText.current = currentVisualViewHeight;
-  if (currentPost) {
+  if (currentPost && commentList) {
     //return <div>{currentPost.postId}</div>;
 
     return (
@@ -232,16 +258,47 @@ const DetailPage = ({ color1, color2, boardType }) => {
             {getNumOfComment()}
           </s.CommentNumSection>
           <s.CommentSection ref={scrollRef}>
-            {currentFilteredCommentList.map((comment, index) => {
-              return (
-                <Comment
-                  comment={comment}
-                  onCommentClick={onCommentSelection}
-                  key={index}
-                  clickedComment={selectedComment}
-                  postWriter_id={currentPost.writerInfo.userId}
-                />
-              );
+            {commentList.map((comment, index) => {
+              let commentElement;
+              let replyElement;
+              if (comment.replyId === null) {
+                //map 돌 때 comment만 돌고있음
+                commentElement = (
+                  <Comment
+                    key={index}
+                    comment={comment}
+                    onCommentClick={onCommentSelection}
+                    clickedComment={selectedComment}
+                    postWriter_id={currentPost.writerInfo.id}
+                  />
+                );
+                if (comment.replyCount === 0) {
+                  //답글이 없으면 comment만 반환
+                  return commentElement;
+                } else {
+                  //답글이 있으면
+                  let replyList = commentList.filter(
+                    (reply) => reply.commentId === comment.commentId,
+                  );
+                  console.log(replyList);
+
+                  return (
+                    <div
+                      style={{ width: '100%' }}
+                      key={index}
+                    >
+                      {commentElement}
+                      {replyList.map((reply, index) => (
+                        <Reply
+                          reply={reply}
+                          key={index}
+                          postWriter_id={currentPost.writerInfo.id}
+                        />
+                      ))}
+                    </div>
+                  );
+                }
+              }
             })}
           </s.CommentSection>
         </s.DetailPageLayout>

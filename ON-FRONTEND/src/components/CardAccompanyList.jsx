@@ -24,55 +24,65 @@ const CardAccompanyList = ({ color, cards }) => {
 
   return (
     <CardListContainer>
-      {cards.map((card, index) => (
-        <CardContainer key={index} onClick={() => {
-          const id = card.postId ?? card.companyPostId;
-          if (id) {
-            window.location.href = `/accompany/detail/${id}`;
-          }
-        }}>
-          <Card>
-            {card.postImg?
-            <CardImage src={card.postImg}/>:
-            <CardImage src={defaultImg}/>
-            }
-            <GreyCard color={color}>
-              <Left><CardName>{card.title}</CardName></Left>
-              <Left>
-                <CardIcon src={personIcon}/>
-                <SmallGreyText>{card.nickname}</SmallGreyText>
-                <SmallGreyText>·</SmallGreyText>
-                <SmallGreyText>{card.age}세</SmallGreyText>
-                <SmallGreyText>·</SmallGreyText>
-                {card.gender == 'FEMALE' ?
-                <SmallGreyText>여</SmallGreyText> :
+  {(cards && cards.length > 0) ? (
+    cards.map((card, index) => (
+      <CardContainer key={index} onClick={() => {
+        const id = card.postId ?? card.companyPostId;
+        if (id) {
+          window.location.href = `/accompany/detail/${id}`;
+        }
+      }}>
+        <Card>
+          {card.postImg ? (
+            <CardImage src={card.postImg} />
+          ) : (
+            <CardImage src={defaultImg} />
+          )}
+          <GreyCard color={color}>
+            <Left>
+              <CardName>{card.title}</CardName>
+            </Left>
+            <Left>
+              <CardIcon src={personIcon} />
+              <SmallGreyText>{card.nickname}</SmallGreyText>
+              <SmallGreyText>·</SmallGreyText>
+              <SmallGreyText>{card.age}세</SmallGreyText>
+              <SmallGreyText>·</SmallGreyText>
+              {card.gender === 'FEMALE' ? (
+                <SmallGreyText>여</SmallGreyText>
+              ) : (
                 <SmallGreyText>남</SmallGreyText>
-                }
-              </Left>
-              <Space/>
-              <Left>
-                <CardIcon src={calendarIcon}/>
-                {card.startDate == card.endDate ?
-                <GreyText>{formatDateToMD(card.startDate)}</GreyText> :
-                <GreyText>{formatDateToMD(card.startDate)}~{formatDateToMD(card.endDate)}</GreyText>
-                }
-                <Padding/>
-                <CardIcon src={plusIcon}/>
-                <GreyText>{card.currentRecruitNumber}/{card.totalRecruitNumber}</GreyText>
-              </Left>
-              <Left>
-                <CardIcon src={placeIcon}/>
-                <GreyText>{card.travelPlace}</GreyText>
-                {/* {card.travelArea[1] ?
-                <GreyText $left="0px">, {card.travelArea[1]}</GreyText>:null
-                } */}
-              </Left>
-              <SmallSpace/>
-            </GreyCard>
-          </Card>
-        </CardContainer>
-      ))}
-    </CardListContainer>
+              )}
+            </Left>
+            <Space />
+            <Left>
+              <CardIcon src={calendarIcon} />
+              {card.startDate === card.endDate ? (
+                <GreyText>{formatDateToMD(card.startDate)}</GreyText>
+              ) : (
+                <GreyText>
+                  {formatDateToMD(card.startDate)}~{formatDateToMD(card.endDate)}
+                </GreyText>
+              )}
+              <Padding />
+              <CardIcon src={plusIcon} />
+              <GreyText>{card.currentRecruitNumber}/{card.totalRecruitNumber}</GreyText>
+            </Left>
+            <Left>
+              <CardIcon src={placeIcon} />
+              <GreyText>{card.travelArea[0]}</GreyText>
+            
+              {card.travelArea[1] ? (
+                <GreyText $left="0px">, {card.travelArea[1]}</GreyText>
+              ) : null}
+            </Left>
+            <SmallSpace />
+          </GreyCard>
+        </Card>
+      </CardContainer>
+    ))
+  ) : <></>}
+</CardListContainer>
   );
 };
 
@@ -158,6 +168,13 @@ const SmallGreyText = styled.p`
   padding-top: 2px;
   padding-bottom: 13px;
   color: #7a7a7a;
+
+  display: inline-block; 
+  max-width: 40%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.02em;
 `;
 
 const GreyText = styled.p`
@@ -166,6 +183,7 @@ const GreyText = styled.p`
   padding-top: 2px;
   padding-bottom: 9px;
   color: #7a7a7a;
+
 `;
 
 const GreyCard = styled.div`

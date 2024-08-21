@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import Reply from './Reply';
 import replyBtnImg from '../../assets/images/replyBtnImg.svg';
 import { showWriter } from '../Common/InfoExp';
+import { getData } from '../../api/Functions';
+import { GET_REPLIES_OF } from '../../api/urls';
+import { useEffect, useState } from 'react';
+import Loading from '../Loading/Loading';
 
 const Comment = ({
   comment,
@@ -9,6 +13,32 @@ const Comment = ({
   clickedComment,
   postWriter_id,
 }) => {
+  const [replyList, setReplyList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // useEffect(() => {
+  //   if (comment.replyCount > 0) {
+  //     const fetchReply = async () => {
+  //       setIsLoading(true);
+  //       const res = await getData(GET_REPLIES_OF(comment.commentId), {
+  //         Authorization: `Bearer ${localStorage.getItem('AToken')}`,
+  //       });
+  //       if (res) {
+  //         console.log('아');
+  //         console.log(res.data);
+  //         setReplyList(res.data);
+  //       }
+  //     };
+  //     fetchReply();
+  //   }
+  //   if (replyList) {
+  //     setIsLoading(false);
+  //   }
+  // }, []);
+
+  // if (isLoading) {
+  //   return <Loading />;
+  // }
   return (
     <CommentAndReplyWrapper>
       <CommentDiv
@@ -25,19 +55,21 @@ const Comment = ({
             clickedComment === comment ? '#bfd8e5dd' : '#d9d9d933',
         }}
       >
-        <Writer writer={`${comment.writerInfo.userId === postWriter_id}`}>
+        <Writer writer={`${comment.writerInfo.id === postWriter_id}`}>
           {showWriter(comment, postWriter_id)}
           <img src={replyBtnImg} />
         </Writer>
-        {comment.content}
+        {comment.contents}
       </CommentDiv>
-      {comment.replyList.map((reply, index) => (
-        <Reply
-          reply={reply}
-          key={index}
-          postWriter_id={postWriter_id}
-        />
-      ))}
+      {/* {replyList
+        ? replyList.map((reply, index) => (
+            <Reply
+              reply={reply}
+              key={index}
+              postWriter_id={postWriter_id}
+            />
+          ))
+        : null} */}
     </CommentAndReplyWrapper>
   );
 };
@@ -50,7 +82,7 @@ const CommentAndReplyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 0.6rem 0;
+  margin: 1.2rem 0 0 0;
 `;
 
 const CommentDiv = styled.div`

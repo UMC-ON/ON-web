@@ -170,7 +170,13 @@ const CardName = styled.p`
   padding-top: 10px;
   padding-bottom: 10px;
   color: #363636;
-  width: 98%;
+
+  display: inline-block; 
+  max-width: 99%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.02em;
 `;
 
 const Overlay = styled.div`

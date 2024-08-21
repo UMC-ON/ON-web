@@ -9,7 +9,7 @@ import GenderChoice from '../components/GenderChoice.jsx';
 import SelectCountry from './SelectCountry/SelectCountry.jsx';
 
 import { getData } from '../api/Functions';
-import { GET_ALL_ACCOMPANY, GET_FILTER_ACCOMPANY } from '../api/urls';
+import { GET_ALL_ACCOMPANY, GET_FILTER_ACCOMPANY, GET_USER_INFO } from '../api/urls';
 
 function AccompanyPage() {
     const [startDate, setStartDate] = useState(null);
@@ -25,6 +25,7 @@ function AccompanyPage() {
     const [country, setCountry] = useState(null);
     const [isCountryClicked, setIsCountryClicked] = useState(false);
     const [allData, setAllData] = useState([]);
+    const [isValidated, setIsValidated] = useState(false);
 
     const handleIsDateClickedChange = () => {
       setIsDateClicked(false);
@@ -117,6 +118,12 @@ function AccompanyPage() {
         setAllData(all_data.data);
         // console.log(all_data.data);
 
+        const user_data = await getData(GET_USER_INFO,{
+          Authorization: `${localStorage.getItem('grantType')} ${localStorage.getItem('AToken')}`,
+        }); 
+        setIsValidated(user_data.data.result.isDispatchConfirmed);
+        // console.log(user_data.data.result.isDispatchConfirmed);
+
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -150,6 +157,7 @@ function AccompanyPage() {
           isCountryClicked={isCountryClicked}
           updateIsCountryClicked={resetCountryClick}
           updateEverything={handleResetAll}
+          isValidated={isValidated}
         />
         
         {showCalendar && 

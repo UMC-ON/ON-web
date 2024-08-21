@@ -19,8 +19,8 @@ function FirstModal({ closeModal, openNextModal, nickname}) {
   
           <Space />
   
-          <ModalText>신청하기를 누르면 제로님께</ModalText>
-          <ModalText>채팅 알람이 갑니다.</ModalText>
+          <ModalText>신청하기를 누르면 {nickname}님과</ModalText>
+          <ModalText>채팅이 시작됩니다.</ModalText>
   
           <Space />
   

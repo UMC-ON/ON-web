@@ -1,23 +1,23 @@
 import { useNavigate } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import * as s from './ChatHeaderStyled.jsx';
-import theme from '../../styles/theme';
 
-const ChatHeader = ({ user, receiver, pointColor, isAccompany }) => {
-  const navigate = useNavigate();
-
-  const onClickBackButton = () => {
-    navigate(-1);
-  };
-
+const ChatHeader = ({
+  user,
+  receiver,
+  pointColor,
+  isAccompany,
+  onBackClick,
+}) => {
   const pointColorOpacity = (e) => {
     return `${pointColor.replace('1)', ` ${e})`)}`;
   };
 
   const handleComplete = () => {}; //해당 함수 구현하기
+
   return (
     <s.ChatHeaderLayout color={pointColorOpacity(0.4)}>
-      <s.BackButton onClick={onClickBackButton}>
+      <s.BackButton onClick={onBackClick}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="10"
