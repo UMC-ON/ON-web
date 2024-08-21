@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/Modal/Modal';
 import { multiFilePostData, postData } from '../../api/Functions';
 import { DISPATCH_CERTIFY_REQUEST, NOT_SURE } from '../../api/urls';
+import styled from 'styled-components';
+import closeIcon from '../../assets/images/close_button.svg';
 
 const SchoolAuthPage = () => {
   //const currentUser = useSelector((state) => state.user);
@@ -18,7 +20,7 @@ const SchoolAuthPage = () => {
     dispatchType: '',
     isDispatchConfirmed: true,
   });
-  const [isFirstModalOpen, setFirstModalOpen] = useState(true);
+
   const [isLastModalOpen, setLastModalOpen] = useState(false);
   const [file, setFile] = useState(null);
 
@@ -117,7 +119,7 @@ const SchoolAuthPage = () => {
           <s.SectionWrapper>
             <s.TitleSection>
               <s.Logo src={groupLogo} />
-              <img />
+
               <div className="on_exp">교환/방문학생 정보공유 커뮤니티, ON </div>
             </s.TitleSection>
 
@@ -148,10 +150,10 @@ const SchoolAuthPage = () => {
                     width: '15%',
                   }}
                   onClick={() => {
-                    setUserInfo({ ...userInfo, isDispatchConfirmed: false });
+                    nav(-1);
                   }}
                 >
-                  건너뛰기
+                  취소
                 </s.PurpleButton>
               ) : null}
               <s.PurpleButton disabled={!isActive}>
@@ -165,17 +167,7 @@ const SchoolAuthPage = () => {
           </s.ButtonSection>
         </s.FormPage>
       </form>
-      {isFirstModalOpen && (
-        <Modal
-          title="아직 파견교 인증을
-          하지 않으셨네요!"
-          content="파견교 미정/미인증 사용자는
-          일부 활동이 제한될 수 있습니다."
-          closeModal={() => {
-            setFirstModalOpen(false);
-          }}
-        />
-      )}
+
       {isLastModalOpen && (
         <Modal
           title="교환, 방문교 인증
