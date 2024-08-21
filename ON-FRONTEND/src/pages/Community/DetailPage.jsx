@@ -28,12 +28,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
   let userInfo = logInInfo.user;
   //let userInfo = userInfo.user;
   const currentPost_id = useLocation().state.value; //post_id 정보만 받아오기
-  //useLocation으로 post_id만 받아 온 뒤, postListDB에서 현재 포스트 찾아와 불러옴.
-  //그 뒤에는 선택사항: commentList DB를 따로 사용하느냐,
-  //아니면 post객체 필드에 각각 commentList를 만들것이냐.
-  //선택할 수 있게 짜놓음
-
-  ///선택 가능하게 하기 위한 변수들///
+  const [commentCount, setCommentCount] = useState(0);
 
   const [currentPost, setCurrentPost] = useState();
   const [commentList, setCommentList] = useState(null);
@@ -41,7 +36,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const openedImg = useRef(null);
   useEffect(() => {
-    console.log(userInfo);
     if (userInfo) {
       const fetchPostData = async () => {
         setLoading(true);
@@ -54,7 +48,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
           },
         );
         if (response) {
-          console.log(response);
           setCurrentPost(response.data);
           return response;
         }
@@ -65,27 +58,20 @@ const DetailPage = ({ color1, color2, boardType }) => {
           Authorization: `Bearer ${localStorage.getItem('AToken')}`,
         });
         if (response) {
-          console.log('댓글');
-          console.log(response.data);
           setCommentList(response.data);
         }
         setLoading(false);
       };
       let res = fetchPostData();
       fetchCommentData();
-      console.log(res);
     }
   }, [userInfo]);
   useEffect(() => {
     if (currentPost && commentList && userInfo) {
       setLoading(false);
-      console.log(currentPost);
+      setCommentCount(currentPost.commentCount);
     }
   }, [currentPost, userInfo, commentList]);
-
-  //console.log(currentPost);
-
-  //return <div>{userInfo.id}</div>;
 
   /// 여기서부터 메인 변수들 ///
   const [content, setContent] = useState('');
@@ -96,16 +82,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
   const replyToText = useRef(null);
   const commentEditor = useRef(null);
   const mobileViewRef = useRef(null);
-
-  const getNumOfComment = () => {
-    let numOfComment = 0;
-    CommentList.filter((comment) => {
-      if (comment.post_id === currentPost.postId) {
-        numOfComment++;
-      }
-    });
-    return numOfComment;
-  };
 
   //기타 이벤트 핸들링 함수
 
@@ -144,7 +120,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
       if (logInInfo.isAuthenticated) {
         addComment(WRITE_COMMENT_ON(currentPost_id));
       } else {
-        console.log(userInfo);
         return alert('로그인이 필요합니다.');
       }
     } else {
@@ -169,13 +144,10 @@ const DetailPage = ({ color1, color2, boardType }) => {
       anonymous: isAnonymous.current,
     };
     const jsonData = JSON.stringify(comment);
-    console.log(comment);
+
     const res = await postData(url, jsonData, {
       Authorization: `Bearer ${localStorage.getItem('AToken')}`,
     });
-    if (res) {
-      console.log(res);
-    }
 
     const commentFE = {
       writerInfo: {
@@ -191,6 +163,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
       contents: content,
     };
     setCommentList([...commentList, commentFE]);
+    setCommentCount((prev) => prev + 1);
     //등록시 바로 보일 수 있도록
 
     //scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -264,7 +237,7 @@ const DetailPage = ({ color1, color2, boardType }) => {
           </s.Content>
           <s.CommentNumSection>
             <img src={commentImg} />
-            {getNumOfComment()}
+            {commentCount}
           </s.CommentNumSection>
           <s.CommentSection ref={scrollRef}>
             {commentList.map((comment, index) => {
@@ -289,7 +262,6 @@ const DetailPage = ({ color1, color2, boardType }) => {
                     (reply) =>
                       reply.commentId === comment.commentId && reply.replyId,
                   );
-                  console.log(replyList);
 
                   return (
                     <div

@@ -46,12 +46,12 @@ const CommunityPost = ({ post }) => {
               {post.anonymous ? '익명' : post.writerInfo.nickname}
               <VerifiedImg
                 src={verifiedBadge}
-                is_verified={post.writerInfo.userState}
+                is_verified={post.writerInfo.userStatus}
               />
             </Writer>
             <Comment>
               <img src={commentImg} />
-              <div>{getNumOfComment()}</div>
+              <div>{post.commentCount}</div>
             </Comment>
           </PostInfoWrapper>
         </ContentWrapper>

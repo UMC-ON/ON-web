@@ -11,46 +11,16 @@ import { GET_USER_INFO, SIGN_IN_URL } from '../../api/urls';
 import { postData, getData } from '../../api/Functions';
 
 const SignInPage = () => {
-  const didMount = useRef(0); //백에 연결하기 전에 임시로...
   //지금 편의를 위해 userInitialState가 너구리로 돼있어서 첫 렌더링시에 자꾸 useEffect 작동해서 막으려고 ㅠ
   const nav = useNavigate();
   const inputValue = useRef({ email: '', password: '' });
 
   const dispatch = useDispatch();
-  const [isLoading, setLoading] = useState(false);
   const onChangeHandler = (e) => {
     let name = e.target.name;
     let value = e.target.value;
 
     inputValue.current = { ...inputValue.current, [name]: value };
-  };
-  // useEffect(() => {
-  //   if (didMount.current === 2) {
-  //     if (currentUser && currentUser.userState === 'TEMPORARY') {
-  //       console.log('실행');
-  //       return nav('/signUp/credentials');
-  //     } else if (currentUser) {
-  //       return nav('/');
-  //     }
-  //   } else {
-  //     didMount.current++;
-  //     console.log('렌더링');
-  //     console.log(currentUser);
-  //   }
-  // }, [currentUser]);
-
-  const handleSubmitFE = (e) => {
-    e.preventDefault();
-    const user = UserList.filter(
-      (user) => user.email === inputValue.current.email,
-    )[0];
-    if (user && inputValue.current.password === user.password) {
-      //여기까지가 백에서 해줄 일..true반환시
-      /////토큰 저장/////
-      dispatch(setUser(user)); //FE:로그인 성공 시 유저 세팅
-    } else {
-      alert('아이디나 비밀번호가 일치하지 않습니다.');
-    }
   };
 
   const handleSubmitBE = async (e) => {
