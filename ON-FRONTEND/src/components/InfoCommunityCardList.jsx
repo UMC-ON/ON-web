@@ -50,7 +50,7 @@ const InfoCommunityCardList = ({ cards }) => {
 export default InfoCommunityCardList;
 
 const ImgContainer = styled.div`
-  background-image: url(${infoImg});
+  background-image: url('/assets/images/info_container.svg');
   background-size: cover; 
   background-position: center; 
   background-repeat: no-repeat; 
