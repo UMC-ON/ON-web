@@ -28,6 +28,7 @@ const AccompanyChat = () => {
   //채팅 말, 보낸 유저 아이디 담기
   const [chatList, setChatList] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const location = useLocation();
   const { roomId, senderName } = location.state || {}; // Destructure selectedCountry from location.state
