@@ -2,7 +2,11 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 import * as s from './MyPostStyled';
 import { useState, useEffect } from 'react';
 import { getData } from '../../api/Functions';
-import { GET_MY_ACCOMPANY_POST, GET_MY_MARKET_POST } from '../../api/urls';
+import {
+  GET_MY_ACCOMPANY_POST,
+  GET_MY_MARKET_POST,
+  GET_MY_POST,
+} from '../../api/urls';
 import { useSelector } from 'react-redux';
 
 import Loading from '../../components/Loading/Loading';
@@ -83,7 +87,7 @@ const MyPost = () => {
       setIsLoading(true);
       try {
         const response = await getData(
-          GET_MY_ACCOMPANY_POST,
+          GET_MY_POST,
           {
             Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
@@ -91,7 +95,7 @@ const MyPost = () => {
         );
 
         if (response) {
-          console.log('accompany: ', response.data);
+          console.log('info: ', response.data);
           setAccompanyPostResult(response.data);
         }
       } catch (error) {
@@ -104,22 +108,22 @@ const MyPost = () => {
     fetchMyInfoPost();
   }, []);
 
-  //내 정보글 보기
+  //내 자유글 보기
   useEffect(() => {
     const fetchMyInfoPost = async () => {
       setIsLoading(true);
       try {
         const response = await getData(
-          GET_MY_ACCOMPANY_POST,
+          GET_MY_POST,
           {
             Authorization: `Bearer ${localStorage.getItem('AToken')}`,
           },
-          { userId: userInfo.id, boardType: 'INFO' },
+          { userId: userInfo.id, boardType: 'FREE' },
         );
 
         if (response) {
-          console.log('accompany: ', response.data);
-          setAccompanyPostResult(response.data);
+          console.log('free: ', response.data);
+          setFreePostResult(response.data);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -129,32 +133,6 @@ const MyPost = () => {
     };
 
     fetchMyInfoPost();
-  }, []);
-
-  useEffect(() => {
-    const fetchMyFreePost = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getData(
-          GET_MY_ACCOMPANY_POST,
-          {
-            Authorization: `Bearer ${localStorage.getItem('AToken')}`,
-          },
-          { userId: userInfo.id },
-        );
-
-        if (response) {
-          console.log('accompany: ', response.data);
-          setAccompanyPostResult(response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchMyFreePost();
   }, []);
 
   const handleModeChange = (mode) => {
@@ -204,25 +182,25 @@ const MyPost = () => {
       </s.ModeContainer>
 
       {currentMode === 0 ? ( //정보글
-        infoPostResult.length === 0 ? (
+        infoPostResult && infoPostResult.length === 0 ? (
           <NoContent
             content={'글'}
             style={{ marginBottom: '10rem' }}
           />
         ) : (
           <s.PostWrapper>
-            <SingleMyPost
-              title={
-                '[🇩🇪 독일 교환학생 준비] Ep 1. 테아민 잡기기기기기기기기기'
-              }
-              time={'10분 전'}
-              content={'정보글'}
-              nickName={'익명'}
-              image={{ Img }}
-              verified={'인증여부'}
-              comment={'1'}
-              categories={'자유 커뮤니티'}
-            />
+            {infoPostResult.map((data) => (
+              <SingleMyPost
+                title={data.title}
+                time={data.createdAt}
+                content={data.content}
+                nickName={data.writerInfo.nickName}
+                image={data.imageUrls}
+                verified={''}
+                comment={data.commentCount}
+                categories={'정보 커뮤니티'}
+              />
+            ))}
           </s.PostWrapper>
         )
       ) : currentMode === 1 ? ( //자유글

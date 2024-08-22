@@ -65,6 +65,7 @@ export const ProductImg = styled.div`
   background-image: url(${(props) => props.$link});
   /* background-size: cover; */
   background-position: center;
+  background-size: cover;
 `;
 
 export const ProductName = styled.span`
