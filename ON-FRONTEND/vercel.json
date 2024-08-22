@@ -5,5 +5,8 @@
       "destination": "/index.html"
     }
   ],
+  "env": {
+    "BRANCH": "DEPLOYMENT"
+  },
   "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
 }

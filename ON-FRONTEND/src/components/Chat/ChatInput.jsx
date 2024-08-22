@@ -26,6 +26,7 @@ const ChatInput = ({ roomId, addNewMessage, currentUserId }) => {
 
     setIsLoading(true);
     try {
+      console.log(serverAddress);
       const apiClient = axios.create({
         baseURL: serverAddress + '/',
         headers: {
