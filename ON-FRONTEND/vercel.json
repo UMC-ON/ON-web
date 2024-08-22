@@ -1,9 +1,9 @@
 {
   "rewrites": [
-    { 
+    {
       "source": "/live/:path*",
       "destination": "/index.html"
-    },
-    { "source": "/(.*)", "destination": "/" } 
-  ]
+    }
+  ],
+  "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
 }
