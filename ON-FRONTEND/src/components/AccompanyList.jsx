@@ -127,7 +127,7 @@ const GreyMiddleText = styled.p`
   text-align: left;
   margin-top: 10px;
   margin-bottom: 10px;
-  width: 99%;
+  width: 80%;
   height: 4vh;
 `;
 
